@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "0.3.3"
+version = "0.3.4"
 description = "Pine Script v6 to AST parser prototype with lexer, layout, semantic diagnostics and CLI"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -52,8 +52,8 @@ branch = true
 source = ["pine2ast"]
 omit = [
   "pine2ast/__main__.py",
-  "pine2ast/cli.py",
-  "pine2ast/benchmark.py",
+  "pine2ast/cli.py",  # command-line glue covered by CLI smoke tests; subprocess/env branches are policy-documented
+  "pine2ast/benchmark.py",  # timing-sensitive helper covered by smoke tests, excluded from threshold math
   "pine2ast/layout/indentation.py",
   "pine2ast/layout/line_wrapping.py",
   "pine2ast/parser/declarations.py",

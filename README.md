@@ -21,13 +21,16 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release: `v3.3 oracle_verified` / package `0.3.3`. TradingView Pine Editor compile-oracle is externally verified for the P0 strategy namespace fixtures; strict `bash scripts/release_gate.sh` is the release gate.
+Current release: `v3.4 oracle_verified hardening` / package `0.3.4`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.4 does not claim wider oracle verification. Strict `bash scripts/release_gate.sh` is the production release gate.
 
-Fallback without pytest, only stdlib:
+Fallback without pytest, only stdlib-compatible tests:
 
 ```bash
 /usr/bin/python tools/run_tests_no_pytest.py
+/usr/bin/python tools/run_tests_no_pytest.py --include-integration
 ```
+
+The fallback runner is a low-dependency smoke/regression aid. It does not replace the full pytest+coverage gate.
 
 ```python
 from pine2ast import parse_code, ast_to_json
@@ -86,7 +89,14 @@ Exit codes:
 
 ## Ограничения текущей версии
 
-Это v1-prototype foundation, а не полный компилятор TradingView. Неполная registry-сигнатура встроенных функций, без online import resolver, без полного real-world корпуса 200–300 файлов. Архитектура оставляет эти пункты как v1.1/v2 hardening backlog.
+Актуальный список ограничений: `docs/current_limitations_v3_4.md`.
+
+## Что не является гарантией
+
+- Pine2AST не исполняет Pine-код, не симулирует бары и не является TradingView runtime.
+- Oracle evidence покрывает конкретный зафиксированный corpus, а не весь язык TradingView Pine Script.
+- `builtins_v6.json` — versioned internal expected snapshot, а не полная официальная карта всех builtins.
+- Online import resolver отсутствует; imports разбираются синтаксически/семантически в рамках доступной локальной информации.
 
 
 ## v0.1.3 corpus validation

@@ -3,12 +3,12 @@
   "contract": "pine2ast.inspect.optimizer.v1",
   "producer": {
     "name": "pine2ast",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "contract": "pine2ast.inspect.optimizer.v1"
   },
   "tool": {
     "name": "pine2ast",
-    "version": "0.3.3"
+    "version": "0.3.4"
   },
   "source": {
     "path": "tests/fixtures/optimizer_contract_v2_20/plot_alert_drawing_mix.pine",
