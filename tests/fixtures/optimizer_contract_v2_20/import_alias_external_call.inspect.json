@@ -3,12 +3,12 @@
   "contract": "pine2ast.inspect.optimizer.v1",
   "producer": {
     "name": "pine2ast",
-    "version": "0.3.7",
+    "version": "0.3.9",
     "contract": "pine2ast.inspect.optimizer.v1"
   },
   "tool": {
     "name": "pine2ast",
-    "version": "0.3.7"
+    "version": "0.3.9"
   },
   "source": {
     "path": "tests/fixtures/optimizer_contract_v2_20/import_alias_external_call.pine",

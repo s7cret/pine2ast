@@ -1,0 +1,536 @@
+{
+  "schema_version": 1,
+  "contract_version": "runtime_contract_v1.4",
+  "pine2ast_schema_version": "1.0",
+  "generated_from": "pine2ast.ast.nodes + pine2ast.ast.types.TypeRef",
+  "policy": {
+    "no_schema_drift": true,
+    "history_ref_expr_for_square_brackets": true,
+    "unsupported_must_have_diagnostic": "P2A1507",
+    "tradingview_oracle_verified_claim": "unchanged; pending entries remain pending without fixture-specific evidence"
+  },
+  "unsupported_features": [
+    {
+      "kind": "ImportDeclaration",
+      "required_fields": [
+        "path"
+      ],
+      "optional_fields": [
+        "owner",
+        "library",
+        "version",
+        "alias"
+      ],
+      "ast2python_lowerable": false,
+      "pinelib_runtime_support": false,
+      "unsupported_diagnostic_code": "P2A1507",
+      "notes": "Online import resolution is out of frontend/runtime scope; AST2Python may record aliases only."
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "Argument",
+      "required_fields": [
+        "value"
+      ],
+      "optional_fields": [
+        "name"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "BinaryExpr",
+      "required_fields": [
+        "op",
+        "left",
+        "right"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "Block",
+      "required_fields": [
+        "statements"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "BreakStatement",
+      "required_fields": [],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "CallExpr",
+      "required_fields": [
+        "callee",
+        "arguments"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable when callee/builtin is in supported subset; unsupported builtins must emit P2A1507/P2A1506/P2A1502 before runtime."
+    },
+    {
+      "kind": "ConditionalExpr",
+      "required_fields": [
+        "condition",
+        "if_true",
+        "if_false"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ContinueStatement",
+      "required_fields": [],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "DeclarationStatement",
+      "required_fields": [
+        "script_type",
+        "call"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ElseIfBranch",
+      "required_fields": [
+        "condition",
+        "block"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "EnumDeclaration",
+      "required_fields": [
+        "name",
+        "members"
+      ],
+      "optional_fields": [
+        "is_exported"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable as declarations/constants; runtime parity is declaration-only."
+    },
+    {
+      "kind": "EnumMember",
+      "required_fields": [
+        "name"
+      ],
+      "optional_fields": [
+        "title"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ExpressionStatement",
+      "required_fields": [
+        "expression"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "FieldDeclaration",
+      "required_fields": [
+        "name",
+        "type_ref"
+      ],
+      "optional_fields": [
+        "default_value"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ForInStructure",
+      "required_fields": [
+        "target",
+        "iterable",
+        "body"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable for iterable surfaces modeled by AST2Python/PineLib; unsupported collection/reference runtime semantics remain explicit diagnostics."
+    },
+    {
+      "kind": "ForInTarget",
+      "required_fields": [
+        "names"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ForRangeStructure",
+      "required_fields": [
+        "variable",
+        "start",
+        "end",
+        "body"
+      ],
+      "optional_fields": [
+        "step"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "FunctionDeclaration",
+      "required_fields": [
+        "name",
+        "parameters",
+        "body"
+      ],
+      "optional_fields": [
+        "is_exported"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "GenericInstantiationExpr",
+      "required_fields": [
+        "base",
+        "type_args"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Frontend preserves type args; lowering support is limited to modeled collection/generic builtin calls."
+    },
+    {
+      "kind": "HistoryRefExpr",
+      "required_fields": [
+        "base",
+        "offset"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable only for runtime Series/history; reference-history requires PineLib explicit support per runtime_contract_v1.4."
+    },
+    {
+      "kind": "Identifier",
+      "required_fields": [
+        "name"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "IfStructure",
+      "required_fields": [
+        "condition",
+        "then_block"
+      ],
+      "optional_fields": [
+        "else_if_branches",
+        "else_block"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "ImportDeclaration",
+      "required_fields": [
+        "path"
+      ],
+      "optional_fields": [
+        "owner",
+        "library",
+        "version",
+        "alias"
+      ],
+      "ast2python_lowerable": false,
+      "pinelib_runtime_support": false,
+      "unsupported_diagnostic_code": "P2A1507",
+      "notes": "Online import resolution is out of frontend/runtime scope; AST2Python may record aliases only."
+    },
+    {
+      "kind": "Literal",
+      "required_fields": [
+        "value",
+        "literal_type"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "MemberAccessExpr",
+      "required_fields": [
+        "object",
+        "member"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable for builtin namespaces, UDT fields, enum members, and aliases validated by semantic passes."
+    },
+    {
+      "kind": "MethodDeclaration",
+      "required_fields": [
+        "name",
+        "parameters",
+        "body"
+      ],
+      "optional_fields": [
+        "receiver_type",
+        "receiver_name",
+        "is_exported"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable as helper functions when receiver semantics are modeled."
+    },
+    {
+      "kind": "Parameter",
+      "required_fields": [
+        "name"
+      ],
+      "optional_fields": [
+        "type_ref",
+        "explicit_qualifier",
+        "default_value"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "Program",
+      "required_fields": [
+        "annotations",
+        "items"
+      ],
+      "optional_fields": [
+        "version",
+        "declaration",
+        "diagnostics",
+        "schema_version",
+        "language",
+        "language_version"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "Reassignment",
+      "required_fields": [
+        "target",
+        "op",
+        "value"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "SwitchCase",
+      "required_fields": [
+        "body"
+      ],
+      "optional_fields": [
+        "condition"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "SwitchStructure",
+      "required_fields": [
+        "cases"
+      ],
+      "optional_fields": [
+        "expression"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "TupleDeclaration",
+      "required_fields": [
+        "targets",
+        "initializer"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable for tuple-returning expressions supported by AST2Python/PineLib."
+    },
+    {
+      "kind": "TupleExpr",
+      "required_fields": [
+        "elements"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable as value tuple; Pine collection/array semantics are not inferred from [] because [] remains HistoryRefExpr outside tuple literals."
+    },
+    {
+      "kind": "TupleExpr",
+      "required_fields": [
+        "elements"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Lowerable as value tuple; Pine collection/array semantics are not inferred from [] because [] remains HistoryRefExpr outside tuple literals."
+    },
+    {
+      "kind": "TupleTarget",
+      "required_fields": [
+        "name"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "TypeDeclaration",
+      "required_fields": [
+        "name",
+        "fields"
+      ],
+      "optional_fields": [
+        "is_exported"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema/lowering node exists; executable UDT/reference semantics require PineLib reference contract support."
+    },
+    {
+      "kind": "TypeRef",
+      "required_fields": [
+        "name"
+      ],
+      "optional_fields": [
+        "template_args"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "UnaryExpr",
+      "required_fields": [
+        "op",
+        "operand"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "VarDeclaration",
+      "required_fields": [
+        "name",
+        "initializer"
+      ],
+      "optional_fields": [
+        "mode",
+        "explicit_qualifier",
+        "type_ref",
+        "is_exported"
+      ],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    },
+    {
+      "kind": "WhileStructure",
+      "required_fields": [
+        "condition",
+        "body"
+      ],
+      "optional_fields": [],
+      "ast2python_lowerable": true,
+      "pinelib_runtime_support": true,
+      "unsupported_diagnostic_code": null,
+      "notes": "Schema node is part of the runtime_contract_v1.4 frontend bridge; consumer-specific semantic limits must be diagnosed explicitly before runtime."
+    }
+  ]
+}

@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release: `v3.5 parser modularization hardening` / package `0.3.5`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.5 does not claim wider oracle verification. Parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` is the production release gate.
+Current release: `v3.9 runtime_contract_v1.4 frontend bridge` / package `0.3.9`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.9 does not claim wider oracle verification and keeps the 30-fixture expansion pending. Runtime bridge notes live in `docs/runtime_contract_v1_4_frontend_mapping.md`; parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` remains verified-only; use `bash scripts/release_gate.sh --allow-pending-oracle` only for honest `oracle_expansion_pending` packaging.
 
 Fallback without pytest, only stdlib-compatible tests:
 
@@ -89,13 +89,13 @@ Exit codes:
 
 ## Ограничения текущей версии
 
-Актуальный список ограничений: `docs/current_limitations_v3_4.md`.
+Актуальный список ограничений: `docs/current_limitations_v3_9.md`.
 
 ## Что не является гарантией
 
 - Pine2AST не исполняет Pine-код, не симулирует бары и не является TradingView runtime.
 - Oracle evidence покрывает конкретный зафиксированный corpus, а не весь язык TradingView Pine Script.
-- `builtins_v6.json` — versioned internal expected snapshot, а не полная официальная карта всех builtins.
+- `builtins_v6.json` — named supported subset/internal confidence matrix, а не полная официальная карта всех builtins.
 - Online import resolver отсутствует; imports разбираются синтаксически/семантически в рамках доступной локальной информации.
 
 

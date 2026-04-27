@@ -48,6 +48,11 @@ from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
 from pine2ast.semantic.type_infer import callee_name, infer_type
 from pine2ast.ast.visitors import walk
+from pine2ast.semantic.passes import (
+    DeclarationIndexPass,
+    ScopeSymbolPass,
+    UnsupportedFeatureExtractionPass,
+)
 
 
 @dataclass(slots=True)
@@ -87,22 +92,9 @@ class SemanticAnalyzer:
 
     def analyze(self, program: Program) -> SemanticModel:
         self._push_scope(ScopeKind.GLOBAL)
-        self._register_builtins()
-        if program.declaration is None:
-            self._diag(
-                Severity.ERROR,
-                codes.MISSING_DECLARATION,
-                "Program has no indicator/strategy/library declaration statement.",
-                program.span,
-            )
-        else:
-            self._analyze_declaration_statement(program.declaration)
-        # Pine permits references to many global declarations before their textual body is visited.
-        # Predeclare global functions/types/enums/methods/import aliases, then validate bodies in order.
-        self._predeclare_globals(program.items)
+        DeclarationIndexPass(self).run(program)
         seen_decls = 1 if program.declaration else 0
-        for item in program.items:
-            self._visit_statement(item)
+        ScopeSymbolPass(self).run(program)
         seen_decls += sum(
             1
             for node in walk(program)
@@ -115,6 +107,7 @@ class SemanticAnalyzer:
                 "Program has more than one declaration statement.",
                 program.span,
             )
+        UnsupportedFeatureExtractionPass(self).run(program)
         self._pop_scope()
         return self.model
 
