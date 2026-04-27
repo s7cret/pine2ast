@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release candidate: `v3.2` / package `0.3.2rc1`. This is an oracle-pending packaging/evidence hardening RC over v3.1. Local gates are expected green via `bash scripts/release_gate.sh --allow-pending-oracle`; external TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed. See `docs/current_limitations_v3_2.md`.
+Current release: `v3.3 oracle_verified` / package `0.3.3`. TradingView Pine Editor compile-oracle is externally verified for the P0 strategy namespace fixtures; strict `bash scripts/release_gate.sh` is the release gate.
 
 Fallback without pytest, only stdlib:
 

@@ -2,12 +2,88 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "internal pine2ast semantic policy checked; external TradingView compile oracle still required for final production sign-off",
+  "oracle": "TradingView Pine Editor external compile oracle, authenticated browser session; evidence in TV_ORACLE_EVIDENCE_v3_3/",
   "policy": [
-    {"fixture": "indicator_strategy_long_allowed.pine", "context": "indicator", "usage": "strategy.long", "expected": "allowed as constant", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
-    {"fixture": "library_strategy_long_allowed.pine", "context": "library", "usage": "strategy.long", "expected": "allowed as constant", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
-    {"fixture": "indicator_strategy_equity_forbidden.pine", "context": "indicator", "usage": "strategy.equity", "expected": "forbidden", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
-    {"fixture": "strategy_closedtrades_allowed.pine", "context": "strategy", "usage": "strategy.closedtrades.entry_price/comment", "expected": "allowed", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
-    {"fixture": "indicator_closedtrades_forbidden.pine", "context": "indicator", "usage": "strategy.closedtrades.entry_price", "expected": "forbidden", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"}
-  ]
+    {
+      "fixture": "indicator_strategy_long_allowed.pine",
+      "context": "indicator",
+      "usage": "strategy.long",
+      "expected": "allowed as constant",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27T13:55:12+03:00",
+      "oracle": "TradingView Pine Editor v6",
+      "message": "TradingView Pine Editor v6 compiled successfully (Ctrl+Enter, 2026-04-27).",
+      "evidence": {
+        "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_long_allowed.pine.body.txt",
+        "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_long_allowed.pine.dom.json",
+        "screenshot": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_long_allowed.pine.jpg"
+      }
+    },
+    {
+      "fixture": "library_strategy_long_allowed.pine",
+      "context": "library",
+      "usage": "strategy.long",
+      "expected": "allowed as constant",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27T13:55:12+03:00",
+      "oracle": "TradingView Pine Editor v6",
+      "message": "TradingView Pine Editor v6 compiled successfully after using valid library title identifier.",
+      "evidence": {
+        "body_text": "TV_ORACLE_EVIDENCE_v3_3/library_strategy_long_allowed.pine.body.txt",
+        "dom_json": "TV_ORACLE_EVIDENCE_v3_3/library_strategy_long_allowed.pine.dom.json",
+        "screenshot": "TV_ORACLE_EVIDENCE_v3_3/library_strategy_long_allowed.pine.jpg"
+      }
+    },
+    {
+      "fixture": "indicator_strategy_equity_forbidden.pine",
+      "context": "indicator",
+      "usage": "strategy.equity",
+      "expected": "forbidden",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-04-27T13:55:12+03:00",
+      "oracle": "TradingView Pine Editor v6",
+      "message": "TradingView CE10027: strategy.equity cannot be used in indicator script.",
+      "evidence": {
+        "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_equity_forbidden.pine.body.txt",
+        "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_equity_forbidden.pine.dom.json",
+        "screenshot": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_equity_forbidden.pine.jpg"
+      }
+    },
+    {
+      "fixture": "strategy_closedtrades_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.closedtrades.entry_price/comment",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27T13:55:12+03:00",
+      "oracle": "TradingView Pine Editor v6",
+      "message": "TradingView Pine Editor v6 compiled successfully for strategy.closedtrades accessors in strategy context.",
+      "evidence": {
+        "body_text": "TV_ORACLE_EVIDENCE_v3_3/strategy_closedtrades_allowed.pine.body.txt",
+        "dom_json": "TV_ORACLE_EVIDENCE_v3_3/strategy_closedtrades_allowed.pine.dom.json",
+        "screenshot": "TV_ORACLE_EVIDENCE_v3_3/strategy_closedtrades_allowed.pine.jpg"
+      }
+    },
+    {
+      "fixture": "indicator_closedtrades_forbidden.pine",
+      "context": "indicator",
+      "usage": "strategy.closedtrades.entry_price",
+      "expected": "forbidden",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-04-27T13:55:12+03:00",
+      "oracle": "TradingView Pine Editor v6",
+      "message": "TradingView CE10027: strategy.closedtrades.entry_price cannot be used in indicator script.",
+      "evidence": {
+        "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_closedtrades_forbidden.pine.body.txt",
+        "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_closedtrades_forbidden.pine.dom.json",
+        "screenshot": "TV_ORACLE_EVIDENCE_v3_3/indicator_closedtrades_forbidden.pine.jpg"
+      }
+    }
+  ],
+  "checked_by": "openclaw-assisted-playwright"
 }

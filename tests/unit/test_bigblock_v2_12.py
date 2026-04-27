@@ -166,6 +166,4 @@ def test_v212_compile_oracle_metadata_is_schema_v2_internal_checked():
     )
     assert payload["schema_version"] == 2
     assert all(item["pine2ast_status"] == "pass" for item in payload["policy"])
-    assert all(
-        item["tradingview_status"] == "pending_external_oracle" for item in payload["policy"]
-    )
+    assert {item["tradingview_status"] for item in payload["policy"]} == {"ok", "invalid_expected"}
