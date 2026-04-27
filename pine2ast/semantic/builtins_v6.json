@@ -437,8 +437,83 @@
     "box.set_bgcolor": {
       "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "box.set_bgcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_border_color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_border_color",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_border_style": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_border_style",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "style",
+          "required": true,
+          "type": "line.style"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_border_width": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_border_width",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "width",
+          "required": true,
+          "type": "int"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -457,6 +532,27 @@
           "name": "bottom",
           "required": false,
           "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_extend": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_extend",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "extend",
+          "required": true,
+          "type": "extend"
         }
       ],
       "pine_version": "6",
@@ -484,14 +580,25 @@
       "scope": "any"
     },
     "box.set_lefttop": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "box.set_lefttop",
       "parameters": [
         {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "left",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "top",
+          "required": true,
+          "type": "float"
         }
       ],
       "pine_version": "6",
@@ -519,14 +626,109 @@
       "scope": "any"
     },
     "box.set_rightbottom": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "box.set_rightbottom",
       "parameters": [
         {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "right",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "bottom",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_text": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_text",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "text",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_text_color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_text_color",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "text_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_text_size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_text_size",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "text_size",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_text_wrap": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "box.set_text_wrap",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "text_wrap",
+          "required": true,
+          "type": "string"
         }
       ],
       "pine_version": "6",
@@ -1579,8 +1781,62 @@
     "label.set_color": {
       "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "label.set_color",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "label.set_size",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "size",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_style": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "label.set_style",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "style",
+          "required": true,
+          "type": "label.style"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -1609,8 +1865,41 @@
     "label.set_textcolor": {
       "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "label.set_textcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "textcolor",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_tooltip": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "label.set_tooltip",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "tooltip",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -1636,14 +1925,25 @@
       "scope": "any"
     },
     "label.set_xy": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "label.set_xy",
       "parameters": [
         {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "x",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "y",
+          "required": true,
+          "type": "float"
         }
       ],
       "pine_version": "6",
@@ -4421,8 +4721,251 @@
     "table.cell": {
       "docs_url": null,
       "kind": "builtin",
+      "metadata_version": 4,
       "name": "table.cell",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "width",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "height",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "text_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "text_halign",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_valign",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_size",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "bgcolor",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_bgcolor": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_bgcolor",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "bgcolor",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_height": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_height",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "height",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_color",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_size",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_size",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_width": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_width",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "width",
+          "required": true,
+          "type": "float"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -4441,6 +4984,42 @@
       "kind": "builtin",
       "name": "table.delete",
       "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.merge_cells": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.merge_cells",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "start_column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "start_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "end_column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "end_row",
+          "required": true,
+          "type": "int"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"

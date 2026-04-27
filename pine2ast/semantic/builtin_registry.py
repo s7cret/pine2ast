@@ -9,7 +9,22 @@ _REQUIRED_TOP_LEVEL_SECTIONS = ("functions", "namespaces", "types", "variables")
 _REQUIRED_FUNCTION_FIELDS = ("name", "kind", "pine_version", "parameters", "returns", "scope")
 _ALLOWED_FUNCTION_KINDS = {"builtin", "declaration"}
 _ALLOWED_FUNCTION_SCOPES = {"any", "global", "global_only", "strategy_readonly"}
-_ALLOWED_VARIABLE_QUALIFIERS = {"const", "input", "simple", "series"}
+_ALLOWED_QUALIFIERS = {"const", "input", "simple", "series"}
+_ALLOWED_VARIABLE_QUALIFIERS = _ALLOWED_QUALIFIERS
+_ALLOWED_FUNCTION_KEYS = {
+    "allow_extra_positional",
+    "docs_url",
+    "dynamic_allowed",
+    "forbidden_in_local_blocks",
+    "kind",
+    "metadata_version",
+    "name",
+    "overloads",
+    "parameters",
+    "pine_version",
+    "returns",
+    "scope",
+}
 _ALLOWED_PARAM_KEYS = {
     "name",
     "type",
@@ -20,6 +35,41 @@ _ALLOWED_PARAM_KEYS = {
     "removed_in",
     "replacement",
     "diagnostic_code",
+}
+_ALLOWED_OVERLOAD_KEYS = {"parameters", "returns", "metadata_version", "docs_url"}
+_ALLOWED_TYPE_ATOMS = {
+    "any",
+    "array",
+    "barmerge.gaps",
+    "barmerge.lookahead",
+    "bool",
+    "box",
+    "chart.point",
+    "color",
+    "display",
+    "dividends.field",
+    "earnings.field",
+    "extend",
+    "float",
+    "hline",
+    "int",
+    "label",
+    "label.style",
+    "line",
+    "line.style",
+    "map",
+    "matrix",
+    "plot",
+    "polyline",
+    "series",
+    "splits.field",
+    "strategy.direction",
+    "strategy.risk.type",
+    "string",
+    "table",
+    "table.position",
+    "unknown",
+    "void",
 }
 
 
@@ -73,6 +123,71 @@ def _require_string(value: Any, path: str) -> str:
     return value
 
 
+def _validate_version_marker(value: Any, path: str) -> None:
+    if value is None:
+        return
+    version = _require_string(value, path)
+    if not version.isdigit():
+        raise _schema_error(path, "expected Pine major version string")
+
+
+def _validate_type_ref(value: Any, path: str) -> None:
+    typ = _require_string(value, path)
+    if typ.startswith("tuple<") and typ.endswith(">"):
+        for idx, part in enumerate(typ[6:-1].split(",")):
+            _validate_type_ref(part.strip(), f"{path}.tuple[{idx}]")
+        return
+    if "<" in typ or ">" in typ:
+        if not typ.endswith(">") or "<" not in typ:
+            raise _schema_error(path, f"malformed generic type {typ!r}")
+        base, inner = typ[:-1].split("<", 1)
+        if base not in {"array", "map", "matrix", "series"}:
+            raise _schema_error(path, f"unsupported generic base {base!r}")
+        if not inner:
+            raise _schema_error(path, "empty generic type arguments")
+        for idx, part in enumerate(inner.split(",")):
+            _validate_type_ref(part.strip(), f"{path}.{base}[{idx}]")
+        return
+    if typ.startswith("series "):
+        _validate_type_ref(typ.removeprefix("series "), f"{path}.series")
+        return
+    if typ not in _ALLOWED_TYPE_ATOMS and not typ.endswith("_direction"):
+        raise _schema_error(path, f"unsupported type reference {typ!r}")
+
+
+def _validate_parameters(params: Any, path: str) -> None:
+    if not isinstance(params, list):
+        raise _schema_error(path, "expected array")
+    param_names: set[str] = set()
+    for idx, param in enumerate(params):
+        p_path = f"{path}[{idx}]"
+        p = _require_mapping(param, p_path)
+        unknown = set(p) - _ALLOWED_PARAM_KEYS
+        if unknown:
+            raise _schema_error(p_path, f"unknown parameter metadata keys: {sorted(unknown)}")
+        p_name = _require_string(p.get("name"), f"{p_path}.name")
+        if p_name in param_names:
+            raise _schema_error(f"{p_path}.name", f"duplicate parameter {p_name!r}")
+        param_names.add(p_name)
+        if "type" in p:
+            _validate_type_ref(p["type"], f"{p_path}.type")
+        if "required" in p and not isinstance(p["required"], bool):
+            raise _schema_error(f"{p_path}.required", "expected boolean")
+        if "qualifier_max" in p:
+            qualifier = _require_string(p["qualifier_max"], f"{p_path}.qualifier_max")
+            if qualifier not in _ALLOWED_QUALIFIERS:
+                raise _schema_error(
+                    f"{p_path}.qualifier_max", f"unsupported qualifier {qualifier!r}"
+                )
+        for marker in ("removed_in", "deprecated_in"):
+            if marker in p:
+                _validate_version_marker(p[marker], f"{p_path}.{marker}")
+        if "replacement" in p:
+            _require_string(p["replacement"], f"{p_path}.replacement")
+        if "diagnostic_code" in p:
+            _require_string(p["diagnostic_code"], f"{p_path}.diagnostic_code")
+
+
 def validate_builtin_registry(registry: dict[str, Any]) -> None:
     """Validate the builtin registry schema strictly enough to catch corrupt packs.
 
@@ -106,7 +221,7 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
     for name, meta in variables.items():
         _require_string(name, f"$.variables key {name!r}")
         entry = _require_mapping(meta, f"$.variables.{name}")
-        _require_string(entry.get("type"), f"$.variables.{name}.type")
+        _validate_type_ref(entry.get("type"), f"$.variables.{name}.type")
         qualifier = _require_string(entry.get("qualifier"), f"$.variables.{name}.qualifier")
         if qualifier not in _ALLOWED_VARIABLE_QUALIFIERS:
             raise _schema_error(
@@ -118,6 +233,12 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
     for name, meta in functions.items():
         _require_string(name, f"$.functions key {name!r}")
         entry = _require_mapping(meta, f"$.functions.{name}")
+        unknown_entry_keys = set(entry) - _ALLOWED_FUNCTION_KEYS
+        if unknown_entry_keys:
+            raise _schema_error(
+                f"$.functions.{name}",
+                f"unknown function metadata keys: {sorted(unknown_entry_keys)}",
+            )
         for required in _REQUIRED_FUNCTION_FIELDS:
             if required not in entry:
                 raise _schema_error(f"$.functions.{name}.{required}", "missing required field")
@@ -133,27 +254,33 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
         scope = _require_string(entry["scope"], f"$.functions.{name}.scope")
         if scope not in _ALLOWED_FUNCTION_SCOPES:
             raise _schema_error(f"$.functions.{name}.scope", f"unsupported scope {scope!r}")
-        _require_string(entry["returns"], f"$.functions.{name}.returns")
-        params = entry["parameters"]
-        if not isinstance(params, list):
-            raise _schema_error(f"$.functions.{name}.parameters", "expected array")
-        param_names: set[str] = set()
-        for idx, param in enumerate(params):
-            p_path = f"$.functions.{name}.parameters[{idx}]"
-            p = _require_mapping(param, p_path)
-            unknown = set(p) - _ALLOWED_PARAM_KEYS
-            if unknown:
-                raise _schema_error(p_path, f"unknown parameter metadata keys: {sorted(unknown)}")
-            p_name = _require_string(p.get("name"), f"{p_path}.name")
-            if p_name in param_names:
-                raise _schema_error(f"{p_path}.name", f"duplicate parameter {p_name!r}")
-            param_names.add(p_name)
-            if "type" in p:
-                _require_string(p["type"], f"{p_path}.type")
-            if "required" in p and not isinstance(p["required"], bool):
-                raise _schema_error(f"{p_path}.required", "expected boolean")
-            if "qualifier_max" in p:
-                _require_string(p["qualifier_max"], f"{p_path}.qualifier_max")
+        _validate_type_ref(entry["returns"], f"$.functions.{name}.returns")
+        _validate_parameters(entry["parameters"], f"$.functions.{name}.parameters")
+        if "overloads" in entry:
+            overloads = entry["overloads"]
+            if not isinstance(overloads, list):
+                raise _schema_error(f"$.functions.{name}.overloads", "expected array")
+            seen_overloads: set[tuple[str, ...]] = set()
+            for idx, overload in enumerate(overloads):
+                o_path = f"$.functions.{name}.overloads[{idx}]"
+                o = _require_mapping(overload, o_path)
+                unknown = set(o) - _ALLOWED_OVERLOAD_KEYS
+                if unknown:
+                    raise _schema_error(
+                        o_path, f"unknown overload metadata keys: {sorted(unknown)}"
+                    )
+                if "returns" not in o:
+                    raise _schema_error(f"{o_path}.returns", "missing required field")
+                if "parameters" not in o:
+                    raise _schema_error(f"{o_path}.parameters", "missing required field")
+                _validate_type_ref(o["returns"], f"{o_path}.returns")
+                _validate_parameters(o["parameters"], f"{o_path}.parameters")
+                signature = tuple(
+                    str(param.get("name")) for param in _require_mapping(o, o_path)["parameters"]
+                )
+                if signature in seen_overloads:
+                    raise _schema_error(o_path, "duplicate overload signature")
+                seen_overloads.add(signature)
 
 
 @lru_cache(maxsize=1)
@@ -237,7 +364,10 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     "label": {
         "new",
         "delete",
+        "set_size",
+        "set_style",
         "set_text",
+        "set_tooltip",
         "set_x",
         "set_y",
         "get_text",
@@ -261,8 +391,39 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
         "style_label_upper_left",
         "style_label_upper_right",
     },
-    "box": {"new", "delete", "set_left", "set_right", "set_top", "set_bottom"},
-    "table": {"new", "cell", "clear", "delete", "set_position"},
+    "box": {
+        "new",
+        "delete",
+        "set_bgcolor",
+        "set_border_color",
+        "set_border_style",
+        "set_border_width",
+        "set_extend",
+        "set_left",
+        "set_lefttop",
+        "set_right",
+        "set_rightbottom",
+        "set_text",
+        "set_text_color",
+        "set_text_size",
+        "set_text_wrap",
+        "set_top",
+        "set_bottom",
+    },
+    "table": {
+        "new",
+        "cell",
+        "cell_set_bgcolor",
+        "cell_set_height",
+        "cell_set_text",
+        "cell_set_text_color",
+        "cell_set_text_size",
+        "cell_set_width",
+        "clear",
+        "delete",
+        "merge_cells",
+        "set_position",
+    },
     "polyline": {"new", "delete"},
     "display": {"all", "none", "data_window", "pane", "price_scale", "status_line"},
     "position": {
@@ -311,27 +472,8 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
 # registry snapshot. Kept separate so coverage output does not imply official
 # coverage is complete when the internal expected set is green.
 OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
-    "line": {"set_extend", "set_style", "set_width", "set_x1", "set_x2", "set_y1", "set_y2"},
-    "label": {"set_size", "set_style", "set_tooltip"},
-    "box": {
-        "set_border_color",
-        "set_border_style",
-        "set_border_width",
-        "set_extend",
-        "set_text",
-        "set_text_color",
-        "set_text_size",
-        "set_text_wrap",
-    },
-    "table": {
-        "cell_set_bgcolor",
-        "cell_set_height",
-        "cell_set_text",
-        "cell_set_text_color",
-        "cell_set_text_size",
-        "cell_set_width",
-        "merge_cells",
-    },
+    "label": {"copy"},
+    "box": {"copy"},
 }
 
 # Known but deliberately deferred/unsupported surfaces. These are not counted as

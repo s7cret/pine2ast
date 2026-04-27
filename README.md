@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_16_0.json
 ```
 
-Current release evidence: v2.18.0 / package `0.2.18` targets layout/parser hardening for ambiguous Real Pine continuations, delimiter-aware token snapshots, and recovery for malformed layout/delimiters with green ruff, black, mypy, tests, coverage, and real-world corpus gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+Current release evidence: v2.19.0 / package `0.2.19` targets builtin registry official-coverage hardening and compatibility-layer signature validation, with stricter registry schema checks, expanded drawing/table setter metadata, and green ruff, black, mypy, tests, coverage, and real-world corpus gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
 
 Fallback without pytest, only stdlib:
 
@@ -130,7 +130,7 @@ Additional v0.1.5 hardening:
 - Type references are validated and emit `P2A1604 UNKNOWN_TYPE` for unresolved explicit types.
 - `extract_inputs()` understands `options = array.from(...)` in addition to tuple-style options.
 - Builtin registry expanded to 165 function entries and the real-world seed corpus was expanded to 30 clean files.
-- Builtin registry schema/coverage notes: see `docs/builtin_registry.md` for strict validation and the internal-vs-official coverage taxonomy.
+- Builtin registry schema/coverage notes: see `docs/builtin_registry.md` for strict validation, overload-shape checks, type/qualifier validation, and the internal-vs-official coverage taxonomy.
 
 
 ## v0.1.8 big-block hardening highlights
