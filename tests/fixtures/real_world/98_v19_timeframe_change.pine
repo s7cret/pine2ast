@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Timeframe Change")
+newDay = timeframe.change("D")
+value = switch
+    newDay => high
+    => close
+plot(value)

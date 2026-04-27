@@ -1,0 +1,19 @@
+//@version=6
+indicator("v1.10 Type Hardening", overlay=true)
+
+enum Trend
+    UP
+    DOWN
+
+type Pivot
+    int x
+    float y
+    Trend trend
+
+makePivot(int x, float y, Trend t) =>
+    Pivot.new(x, y, t)
+
+var array<Pivot> pivots = array.new<Pivot>()
+p = makePivot(bar_index, close, Trend.UP)
+array.push(pivots, p)
+plot(p.y)

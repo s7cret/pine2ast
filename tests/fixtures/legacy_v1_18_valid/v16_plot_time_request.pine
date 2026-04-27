@@ -1,0 +1,6 @@
+//@version=6
+indicator("v16 plot/time/request", timeframe="D", timeframe_gaps=true, scale=scale.right)
+s = input.session("0930-1600", "Session")
+in_sess = not na(time(timeframe.period, s))
+rate = request.currency_rate(currency.USD, currency.EUR)
+plot(close, offset=1, trackprice=false, histbase=0.0, join=false, editable=true, show_last=10)

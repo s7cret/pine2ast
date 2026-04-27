@@ -1,0 +1,8 @@
+//@version=6
+indicator("v23 switch seed 257")
+mode = input.string("Fast", "Mode", options = ["Fast", "Slow"])
+value = switch mode
+    "Fast" => ta.ema(close, 9)
+    "Slow" => ta.ema(close, 21)
+    => close
+plot(value)

@@ -1,0 +1,14 @@
+//@version=6
+indicator("v1.11 enum + UDT hardening", overlay = true)
+
+enum Trend
+    UP
+    DOWN
+
+type Pivot
+    int x
+    float y
+    Trend trend
+
+p = Pivot.new(x=bar_index, y=close, trend=Trend.UP)
+plot(p.y)

@@ -1,0 +1,5 @@
+//@version=6
+indicator("Security Tuple Arg")
+remoteClose = request.security(syminfo.tickerid, "D", close)
+remoteMa = ta.sma(remoteClose, 10)
+plot(remoteMa)

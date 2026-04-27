@@ -1,0 +1,4 @@
+//@version=6
+strategy("Exit")
+strategy.entry("L", strategy.long)
+strategy.exit("LX", "L", stop = low, limit = high)

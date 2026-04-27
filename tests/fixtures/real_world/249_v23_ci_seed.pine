@@ -1,0 +1,8 @@
+//@version=6
+indicator("v23 udt seed 249")
+type Pivot
+    int x
+    float y
+p = Pivot.new(bar_index, close)
+next = p.y > open ? p.y : open
+plot(next)

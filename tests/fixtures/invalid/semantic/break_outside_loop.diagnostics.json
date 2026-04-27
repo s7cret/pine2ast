@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/semantic/break_outside_loop.pine",
+  "expected_codes": [
+    "P2A1701"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A1701"
+  ],
+  "notes": "Expected-code contract generated for v2.15.0 fixture hardening. Tests require every expected code to be emitted; additional recovery diagnostics are allowed."
+}

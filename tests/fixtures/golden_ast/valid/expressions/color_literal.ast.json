@@ -1,0 +1,209 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 73,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 5,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 35,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 23
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 35,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 23
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 34,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 22
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 34,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 22
+            },
+            "value": "Color lit",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 36,
+        "end_offset": 49,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 14
+      },
+      "name": "c",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "Literal",
+        "span": {
+          "start_offset": 40,
+          "end_offset": 49,
+          "start_line": 3,
+          "start_col": 5,
+          "end_line": 3,
+          "end_col": 14
+        },
+        "value": "#FF000080",
+        "literal_type": "color"
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 50,
+        "end_offset": 72,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 23
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 50,
+          "end_offset": 72,
+          "start_line": 4,
+          "start_col": 1,
+          "end_line": 4,
+          "end_col": 23
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 50,
+            "end_offset": 54,
+            "start_line": 4,
+            "start_col": 1,
+            "end_line": 4,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 55,
+              "end_offset": 60,
+              "start_line": 4,
+              "start_col": 6,
+              "end_line": 4,
+              "end_col": 11
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 55,
+                "end_offset": 60,
+                "start_line": 4,
+                "start_col": 6,
+                "end_line": 4,
+                "end_col": 11
+              },
+              "name": "close"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 68,
+              "end_offset": 71,
+              "start_line": 4,
+              "start_col": 19,
+              "end_line": 4,
+              "end_col": 22
+            },
+            "name": "color",
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 70,
+                "end_offset": 71,
+                "start_line": 4,
+                "start_col": 21,
+                "end_line": 4,
+                "end_col": 22
+              },
+              "name": "c"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

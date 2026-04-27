@@ -1,0 +1,9 @@
+//@version=6
+strategy("EMA Cross", overlay = true)
+fastLen = input.int(12, title = "Fast", minval = 1)
+slowLen = input.int(26, title = "Slow", minval = 1)
+fast = ta.ema(close, fastLen)
+slow = ta.ema(close, slowLen)
+longCond = fast > slow
+if longCond
+    strategy.entry("L", strategy.long)

@@ -1,0 +1,8 @@
+//@version=6
+indicator("Comments wrap")
+x = ta.sma(
+    close,
+    // length comment
+    20
+)
+plot(x)

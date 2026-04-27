@@ -1,0 +1,5 @@
+//@version=6
+indicator("v23 request seed 280")
+[secClose, secOpen] = request.security(syminfo.tickerid, "D", [close, open])
+spread = secClose - secOpen
+plot(spread)

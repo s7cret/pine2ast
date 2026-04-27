@@ -1,0 +1,12 @@
+//@version=6
+indicator("Switch Block Body")
+mode = input.string("A", "Mode", options = ["A", "B"])
+value = switch mode
+    "A" =>
+        a = close + 1
+        a
+    "B" =>
+        b = close - 1
+        b
+    => close
+plot(value)

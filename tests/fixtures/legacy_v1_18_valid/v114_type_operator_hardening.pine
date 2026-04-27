@@ -1,0 +1,6 @@
+//@version=6
+indicator("v1.14 type/operator hardening", overlay=true)
+float baseline = 1
+baseline := 2
+message = "prefix" + "suffix"
+plot(close, linewidth=2, color=color.new(color.green, 0))

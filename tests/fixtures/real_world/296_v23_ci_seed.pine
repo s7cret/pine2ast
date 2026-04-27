@@ -1,0 +1,6 @@
+//@version=6
+indicator("v23 collections seed 296")
+array<float> values = array.new<float>(0)
+values.push(close)
+value = values.size() > 0 ? values.get(0) : close
+plot(value)

@@ -1,0 +1,5 @@
+//@version=6
+indicator("V19 Text Area")
+notes = input.text_area("hello", "Notes")
+label.new(bar_index, close, notes)
+plot(close)

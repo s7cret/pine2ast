@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 UDT Nested")
+type BoxState
+    float top = 0.0
+    float bottom = 0.0
+state = BoxState.new(top = high, bottom = low)
+plot(state.top - state.bottom)

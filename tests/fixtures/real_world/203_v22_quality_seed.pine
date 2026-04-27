@@ -1,0 +1,5 @@
+//@version=6
+indicator("v22 matrix set 203")
+matrix<float> mm = matrix.new<float>(2, 2, 0.0)
+matrix.set(mm, 0, 0, close)
+plot(matrix.get(mm, 0, 0))

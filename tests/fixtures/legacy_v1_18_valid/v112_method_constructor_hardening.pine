@@ -1,0 +1,14 @@
+//@version=6
+indicator("v1.12 method + constructor hardening", overlay=true)
+
+type Pivot
+    int x = 0
+    float y
+
+method isHigh(Pivot p) =>
+    p.y > high[1]
+
+Pivot p = Pivot.new(y=high)
+var array<float> values = array.new<float>()
+values.push(p.y)
+plot(p.isHigh() ? p.y : close)

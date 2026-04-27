@@ -1,0 +1,4 @@
+//@version=6
+indicator("Linreg")
+reg = ta.linreg(close, 20, 0)
+plot(reg)

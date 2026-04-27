@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "summary": {
+    "ok": true,
+    "total": 0,
+    "max_severity": null,
+    "by_severity": {},
+    "by_code": {}
+  },
+  "diagnostics": []
+}

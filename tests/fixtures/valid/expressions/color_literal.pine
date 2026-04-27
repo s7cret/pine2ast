@@ -1,0 +1,4 @@
+//@version=6
+indicator("Color lit")
+c = #FF000080
+plot(close, color = c)

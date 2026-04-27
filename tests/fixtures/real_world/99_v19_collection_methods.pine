@@ -1,0 +1,6 @@
+//@version=6
+indicator("V19 Collection Methods")
+values = array.from(close, open, high)
+first = values.first()
+last = values.last()
+plot(first + last)

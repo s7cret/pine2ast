@@ -1,0 +1,7 @@
+//@version=6
+indicator("For in")
+var array<float> values = array.new<float>()
+sum = 0.0
+for item in values
+    sum += item
+plot(sum)

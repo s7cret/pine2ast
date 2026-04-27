@@ -1,0 +1,7 @@
+//@version=6
+indicator("Nested Tuple Function")
+bounds(float src, int len) =>
+    [b, u, l] = ta.bb(src, len, 2)
+    [u, l]
+[upper, lower] = bounds(close, 20)
+plot(upper - lower)

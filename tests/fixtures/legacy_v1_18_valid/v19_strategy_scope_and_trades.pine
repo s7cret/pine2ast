@@ -1,0 +1,6 @@
+//@version=6
+strategy("v19 strategy helpers", overlay=true)
+strategy.entry("L", strategy.long)
+profit = strategy.closedtrades > 0 ? strategy.closedtrades.profit(0) : 0.0
+openProfit = strategy.opentrades > 0 ? strategy.opentrades.profit(0) : 0.0
+plot(profit + openProfit)

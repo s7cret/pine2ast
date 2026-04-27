@@ -1,0 +1,9 @@
+//@version=6
+indicator("Loop Control")
+var array<float> values = array.new<float>(0)
+sum = 0.0
+for item in values
+    if na(item)
+        continue
+    sum += item
+plot(sum)

@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pine2ast"
+version = "0.2.15"
+description = "Pine Script v6 to AST parser prototype with lexer, layout, semantic diagnostics and CLI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Interpipe Solutions"}]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "ruff>=0.6",
+  "black>=24",
+  "mypy>=1.10",
+]
+
+[project.scripts]
+pine2ast = "pine2ast.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["pine2ast*"]
+
+[tool.setuptools.package-data]
+pine2ast = ["semantic/*.json"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration"]
+addopts = "-q"
+python_files = ["test_*.py"]
+
+[tool.coverage.run]
+branch = true
+source = ["pine2ast"]
+omit = ["pine2ast/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 90
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
+]
+
+[tool.mypy]
+python_version = "3.10"
+packages = ["pine2ast"]
+ignore_missing_imports = true
+warn_unused_configs = true
+check_untyped_defs = true
+no_implicit_optional = true

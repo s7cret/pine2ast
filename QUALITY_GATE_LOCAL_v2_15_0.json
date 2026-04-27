@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "version": "v2.15.0",
+  "stage": "P0 Golden/negative fixtures hardening",
+  "sandbox_verification": {
+    "valid_fixture_parse_ok": true,
+    "valid_fixture_count": 57,
+    "integration_contract_checks_passed": 8,
+    "invalid_fixture_count": 23,
+    "golden_ast_count": 57,
+    "golden_diagnostics_count": 57,
+    "invalid_diagnostics_contract_count": 23
+  },
+  "not_claimed_in_sandbox": [
+    "pytest full suite",
+    "pytest-cov",
+    "ruff",
+    "black",
+    "mypy"
+  ]
+}

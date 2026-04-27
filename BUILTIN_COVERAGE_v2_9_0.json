@@ -1,0 +1,589 @@
+{
+  "schema_version": 1,
+  "pine_version": "6",
+  "function_count": 255,
+  "variable_count": 62,
+  "namespace_count": 30,
+  "namespaces": {
+    "array": {
+      "entry_count": 32,
+      "entries": [
+        "array.avg",
+        "array.clear",
+        "array.copy",
+        "array.first",
+        "array.from",
+        "array.from<bool>",
+        "array.from<color>",
+        "array.from<float>",
+        "array.from<int>",
+        "array.from<string>",
+        "array.get",
+        "array.includes",
+        "array.indexof",
+        "array.insert",
+        "array.last",
+        "array.max",
+        "array.min",
+        "array.new<bool>",
+        "array.new<color>",
+        "array.new<float>",
+        "array.new<int>",
+        "array.new<string>",
+        "array.pop",
+        "array.push",
+        "array.remove",
+        "array.reverse",
+        "array.set",
+        "array.shift",
+        "array.size",
+        "array.sort",
+        "array.sum",
+        "array.unshift"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "barstate": {
+      "entry_count": 7,
+      "entries": [
+        "barstate.isconfirmed",
+        "barstate.isfirst",
+        "barstate.ishistory",
+        "barstate.islast",
+        "barstate.islastconfirmedhistory",
+        "barstate.isnew",
+        "barstate.isrealtime"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "box": {
+      "entry_count": 5,
+      "entries": [
+        "box.delete",
+        "box.new",
+        "box.set_bgcolor",
+        "box.set_lefttop",
+        "box.set_rightbottom"
+      ],
+      "expected_count": 6,
+      "missing_expected": [
+        "box.set_bottom",
+        "box.set_left",
+        "box.set_right",
+        "box.set_top"
+      ],
+      "coverage_ratio": 0.3333333333333333
+    },
+    "chart": {
+      "entry_count": 3,
+      "entries": [
+        "chart.point.from_index",
+        "chart.point.from_time",
+        "chart.point.now"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "color": {
+      "entry_count": 11,
+      "entries": [
+        "color.black",
+        "color.blue",
+        "color.from_gradient",
+        "color.gray",
+        "color.green",
+        "color.new",
+        "color.orange",
+        "color.red",
+        "color.rgb",
+        "color.white",
+        "color.yellow"
+      ],
+      "expected_count": 3,
+      "missing_expected": [],
+      "coverage_ratio": 1.0
+    },
+    "display": {
+      "entry_count": 2,
+      "entries": [
+        "display.all",
+        "display.none"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "extend": {
+      "entry_count": 2,
+      "entries": [
+        "extend.none",
+        "extend.right"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "format": {
+      "entry_count": 2,
+      "entries": [
+        "format.price",
+        "format.volume"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "input": {
+      "entry_count": 13,
+      "entries": [
+        "input.bool",
+        "input.color",
+        "input.enum",
+        "input.float",
+        "input.int",
+        "input.price",
+        "input.session",
+        "input.source",
+        "input.string",
+        "input.symbol",
+        "input.text_area",
+        "input.time",
+        "input.timeframe"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "label": {
+      "entry_count": 6,
+      "entries": [
+        "label.delete",
+        "label.new",
+        "label.set_color",
+        "label.set_text",
+        "label.set_textcolor",
+        "label.set_xy"
+      ],
+      "expected_count": 8,
+      "missing_expected": [
+        "label.get_text",
+        "label.get_x",
+        "label.get_y",
+        "label.set_x",
+        "label.set_y"
+      ],
+      "coverage_ratio": 0.375
+    },
+    "line": {
+      "entry_count": 6,
+      "entries": [
+        "line.delete",
+        "line.get_price",
+        "line.new",
+        "line.set_color",
+        "line.set_xy1",
+        "line.set_xy2"
+      ],
+      "expected_count": 8,
+      "missing_expected": [
+        "line.get_x1",
+        "line.get_x2",
+        "line.get_y1",
+        "line.get_y2"
+      ],
+      "coverage_ratio": 0.5
+    },
+    "location": {
+      "entry_count": 2,
+      "entries": [
+        "location.abovebar",
+        "location.belowbar"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "map": {
+      "entry_count": 10,
+      "entries": [
+        "map.contains",
+        "map.get",
+        "map.keys",
+        "map.new<string,float>",
+        "map.new<string,int>",
+        "map.new<string,string>",
+        "map.put",
+        "map.remove",
+        "map.size",
+        "map.values"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "math": {
+      "entry_count": 23,
+      "entries": [
+        "math.abs",
+        "math.acos",
+        "math.asin",
+        "math.atan",
+        "math.avg",
+        "math.ceil",
+        "math.cos",
+        "math.exp",
+        "math.floor",
+        "math.log",
+        "math.log10",
+        "math.max",
+        "math.min",
+        "math.pow",
+        "math.random",
+        "math.round",
+        "math.sign",
+        "math.sin",
+        "math.sqrt",
+        "math.sum",
+        "math.tan",
+        "math.todegrees",
+        "math.toradians"
+      ],
+      "expected_count": 12,
+      "missing_expected": [],
+      "coverage_ratio": 1.0
+    },
+    "matrix": {
+      "entry_count": 13,
+      "entries": [
+        "matrix.avg",
+        "matrix.columns",
+        "matrix.get",
+        "matrix.max",
+        "matrix.min",
+        "matrix.new<float>",
+        "matrix.new<int>",
+        "matrix.reshape",
+        "matrix.reverse",
+        "matrix.rows",
+        "matrix.set",
+        "matrix.sum",
+        "matrix.transpose"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "position": {
+      "entry_count": 4,
+      "entries": [
+        "position.bottom_left",
+        "position.bottom_right",
+        "position.top_left",
+        "position.top_right"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "request": {
+      "entry_count": 8,
+      "entries": [
+        "request.currency_rate",
+        "request.dividends",
+        "request.earnings",
+        "request.financial",
+        "request.quandl",
+        "request.security",
+        "request.seed",
+        "request.splits"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "session": {
+      "entry_count": 0,
+      "entries": [],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "shape": {
+      "entry_count": 2,
+      "entries": [
+        "shape.triangledown",
+        "shape.triangleup"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "size": {
+      "entry_count": 3,
+      "entries": [
+        "size.normal",
+        "size.small",
+        "size.tiny"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "str": {
+      "entry_count": 12,
+      "entries": [
+        "str.contains",
+        "str.endswith",
+        "str.format",
+        "str.length",
+        "str.lower",
+        "str.replace",
+        "str.replace_all",
+        "str.split",
+        "str.startswith",
+        "str.substring",
+        "str.tostring",
+        "str.upper"
+      ],
+      "expected_count": 9,
+      "missing_expected": [
+        "str.tonumber"
+      ],
+      "coverage_ratio": 0.8888888888888888
+    },
+    "strategy": {
+      "entry_count": 46,
+      "entries": [
+        "strategy.cancel",
+        "strategy.cancel_all",
+        "strategy.cash",
+        "strategy.close",
+        "strategy.closedtrades",
+        "strategy.closedtrades.commission",
+        "strategy.closedtrades.entry_bar_index",
+        "strategy.closedtrades.entry_id",
+        "strategy.closedtrades.entry_price",
+        "strategy.closedtrades.entry_time",
+        "strategy.closedtrades.exit_bar_index",
+        "strategy.closedtrades.exit_id",
+        "strategy.closedtrades.exit_price",
+        "strategy.closedtrades.exit_time",
+        "strategy.closedtrades.max_drawdown",
+        "strategy.closedtrades.max_runup",
+        "strategy.closedtrades.profit",
+        "strategy.closedtrades.profit_percent",
+        "strategy.closedtrades.size",
+        "strategy.entry",
+        "strategy.equity",
+        "strategy.exit",
+        "strategy.long",
+        "strategy.losstrades",
+        "strategy.netprofit",
+        "strategy.openprofit",
+        "strategy.opentrades",
+        "strategy.opentrades.commission",
+        "strategy.opentrades.entry_bar_index",
+        "strategy.opentrades.entry_id",
+        "strategy.opentrades.entry_price",
+        "strategy.opentrades.entry_time",
+        "strategy.opentrades.max_drawdown",
+        "strategy.opentrades.max_runup",
+        "strategy.opentrades.profit",
+        "strategy.opentrades.profit_percent",
+        "strategy.opentrades.size",
+        "strategy.order",
+        "strategy.percent_of_equity",
+        "strategy.position_avg_price",
+        "strategy.position_size",
+        "strategy.risk.allow_entry_in",
+        "strategy.risk.max_drawdown",
+        "strategy.risk.max_intraday_loss",
+        "strategy.short",
+        "strategy.wintrades"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "syminfo": {
+      "entry_count": 3,
+      "entries": [
+        "syminfo.prefix",
+        "syminfo.root",
+        "syminfo.tickerid"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "ta": {
+      "entry_count": 45,
+      "entries": [
+        "ta.alma",
+        "ta.atr",
+        "ta.barssince",
+        "ta.bb",
+        "ta.cci",
+        "ta.change",
+        "ta.cmo",
+        "ta.cross",
+        "ta.crossover",
+        "ta.crossunder",
+        "ta.cum",
+        "ta.dev",
+        "ta.dmi",
+        "ta.ema",
+        "ta.falling",
+        "ta.highest",
+        "ta.highestbars",
+        "ta.hma",
+        "ta.kc",
+        "ta.kcw",
+        "ta.linreg",
+        "ta.lowest",
+        "ta.lowestbars",
+        "ta.macd",
+        "ta.mfi",
+        "ta.mom",
+        "ta.obv",
+        "ta.percentrank",
+        "ta.pivothigh",
+        "ta.pivotlow",
+        "ta.rising",
+        "ta.rma",
+        "ta.roc",
+        "ta.rsi",
+        "ta.sar",
+        "ta.sma",
+        "ta.stdev",
+        "ta.supertrend",
+        "ta.swma",
+        "ta.tr",
+        "ta.valuewhen",
+        "ta.variance",
+        "ta.vwap",
+        "ta.vwma",
+        "ta.wma"
+      ],
+      "expected_count": 12,
+      "missing_expected": [],
+      "coverage_ratio": 1.0
+    },
+    "table": {
+      "entry_count": 4,
+      "entries": [
+        "table.cell",
+        "table.clear",
+        "table.delete",
+        "table.new"
+      ],
+      "expected_count": 5,
+      "missing_expected": [
+        "table.set_position"
+      ],
+      "coverage_ratio": 0.8
+    },
+    "ticker": {
+      "entry_count": 0,
+      "entries": [],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "time": {
+      "entry_count": 0,
+      "entries": [],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "timeframe": {
+      "entry_count": 2,
+      "entries": [
+        "timeframe.change",
+        "timeframe.period"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "xloc": {
+      "entry_count": 1,
+      "entries": [
+        "xloc.bar_index"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "yloc": {
+      "entry_count": 1,
+      "entries": [
+        "yloc.price"
+      ],
+      "expected_count": 0,
+      "missing_expected": [],
+      "coverage_ratio": null
+    },
+    "polyline": {
+      "entry_count": 0,
+      "entries": [],
+      "expected_count": 2,
+      "missing_expected": [
+        "polyline.delete",
+        "polyline.new"
+      ],
+      "coverage_ratio": 0.0
+    },
+    "strategy.closedtrades": {
+      "entry_count": 14,
+      "entries": [
+        "strategy.closedtrades.commission",
+        "strategy.closedtrades.entry_bar_index",
+        "strategy.closedtrades.entry_id",
+        "strategy.closedtrades.entry_price",
+        "strategy.closedtrades.entry_time",
+        "strategy.closedtrades.exit_bar_index",
+        "strategy.closedtrades.exit_id",
+        "strategy.closedtrades.exit_price",
+        "strategy.closedtrades.exit_time",
+        "strategy.closedtrades.max_drawdown",
+        "strategy.closedtrades.max_runup",
+        "strategy.closedtrades.profit",
+        "strategy.closedtrades.profit_percent",
+        "strategy.closedtrades.size"
+      ],
+      "expected_count": 14,
+      "missing_expected": [
+        "strategy.closedtrades.entry_comment",
+        "strategy.closedtrades.exit_comment"
+      ],
+      "coverage_ratio": 0.8571428571428571
+    },
+    "strategy.opentrades": {
+      "entry_count": 10,
+      "entries": [
+        "strategy.opentrades.commission",
+        "strategy.opentrades.entry_bar_index",
+        "strategy.opentrades.entry_id",
+        "strategy.opentrades.entry_price",
+        "strategy.opentrades.entry_time",
+        "strategy.opentrades.max_drawdown",
+        "strategy.opentrades.max_runup",
+        "strategy.opentrades.profit",
+        "strategy.opentrades.profit_percent",
+        "strategy.opentrades.size"
+      ],
+      "expected_count": 9,
+      "missing_expected": [
+        "strategy.opentrades.entry_comment"
+      ],
+      "coverage_ratio": 0.8888888888888888
+    }
+  }
+}

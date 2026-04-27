@@ -1,0 +1,5 @@
+FORBIDDEN_IN_LOCAL_BLOCKS = {
+    "barcolor", "bgcolor", "plot", "plotshape", "plotchar", "plotarrow",
+    "plotcandle", "plotbar", "hline", "fill", "alertcondition",
+    "indicator", "strategy", "library",
+}

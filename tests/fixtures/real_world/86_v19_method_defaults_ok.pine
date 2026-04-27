@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Method Defaults")
+type Pivot
+    float y = 0.0
+method score(Pivot p, int weight = 1) => p.y * weight
+p = Pivot.new(close)
+plot(p.score())

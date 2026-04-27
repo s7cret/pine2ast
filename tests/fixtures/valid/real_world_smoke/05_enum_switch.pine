@@ -1,0 +1,12 @@
+//@version=6
+indicator("Enum Switch")
+enum Trend
+    UP "Up"
+    DOWN "Down"
+    SIDEWAYS "Sideways"
+trend = close > open ? Trend.UP : Trend.DOWN
+value = switch trend
+    Trend.UP => 1
+    Trend.DOWN => -1
+    => 0
+plot(value)

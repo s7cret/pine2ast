@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Switch Bool")
+value = switch
+    close > open => 1
+    close < open => -1
+    => 0
+plot(value)

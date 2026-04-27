@@ -1,0 +1,6 @@
+//@version=6
+indicator("v22 array push 236")
+array<float> values = array.new<float>(0)
+array.push(values, close)
+last = values.size() > 0 ? values.last() : close
+plot(last)

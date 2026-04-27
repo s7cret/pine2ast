@@ -1,0 +1,6 @@
+//@version=6
+indicator("Table Summary")
+t = table.new(position.top_right, 2, 2)
+table.cell(t, 0, 0, "RSI")
+r = ta.rsi(close, 14)
+plot(r)

@@ -1,0 +1,6 @@
+//@version=6
+indicator("V19 Chart Points")
+p1 = chart.point.now(close)
+p2 = chart.point.from_index(bar_index, high)
+line.new(p1, p2)
+plot(close)

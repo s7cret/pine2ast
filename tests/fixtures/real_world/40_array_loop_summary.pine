@@ -1,0 +1,9 @@
+//@version=6
+indicator("Array Loop Summary")
+var array<float> values = array.new<float>()
+array.push(values, close)
+sum = 0.0
+for item in values
+    sum += item
+avg = sum / math.max(array.size(values), 1)
+plot(avg)

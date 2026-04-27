@@ -1,0 +1,356 @@
+{
+  "ok": true,
+  "diagnostics": [],
+  "semantic": {
+    "schema_version": 2,
+    "symbol_count": 20,
+    "scope_count": 1,
+    "by_kind": {
+      "TYPE": 18,
+      "VARIABLE": 2
+    },
+    "by_type": {
+      "float": 1,
+      "int": 1,
+      "type": 18
+    },
+    "by_qualifier": {
+      "input": 1,
+      "none": 18,
+      "series": 1
+    },
+    "symbols": [
+      {
+        "id": 37,
+        "name": "box.style",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 38,
+        "name": "chart.point",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 40,
+        "name": "const",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 41,
+        "name": "display",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 42,
+        "name": "extend",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 48,
+        "name": "label.style",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 449,
+        "name": "len",
+        "kind": "VARIABLE",
+        "type": "int",
+        "qualifier": "input",
+        "scope_id": 1,
+        "span": {
+          "start_offset": 55,
+          "end_offset": 104,
+          "start_line": 3,
+          "start_col": 1,
+          "end_line": 3,
+          "end_col": 50
+        }
+      },
+      {
+        "id": 50,
+        "name": "line.style",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 51,
+        "name": "linefill",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 450,
+        "name": "ma",
+        "kind": "VARIABLE",
+        "type": "float",
+        "qualifier": "series",
+        "scope_id": 1,
+        "span": {
+          "start_offset": 105,
+          "end_offset": 128,
+          "start_line": 4,
+          "start_col": 1,
+          "end_line": 4,
+          "end_col": 24
+        }
+      },
+      {
+        "id": 56,
+        "name": "series",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 57,
+        "name": "simple",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 58,
+        "name": "size",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 59,
+        "name": "strategy.direction",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 60,
+        "name": "strategy.order_type",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 61,
+        "name": "strategy.risk.type",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 64,
+        "name": "table.position",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 65,
+        "name": "text.align",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 66,
+        "name": "xloc",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      },
+      {
+        "id": 67,
+        "name": "yloc",
+        "kind": "TYPE",
+        "type": "type",
+        "qualifier": null,
+        "scope_id": 1,
+        "span": {
+          "start_offset": 0,
+          "end_offset": 0,
+          "start_line": 1,
+          "start_col": 1,
+          "end_line": 1,
+          "end_col": 1
+        }
+      }
+    ],
+    "scopes": [
+      {
+        "id": 1,
+        "kind": "GLOBAL",
+        "parent_id": null,
+        "symbol_count": 181,
+        "non_na_symbols": [],
+        "non_na_paths": []
+      }
+    ],
+    "narrowing_count": 0
+  }
+}

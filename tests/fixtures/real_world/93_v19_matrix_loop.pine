@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Matrix Loop")
+var matrix<float> values = matrix.new<float>(2, 2, 0.0)
+sum = 0.0
+for item in values
+    sum += item
+plot(sum)

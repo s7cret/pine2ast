@@ -1,0 +1,5 @@
+//@version=6
+indicator("V19 String Helpers")
+msg = str.upper(str.replace_all("risk mode", " ", "_"))
+label.new(bar_index, high, msg)
+plot(close)

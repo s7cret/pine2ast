@@ -1,0 +1,9 @@
+//@version=6
+import TradingView/ta/7 as ta2
+indicator("T", overlay=true)
+[hh, ll] = request.security(syminfo.tickerid, "D", [high, low])
+var int x = na
+if barstate.isconfirmed
+    x := 1
+p = chart.point.now(close)
+plot(ta2.sma(hh, x))

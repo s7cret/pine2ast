@@ -1,0 +1,4998 @@
+{
+  "functions": {
+    "alertcondition": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "alertcondition",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "array.avg": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.avg",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.clear": {
+      "kind": "builtin",
+      "name": "array.clear",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "array.copy": {
+      "kind": "builtin",
+      "name": "array.copy",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.first": {
+      "kind": "builtin",
+      "name": "array.first",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "array.from": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.from",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.from<bool>": {
+      "kind": "builtin",
+      "name": "array.from<bool>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<bool>",
+      "scope": "any"
+    },
+    "array.from<color>": {
+      "kind": "builtin",
+      "name": "array.from<color>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<color>",
+      "scope": "any"
+    },
+    "array.from<float>": {
+      "kind": "builtin",
+      "name": "array.from<float>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "array.from<int>": {
+      "kind": "builtin",
+      "name": "array.from<int>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.from<string>": {
+      "kind": "builtin",
+      "name": "array.from<string>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<string>",
+      "scope": "any"
+    },
+    "array.get": {
+      "kind": "builtin",
+      "name": "array.get",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "array.includes": {
+      "kind": "builtin",
+      "name": "array.includes",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "array.indexof": {
+      "kind": "builtin",
+      "name": "array.indexof",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.insert": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.insert",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.last": {
+      "kind": "builtin",
+      "name": "array.last",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "array.max": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.max",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.min": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.min",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.new<bool>": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.new<bool>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.new<color>": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.new<color>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.new<float>": {
+      "kind": "builtin",
+      "name": "array.new<float>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "array.new<int>": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.new<int>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.new<string>": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.new<string>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.pop": {
+      "kind": "builtin",
+      "name": "array.pop",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "array.push": {
+      "kind": "builtin",
+      "name": "array.push",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "array.remove": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.remove",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.reverse": {
+      "kind": "builtin",
+      "name": "array.reverse",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "array.set": {
+      "kind": "builtin",
+      "name": "array.set",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "array.shift": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.shift",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.size": {
+      "kind": "builtin",
+      "name": "array.size",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.sort": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.sort",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.sum": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.sum",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "array.unshift": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "array.unshift",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "barcolor": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "barcolor",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "barssince": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "barssince",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "bgcolor": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "bgcolor",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "bool": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "bool",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "box.delete": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "box.delete",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.new",
+      "parameters": [
+        {
+          "name": "left",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "top",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "right",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "bottom",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "border_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "border_width",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "border_style",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "extend",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "bgcolor",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "text",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_size",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "text_halign",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_valign",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text_wrap",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "box",
+      "scope": "any"
+    },
+    "box.set_bgcolor": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "box.set_bgcolor",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_bottom": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_bottom",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "box"
+        },
+        {
+          "name": "bottom",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_left": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_left",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "box"
+        },
+        {
+          "name": "left",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_lefttop": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "box.set_lefttop",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_right": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_right",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "box"
+        },
+        {
+          "name": "right",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_rightbottom": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "box.set_rightbottom",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "box.set_top": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_top",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "box"
+        },
+        {
+          "name": "top",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "chart.point.from_index": {
+      "kind": "builtin",
+      "name": "chart.point.from_index",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "chart.point",
+      "scope": "any"
+    },
+    "chart.point.from_time": {
+      "kind": "builtin",
+      "name": "chart.point.from_time",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "chart.point",
+      "scope": "any"
+    },
+    "chart.point.now": {
+      "kind": "builtin",
+      "name": "chart.point.now",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "chart.point",
+      "scope": "any"
+    },
+    "color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "color",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "color",
+      "scope": "any"
+    },
+    "color.from_gradient": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "color.from_gradient",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "series<any>"
+        },
+        {
+          "name": "bottom_value",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "top_value",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "bottom_color",
+          "required": true,
+          "type": "color"
+        },
+        {
+          "name": "top_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "color",
+      "scope": "any"
+    },
+    "color.new": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "color.new",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "color",
+      "scope": "any"
+    },
+    "color.rgb": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "color.rgb",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "color",
+      "scope": "any"
+    },
+    "dayofmonth": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "dayofmonth",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "dayofweek": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "dayofweek",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<int>",
+      "scope": "any"
+    },
+    "fill": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "fill",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "fixnan": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "fixnan",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "float": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "float",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "highest": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "highest",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "hline": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "hline",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "hline",
+      "scope": "global"
+    },
+    "hour": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "hour",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "indicator": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "declaration",
+      "name": "indicator",
+      "parameters": [
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "shorttitle",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global_only"
+    },
+    "input.bool": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input.bool",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": true,
+          "type": "bool"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "metadata_version": 2,
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "input.color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.color",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "color",
+      "scope": "any"
+    },
+    "input.enum": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.enum",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "input.float": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input.float",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "minval",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "maxval",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "step",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<float>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "metadata_version": 2,
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "input.int": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input.int",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "minval",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "maxval",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "step",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<int>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "metadata_version": 2,
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "input.price": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.price",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "input.session": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.session",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "input.source": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.source",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "input.string": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input.string",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<string>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "metadata_version": 2,
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "input.symbol": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.symbol",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "input.text_area": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.text_area",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "input.time": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "input.time",
+      "parameters": [
+        {
+          "name": "defval",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<any>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "input.timeframe": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input.timeframe",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "array<string>"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "metadata_version": 2,
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "int": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "int",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "label.delete": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "label.delete",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.get_text": {
+      "kind": "builtin",
+      "name": "label.get_text",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "label.get_x": {
+      "kind": "builtin",
+      "name": "label.get_x",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "label.get_y": {
+      "kind": "builtin",
+      "name": "label.get_y",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "label.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.new",
+      "parameters": [
+        {
+          "name": "x",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "y",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "text",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "yloc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "metadata_version": 2,
+          "name": "style",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "label.style"
+        },
+        {
+          "name": "textcolor",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "size",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "textalign",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "label",
+      "scope": "any"
+    },
+    "label.set_color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "label.set_color",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_text": {
+      "allow_extra_positional": true,
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "label.set_text",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "label"
+        },
+        {
+          "name": "text",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_textcolor": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "label.set_textcolor",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_x": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_x",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "label"
+        },
+        {
+          "name": "x",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_xy": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "label.set_xy",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "label.set_y": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_y",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "label"
+        },
+        {
+          "name": "y",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "library": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "declaration",
+      "name": "library",
+      "parameters": [
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global_only"
+    },
+    "line.delete": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "line.delete",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.get_price": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "line.get_price",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "x",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "line.get_x1": {
+      "kind": "builtin",
+      "name": "line.get_x1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "line.get_x2": {
+      "kind": "builtin",
+      "name": "line.get_x2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "line.get_y1": {
+      "kind": "builtin",
+      "name": "line.get_y1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "line.get_y2": {
+      "kind": "builtin",
+      "name": "line.get_y2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "line.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.new",
+      "parameters": [
+        {
+          "name": "x1",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "y1",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "x2",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "y2",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "extend",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "metadata_version": 2,
+          "name": "style",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "line.style"
+        },
+        {
+          "name": "width",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "scope": "any"
+    },
+    "line.set_color": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "line.set_color",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_xy1": {
+      "allow_extra_positional": true,
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "line.set_xy1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "line"
+        },
+        {
+          "name": "x",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "y",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_xy2": {
+      "allow_extra_positional": true,
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "line.set_xy2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "line"
+        },
+        {
+          "name": "x",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "y",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "lowest": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "lowest",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "map.contains": {
+      "kind": "builtin",
+      "name": "map.contains",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "map.get": {
+      "kind": "builtin",
+      "name": "map.get",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "map.keys": {
+      "kind": "builtin",
+      "name": "map.keys",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "map.new<string,float>": {
+      "kind": "builtin",
+      "name": "map.new<string,float>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<string,float>",
+      "scope": "any"
+    },
+    "map.new<string,int>": {
+      "kind": "builtin",
+      "name": "map.new<string,int>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<string,int>",
+      "scope": "any"
+    },
+    "map.new<string,string>": {
+      "kind": "builtin",
+      "name": "map.new<string,string>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<string,string>",
+      "scope": "any"
+    },
+    "map.put": {
+      "kind": "builtin",
+      "name": "map.put",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "map.remove": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "map.remove",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "scope": "any"
+    },
+    "map.size": {
+      "kind": "builtin",
+      "name": "map.size",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "map.values": {
+      "kind": "builtin",
+      "name": "map.values",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "math.abs": {
+      "kind": "builtin",
+      "name": "math.abs",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.acos": {
+      "kind": "builtin",
+      "name": "math.acos",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.asin": {
+      "kind": "builtin",
+      "name": "math.asin",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.atan": {
+      "kind": "builtin",
+      "name": "math.atan",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.avg": {
+      "kind": "builtin",
+      "name": "math.avg",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.ceil": {
+      "kind": "builtin",
+      "name": "math.ceil",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.cos": {
+      "kind": "builtin",
+      "name": "math.cos",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.exp": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "math.exp",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "math.floor": {
+      "kind": "builtin",
+      "name": "math.floor",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.log": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "math.log",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "math.log10": {
+      "kind": "builtin",
+      "name": "math.log10",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.max": {
+      "kind": "builtin",
+      "name": "math.max",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.min": {
+      "kind": "builtin",
+      "name": "math.min",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.pow": {
+      "kind": "builtin",
+      "name": "math.pow",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.random": {
+      "kind": "builtin",
+      "name": "math.random",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.round": {
+      "kind": "builtin",
+      "name": "math.round",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.sign": {
+      "kind": "builtin",
+      "name": "math.sign",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.sin": {
+      "kind": "builtin",
+      "name": "math.sin",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.sqrt": {
+      "kind": "builtin",
+      "name": "math.sqrt",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.sum": {
+      "kind": "builtin",
+      "name": "math.sum",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.tan": {
+      "kind": "builtin",
+      "name": "math.tan",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.todegrees": {
+      "kind": "builtin",
+      "name": "math.todegrees",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "math.toradians": {
+      "kind": "builtin",
+      "name": "math.toradians",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.avg": {
+      "kind": "builtin",
+      "name": "matrix.avg",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.columns": {
+      "kind": "builtin",
+      "name": "matrix.columns",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.get": {
+      "kind": "builtin",
+      "name": "matrix.get",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
+    "matrix.max": {
+      "kind": "builtin",
+      "name": "matrix.max",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.min": {
+      "kind": "builtin",
+      "name": "matrix.min",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.new<float>": {
+      "kind": "builtin",
+      "name": "matrix.new<float>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.new<int>": {
+      "kind": "builtin",
+      "name": "matrix.new<int>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "matrix<int>",
+      "scope": "any"
+    },
+    "matrix.reshape": {
+      "kind": "builtin",
+      "name": "matrix.reshape",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.reverse": {
+      "kind": "builtin",
+      "name": "matrix.reverse",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.rows": {
+      "kind": "builtin",
+      "name": "matrix.rows",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.set": {
+      "kind": "builtin",
+      "name": "matrix.set",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.sum": {
+      "kind": "builtin",
+      "name": "matrix.sum",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.transpose": {
+      "kind": "builtin",
+      "name": "matrix.transpose",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "minute": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "minute",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "month": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "month",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "na": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "na",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "nz": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "nz",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "plot": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plot",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "plot",
+      "scope": "global"
+    },
+    "plotarrow": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plotarrow",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "plotbar": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plotbar",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "plotcandle": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plotcandle",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global"
+    },
+    "plotchar": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plotchar",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "plot",
+      "scope": "global"
+    },
+    "plotshape": {
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "plotshape",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "plot",
+      "scope": "global"
+    },
+    "polyline.delete": {
+      "kind": "builtin",
+      "name": "polyline.delete",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "polyline"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "polyline.new": {
+      "allow_extra_positional": true,
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "name": "polyline.new",
+      "parameters": [
+        {
+          "name": "points",
+          "required": false,
+          "type": "array<chart.point>"
+        },
+        {
+          "name": "curved",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "closed",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "line_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "fill_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "line_style",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "line_width",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "polyline",
+      "scope": "any"
+    },
+    "request.currency_rate": {
+      "allow_extra_positional": true,
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.currency_rate",
+      "parameters": [
+        {
+          "name": "from",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "to",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "ignore_invalid_currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "request.dividends": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.dividends",
+      "parameters": [
+        {
+          "name": "ticker",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "dividends.field"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "lookahead",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.lookahead"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.earnings": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.earnings",
+      "parameters": [
+        {
+          "name": "ticker",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "earnings.field"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "lookahead",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.lookahead"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.financial": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.financial",
+      "parameters": [
+        {
+          "name": "symbol",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "financial_id",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "period",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.quandl": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "request.quandl",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.security": {
+      "allow_extra_positional": true,
+      "dynamic_allowed": true,
+      "kind": "builtin",
+      "name": "request.security",
+      "parameters": [
+        {
+          "name": "symbol",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "timeframe",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "expression",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "lookahead",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "calc_bars_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.security_lower_tf": {
+      "allow_extra_positional": true,
+      "dynamic_allowed": true,
+      "kind": "builtin",
+      "name": "request.security_lower_tf",
+      "parameters": [
+        {
+          "name": "symbol",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "timeframe",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "expression",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "ignore_invalid_timeframe",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_bars_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "request.seed": {
+      "allow_extra_positional": true,
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.seed",
+      "parameters": [
+        {
+          "name": "source",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "expression",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_bars_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "request.splits": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.splits",
+      "parameters": [
+        {
+          "name": "ticker",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "splits.field"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "lookahead",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "barmerge.lookahead"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "second": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "second",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "str.contains": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.contains",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "str.endswith": {
+      "kind": "builtin",
+      "name": "str.endswith",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "str.format": {
+      "allow_extra_positional": true,
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.format",
+      "parameters": [
+        {
+          "name": "formatString",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.length": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.length",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "str.lower": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.lower",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.replace": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.replace",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.replace_all": {
+      "kind": "builtin",
+      "name": "str.replace_all",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.split": {
+      "kind": "builtin",
+      "name": "str.split",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<string>",
+      "scope": "any"
+    },
+    "str.startswith": {
+      "kind": "builtin",
+      "name": "str.startswith",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "str.substring": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.substring",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.tonumber": {
+      "kind": "builtin",
+      "name": "str.tonumber",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "str.tostring": {
+      "kind": "builtin",
+      "name": "str.tostring",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "str.upper": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.upper",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "strategy": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "declaration",
+      "name": "strategy",
+      "parameters": [
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "global_only"
+    },
+    "strategy.cancel": {
+      "kind": "builtin",
+      "name": "strategy.cancel",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.cancel_all": {
+      "kind": "builtin",
+      "name": "strategy.cancel_all",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.close": {
+      "kind": "builtin",
+      "name": "strategy.close",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "qty",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.closedtrades": {
+      "kind": "builtin",
+      "name": "strategy.closedtrades",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "strategy.closedtrades.commission": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.commission",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.entry_bar_index": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.entry_bar_index",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.entry_comment": {
+      "kind": "builtin",
+      "name": "strategy.closedtrades.entry_comment",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "strategy.closedtrades.entry_id": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.entry_id",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.entry_price": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.entry_price",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.entry_time": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.entry_time",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.exit_bar_index": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.exit_bar_index",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.exit_comment": {
+      "kind": "builtin",
+      "name": "strategy.closedtrades.exit_comment",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "strategy.closedtrades.exit_id": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.exit_id",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.exit_price": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.exit_price",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.exit_time": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.exit_time",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.max_drawdown": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_drawdown",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.max_runup": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.profit": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.profit",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.profit_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.profit_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.size",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.entry": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "strategy.entry",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "direction",
+          "required": true,
+          "type": "strategy_direction"
+        },
+        {
+          "name": "qty",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "limit",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "stop",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "oca_name",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "oca_type",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.exit": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "strategy.exit",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "from_entry",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "qty",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "qty_percent",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "profit",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "limit",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "loss",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "stop",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "trail_price",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "trail_points",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "trail_offset",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "oca_name",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment_profit",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment_loss",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment_trailing",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_profit",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_loss",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_trailing",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.opentrades": {
+      "kind": "builtin",
+      "name": "strategy.opentrades",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "strategy.opentrades.commission": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.commission",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.entry_bar_index": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.entry_bar_index",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.entry_comment": {
+      "kind": "builtin",
+      "name": "strategy.opentrades.entry_comment",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "strategy.opentrades.entry_id": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.entry_id",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.entry_price": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.entry_price",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.entry_time": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.entry_time",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.max_drawdown": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_drawdown",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.max_runup": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.profit": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.profit",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.profit_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.profit_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.size",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.order": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "strategy.order",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "direction",
+          "required": true,
+          "type": "strategy_direction"
+        },
+        {
+          "name": "qty",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "limit",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "stop",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "oca_name",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "oca_type",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.risk.allow_entry_in": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.allow_entry_in",
+      "parameters": [
+        {
+          "name": "value",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "strategy.direction"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.risk.max_cons_loss_days": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_cons_loss_days",
+      "parameters": [
+        {
+          "name": "count",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.risk.max_drawdown": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_drawdown",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "type",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "strategy.risk.type"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.risk.max_intraday_filled_orders": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_intraday_filled_orders",
+      "parameters": [
+        {
+          "name": "count",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "strategy.risk.max_intraday_loss": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_intraday_loss",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "type",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "strategy.risk.type"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "string": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "string",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ta.alma": {
+      "kind": "builtin",
+      "name": "ta.alma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.atr": {
+      "kind": "builtin",
+      "name": "ta.atr",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.barssince": {
+      "kind": "builtin",
+      "name": "ta.barssince",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "ta.bb": {
+      "kind": "builtin",
+      "name": "ta.bb",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "tuple<float,float,float>",
+      "scope": "any"
+    },
+    "ta.cci": {
+      "kind": "builtin",
+      "name": "ta.cci",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.change": {
+      "kind": "builtin",
+      "name": "ta.change",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.cmo": {
+      "kind": "builtin",
+      "name": "ta.cmo",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.cross": {
+      "kind": "builtin",
+      "name": "ta.cross",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "ta.crossover": {
+      "kind": "builtin",
+      "name": "ta.crossover",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "ta.crossunder": {
+      "kind": "builtin",
+      "name": "ta.crossunder",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "ta.cum": {
+      "kind": "builtin",
+      "name": "ta.cum",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.dev": {
+      "kind": "builtin",
+      "name": "ta.dev",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.dmi": {
+      "kind": "builtin",
+      "name": "ta.dmi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "tuple<float,float,float>",
+      "scope": "any"
+    },
+    "ta.ema": {
+      "kind": "builtin",
+      "name": "ta.ema",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.falling": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "ta.falling",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<bool>",
+      "scope": "any"
+    },
+    "ta.highest": {
+      "kind": "builtin",
+      "name": "ta.highest",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.highestbars": {
+      "kind": "builtin",
+      "name": "ta.highestbars",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "ta.hma": {
+      "kind": "builtin",
+      "name": "ta.hma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.kc": {
+      "kind": "builtin",
+      "name": "ta.kc",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "tuple<float,float,float>",
+      "scope": "any"
+    },
+    "ta.kcw": {
+      "kind": "builtin",
+      "name": "ta.kcw",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.linreg": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "ta.linreg",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "series<any>"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "offset",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.lowest": {
+      "kind": "builtin",
+      "name": "ta.lowest",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.lowestbars": {
+      "kind": "builtin",
+      "name": "ta.lowestbars",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "ta.macd": {
+      "kind": "builtin",
+      "name": "ta.macd",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "tuple<float,float,float>",
+      "scope": "any"
+    },
+    "ta.mfi": {
+      "kind": "builtin",
+      "name": "ta.mfi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.mom": {
+      "kind": "builtin",
+      "name": "ta.mom",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.obv": {
+      "kind": "builtin",
+      "name": "ta.obv",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.percentrank": {
+      "kind": "builtin",
+      "name": "ta.percentrank",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.pivothigh": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "ta.pivothigh",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.pivotlow": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "ta.pivotlow",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.rising": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "ta.rising",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<bool>",
+      "scope": "any"
+    },
+    "ta.rma": {
+      "kind": "builtin",
+      "name": "ta.rma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.roc": {
+      "kind": "builtin",
+      "name": "ta.roc",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.rsi": {
+      "kind": "builtin",
+      "name": "ta.rsi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.sar": {
+      "kind": "builtin",
+      "name": "ta.sar",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.sma": {
+      "kind": "builtin",
+      "name": "ta.sma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.stdev": {
+      "kind": "builtin",
+      "name": "ta.stdev",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.supertrend": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "ta.supertrend",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "tuple<float,int>",
+      "scope": "any"
+    },
+    "ta.swma": {
+      "kind": "builtin",
+      "name": "ta.swma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.tr": {
+      "kind": "builtin",
+      "name": "ta.tr",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.valuewhen": {
+      "kind": "builtin",
+      "name": "ta.valuewhen",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.variance": {
+      "kind": "builtin",
+      "name": "ta.variance",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.vwap": {
+      "kind": "builtin",
+      "name": "ta.vwap",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.vwma": {
+      "kind": "builtin",
+      "name": "ta.vwma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.wma": {
+      "kind": "builtin",
+      "name": "ta.wma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "table.cell": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "table.cell",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.clear": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "table.clear",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.delete": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "table.delete",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "table.new",
+      "parameters": [
+        {
+          "metadata_version": 2,
+          "name": "position",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "table.position"
+        },
+        {
+          "name": "columns",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "rows",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "bgcolor",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "frame_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "frame_width",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "border_color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "border_width",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "table",
+      "scope": "any"
+    },
+    "table.set_position": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "table.set_position",
+      "parameters": [
+        {
+          "name": "id",
+          "required": false,
+          "type": "table"
+        },
+        {
+          "metadata_version": 2,
+          "name": "position",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "table.position"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "time": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "time",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "time_close": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "time_close",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "timeframe.change": {
+      "kind": "builtin",
+      "name": "timeframe.change",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "timestamp": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "timestamp",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "valuewhen": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "valuewhen",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "series<any>",
+      "scope": "any"
+    },
+    "year": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "year",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    }
+  },
+  "generated_at": null,
+  "namespaces": {
+    "array": {},
+    "barstate": {},
+    "box": {},
+    "chart": {},
+    "color": {},
+    "display": {},
+    "extend": {},
+    "format": {},
+    "input": {},
+    "label": {},
+    "line": {},
+    "location": {},
+    "map": {},
+    "math": {},
+    "matrix": {},
+    "polyline": {
+      "kind": "namespace",
+      "name": "polyline",
+      "pine_version": "6"
+    },
+    "position": {},
+    "request": {},
+    "session": {},
+    "shape": {},
+    "size": {},
+    "str": {},
+    "strategy": {},
+    "strategy.closedtrades": {
+      "kind": "namespace",
+      "name": "strategy.closedtrades",
+      "pine_version": "6"
+    },
+    "strategy.opentrades": {
+      "kind": "namespace",
+      "name": "strategy.opentrades",
+      "pine_version": "6"
+    },
+    "syminfo": {},
+    "ta": {},
+    "table": {},
+    "ticker": {},
+    "time": {},
+    "timeframe": {},
+    "xloc": {},
+    "yloc": {}
+  },
+  "pine_version": "6",
+  "schema_version": 1,
+  "source": "manual+official-docs+v0.1.7-bigblock-seed",
+  "types": {
+    "array": {},
+    "bool": {},
+    "box": {},
+    "box.style": {
+      "kind": "type",
+      "name": "box.style",
+      "pine_version": "6"
+    },
+    "chart.point": {},
+    "color": {},
+    "const": {
+      "kind": "type",
+      "name": "const",
+      "pine_version": "6"
+    },
+    "display": {
+      "kind": "type",
+      "name": "display",
+      "pine_version": "6"
+    },
+    "extend": {
+      "kind": "type",
+      "name": "extend",
+      "pine_version": "6"
+    },
+    "float": {},
+    "hline": {},
+    "input": {
+      "kind": "type",
+      "name": "input",
+      "pine_version": "6"
+    },
+    "int": {},
+    "label": {},
+    "label.style": {
+      "kind": "type",
+      "name": "label.style",
+      "pine_version": "6"
+    },
+    "line": {},
+    "line.style": {
+      "kind": "type",
+      "name": "line.style",
+      "pine_version": "6"
+    },
+    "linefill": {
+      "kind": "type",
+      "name": "linefill",
+      "pine_version": "6"
+    },
+    "map": {},
+    "matrix": {},
+    "plot": {},
+    "polyline": {},
+    "series": {
+      "kind": "type",
+      "name": "series",
+      "pine_version": "6"
+    },
+    "simple": {
+      "kind": "type",
+      "name": "simple",
+      "pine_version": "6"
+    },
+    "size": {
+      "kind": "type",
+      "name": "size",
+      "pine_version": "6"
+    },
+    "strategy.direction": {},
+    "strategy.order_type": {},
+    "strategy.risk.type": {
+      "kind": "type",
+      "name": "strategy.risk.type",
+      "pine_version": "6"
+    },
+    "string": {},
+    "table": {},
+    "table.position": {
+      "kind": "type",
+      "name": "table.position",
+      "pine_version": "6"
+    },
+    "text.align": {
+      "kind": "type",
+      "name": "text.align",
+      "pine_version": "6"
+    },
+    "xloc": {
+      "kind": "type",
+      "name": "xloc",
+      "pine_version": "6"
+    },
+    "yloc": {
+      "kind": "type",
+      "name": "yloc",
+      "pine_version": "6"
+    }
+  },
+  "variables": {
+    "bar_index": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "barmerge.gaps_off": {
+      "qualifier": "const",
+      "type": "barmerge.gaps"
+    },
+    "barmerge.gaps_on": {
+      "qualifier": "const",
+      "type": "barmerge.gaps"
+    },
+    "barmerge.lookahead_off": {
+      "qualifier": "const",
+      "type": "barmerge.lookahead"
+    },
+    "barmerge.lookahead_on": {
+      "qualifier": "const",
+      "type": "barmerge.lookahead"
+    },
+    "barstate.isconfirmed": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.isfirst": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.ishistory": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.islast": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.islastconfirmedhistory": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.isnew": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "barstate.isrealtime": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "close": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "color.black": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.blue": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.gray": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.green": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.orange": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.red": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.white": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.yellow": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "display.all": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "display.data_window": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "display.none": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "display.pane": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "display.price_scale": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "display.status_line": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "dividends.gross": {
+      "qualifier": "const",
+      "type": "dividends.field"
+    },
+    "dividends.net": {
+      "qualifier": "const",
+      "type": "dividends.field"
+    },
+    "earnings.actual": {
+      "qualifier": "const",
+      "type": "earnings.field"
+    },
+    "earnings.estimate": {
+      "qualifier": "const",
+      "type": "earnings.field"
+    },
+    "earnings.standardized": {
+      "qualifier": "const",
+      "type": "earnings.field"
+    },
+    "extend.none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "extend.right": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.price": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.volume": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "high": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "hl2": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "hlc3": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "label.style_arrowdown": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_arrowup": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_circle": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_cross": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_flag": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_down": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_left": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_lower_left": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_lower_right": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_right": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_up": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_upper_left": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_upper_right": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_none": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_triangledown": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_triangleup": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_xcross": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "last_bar_index": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "line.style_arrow_both": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "line.style_arrow_left": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "line.style_arrow_right": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "line.style_dashed": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "line.style_dotted": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "line.style_solid": {
+      "qualifier": "const",
+      "type": "line.style"
+    },
+    "location.abovebar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.belowbar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "low": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ohlc4": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "open": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "position.bottom_left": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.bottom_right": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.middle_center": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.middle_left": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.middle_right": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.top_left": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "position.top_right": {
+      "qualifier": "const",
+      "type": "table.position"
+    },
+    "shape.triangledown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.triangleup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.normal": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.small": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.tiny": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "splits.denominator": {
+      "qualifier": "const",
+      "type": "splits.field"
+    },
+    "splits.numerator": {
+      "qualifier": "const",
+      "type": "splits.field"
+    },
+    "strategy.cash": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.closedtrades": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "strategy.equity": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.long": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.losstrades": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "strategy.netprofit": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.openprofit": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.opentrades": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "strategy.percent_of_equity": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.position_avg_price": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.position_size": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.short": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.wintrades": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "syminfo.prefix": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.root": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.tickerid": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "timeframe.period": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "volume": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "xloc.bar_index": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "yloc.price": {
+      "qualifier": "const",
+      "type": "string"
+    }
+  }
+}

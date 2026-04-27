@@ -1,0 +1,7 @@
+//@version=6
+indicator("Switch Inline Sequence")
+mode = input.string("fast", "Mode", options = ["fast", "slow"])
+value = switch mode
+    "fast" => a = ta.ema(close, 9), b = a + close, b
+    => ta.sma(close, 21)
+plot(value)

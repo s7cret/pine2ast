@@ -1,0 +1,5 @@
+//@version=6
+indicator("V19 Math")
+angle = math.toradians(45)
+x = math.pow(close, 2) + math.sin(angle)
+plot(x)

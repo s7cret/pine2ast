@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "version": "v2.15.0",
+  "stage": "P0 Golden/negative fixtures hardening",
+  "valid_fixture_count": 57,
+  "invalid_fixture_count": 23,
+  "categorized_invalid_fixture_count": 22,
+  "golden_ast_count": 57,
+  "golden_diagnostics_count": 57,
+  "invalid_diagnostics_contract_count": 23,
+  "valid_categories": [
+    "basic_indicator.pine",
+    "collections",
+    "declarations",
+    "expressions",
+    "imports",
+    "layout",
+    "loops",
+    "optimizer_contract",
+    "real_world_smoke",
+    "semantic_ok",
+    "strings",
+    "types"
+  ],
+  "invalid_categories": [
+    "layout",
+    "semantic",
+    "syntax",
+    "v6_migration"
+  ]
+}

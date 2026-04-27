@@ -1,0 +1,11 @@
+//@version=6
+indicator("Nested call")
+x = ta.sma(
+    request.security(
+        syminfo.tickerid,
+        "D",
+        close
+    ),
+    20
+)
+plot(x)

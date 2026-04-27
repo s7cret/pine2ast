@@ -1,0 +1,6 @@
+//@version=6
+indicator("V19 TA Expansion")
+hi = ta.highest(high, 20)
+lo = ta.lowest(low, 20)
+rank = ta.percentrank(close, 50)
+plot(hi - lo + rank)

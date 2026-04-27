@@ -1,0 +1,6 @@
+//@version=6
+indicator("v22 map put 217")
+map<string,float> m = map.new<string,float>()
+map.put(m, "close", close)
+x = map.get(m, "close")
+plot(x)

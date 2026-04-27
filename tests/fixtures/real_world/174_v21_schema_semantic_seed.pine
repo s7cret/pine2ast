@@ -1,0 +1,8 @@
+//@version=6
+indicator("v21 seed 174", overlay = false)
+len174 = input.int(14, title = "Length 174", minval = 1)
+src174 = input.source(close, title = "Source 174")
+ma174 = ta.sma(src174, len174)
+flag174 = close > ma174
+plot(ma174)
+alertcondition(flag174, title = "Cross 174")

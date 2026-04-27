@@ -1,0 +1,4 @@
+//@version=6
+indicator("closed trades forbidden")
+price = strategy.closedtrades.entry_price(0)
+plot(close)

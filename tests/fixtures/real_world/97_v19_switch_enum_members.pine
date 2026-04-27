@@ -1,0 +1,11 @@
+//@version=6
+indicator("V19 Enum")
+enum Mode
+    Fast "Fast"
+    Slow "Slow"
+mode = input.enum(Mode.Fast, "Mode")
+score = switch mode
+    Mode.Fast => 1
+    Mode.Slow => 2
+    => 0
+plot(score)

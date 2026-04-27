@@ -1,0 +1,6 @@
+//@version=6
+indicator("v20 generated MA 135", overlay = true)
+len = input.int(25, "Length", minval = 1)
+src = input.source(close, "Source")
+ma = ta.ema(src, len)
+plot(ma, color = color.blue)

@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Map Loop")
+var map<string, float> values = map.new<string, float>()
+sum = 0.0
+for [key, value] in values
+    sum += value
+plot(sum)

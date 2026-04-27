@@ -1,0 +1,8 @@
+//@version=6
+strategy("v22 strategy deps 219")
+fast = ta.ema(close, 12)
+slow = ta.ema(close, 26)
+if ta.crossover(fast, slow)
+    strategy.entry("L", strategy.long)
+if ta.crossunder(fast, slow)
+    strategy.close("L")

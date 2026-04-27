@@ -1,0 +1,19 @@
+//@version=6
+indicator("v1.17 return and field types", overlay=true)
+
+type Pivot
+    int x
+    float y
+
+method getY(Pivot p) =>
+    p.y
+
+addOne(int x) => x + 1
+
+var Pivot p = Pivot.new(bar_index, close)
+float y1 = p.y
+float y2 = p.getY()
+float y3 = addOne(1)
+float branch = close > open ? 1 : 2.5
+array<float> xs = [1, 2.0]
+plot(y1 + y2 + y3 + branch + xs.get(0))

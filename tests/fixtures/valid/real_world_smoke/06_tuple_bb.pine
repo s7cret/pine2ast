@@ -1,0 +1,6 @@
+//@version=6
+indicator("BB")
+[basis, upper, lower] = ta.bb(close, 20, 2)
+plot(basis)
+plot(upper)
+plot(lower)

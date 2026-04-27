@@ -1,0 +1,7 @@
+//@version=6
+indicator("V19 Map Matrix")
+var map<string, float> weights = map.new<string, float>()
+var matrix<float> grid = matrix.new<float>(2, 2, 0.0)
+w = weights.get("risk")
+g = matrix.get(grid, 0, 0)
+plot(w + g)

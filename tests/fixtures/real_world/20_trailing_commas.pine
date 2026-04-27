@@ -1,0 +1,7 @@
+//@version=6
+indicator("Trailing Commas", overlay = true,)
+var array<float> values = array.new<float>(0,)
+pair(x,) => [x, x + 1,]
+[a, b,] = pair(close,)
+plot(a,)
+plot(b,)

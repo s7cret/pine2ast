@@ -1,0 +1,19 @@
+Pine2AST v2.11.0 verification log
+
+Focused v2.11 tests:
+- tests/unit/test_bigblock_v2_11.py
+- result: 4 passed
+
+Py compile:
+- pine2ast/semantic/analyzer.py
+- pine2ast/semantic/reports.py
+- tests/unit/test_bigblock_v2_11.py
+- result: ok
+
+Builtin coverage direct smoke:
+- function_count=275
+- missing_expected=0
+
+Known environment limitation:
+- Full stdlib runner and full real_world corpus CLI runs were interrupted by external helper processes polling stale /mnt/data/work_v28 and /mnt/data/work_v29 paths.
+- Full clean-environment regression remains P0 in pine2ast_tz_detailed_v1_9_remaining.md.

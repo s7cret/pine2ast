@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/strategy_when.pine",
+  "expected_codes": [
+    "P2A1501"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A1501",
+    "P2A1501"
+  ],
+  "notes": "Legacy root invalid fixture covered by v2.15.0 diagnostics contract."
+}

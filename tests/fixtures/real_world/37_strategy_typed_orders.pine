@@ -1,0 +1,6 @@
+//@version=6
+strategy("Typed Orders")
+longCondition = ta.crossover(close, ta.sma(close, 20))
+if longCondition
+    strategy.entry("L", strategy.long, qty = 1)
+strategy.exit("XL", from_entry = "L", stop = low, limit = high)

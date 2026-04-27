@@ -1,0 +1,8 @@
+//@version=6
+indicator("v20 generated UDT 117")
+type Pivot
+    int x
+    float y
+p = Pivot.new(bar_index, high)
+p.y := math.max(p.y, close)
+plot(p.y)

@@ -1,0 +1,8 @@
+//@version=6
+indicator("v21 seed 192", overlay = false)
+len192 = input.int(14, title = "Length 192", minval = 1)
+src192 = input.source(close, title = "Source 192")
+ma192 = ta.sma(src192, len192)
+flag192 = close > ma192
+plot(ma192)
+alertcondition(flag192, title = "Cross 192")

@@ -1,0 +1,5 @@
+//@version=6
+indicator("V19 Request More")
+s = request.splits(syminfo.tickerid, "split_factor")
+q = request.quandl("NASDAQ:AAPL")
+plot(close)

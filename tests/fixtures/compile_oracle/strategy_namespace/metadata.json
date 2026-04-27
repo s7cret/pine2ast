@@ -1,0 +1,13 @@
+{
+  "schema_version": 2,
+  "pine_version": 6,
+  "checked_at": "2026-04-27",
+  "oracle": "internal pine2ast semantic policy checked; external TradingView compile oracle still required for final production sign-off",
+  "policy": [
+    {"fixture": "indicator_strategy_long_allowed.pine", "context": "indicator", "usage": "strategy.long", "expected": "allowed as constant", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
+    {"fixture": "library_strategy_long_allowed.pine", "context": "library", "usage": "strategy.long", "expected": "allowed as constant", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
+    {"fixture": "indicator_strategy_equity_forbidden.pine", "context": "indicator", "usage": "strategy.equity", "expected": "forbidden", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
+    {"fixture": "strategy_closedtrades_allowed.pine", "context": "strategy", "usage": "strategy.closedtrades.entry_price/comment", "expected": "allowed", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"},
+    {"fixture": "indicator_closedtrades_forbidden.pine", "context": "indicator", "usage": "strategy.closedtrades.entry_price", "expected": "forbidden", "pine2ast_status": "pass", "tradingview_status": "pending_external_oracle"}
+  ]
+}

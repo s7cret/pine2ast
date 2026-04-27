@@ -1,0 +1,7 @@
+//@version=6
+indicator("History Local Warning Seed")
+x = close
+if close > open
+    localValue = close
+    x := localValue[1]
+plot(x)

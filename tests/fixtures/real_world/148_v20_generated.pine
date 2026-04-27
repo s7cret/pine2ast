@@ -1,0 +1,8 @@
+//@version=6
+indicator("v20 generated collections 148")
+var array<float> values = array.from(open, high, low, close)
+sum = 0.0
+for value in values
+    sum += value
+avg = sum / 4.0
+plot(avg)

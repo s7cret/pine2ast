@@ -1,0 +1,6 @@
+//@version=6
+indicator("v23 sarif seed 258")
+len = input.int(14, "Length", minval = 1, maxval = 200)
+ma = ta.ema(close, len)
+trend = close > ma ? 1 : 0
+plot(ma)

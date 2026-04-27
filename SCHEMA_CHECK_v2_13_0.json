@@ -1,0 +1,23 @@
+{
+  "parse_ok": true,
+  "schema": {
+    "ok": true,
+    "schema_version": "1.0",
+    "language": "pine",
+    "language_version": 6,
+    "node_count": 31,
+    "kind_counts": {
+      "Argument": 8,
+      "CallExpr": 4,
+      "DeclarationStatement": 1,
+      "ExpressionStatement": 1,
+      "Identifier": 7,
+      "Literal": 5,
+      "MemberAccessExpr": 2,
+      "Program": 1,
+      "VarDeclaration": 2
+    },
+    "issues": []
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,16 @@
+//@version=6
+indicator("Collection generics v1.16")
+
+array<float> xs = array.new<float>()
+xs.push(close)
+float last = xs.get(0)
+
+map<string,float> m = map.new<string,float>()
+m.put("close", close)
+float mapped = m.get("close")
+
+matrix<float> mx = matrix.new<float>(2, 2, 0.0)
+mx.set(0, 0, close)
+float cell = mx.get(0, 0)
+
+plot(last + mapped + cell)

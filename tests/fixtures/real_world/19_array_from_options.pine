@@ -1,0 +1,5 @@
+//@version=6
+indicator("Array Options")
+len = input.int(14, "Length", options = array.from(10, 14, 20, 50))
+ma = ta.sma(close, len)
+plot(ma)

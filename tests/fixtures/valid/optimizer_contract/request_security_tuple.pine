@@ -1,0 +1,5 @@
+//@version=6
+indicator("Request tuple")
+htfClose = request.security(syminfo.tickerid, "D", close)
+[basis, upper, lower] = ta.bb(htfClose, 20, 2)
+plot(basis)

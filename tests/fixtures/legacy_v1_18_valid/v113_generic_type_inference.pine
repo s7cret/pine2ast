@@ -1,0 +1,11 @@
+//@version=6
+indicator("v1.13 generic type inference", overlay=true)
+xs = array.new<float>()
+ys = array.from(1.0, 2.0, 3.0)
+mx = matrix.new<float>(2, 2, 0.0)
+kv = map.new<string, float>()
+xs.push(close)
+ys.push(open)
+mx.set(0, 0, high)
+kv.put("last", low)
+plot(xs.get(0))

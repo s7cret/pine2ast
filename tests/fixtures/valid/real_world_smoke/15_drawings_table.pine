@@ -1,0 +1,6 @@
+//@version=6
+indicator("Drawings", overlay = true)
+var table t = table.new(position.top_right, 2, 2)
+if barstate.islast
+    table.cell(t, 0, 0, str.tostring(close))
+label.new(bar_index, high, "H", textcolor = color.white)

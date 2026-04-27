@@ -1,0 +1,9 @@
+//@version=6
+indicator("V19 Security Tuple")
+[o, h] = request.security(syminfo.tickerid, "D", [open, high])
+mode = input.string("fast", options = ["fast", "slow"])
+value = switch mode
+    "fast" => o
+    "slow" => h
+    => close
+plot(value)

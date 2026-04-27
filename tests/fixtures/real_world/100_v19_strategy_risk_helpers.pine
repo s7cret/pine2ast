@@ -1,0 +1,6 @@
+//@version=6
+strategy("V19 Strategy Risk")
+if ta.crossover(close, ta.sma(close, 20))
+    strategy.order("L", strategy.long)
+strategy.cancel("L")
+plot(close)

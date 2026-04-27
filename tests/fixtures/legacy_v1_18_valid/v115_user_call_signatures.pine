@@ -1,0 +1,17 @@
+//@version=6
+indicator("v1.15 user signatures", overlay=true)
+
+f(int x, string label="ok") =>
+    x
+
+type Pivot
+    int x
+    float y
+
+method move(Pivot p, int dx, float dy=1.0) =>
+    p.x + dx
+
+y = f(1, label="ok")
+p = Pivot.new(x=1, y=close)
+z = p.move(1, dy=2)
+plot(close)

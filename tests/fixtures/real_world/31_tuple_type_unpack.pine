@@ -1,0 +1,5 @@
+//@version=6
+indicator("Tuple Type Unpack", overlay = true)
+[basis, upper, lower] = ta.bb(close, 20, 2)
+width = upper - lower
+plot(width)

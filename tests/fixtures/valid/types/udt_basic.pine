@@ -1,0 +1,7 @@
+//@version=6
+indicator("UDT")
+type Pivot
+    int x
+    float y
+p = Pivot.new(bar_index, close)
+plot(p.y)

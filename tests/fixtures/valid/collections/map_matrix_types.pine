@@ -1,0 +1,5 @@
+//@version=6
+indicator("Map matrix")
+var matrix<float> m = matrix.new<float>(2, 2, 0.0)
+var map<string, float> mp = map.new<string, float>()
+plot(close)

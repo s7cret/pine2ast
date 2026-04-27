@@ -1,0 +1,11 @@
+//@version=6
+indicator("Generated v18 71", overlay = true)
+len = input.int(14, "Length", minval = 1, options = array.from(10, 14, 20))
+values = array.from(1.0, 2.0, 3.0)
+acc = 0.0
+for [idx, item] in values
+    acc += item + idx
+ma = ta.sma(close, len)
+trend = close > ma ? color.green : color.red
+label.new(bar_index, acc, str.tostring(acc))
+plot(ma)

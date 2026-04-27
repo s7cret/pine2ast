@@ -1,0 +1,454 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 157,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 6,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 39,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 27
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 39,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 27
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 38,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 26
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 38,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 26
+            },
+            "value": "Request tuple",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 40,
+        "end_offset": 97,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 58
+      },
+      "name": "htfClose",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 51,
+          "end_offset": 97,
+          "start_line": 3,
+          "start_col": 12,
+          "end_line": 3,
+          "end_col": 58
+        },
+        "callee": {
+          "kind": "MemberAccessExpr",
+          "span": {
+            "start_offset": 51,
+            "end_offset": 67,
+            "start_line": 3,
+            "start_col": 12,
+            "end_line": 3,
+            "end_col": 28
+          },
+          "object": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 51,
+              "end_offset": 58,
+              "start_line": 3,
+              "start_col": 12,
+              "end_line": 3,
+              "end_col": 19
+            },
+            "name": "request"
+          },
+          "member": "security"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 68,
+              "end_offset": 84,
+              "start_line": 3,
+              "start_col": 29,
+              "end_line": 3,
+              "end_col": 45
+            },
+            "name": null,
+            "value": {
+              "kind": "MemberAccessExpr",
+              "span": {
+                "start_offset": 68,
+                "end_offset": 84,
+                "start_line": 3,
+                "start_col": 29,
+                "end_line": 3,
+                "end_col": 45
+              },
+              "object": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 68,
+                  "end_offset": 75,
+                  "start_line": 3,
+                  "start_col": 29,
+                  "end_line": 3,
+                  "end_col": 36
+                },
+                "name": "syminfo"
+              },
+              "member": "tickerid"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 86,
+              "end_offset": 89,
+              "start_line": 3,
+              "start_col": 47,
+              "end_line": 3,
+              "end_col": 50
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 86,
+                "end_offset": 89,
+                "start_line": 3,
+                "start_col": 47,
+                "end_line": 3,
+                "end_col": 50
+              },
+              "value": "D",
+              "literal_type": "string"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 91,
+              "end_offset": 96,
+              "start_line": 3,
+              "start_col": 52,
+              "end_line": 3,
+              "end_col": 57
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 91,
+                "end_offset": 96,
+                "start_line": 3,
+                "start_col": 52,
+                "end_line": 3,
+                "end_col": 57
+              },
+              "name": "close"
+            }
+          }
+        ]
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "TupleDeclaration",
+      "span": {
+        "start_offset": 98,
+        "end_offset": 144,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 47
+      },
+      "targets": [
+        {
+          "kind": "TupleTarget",
+          "span": {
+            "start_offset": 99,
+            "end_offset": 104,
+            "start_line": 4,
+            "start_col": 2,
+            "end_line": 4,
+            "end_col": 7
+          },
+          "name": "basis"
+        },
+        {
+          "kind": "TupleTarget",
+          "span": {
+            "start_offset": 106,
+            "end_offset": 111,
+            "start_line": 4,
+            "start_col": 9,
+            "end_line": 4,
+            "end_col": 14
+          },
+          "name": "upper"
+        },
+        {
+          "kind": "TupleTarget",
+          "span": {
+            "start_offset": 113,
+            "end_offset": 118,
+            "start_line": 4,
+            "start_col": 16,
+            "end_line": 4,
+            "end_col": 21
+          },
+          "name": "lower"
+        }
+      ],
+      "initializer": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 122,
+          "end_offset": 144,
+          "start_line": 4,
+          "start_col": 25,
+          "end_line": 4,
+          "end_col": 47
+        },
+        "callee": {
+          "kind": "MemberAccessExpr",
+          "span": {
+            "start_offset": 122,
+            "end_offset": 127,
+            "start_line": 4,
+            "start_col": 25,
+            "end_line": 4,
+            "end_col": 30
+          },
+          "object": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 122,
+              "end_offset": 124,
+              "start_line": 4,
+              "start_col": 25,
+              "end_line": 4,
+              "end_col": 27
+            },
+            "name": "ta"
+          },
+          "member": "bb"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 128,
+              "end_offset": 136,
+              "start_line": 4,
+              "start_col": 31,
+              "end_line": 4,
+              "end_col": 39
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 128,
+                "end_offset": 136,
+                "start_line": 4,
+                "start_col": 31,
+                "end_line": 4,
+                "end_col": 39
+              },
+              "name": "htfClose"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 138,
+              "end_offset": 140,
+              "start_line": 4,
+              "start_col": 41,
+              "end_line": 4,
+              "end_col": 43
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 138,
+                "end_offset": 140,
+                "start_line": 4,
+                "start_col": 41,
+                "end_line": 4,
+                "end_col": 43
+              },
+              "value": 20,
+              "literal_type": "int"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 142,
+              "end_offset": 143,
+              "start_line": 4,
+              "start_col": 45,
+              "end_line": 4,
+              "end_col": 46
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 142,
+                "end_offset": 143,
+                "start_line": 4,
+                "start_col": 45,
+                "end_line": 4,
+                "end_col": 46
+              },
+              "value": 2,
+              "literal_type": "int"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 145,
+        "end_offset": 156,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 12
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 145,
+          "end_offset": 156,
+          "start_line": 5,
+          "start_col": 1,
+          "end_line": 5,
+          "end_col": 12
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 145,
+            "end_offset": 149,
+            "start_line": 5,
+            "start_col": 1,
+            "end_line": 5,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 150,
+              "end_offset": 155,
+              "start_line": 5,
+              "start_col": 6,
+              "end_line": 5,
+              "end_col": 11
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 150,
+                "end_offset": 155,
+                "start_line": 5,
+                "start_col": 6,
+                "end_line": 5,
+                "end_col": 11
+              },
+              "name": "basis"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

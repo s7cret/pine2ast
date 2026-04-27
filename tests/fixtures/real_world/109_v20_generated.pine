@@ -1,0 +1,7 @@
+//@version=6
+indicator("v20 generated inspect 109", overlay = true)
+len = input.int(14, "Length")
+ma = request.security(syminfo.tickerid, "D", ta.sma(close, len))
+alertcondition(ma > close, "MA above", "MA above")
+label.new(bar_index, high, str.tostring(ma))
+plot(ma)

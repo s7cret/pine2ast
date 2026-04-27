@@ -1,0 +1,10 @@
+//@version=6
+indicator("Tuple wrap")
+[basis,
+ upper,
+ lower] = ta.bb(
+    close,
+    20,
+    2
+)
+plot(basis)

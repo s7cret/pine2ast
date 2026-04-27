@@ -1,0 +1,390 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 150,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 6,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 37,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 25
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 37,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 25
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 36,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 24
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 36,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 24
+            },
+            "value": "Collections",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 38,
+        "end_offset": 94,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 57
+      },
+      "name": "values",
+      "mode": "var",
+      "explicit_qualifier": null,
+      "type_ref": {
+        "kind": "TypeRef",
+        "name": "map",
+        "template_args": [
+          {
+            "kind": "TypeRef",
+            "name": "string",
+            "template_args": [],
+            "span": {
+              "start_offset": 46,
+              "end_offset": 52,
+              "start_line": 3,
+              "start_col": 9,
+              "end_line": 3,
+              "end_col": 15
+            }
+          },
+          {
+            "kind": "TypeRef",
+            "name": "float",
+            "template_args": [],
+            "span": {
+              "start_offset": 54,
+              "end_offset": 59,
+              "start_line": 3,
+              "start_col": 17,
+              "end_line": 3,
+              "end_col": 22
+            }
+          }
+        ],
+        "span": {
+          "start_offset": 42,
+          "end_offset": 60,
+          "start_line": 3,
+          "start_col": 5,
+          "end_line": 3,
+          "end_col": 23
+        }
+      },
+      "initializer": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 70,
+          "end_offset": 94,
+          "start_line": 3,
+          "start_col": 33,
+          "end_line": 3,
+          "end_col": 57
+        },
+        "callee": {
+          "kind": "GenericInstantiationExpr",
+          "span": {
+            "start_offset": 70,
+            "end_offset": 92,
+            "start_line": 3,
+            "start_col": 33,
+            "end_line": 3,
+            "end_col": 55
+          },
+          "base": {
+            "kind": "MemberAccessExpr",
+            "span": {
+              "start_offset": 70,
+              "end_offset": 77,
+              "start_line": 3,
+              "start_col": 33,
+              "end_line": 3,
+              "end_col": 40
+            },
+            "object": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 70,
+                "end_offset": 73,
+                "start_line": 3,
+                "start_col": 33,
+                "end_line": 3,
+                "end_col": 36
+              },
+              "name": "map"
+            },
+            "member": "new"
+          },
+          "type_args": [
+            {
+              "kind": "TypeRef",
+              "name": "string",
+              "template_args": [],
+              "span": {
+                "start_offset": 78,
+                "end_offset": 84,
+                "start_line": 3,
+                "start_col": 41,
+                "end_line": 3,
+                "end_col": 47
+              }
+            },
+            {
+              "kind": "TypeRef",
+              "name": "float",
+              "template_args": [],
+              "span": {
+                "start_offset": 86,
+                "end_offset": 91,
+                "start_line": 3,
+                "start_col": 49,
+                "end_line": 3,
+                "end_col": 54
+              }
+            }
+          ]
+        },
+        "arguments": []
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 95,
+        "end_offset": 137,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 43
+      },
+      "name": "mx",
+      "mode": "var",
+      "explicit_qualifier": null,
+      "type_ref": {
+        "kind": "TypeRef",
+        "name": "matrix",
+        "template_args": [
+          {
+            "kind": "TypeRef",
+            "name": "float",
+            "template_args": [],
+            "span": {
+              "start_offset": 106,
+              "end_offset": 111,
+              "start_line": 4,
+              "start_col": 12,
+              "end_line": 4,
+              "end_col": 17
+            }
+          }
+        ],
+        "span": {
+          "start_offset": 99,
+          "end_offset": 112,
+          "start_line": 4,
+          "start_col": 5,
+          "end_line": 4,
+          "end_col": 18
+        }
+      },
+      "initializer": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 118,
+          "end_offset": 137,
+          "start_line": 4,
+          "start_col": 24,
+          "end_line": 4,
+          "end_col": 43
+        },
+        "callee": {
+          "kind": "GenericInstantiationExpr",
+          "span": {
+            "start_offset": 118,
+            "end_offset": 135,
+            "start_line": 4,
+            "start_col": 24,
+            "end_line": 4,
+            "end_col": 41
+          },
+          "base": {
+            "kind": "MemberAccessExpr",
+            "span": {
+              "start_offset": 118,
+              "end_offset": 128,
+              "start_line": 4,
+              "start_col": 24,
+              "end_line": 4,
+              "end_col": 34
+            },
+            "object": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 118,
+                "end_offset": 124,
+                "start_line": 4,
+                "start_col": 24,
+                "end_line": 4,
+                "end_col": 30
+              },
+              "name": "matrix"
+            },
+            "member": "new"
+          },
+          "type_args": [
+            {
+              "kind": "TypeRef",
+              "name": "float",
+              "template_args": [],
+              "span": {
+                "start_offset": 129,
+                "end_offset": 134,
+                "start_line": 4,
+                "start_col": 35,
+                "end_line": 4,
+                "end_col": 40
+              }
+            }
+          ]
+        },
+        "arguments": []
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 138,
+        "end_offset": 149,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 12
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 138,
+          "end_offset": 149,
+          "start_line": 5,
+          "start_col": 1,
+          "end_line": 5,
+          "end_col": 12
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 138,
+            "end_offset": 142,
+            "start_line": 5,
+            "start_col": 1,
+            "end_line": 5,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 143,
+              "end_offset": 148,
+              "start_line": 5,
+              "start_col": 6,
+              "end_line": 5,
+              "end_col": 11
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 143,
+                "end_offset": 148,
+                "start_line": 5,
+                "start_col": 6,
+                "end_line": 5,
+                "end_col": 11
+              },
+              "name": "close"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

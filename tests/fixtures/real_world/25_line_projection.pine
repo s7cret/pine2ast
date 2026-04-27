@@ -1,0 +1,5 @@
+//@version=6
+indicator("Line Projection", overlay = true)
+ln = line.new(bar_index[1], close[1], bar_index, close)
+price = line.get_price(ln, bar_index)
+plot(price)

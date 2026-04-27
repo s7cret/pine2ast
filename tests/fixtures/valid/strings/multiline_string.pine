@@ -1,0 +1,6 @@
+//@version=6
+indicator("Multi string")
+msg = """hello
+world"""
+label.new(bar_index, high, msg)
+plot(close)

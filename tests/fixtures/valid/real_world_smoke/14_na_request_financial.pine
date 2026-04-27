@@ -1,0 +1,5 @@
+//@version=6
+indicator("Financial NA")
+eps = request.financial(syminfo.tickerid, "EARNINGS_PER_SHARE", "FQ")
+confirmed = barstate.isconfirmed and not na(eps)
+plot(confirmed ? eps : na)

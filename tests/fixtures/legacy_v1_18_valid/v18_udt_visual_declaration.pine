@@ -1,0 +1,18 @@
+//@version=6
+indicator("v18 UDT Visual Declaration", overlay=true, explicit_plot_zorder=true, max_lines_count=500, max_labels_count=500, max_boxes_count=500, format=format.price, precision=2)
+
+type Pivot
+    int x
+    float y
+
+method isBullish(Pivot p) =>
+    p.y > close
+
+var Pivot p = Pivot.new(bar_index, close)
+p.y := high
+var table t = table.new(position.top_right, 1, 1)
+if barstate.islast
+    table.cell(t, 0, 0, str.tostring(p.y), text_color=color.white)
+
+plotcandle(open, high, low, close, title="C")
+plot(close)

@@ -1,0 +1,5 @@
+//@version=6
+indicator("V19 TA Tuple")
+[plus, minus, adx] = ta.dmi(14, 14)
+[upper, basis, lower] = ta.kc(close, 20, 1.5)
+plot(adx + basis)
