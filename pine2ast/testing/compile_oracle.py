@@ -147,7 +147,9 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
             if pending:
                 message_parts.append("external TradingView oracle is pending")
             if platform_blocked:
-                message_parts.append("TradingView/platform blocked real compile evidence capture; not oracle_verified")
+                message_parts.append(
+                    "TradingView/platform blocked real compile evidence capture; not oracle_verified"
+                )
 
             entries.append(
                 CompileOracleEntryReport(
@@ -172,7 +174,9 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
     pending_count = sum(1 for entry in entries if entry.pending)
     invalid_count = sum(1 for entry in entries if not entry.ok and not entry.pending)
     ok_count = sum(1 for entry in entries if entry.tradingview_status in VERIFIED_STATUSES)
-    platform_blocked_count = sum(1 for entry in entries if entry.tradingview_status == PLATFORM_BLOCKED_STATUS)
+    platform_blocked_count = sum(
+        1 for entry in entries if entry.tradingview_status == PLATFORM_BLOCKED_STATUS
+    )
     return CompileOracleReport(
         schema_version=1,
         path=str(root),

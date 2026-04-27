@@ -9,7 +9,9 @@ from pine2ast.ast.nodes import Program
 from pine2ast.ast.visitors import walk
 from pine2ast.diagnostics import codes
 
-_CONTRACT_FIXTURE = Path(__file__).resolve().parent / "runtime_contract_v1_4" / "frontend_node_mapping.json"
+_CONTRACT_FIXTURE = (
+    Path(__file__).resolve().parent / "runtime_contract_v1_4" / "frontend_node_mapping.json"
+)
 
 
 def load_runtime_contract_mapping(path: Path | None = None) -> dict[str, Any]:
@@ -18,7 +20,9 @@ def load_runtime_contract_mapping(path: Path | None = None) -> dict[str, Any]:
     if path is not None:
         return json.loads(path.read_text(encoding="utf-8"))
     try:
-        text = (resources.files("pine2ast") / "runtime_contract_v1_4" / "frontend_node_mapping.json").read_text(encoding="utf-8")
+        text = (
+            resources.files("pine2ast") / "runtime_contract_v1_4" / "frontend_node_mapping.json"
+        ).read_text(encoding="utf-8")
     except (FileNotFoundError, ModuleNotFoundError):
         text = _CONTRACT_FIXTURE.read_text(encoding="utf-8")
     return json.loads(text)

@@ -25,7 +25,11 @@ run_log RUFF_FINAL.log "$PYTHON" -m ruff check .
 run_log BLACK_FINAL.log "$PYTHON" -m black --check .
 run_log MYPY_FINAL.log "$PYTHON" -m mypy pine2ast
 run_log SMOKE_IMPORT_PARSE_FINAL.log bash scripts/smoke_import_parse.sh
-run_log TEST_RUN_FINAL.log "$PYTHON" -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
+# Keep release verification hermetic: stale/corrupt coverage DBs from earlier
+# interrupted runs must not poison the gate, and coverage XML must not rewrite
+# tracked repository files during verification.
+rm -f .coverage
+run_log TEST_RUN_FINAL.log "$PYTHON" -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml:"$OUT_DIR/coverage.xml"
 run_log QUALITY_GATE_FINAL.log "$PYTHON" -m pine2ast quality-gate tests/fixtures/real_world --json "$OUT_DIR/QUALITY_GATE_FINAL.json"
 run_log BUILTIN_COVERAGE_FINAL.log "$PYTHON" -m pine2ast builtin-coverage --json "$OUT_DIR/BUILTIN_COVERAGE_FINAL.json"
 
