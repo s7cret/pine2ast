@@ -1,8 +1,0 @@
-{
-  "schema_version": 1,
-  "release": "v2.20.0",
-  "status": "pending_external_oracle",
-  "reason": "TradingView Pine Editor access is not available in this environment; no compile-oracle result was faked.",
-  "checked_by": "local release automation only",
-  "archive_suffix": "oracle_pending"
-}

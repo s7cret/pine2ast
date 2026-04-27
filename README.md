@@ -18,10 +18,10 @@ python -m ruff check .
 python -m black --check .
 python -m mypy pine2ast
 python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
-python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_20_0.json
+python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release evidence: v2.20.0 / package `0.2.20` freezes the AST2Python/optimizer inspect integration contract with stable producer/source/script metadata, unsupported-feature reporting, v2.20 golden inspect snapshots, contract docs, and green ruff, black, mypy, tests, coverage, builtin coverage, and real-world quality gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+Current release candidate: `v3.0-rc1` / package `0.3.0rc1`. This is a final production-candidate packaging/sign-off build over the v2.20 AST2Python/optimizer inspect contract. Local gates are expected green: ruff, black, mypy, unit+integration tests with coverage, builtin coverage, and real-world quality gate. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
 
 Fallback without pytest, only stdlib:
 
