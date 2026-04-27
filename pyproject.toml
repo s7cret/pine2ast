@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "0.3.6"
+version = "0.3.7"
 description = "Pine Script v6 to AST parser prototype with lexer, layout, semantic diagnostics and CLI"
 readme = "README.md"
 requires-python = ">=3.10"

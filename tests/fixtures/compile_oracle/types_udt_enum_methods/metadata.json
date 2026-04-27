@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "Pending TradingView Pine Editor external compile oracle; intentionally not counted as oracle_verified.",
+  "oracle": "Pending TradingView Pine Editor external compile oracle; v3.7 attempt blocked by unauthenticated TradingView profile; intentionally not counted as oracle_verified.",
   "policy": [
     {
       "fixture": "udt_constructor_method.pine",
@@ -12,8 +12,8 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     },
     {
       "fixture": "enum_switch_values.pine",
@@ -23,8 +23,8 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     },
     {
       "fixture": "nested_udt_fields.pine",
@@ -34,8 +34,8 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     },
     {
       "fixture": "method_with_param.pine",
@@ -45,8 +45,8 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     },
     {
       "fixture": "enum_input_options.pine",
@@ -56,8 +56,8 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     },
     {
       "fixture": "export_method_library.pine",
@@ -67,9 +67,12 @@
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
       "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check",
-      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
+      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
     }
   ],
-  "checked_by": "openclaw-local-fixture-prep"
+  "checked_by": "openclaw-local-fixture-prep",
+  "last_attempted_at": "2026-04-27T15:18:00+03:00",
+  "last_attempt_blocker": "TradingView displayed Sign in with email modal after Pine Editor fixture insertion and Ctrl+Enter; no fixture-specific compile result was available.",
+  "attempt_evidence": "TV_ORACLE_ATTEMPT_v3_7/"
 }
