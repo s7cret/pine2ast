@@ -156,6 +156,40 @@ def _collection_call_return(expr: CallExpr, symbols: Mapping[str, object] | None
     return None
 
 
+def _generic_collection_constructor_return(expr: CallExpr) -> str | None:
+    """Infer collection constructors represented as generic call callees.
+
+    Pine collection constructors are commonly written as `array.new<float>()`,
+    `matrix.new<float>()`, and `map.new<string, float>()`. The parser keeps the
+    generic part on the callee expression, so builtin-registry lookup by raw
+    callee name cannot recover the element/key/value types. Preserve those
+    shapes here without introducing any new AST node kind.
+    """
+
+    if not isinstance(expr.callee, GenericInstantiationExpr):
+        return None
+    base_name = callee_name(expr.callee.base)
+    type_args = [_type_ref_name(type_arg) for type_arg in expr.callee.type_args]
+    if (
+        base_name
+        in {
+            "array.new",
+            "array.new_bool",
+            "array.new_color",
+            "array.new_float",
+            "array.new_int",
+            "array.new_string",
+        }
+        and type_args
+    ):
+        return f"array<{type_args[0]}>"
+    if base_name == "matrix.new" and type_args:
+        return f"matrix<{type_args[0]}>"
+    if base_name == "map.new" and len(type_args) >= 2:
+        return f"map<{type_args[0]},{type_args[1]}>"
+    return None
+
+
 def _request_security_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
     name = callee_name(expr.callee)
     if name not in {"request.security", "request.security_lower_tf"} or len(expr.arguments) < 3:
@@ -217,6 +251,9 @@ def infer_type(expr, symbols: Mapping[str, object] | None = None) -> str:
         case_types = [_case_body_type(case.body, symbols) for case in expr.cases]
         return _merge_types(case_types)
     if isinstance(expr, CallExpr):
+        generic_collection_type = _generic_collection_constructor_return(expr)
+        if generic_collection_type:
+            return generic_collection_type
         udt_type = _udt_constructor_return(expr, symbols)
         if udt_type:
             return udt_type

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 _REQUIRED_TOP_LEVEL_SECTIONS = ("functions", "namespaces", "types", "variables")
 _REQUIRED_FUNCTION_FIELDS = ("name", "kind", "pine_version", "parameters", "returns", "scope")
@@ -21,6 +21,36 @@ _ALLOWED_PARAM_KEYS = {
     "replacement",
     "diagnostic_code",
 }
+
+
+class NamespaceCoverageReport(TypedDict):
+    entry_count: int
+    entries: list[str]
+    coverage_basis: str
+    internal_expected_count: int
+    missing_internal_expected: list[str]
+    internal_coverage_ratio: float | None
+    official_unmapped: list[str]
+    known_deferred: list[str]
+    known_unsupported: list[str]
+    expected_count: int
+    missing_expected: list[str]
+    coverage_ratio: float | None
+
+
+class BuiltinCoverageReport(TypedDict):
+    schema_version: Any
+    pine_version: Any
+    function_count: int
+    variable_count: int
+    namespace_count: int
+    coverage_basis: str
+    missing_internal_expected_count: int
+    official_unmapped_count: int
+    known_deferred_count: int
+    known_unsupported_count: int
+    taxonomy: dict[str, str]
+    namespaces: dict[str, NamespaceCoverageReport]
 
 
 class BuiltinRegistrySchemaError(ValueError):
@@ -321,7 +351,7 @@ def _full_names(namespace: str, members: set[str]) -> set[str]:
     return {f"{namespace}.{member}" for member in members}
 
 
-def builtin_registry_coverage_report() -> dict[str, Any]:
+def builtin_registry_coverage_report() -> BuiltinCoverageReport:
     registry = load_builtin_registry()
     functions = set(registry.get("functions", {}))
     variables = set(registry.get("variables", {}))
@@ -333,7 +363,7 @@ def builtin_registry_coverage_report() -> dict[str, Any]:
         | set(KNOWN_DEFERRED_NAMESPACE_MEMBERS)
         | set(KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS)
     )
-    namespace_reports: dict[str, dict[str, Any]] = {}
+    namespace_reports: dict[str, NamespaceCoverageReport] = {}
     all_entries = functions | variables
     for namespace in tracked_namespaces:
         prefix = namespace + "."

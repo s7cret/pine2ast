@@ -2,11 +2,24 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, TypedDict, cast
 
 from pine2ast.api import ParseOptions, ast_to_dict, parse_file
 from pine2ast.diagnostics import Severity
 from pine2ast.testing.ast_compare import strip_spans
+
+
+class GoldenGenerationResult(TypedDict):
+    ast_path: Path
+    diagnostics_path: Path
+    ok: bool
+    diagnostic_count: int
+
+
+class InvalidDiagnosticContract(TypedDict, total=False):
+    fixture: str
+    expected_codes: list[str]
+    notes: str
 
 
 def _normalize(value: Any, *, ignore_spans: bool) -> Any:
@@ -28,7 +41,7 @@ def generate_golden(
     ignore_spans: bool = False,
     run_semantic: bool = True,
     indent: int = 2,
-) -> dict[str, Path | int | bool]:
+) -> GoldenGenerationResult:
     """Parse a Pine fixture and write stable golden AST/diagnostics JSON files."""
     src = Path(source_path)
     ast_out = Path(ast_path) if ast_path else src.with_suffix(".ast.json")
@@ -121,7 +134,10 @@ def validate_invalid_diagnostic_contract(
     )
     if not contract_path.exists():
         return False, f"Diagnostic contract does not exist: {contract_path}"
-    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    raw_contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    if not isinstance(raw_contract, dict):
+        return False, "Diagnostic contract root must be an object"
+    contract = cast(InvalidDiagnosticContract, raw_contract)
     expected_codes = list(contract.get("expected_codes", []))
     if not expected_codes:
         return False, "Diagnostic contract has no expected_codes"

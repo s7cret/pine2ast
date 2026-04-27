@@ -112,6 +112,44 @@ def test_type_inference_collection_udt_security_and_generic_paths():
         infer_type(CallExpr(S, MemberAccessExpr(S, ident("lib"), "score"), []), symbols) == "float"
     )
     assert (
+        infer_type(
+            CallExpr(
+                S,
+                GenericInstantiationExpr(
+                    S, MemberAccessExpr(S, ident("array"), "new"), [TypeRef("float")]
+                ),
+                [],
+            )
+        )
+        == "array<float>"
+    )
+    assert (
+        infer_type(
+            CallExpr(
+                S,
+                GenericInstantiationExpr(
+                    S,
+                    MemberAccessExpr(S, ident("map"), "new"),
+                    [TypeRef("string"), TypeRef("float")],
+                ),
+                [],
+            )
+        )
+        == "map<string,float>"
+    )
+    assert (
+        infer_type(
+            CallExpr(
+                S,
+                GenericInstantiationExpr(
+                    S, MemberAccessExpr(S, ident("matrix"), "new"), [TypeRef("color")]
+                ),
+                [],
+            )
+        )
+        == "matrix<color>"
+    )
+    assert (
         infer_type(GenericInstantiationExpr(S, ident("array"), [TypeRef("float")]))
         == "array<float>"
     )

@@ -3,12 +3,36 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 PENDING_STATUS = "pending_external_oracle"
 PASS_STATUS = "pass"
 EXPECTED_FAIL_STATUS = "fail_expected"
 ALLOWED_STATUSES = {PASS_STATUS, EXPECTED_FAIL_STATUS, PENDING_STATUS}
+
+
+class CompileOracleEntryPayload(TypedDict):
+    metadata_file: str
+    fixture: str
+    tradingview_status: str
+    pine2ast_status: str | None
+    expected: str | None
+    checked_at: str | None
+    ok: bool
+    pending: bool
+    message: str | None
+
+
+class CompileOraclePayload(TypedDict):
+    schema_version: int
+    path: str
+    metadata_count: int
+    fixture_count: int
+    ok_count: int
+    pending_count: int
+    invalid_count: int
+    ok: bool
+    entries: list[CompileOracleEntryPayload]
 
 
 @dataclass(slots=True)
@@ -152,7 +176,7 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
     )
 
 
-def report_to_dict(report: CompileOracleReport) -> dict[str, Any]:
+def report_to_dict(report: CompileOracleReport) -> CompileOraclePayload:
     return {
         "schema_version": report.schema_version,
         "path": report.path,
