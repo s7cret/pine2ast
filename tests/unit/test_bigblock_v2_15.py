@@ -62,7 +62,7 @@ def test_v215_builtin_coverage_taxonomy_separates_internal_official_and_deferred
     report = builtin_registry_coverage_report()
     assert report["coverage_basis"] == "internal_expected_snapshot_not_official_complete"
     assert report["missing_internal_expected_count"] == 0
-    assert report["official_unmapped_count"] > 0
+    assert report["official_unmapped_count"] == 0
     assert report["known_deferred_count"] > 0
     assert report["known_unsupported_count"] > 0
     assert "official_unmapped" in report["taxonomy"]
@@ -71,7 +71,7 @@ def test_v215_builtin_coverage_taxonomy_separates_internal_official_and_deferred
     assert line["missing_internal_expected"] == []
     assert line["official_unmapped"] == []  # safe v3 line setters are now modeled.
     assert line["coverage_basis"] == "internal_expected_snapshot_not_official_complete"
-    assert "box.copy" in report["namespaces"]["box"]["official_unmapped"]
+    assert "box.copy" not in report["namespaces"]["box"]["official_unmapped"]
 
 
 def test_v215_line_setter_registry_expansion_accepts_named_parameters_and_types():

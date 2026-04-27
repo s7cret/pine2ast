@@ -5160,6 +5160,36 @@
       "pine_version": "6",
       "returns": "int",
       "scope": "any"
+    },
+    "box.copy": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "box.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "box",
+      "scope": "any"
+    },
+    "label.copy": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "label.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "label",
+      "scope": "any"
     }
   },
   "generated_at": null,
@@ -5214,7 +5244,10 @@
     "time": {},
     "timeframe": {},
     "xloc": {},
-    "yloc": {}
+    "yloc": {},
+    "runtime": {
+      "name": "runtime"
+    }
   },
   "pine_version": "6",
   "schema_version": 1,

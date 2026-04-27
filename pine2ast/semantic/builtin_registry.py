@@ -363,6 +363,7 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     },
     "label": {
         "new",
+        "copy",
         "delete",
         "set_size",
         "set_style",
@@ -393,6 +394,7 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     },
     "box": {
         "new",
+        "copy",
         "delete",
         "set_bgcolor",
         "set_border_color",
@@ -471,10 +473,7 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
 # Curated official members known to exist but not yet represented in this
 # registry snapshot. Kept separate so coverage output does not imply official
 # coverage is complete when the internal expected set is green.
-OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
-    "label": {"copy"},
-    "box": {"copy"},
-}
+OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 
 # Known but deliberately deferred/unsupported surfaces. These are not counted as
 # missing internal coverage and should not be used to claim official completeness.

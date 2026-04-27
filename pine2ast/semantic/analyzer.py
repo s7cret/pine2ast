@@ -38,7 +38,11 @@ from pine2ast.ast.nodes import (
 from pine2ast.diagnostics import Diagnostic, Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.semantic.builtin_registry import (
+    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
+    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
+    load_builtin_registry,
+)
 from pine2ast.semantic.qualifier_infer import infer_qualifier
 from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
@@ -959,8 +963,13 @@ class SemanticAnalyzer:
                 )
             self._validate_strategy_call_script_type(name, expr)
             self._validate_strategy_namespace_usage(name, expr.span, is_call=True)
+            self._validate_known_deferred_or_unsupported_builtin(name, entry, expr)
             self._validate_unknown_builtin_namespace_member(name, entry, expr)
-            if name.startswith("request.") and entry is None:
+            if (
+                name.startswith("request.")
+                and entry is None
+                and not self._is_known_deferred_or_unsupported_builtin(name)
+            ):
                 self._diag(
                     Severity.ERROR,
                     codes.REQUEST_SIGNATURE,
@@ -1160,13 +1169,46 @@ class SemanticAnalyzer:
             return root
         return None
 
+    def _is_known_deferred_or_unsupported_builtin(self, name: str) -> bool:
+        if "." not in name:
+            return False
+        namespace, member = name.split(".", 1)
+        return member in KNOWN_DEFERRED_NAMESPACE_MEMBERS.get(
+            namespace, set()
+        ) or member in KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS.get(namespace, set())
+
+    def _validate_known_deferred_or_unsupported_builtin(
+        self, name: str, entry: dict | None, expr: CallExpr
+    ) -> None:
+        if entry is not None or "." not in name:
+            return
+        namespace, member = name.split(".", 1)
+        if member in KNOWN_DEFERRED_NAMESPACE_MEMBERS.get(namespace, set()):
+            self._diag(
+                Severity.INFO,
+                codes.UNSUPPORTED_FEATURE,
+                f"Builtin {name} is deliberately deferred in the v3.1 registry snapshot.",
+                expr.span,
+            )
+        if member in KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS.get(namespace, set()):
+            self._diag(
+                Severity.ERROR,
+                codes.UNSUPPORTED_FEATURE,
+                f"Builtin {name} is intentionally unsupported by this parser/semantic layer.",
+                expr.span,
+            )
+
     def _validate_unknown_builtin_namespace_member(
         self, name: str, entry: dict | None, expr: CallExpr
     ) -> None:
         if entry is not None or name.startswith("<"):
             return
         root = self._builtin_namespace_root(name)
-        if root is None or root in self._external_aliases:
+        if (
+            root is None
+            or root in self._external_aliases
+            or self._is_known_deferred_or_unsupported_builtin(name)
+        ):
             return
         # Registry coverage is intentionally incomplete, so unknown members from known namespaces
         # are surfaced as INFO instead of ERROR. `request.*` remains an ERROR in the dedicated

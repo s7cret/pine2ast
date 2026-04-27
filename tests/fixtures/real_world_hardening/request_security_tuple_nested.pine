@@ -1,0 +1,5 @@
+//@version=6
+indicator("security tuple")
+[secClose, secEma] = request.security(syminfo.tickerid, "60", [close, ta.ema(close, 21)])
+plot(secClose)
+plot(secEma)

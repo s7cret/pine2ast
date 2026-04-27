@@ -1,0 +1,11 @@
+//@version=6
+indicator("switch cases")
+mode = input.string("fast", "Mode")
+len = switch mode
+    "fast" =>
+        10
+    "slow" =>
+        30
+    =>
+        20
+plot(ta.sma(close, len))

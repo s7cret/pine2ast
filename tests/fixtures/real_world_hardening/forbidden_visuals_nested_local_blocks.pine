@@ -1,0 +1,4 @@
+//@version=6
+indicator("forbidden visuals")
+if close > open
+    plot(close)

@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release candidate: `v3.0-rc1` / package `0.3.0rc1`. This is a final production-candidate packaging/sign-off build over the v2.20 AST2Python/optimizer inspect contract. Local gates are expected green: ruff, black, mypy, unit+integration tests with coverage, builtin coverage, and real-world quality gate. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+Current release candidate: `v3.1` / package `0.3.1rc1`. This is an oracle-pending production-hardening RC over v3.0. Local gates are expected green via `bash scripts/release_gate.sh --allow-pending-oracle`; external TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed. See `docs/current_limitations_v3_1.md`.
 
 Fallback without pytest, only stdlib:
 

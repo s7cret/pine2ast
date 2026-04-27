@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "pine_version": "6",
-  "function_count": 303,
+  "function_count": 305,
   "variable_count": 103,
-  "namespace_count": 34,
+  "namespace_count": 35,
   "coverage_basis": "internal_expected_snapshot_not_official_complete",
   "missing_internal_expected_count": 0,
-  "official_unmapped_count": 2,
+  "official_unmapped_count": 0,
   "known_deferred_count": 1,
   "known_unsupported_count": 1,
   "taxonomy": {
@@ -105,8 +105,9 @@
       "coverage_ratio": null
     },
     "box": {
-      "entry_count": 17,
+      "entry_count": 18,
       "entries": [
+        "box.copy",
         "box.delete",
         "box.new",
         "box.set_bgcolor",
@@ -126,15 +127,13 @@
         "box.set_top"
       ],
       "coverage_basis": "internal_expected_snapshot_not_official_complete",
-      "internal_expected_count": 17,
+      "internal_expected_count": 18,
       "missing_internal_expected": [],
       "internal_coverage_ratio": 1.0,
-      "official_unmapped": [
-        "box.copy"
-      ],
+      "official_unmapped": [],
       "known_deferred": [],
       "known_unsupported": [],
-      "expected_count": 17,
+      "expected_count": 18,
       "missing_expected": [],
       "coverage_ratio": 1.0
     },
@@ -301,8 +300,9 @@
       "coverage_ratio": null
     },
     "label": {
-      "entry_count": 31,
+      "entry_count": 32,
       "entries": [
+        "label.copy",
         "label.delete",
         "label.get_text",
         "label.get_x",
@@ -336,15 +336,13 @@
         "label.style_xcross"
       ],
       "coverage_basis": "internal_expected_snapshot_not_official_complete",
-      "internal_expected_count": 28,
+      "internal_expected_count": 29,
       "missing_internal_expected": [],
       "internal_coverage_ratio": 1.0,
-      "official_unmapped": [
-        "label.copy"
-      ],
+      "official_unmapped": [],
       "known_deferred": [],
       "known_unsupported": [],
-      "expected_count": 28,
+      "expected_count": 29,
       "missing_expected": [],
       "coverage_ratio": 1.0
     },
