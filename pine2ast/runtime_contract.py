@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from importlib import resources
 from pathlib import Path
 from typing import Any
 
@@ -8,19 +9,19 @@ from pine2ast.ast.nodes import Program
 from pine2ast.ast.visitors import walk
 from pine2ast.diagnostics import codes
 
-_CONTRACT_FIXTURE = (
-    Path(__file__).resolve().parents[1]
-    / "tests"
-    / "fixtures"
-    / "runtime_contract_v1_4"
-    / "frontend_node_mapping.json"
-)
+_CONTRACT_FIXTURE = Path(__file__).resolve().parent / "runtime_contract_v1_4" / "frontend_node_mapping.json"
 
 
 def load_runtime_contract_mapping(path: Path | None = None) -> dict[str, Any]:
     """Load the machine-readable runtime_contract_v1.4 frontend mapping."""
 
-    return json.loads((path or _CONTRACT_FIXTURE).read_text(encoding="utf-8"))
+    if path is not None:
+        return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        text = (resources.files("pine2ast") / "runtime_contract_v1_4" / "frontend_node_mapping.json").read_text(encoding="utf-8")
+    except (FileNotFoundError, ModuleNotFoundError):
+        text = _CONTRACT_FIXTURE.read_text(encoding="utf-8")
+    return json.loads(text)
 
 
 def unsupported_features_for_program(
