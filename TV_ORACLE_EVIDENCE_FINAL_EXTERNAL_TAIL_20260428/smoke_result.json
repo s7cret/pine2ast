@@ -1,0 +1,213 @@
+{
+  "checked_at": "2026-04-28T02:45:14+0300",
+  "url": "https://www.tradingview.com/chart/?symbol=NASDAQ:AAPL",
+  "profile": "[local-home]/.config/tradingview-oracle-profile",
+  "events": [
+    {
+      "response": 200,
+      "url": "https://www.tradingview.com/chart/?symbol=NASDAQ:AAPL"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/main_chart.852e28a03a70347bef3c.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-bottom-toolbar.1e144968f5ee85cf5c73.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-news.4c732d9cd75c59f29158.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-alerts-facade.798c52574655856c59cd.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-source-ids-getter.a58b3bf17db587c4bab0.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-widget-gui.52aed94fcebf47b33600.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/toasts-groupable-layer-chart.7aa5b4913b09637e2ad2.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/published-charts-timeline-tooltip.248390c4da8b1ee6bc84.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/chart-lottie-animation.50236053e14d6fd969ef.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-full.c5fd28fd6932fe839ea4.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-bottom-widget-model.b9dc3e1153579c9feebc.js"
+    },
+    {
+      "console": "warning",
+      "text": "Deprecation warning: use moment.updateLocale(localeName, config) to change an existing locale. moment.defineLocale(localeName, config) should only be used for creating a new locale See http://momentjs.com/guides/#/warnings/define-locale/ for more info."
+    },
+    {
+      "response": 200,
+      "url": "https://www.tradingview.com/api/v1/study-templates"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-dialog-open-state.95a08e38a2c185eb34b4.js"
+    },
+    {
+      "response": 204,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YVVRYGL0E0&gtm=45je64o1v9104254764za200zd9104254764&_p=1777333520534&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&dma=0&_eu=AEAEAGA&ae=a&are=1&cid=1158781223.1777333522&frm=0&pscdl=noapi&rcb=6&sr=1440x1000&uaa=arm&uab=64&uafvl=Chromium%3B147.0.7727.101%7CNot.A"
+    },
+    {
+      "response": 204,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YVVRYGL0E0&gtm=45je64o1v9104254764za200zd9104254764&_p=1777333520534&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&dma=0&_eu=AAAAAGA&are=1&cid=1158781223.1777333522&frm=0&pscdl=noapi&rcb=6&sr=1440x1000&uaa=arm&uab=64&uafvl=Chromium%3B147.0.7727.101%7CNot.A%252F"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/advanced-chart-lollipops.770cfbd0db3465f42862.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/study-pane-views.a42c0ff9a2d4e7e5808d.js"
+    },
+    {
+      "response": 204,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YVVRYGL0E0&gtm=45je64o1v9104254764za200zd9104254764&_p=1777333520534&gcs=G100&gcd=13p3p3l3l5l1&npa=0&dma=0&_eu=AEAAAGA&ae=a&are=1&cid=1158781223.1777333522&frm=0&pscdl=denied&rcb=6&sr=1440x1000&uaa=arm&uab=64&uafvl=Chromium%3B147.0.7727.101%7CNot."
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/seasonals-chart.4194fe69405303db4186.js"
+    },
+    {
+      "response": 200,
+      "url": "https://options-charting.tradingview.com/v1/volatility-chart/NASDAQ:AAPL;AAPL;20260529?xaxis=strikes&label-product=details_widget_volatility_chart"
+    },
+    {
+      "response": 200,
+      "url": "https://options-charting.tradingview.com/v1/in-time-iv/NASDAQ%3AAAPL?label-product=details_widget_in_time_iv_chart"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/lightweight-minichart-study-data-source.ee1f75b3e051120ff38f.js"
+    },
+    {
+      "response": 200,
+      "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=2&frm=0&en=page_view&dl=https%3A%2F%2Fwww.tradingview.com%2Fchart%2F&scrsrc=www.googletagmanager.com&rnd=1761620296.1777333523&navt=n&npa=0&gtm=45fe64o1v9190700051za200zb9104254764zd9104254764xec&gcs=G100&gcd=13p3p3l3l5l1&dma=0&tag_exp=0~11593846"
+    },
+    {
+      "response": 200,
+      "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=2&frm=0&en=Legend%20action&dl=https%3A%2F%2Fwww.tradingview.com%2Fchart%2F&scrsrc=www.googletagmanager.com&rnd=1761620296.1777333523&navt=n&npa=0&ep.event_category=GUI&ep.event_label=Show%20not%20main%20sources&gtm=45fe64o1v9190700051za200zb91042"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/lollipop-chart-events.9e94d7796ef0f262ce47.js"
+    },
+    {
+      "response": 200,
+      "url": "https://news-mediator.tradingview.com/public/news-flow/v2/news?filter=lang%3Aen&filter=symbol%3ANASDAQ%3AAAPL&client=chart&user_prostatus=non_pro"
+    },
+    {
+      "response": 200,
+      "url": "https://ade.googlesyndication.com/ddm/activity/src=13919399;rcb=2;npa=0;uaa=arm;uab=64;uafvl=Chromium%3B147.0.7727.101%7CNot.A%252FBrand%3B8.0.0.0;uamb=0;uam=;uap=Linux;uapv=;uaw=0;pscdl=denied;frm=0;_tu=ACA;gtm=45fe64o1v9190700051za200zb9104254764zd9104254764xec;gcs=G100;gcd=13p3p3l3l5l1;dma=0;dc_f"
+    },
+    {
+      "console": "warning",
+      "text": "[GSI_LOGGER]: Your client application uses one of the Google One Tap prompt UI status methods that may stop functioning when FedCM becomes mandatory. Refer to the migration guide to update your code accordingly and opt-in to FedCM to test your changes. Learn more: https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#display_moment and https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#skipped_moment"
+    },
+    {
+      "console": "error",
+      "text": "Not signed in with the identity provider."
+    },
+    {
+      "console": "warning",
+      "text": "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">"
+    },
+    {
+      "response": 204,
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YVVRYGL0E0&gtm=45je64o1v9104254764za200zd9104254764&_p=1777333520534&gcs=G100&gcd=13p3p3l3l5l1&npa=0&dma=0&_eu=AAAAAGA&are=1&cid=1158781223.1777333522&frm=0&pscdl=denied&rcb=6&sr=1440x1000&uaa=arm&uab=64&uafvl=Chromium%3B147.0.7727.101%7CNot.A%252"
+    },
+    {
+      "click_failed": "text=Pine Editor",
+      "error": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\"text=Pine Editor\").first\\n')"
+    },
+    {
+      "console": "error",
+      "text": "[GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token."
+    },
+    {
+      "click_failed": "button:has-text('Pine Editor')",
+      "error": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\"button:has-text(\\'Pine Editor\\')\").first\\n')"
+    },
+    {
+      "click_failed": "[data-name='pine-editor']",
+      "error": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[data-name=\\'pine-editor\\']\").first\\n')"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/show-pine-dialog.304821c535fab64ef39d.js"
+    },
+    {
+      "clicked": "[aria-label*='Pine']"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-dialog.3abefd00009970fc6c7f.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-reference-dialog.ade475bfacef27808868.js"
+    },
+    {
+      "response": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-dialog.3c1aa4dbd4b871b7d021.js"
+    },
+    {
+      "console": "log",
+      "text": "%c WARN color: #993 Creation of workbench contribution 'workbench.contrib.textInputActionsProvider' took 23ms."
+    },
+    {
+      "response": 200,
+      "url": "https://www.tradingview.com/pine-script-docs/last-update-time.json"
+    },
+    {
+      "response": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/translate_light?v=3"
+    },
+    {
+      "response": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/TradingView/Strategy/last?v=2"
+    },
+    {
+      "response": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/PineCoders/VisibleChart/last?v=2"
+    },
+    {
+      "response": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/PineCoders/Time/last?v=2"
+    },
+    {
+      "response": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/TradingView/ta/last?v=2"
+    }
+  ],
+  "after_goto_url": "https://www.tradingview.com/chart/?symbol=NASDAQ:AAPL",
+  "body_sample": "AAPL\nD\nIndicators\nAlert\nReplay\nSave\nSave\nTrade\nPublish\nA\nApple Inc\n1D\nNASDAQ\nO\n266.09\nH\n268.36\nL\n265.07\nC\n267.61\n\u22123.45 (\u22121.27%)\n267.87\nSELL\n0.02\n267.89\nBUY\nVol\n41.45\u202fM\n1D\n5D\n1M\n3M\n6M\nYTD\n1Y\n5Y\nAll\n23:45:33 UTC\nADJ\nWatchlist\nSymbol\nLast\nChg\nChg%\nINDICES\nS\nSPX\n7,173.92\n8.85\n0.12%\nN\nNDQ\n27,305.68\n2.01\n0.01%\nD\nDJI\n49,167.79\n\u221262.92\n\u22120.13%\nV\nVIX\nD\n18.02\n\u22120.69\n\u22123.69%\nD\nDXY\n98.470\n\u22120.027\n\u22120.03%\nSTOCKS\nA\nAAPL\n267.61\n\u22123.45\n\u22121.27%\nT\nTSLA\n378.67\n2.37\n0.63%\nN\nNFLX\n91.37\n\u22121.07\n\u22121.16%\nFUTURES\nU\nUSOIL\n96.66\n\u22120.01\n\u22120.01%\nG\nGOLD\n4,693.985\n11.825\n0.25%\nS\nSILVER\n75.9630\n0.5006\n0.66%\nFOREX\nE\nEURUSD\n1.17226\n0.00033\n0.03%\nG\nGBPUSD\n1.35366\n0.00037\n0.03%\nU\nUSDJPY\n159.416\n0.006\n0.00%\nCRYPTO\nB\nBTCUSD\n77,292\n\u22121,368\n\u22121.74%\nB\nBTCUSDT\n77,275.06\n\u22121,382.49\n\u22121.76%\nE\nETHUSD\n2,298.0\n\u221272.2\n\u22123.05%\nA\nAAPL\nApple Inc\nNASDAQ\nElectronic Technology\nTelecommunications Equipment\n267.61\nUSD\n\u22123.45\n\u22121.27%\nLast update at 02:30 GMT+3\n267.89USD\n+0.28\n+0.10%\nPost-market\nLast update at 02:45 GMT+3\nxAI and OpenAI filed an antitrust lawsuit against Apple in 2025 alleging anticompetitive behavior; the case remains ongoing with a hearing scheduled for May in Texas.\nKey stats\nNext earnings report\nIn 2 days\nVolume\n\u202a41.45\u202fM\u202c\nAverage Volume (30D)\n\u202a42.06\u202fM\u202c\nMarket capitalization\n\u202a3.93\u202fT\u202c\nEarnings\n2\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\nQ2 '26\n\u202a0.00\u202c\n\u202a0.80\u202c\n\u202a1.60\u202c\n\u202a2.40\u202c\n\u202a3.20\u202c\nActual\nEstimate\nMore info\nDividends\n13.03%\nEarnings retained\nPayout ratio (TTM)\nDividend yield TTM\n0.38%\nLast payment\n0.26\nLast ex-dividend date\nFeb 9, 2026\nLast payment date\nFeb 12, 2026\nMore info\nIncome statement\nAnnual\nQuarterly\nQ1 '25\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\n\u202a0.00\u202c\n\u202a\u202a40.00\u202fB\u202c\u202c\n\u202a\u202a80.00\u202fB\u202c\u202c\n\u202a\u202a120.00\u202fB\u202c\u202c\n\u202a\u202a160.00\u202fB\u202c\u202c\nRevenue\nNet income\nNet margin %\nMore financials\nPerformance\n\u22121.01%\n1W\n5.40%\n1M\n3.26%\n3M\n\u22120.62%\n6M\n\u22121.71%\nYTD\n29.68%\n1Y\nSeasonals\n\t\n\t\n\t\n\t\n2026\n2025\n2024\nMore seasonals\nTechnicals\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\nMore technicals\nAnalyst rating\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\n1 year price target\n301.62\n(12.71%)\nSee forecast\nHighest YTM bonds\nJul 31, 2042\n5.90%\nAug 8, 2062\n5.61%\nMay 11, 2050\n5.58%\nMore bonds\nATM IV term structure\n1W\n2W\n1M\n2M\n3M\n6M\n9M\n1Y\n\u202a25%\u202c\n\u202a29%\u202c\n\u202a33%\u202c\n\u202a37%\u202c\n\u202a41%\u202c\nVolatility curve (31 days)\n\t\n\t\n\n\t\n\t\nMore on options\nProfile\nWebsite\napple.com\nEmployees (FY)\n\u202a166\u202fK\u202c\nISIN\nUS0378331005\nCUSIP\n037833100\nFIGI\nBBG000B9XRY4\nCFI code\nESVUFR\n\nApple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of related services. It operates through the following geographical segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. The Americas segment includes North and South America. The Europe segment consists of European countries, as well as India, the Middle East, and Africa. The Greater China segment comprises China, Hong Kong, and Taiwan. The Rest of Asia Pacific segment includes Australia and Asian countries. Its products and services include iPhone, Mac, iPad, AirPods, Apple TV, Apple Watch, Beats products, AppleCare, iCloud, digital content stores, streaming, and licensing services. The company was founded by Steven Paul Jobs, Ronald Gerald Wayne, and Stephen G. Wozniak in April 1976 and is headquartered in Cupertino, CA.\n\nThis website uses cookies. Our policy\nDon't allow\nAccept all",
+  "auth_indicators": {
+    "has_sign_in_text": false,
+    "has_user_menu_text": true,
+    "has_pine_editor_text": false,
+    "has_unsupported_browser_text": false,
+    "has_cloudflare_or_block_text": false
+  },
+  "pine_editor_opened": true,
+  "after_pine_body_sample": "AAPL\nD\nIndicators\nAlert\nReplay\nSave\nSave\nTrade\nPublish\nA\nApple Inc\n1D\nNASDAQ\nO\n266.09\nH\n268.36\nL\n265.07\nC\n267.61\n\u22123.45 (\u22121.27%)\n267.87\nSELL\n0.12\n267.99\nBUY\nVol\n41.45\u202fM\n1D\n5D\n1M\n3M\n6M\nYTD\n1Y\n5Y\nAll\n23:45:55 UTC\nADJ\nWatchlist\nSymbol\nLast\nChg\nChg%\nINDICES\nS\nSPX\n7,173.92\n8.85\n0.12%\nN\nNDQ\n27,305.68\n2.01\n0.01%\nD\nDJI\n49,167.79\n\u221262.92\n\u22120.13%\nV\nVIX\nD\n18.02\n\u22120.69\n\u22123.69%\nD\nDXY\n98.472\n\u22120.025\n\u22120.03%\nSTOCKS\nA\nAAPL\n267.61\n\u22123.45\n\u22121.27%\nT\nTSLA\n378.67\n2.37\n0.63%\nN\nNFLX\n91.37\n\u22121.07\n\u22121.16%\nFUTURES\nU\nUSOIL\n96.66\n\u22120.01\n\u22120.01%\nG\nGOLD\n4,693.610\n11.450\n0.24%\nS\nSILVER\n75.9614\n0.4990\n0.66%\nFOREX\nE\nEURUSD\n1.17226\n0.00033\n0.03%\nG\nGBPUSD\n1.35366\n0.00037\n0.03%\nU\nUSDJPY\n159.405\n\u22120.005\n0.00%\nCRYPTO\nB\nBTCUSD\n77,292\n\u22121,368\n\u22121.74%\nB\nBTCUSDT\n77,287.08\n\u22121,370.47\n\u22121.74%\nE\nETHUSD\n2,298.0\n\u221272.2\n\u22123.05%\nA\nAAPL\nApple Inc\nNASDAQ\nElectronic Technology\nTelecommunications Equipment\n267.61\nUSD\n\u22123.45\n\u22121.27%\nLast update at 02:30 GMT+3\n267.88USD\n+0.27\n+0.10%\nPost-market\nLast update at 02:45 GMT+3\nxAI and OpenAI filed an antitrust lawsuit against Apple in 2025 alleging anticompetitive behavior; the case remains ongoing with a hearing scheduled for May in Texas.\nKey stats\nNext earnings report\nIn 2 days\nVolume\n\u202a41.45\u202fM\u202c\nAverage Volume (30D)\n\u202a42.06\u202fM\u202c\nMarket capitalization\n\u202a3.93\u202fT\u202c\nEarnings\n2\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\nQ2 '26\n\u202a0.00\u202c\n\u202a0.80\u202c\n\u202a1.60\u202c\n\u202a2.40\u202c\n\u202a3.20\u202c\nActual\nEstimate\nMore info\nDividends\n13.03%\nEarnings retained\nPayout ratio (TTM)\nDividend yield TTM\n0.38%\nLast payment\n0.26\nLast ex-dividend date\nFeb 9, 2026\nLast payment date\nFeb 12, 2026\nMore info\nIncome statement\nAnnual\nQuarterly\nQ1 '25\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\n\u202a0.00\u202c\n\u202a\u202a40.00\u202fB\u202c\u202c\n\u202a\u202a80.00\u202fB\u202c\u202c\n\u202a\u202a120.00\u202fB\u202c\u202c\n\u202a\u202a160.00\u202fB\u202c\u202c\nRevenue\nNet income\nNet margin %\nMore financials\nPerformance\n\u22121.01%\n1W\n5.40%\n1M\n3.26%\n3M\n\u22120.62%\n6M\n\u22121.71%\nYTD\n29.68%\n1Y\nSeasonals\n\t\n\t\n\t\n\t\n2026\n2025\n2024\nMore seasonals\nTechnicals\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\nMore technicals\nAnalyst rating\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\n1 year price target\n301.62\n(12.71%)\nSee forecast\nHighest YTM bonds\nJul 31, 2042\n5.90%\nAug 8, 2062\n5.61%\nMay 11, 2050\n5.58%\nMore bonds\nATM IV term structure\n1W\n2W\n1M\n2M\n3M\n6M\n9M\n1Y\n\u202a25%\u202c\n\u202a29%\u202c\n\u202a33%\u202c\n\u202a37%\u202c\n\u202a41%\u202c\nVolatility curve (31 days)\n\t\n\t\n\n\t\n\t\nMore on options\nProfile\nWebsite\napple.com\nEmployees (FY)\n\u202a166\u202fK\u202c\nISIN\nUS0378331005\nCUSIP\n037833100\nFIGI\nBBG000B9XRY4\nCFI code\nESVUFR\n\nApple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of related services. It operates through the following geographical segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. The Americas segment includes North and South America. The Europe segment consists of European countries, as well as India, the Middle East, and Africa. The Greater China segment comprises China, Hong Kong, and Taiwan. The Rest of Asia Pacific segment includes Australia and Asian countries. Its products and services include iPhone, Mac, iPad, AirPods, Apple TV, Apple Watch, Beats products, AppleCare, iCloud, digital content stores, streaming, and licensing services. The company was founded by Steven Paul Jobs, Ronald Gerald Wayne, and Stephen G. Wozniak in April 1976 and is headquartered in Cupertino, CA.\n\nPine\nThis website uses cookies. Our policy\nDon't allow\nAccept all\nPine Editor\nUntitled script\nAdd to chart\nSave\nPublish script\n1\n2\n3\n4\n5\n6\n7\n//\u00a0This\u00a0Pine\u00a0Script\u00ae\u00a0code\u00a0is\u00a0subject\u00a0to\u00a0the\u00a0terms\u00a0of\u00a0the\u00a0Mozilla\u00a0Public\u00a0License\u00a02.0\u00a0at\u00a0https://mozilla.org/MPL/2.0/\n//@version=6\nindicator(\"My\u00a0script\")\nplot(close)\nLine 1, Col 1\nPine Script\u00ae v6"
+}

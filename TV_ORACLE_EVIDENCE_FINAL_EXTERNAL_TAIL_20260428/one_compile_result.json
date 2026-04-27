@@ -1,0 +1,138 @@
+{
+  "fixture": "tests/fixtures/compile_oracle/layout_wrapping/wrapped_binary_expr.pine",
+  "checked_at": "2026-04-28T02:46:24+0300",
+  "responses": [
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-full.c5fd28fd6932fe839ea4.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-bottom-widget-model.b9dc3e1153579c9feebc.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://www.tradingview.com/api/v1/study-templates",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-dialog-open-state.95a08e38a2c185eb34b4.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/study-pane-views.a42c0ff9a2d4e7e5808d.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/lightweight-minichart-study-data-source.ee1f75b3e051120ff38f.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/show-pine-dialog.304821c535fab64ef39d.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-dialog.3abefd00009970fc6c7f.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-reference-dialog.ade475bfacef27808868.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://static.tradingview.com/static/bundles/pine-editor-dialog.3c1aa4dbd4b871b7d021.js",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://www.tradingview.com/pine-script-docs/last-update-time.json",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/translate_light?v=3",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/PineCoders/VisibleChart/last?v=2",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/PineCoders/Time/last?v=2",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/TradingView/Strategy/last?v=2",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/get_lib_export_data/TradingView/ta/last?v=2",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://pine-facade.tradingview.com/pine-facade/translate_light?v=3",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    },
+    {
+      "status": 200,
+      "url": "https://www.tradingview.com/pine-script-docs/documented-errors.json",
+      "body_error": "TypeError(\"Response.text() got an unexpected keyword argument 'timeout'\")"
+    }
+  ],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Deprecation warning: use moment.updateLocale(localeName, config) to change an existing locale. moment.defineLocale(localeName, config) should only be used for creating a new locale See http://momentjs.com/guides/#/warnings/define-locale/ for more info."
+    },
+    {
+      "type": "warning",
+      "text": "[GSI_LOGGER]: Your client application uses one of the Google One Tap prompt UI status methods that may stop functioning when FedCM becomes mandatory. Refer to the migration guide to update your code accordingly and opt-in to FedCM to test your changes. Learn more: https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#display_moment and https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#skipped_moment"
+    },
+    {
+      "type": "error",
+      "text": "Not signed in with the identity provider."
+    },
+    {
+      "type": "warning",
+      "text": "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\"> is deprecated. Please include <meta name=\"mobile-web-app-capable\" content=\"yes\">"
+    },
+    {
+      "type": "error",
+      "text": "[GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token."
+    },
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    }
+  ],
+  "clicked_pine": "[aria-label*='Pine']",
+  "editor_click_fail": [
+    {
+      ".monaco-editor textarea": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\".monaco-editor textarea\").first\\n    - locator resolved to <textarea wrap=\"off\" tabindex=\"0\" data-mprt=\"7\" ro"
+    },
+    {
+      ".inputarea": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\".inputarea\").first\\n    - locator resolved to <textarea wrap=\"off\" tabindex=\"0\" data-mprt=\"7\" role=\"textbox\" "
+    },
+    {
+      "[role=\"textbox\"]": "TimeoutError('Locator.click: Timeout 5000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[role=\\\\\"textbox\\\\\"]\").first\\n    - locator resolved to <textarea wrap=\"off\" tabindex=\"0\" data-mprt=\"7\" role="
+    }
+  ],
+  "after_set_contains_title": false,
+  "after_set_body_tail": "25\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\n\u202a0.00\u202c\n\u202a\u202a40.00\u202fB\u202c\u202c\n\u202a\u202a80.00\u202fB\u202c\u202c\n\u202a\u202a120.00\u202fB\u202c\u202c\n\u202a\u202a160.00\u202fB\u202c\u202c\nRevenue\nNet income\nNet margin %\nMore financials\nPerformance\n\u22121.01%\n1W\n5.40%\n1M\n3.26%\n3M\n\u22120.62%\n6M\n\u22121.71%\nYTD\n29.68%\n1Y\nSeasonals\n\t\n\t\n\t\n\t\n2026\n2025\n2024\nMore seasonals\nTechnicals\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\nMore technicals\nAnalyst rating\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\n1 year price target\n301.62\n(12.71%)\nSee forecast\nHighest YTM bonds\nJul 31, 2042\n5.90%\nAug 8, 2062\n5.61%\nMay 11, 2050\n5.58%\nMore bonds\nATM IV term structure\n1W\n2W\n1M\n2M\n3M\n6M\n9M\n1Y\n\u202a25%\u202c\n\u202a29%\u202c\n\u202a33%\u202c\n\u202a37%\u202c\n\u202a41%\u202c\nVolatility curve (31 days)\n\t\n\t\n\n\t\n\t\nMore on options\nProfile\nWebsite\napple.com\nEmployees (FY)\n\u202a166\u202fK\u202c\nISIN\nUS0378331005\nCUSIP\n037833100\nFIGI\nBBG000B9XRY4\nCFI code\nESVUFR\n\nApple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of related services. It operates through the following geographical segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. The Americas segment includes North and South America. The Europe segment consists of European countries, as well as India, the Middle East, and Africa. The Greater China segment comprises China, Hong Kong, and Taiwan. The Rest of Asia Pacific segment includes Australia and Asian countries. Its products and services include iPhone, Mac, iPad, AirPods, Apple TV, Apple Watch, Beats products, AppleCare, iCloud, digital content stores, streaming, and licensing services. The company was founded by Steven Paul Jobs, Ronald Gerald Wayne, and Stephen G. Wozniak in April 1976 and is headquartered in Cupertino, CA.\n\nPine\nThis website uses cookies. Our policy\nDon't allow\nAccept all\nPine Editor\nUntitled script\nAdd to chart\nSave\nPublish script\n1\n2\n3\n4\n5\n6\n7\n//@version=6\nindicator(\"Wrapped\u00a0expr\")\nx\u00a0=\u00a0close\u00a0+\n\u00a0\u00a0open\u00a0+\n\u00a0\u00a0\u00a0\u00a0high\n\u00a0\u00a0\u00a0\u00a0plot(x)\n\u00a0\u00a0\u00a0\u00a0\nLine 7, Col 5\nPine Script\u00ae v6",
+  "clicked_add": "button:has-text('Add to chart')",
+  "after_add_body": "AAPL\nD\nIndicators\nAlert\nReplay\nSave\nSave\nTrade\nPublish\nA\nApple Inc\n1D\nNASDAQ\nO\n266.09\nH\n268.36\nL\n265.07\nC\n267.61\n\u22123.45 (\u22121.27%)\n267.89\nSELL\n0.10\n267.99\nBUY\nVol\n41.45\u202fM\n1D\n5D\n1M\n3M\n6M\nYTD\n1Y\n5Y\nAll\n23:47:21 UTC\nADJ\nWatchlist\nSymbol\nLast\nChg\nChg%\nINDICES\nS\nSPX\n7,173.92\n8.85\n0.12%\nN\nNDQ\n27,305.68\n2.01\n0.01%\nD\nDJI\n49,167.79\n\u221262.92\n\u22120.13%\nV\nVIX\nD\n18.02\n\u22120.69\n\u22123.69%\nD\nDXY\n98.471\n\u22120.026\n\u22120.03%\nSTOCKS\nA\nAAPL\n267.61\n\u22123.45\n\u22121.27%\nT\nTSLA\n378.67\n2.37\n0.63%\nN\nNFLX\n91.37\n\u22121.07\n\u22121.16%\nFUTURES\nU\nUSOIL\n96.69\n0.02\n0.02%\nG\nGOLD\n4,693.822\n11.662\n0.25%\nS\nSILVER\n75.9347\n0.4723\n0.63%\nFOREX\nE\nEURUSD\n1.17224\n0.00031\n0.03%\nG\nGBPUSD\n1.35364\n0.00035\n0.03%\nU\nUSDJPY\n159.405\n\u22120.005\n0.00%\nCRYPTO\nB\nBTCUSD\n77,313\n\u22121,347\n\u22121.71%\nB\nBTCUSDT\n77,325.64\n\u22121,331.91\n\u22121.69%\nE\nETHUSD\n2,299.0\n\u221271.2\n\u22123.00%\nA\nAAPL\nApple Inc\nNASDAQ\nElectronic Technology\nTelecommunications Equipment\n267.61\nUSD\n\u22123.45\n\u22121.27%\nLast update at 02:30 GMT+3\n267.90USD\n+0.29\n+0.11%\nPost-market\nLast update at 02:47 GMT+3\nxAI and OpenAI filed an antitrust lawsuit against Apple in 2025 alleging anticompetitive behavior; the case remains ongoing with a hearing scheduled for May in Texas.\nKey stats\nNext earnings report\nIn 2 days\nVolume\n\u202a41.45\u202fM\u202c\nAverage Volume (30D)\n\u202a42.06\u202fM\u202c\nMarket capitalization\n\u202a3.93\u202fT\u202c\nEarnings\n2\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\nQ2 '26\n\u202a0.00\u202c\n\u202a0.80\u202c\n\u202a1.60\u202c\n\u202a2.40\u202c\n\u202a3.20\u202c\nActual\nEstimate\nMore info\nDividends\n13.03%\nEarnings retained\nPayout ratio (TTM)\nDividend yield TTM\n0.38%\nLast payment\n0.26\nLast ex-dividend date\nFeb 9, 2026\nLast payment date\nFeb 12, 2026\nMore info\nIncome statement\nAnnual\nQuarterly\nQ1 '25\nQ2 '25\nQ3 '25\nQ4 '25\nQ1 '26\n\u202a0.00\u202c\n\u202a\u202a40.00\u202fB\u202c\u202c\n\u202a\u202a80.00\u202fB\u202c\u202c\n\u202a\u202a120.00\u202fB\u202c\u202c\n\u202a\u202a160.00\u202fB\u202c\u202c\nRevenue\nNet income\nNet margin %\nMore financials\nPerformance\n\u22121.01%\n1W\n5.40%\n1M\n3.26%\n3M\n\u22120.62%\n6M\n\u22121.71%\nYTD\n29.68%\n1Y\nSeasonals\n\t\n\t\n\t\n\t\n2026\n2025\n2024\nMore seasonals\nTechnicals\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\nMore technicals\nAnalyst rating\nNeutral\nSell\nBuy\nStrong sell\nStrong buy\nStrong sell\nSell\nNeutral\nBuy\nStrong buy\n1 year price target\n301.62\n(12.71%)\nSee forecast\nHighest YTM bonds\nJul 31, 2042\n5.90%\nAug 8, 2062\n5.61%\nMay 11, 2050\n5.58%\nMore bonds\nATM IV term structure\n1W\n2W\n1M\n2M\n3M\n6M\n9M\n1Y\n\u202a25%\u202c\n\u202a29%\u202c\n\u202a33%\u202c\n\u202a37%\u202c\n\u202a41%\u202c\nVolatility curve (31 days)\n\t\n\t\n\n\t\n\t\nMore on options\nProfile\nWebsite\napple.com\nEmployees (FY)\n\u202a166\u202fK\u202c\nISIN\nUS0378331005\nCUSIP\n037833100\nFIGI\nBBG000B9XRY4\nCFI code\nESVUFR\n\nApple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of related services. It operates through the following geographical segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. The Americas segment includes North and South America. The Europe segment consists of European countries, as well as India, the Middle East, and Africa. The Greater China segment comprises China, Hong Kong, and Taiwan. The Rest of Asia Pacific segment includes Australia and Asian countries. Its products and services include iPhone, Mac, iPad, AirPods, Apple TV, Apple Watch, Beats products, AppleCare, iCloud, digital content stores, streaming, and licensing services. The company was founded by Steven Paul Jobs, Ronald Gerald Wayne, and Stephen G. Wozniak in April 1976 and is headquartered in Cupertino, CA.\n\nAdd to chart\nCtrl\n+\n\u21b5\nThis website uses cookies. Our policy\nDon't allow\nAccept all\nPine Editor\nUntitled script\nAdd to chart\nSave\nPublish script\n1\n2\n3\n4\n5\n6\n7\n//@version=6\nindicator(\"Wrapped\u00a0expr\")\nx\u00a0=\u00a0close\u00a0+\n\u00a0\u00a0open\u00a0+\n\u00a0\u00a0\u00a0\u00a0high\n\u00a0\u00a0\u00a0\u00a0plot(x)\n\u00a0\u00a0\u00a0\u00a0\nLine 7, Col 5\nPine Script\u00ae v6\nBack\nClose\n\nSign in with email\n\nEmail or Username\nPassword\nI forgot password or can't sign in\nRemember me\nSign in\n\nDo not have an account? Sign up"
+}
