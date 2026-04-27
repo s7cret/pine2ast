@@ -1,0 +1,5 @@
+//@version=6
+indicator("Request Security Tuple")
+[remoteClose, remoteVolume] = request.security(syminfo.tickerid, "D", [close, volume])
+plot(remoteClose)
+plot(remoteVolume)

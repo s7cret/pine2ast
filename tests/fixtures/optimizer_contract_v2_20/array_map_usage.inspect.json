@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/array_map_usage.pine",
+    "name": "array_map_usage.pine"
+  },
+  "script": {
+    "type": "indicator",
+    "title": "Array Map Usage",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [],
+  "strategy_calls": [],
+  "request_calls": [],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 171,
+        "end_offset": 195,
+        "start_line": 6,
+        "start_col": 1,
+        "end_line": 6,
+        "end_col": 25
+      }
+    }
+  ],
+  "alerts": [],
+  "drawings": [],
+  "dependencies": {
+    "imports": [],
+    "import_aliases": [],
+    "namespaces": [
+      "array",
+      "map"
+    ],
+    "builtin_calls": [
+      "array.new<float>",
+      "array.push",
+      "array.size",
+      "indicator",
+      "map.new<string,float>",
+      "plot"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [],
+    "unknown_calls": []
+  }
+}

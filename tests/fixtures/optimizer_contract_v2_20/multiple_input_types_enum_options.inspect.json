@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/multiple_input_types_enum_options.pine",
+    "name": "multiple_input_types_enum_options.pine"
+  },
+  "script": {
+    "type": "indicator",
+    "title": "Input Types",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [
+    {
+      "name": "mode",
+      "title": "Mode",
+      "input_function": "input.string",
+      "default_value": "Fast",
+      "minval": null,
+      "maxval": null,
+      "step": null,
+      "options": [
+        "Fast",
+        "Slow"
+      ],
+      "span": {
+        "start_offset": 45,
+        "end_offset": 101,
+        "start_line": 3,
+        "start_col": 8,
+        "end_line": 3,
+        "end_col": 64
+      }
+    },
+    {
+      "name": "useFilter",
+      "title": "Use filter",
+      "input_function": "input.bool",
+      "default_value": true,
+      "minval": null,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 114,
+        "end_offset": 144,
+        "start_line": 4,
+        "start_col": 13,
+        "end_line": 4,
+        "end_col": 43
+      }
+    },
+    {
+      "name": "price",
+      "title": "Price",
+      "input_function": "input.source",
+      "default_value": "close",
+      "minval": null,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 153,
+        "end_offset": 181,
+        "start_line": 5,
+        "start_col": 9,
+        "end_line": 5,
+        "end_col": 37
+      }
+    },
+    {
+      "name": "length",
+      "title": "Length",
+      "input_function": "input.int",
+      "default_value": 14,
+      "minval": 1,
+      "maxval": 200,
+      "step": 1,
+      "options": null,
+      "span": {
+        "start_offset": 191,
+        "end_offset": 250,
+        "start_line": 6,
+        "start_col": 10,
+        "end_line": 6,
+        "end_col": 69
+      }
+    }
+  ],
+  "strategy_calls": [],
+  "request_calls": [],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 251,
+        "end_offset": 278,
+        "start_line": 7,
+        "start_col": 1,
+        "end_line": 7,
+        "end_col": 28
+      }
+    }
+  ],
+  "alerts": [],
+  "drawings": [],
+  "dependencies": {
+    "imports": [],
+    "import_aliases": [],
+    "namespaces": [
+      "input",
+      "ta"
+    ],
+    "builtin_calls": [
+      "indicator",
+      "input.bool",
+      "input.int",
+      "input.source",
+      "input.string",
+      "plot",
+      "ta.sma"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [],
+    "unknown_calls": []
+  }
+}

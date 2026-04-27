@@ -1,0 +1,7 @@
+//@version=6
+strategy("TP SL Trail", overlay = true)
+stopTicks = input.int(20, "Stop ticks", minval = 1)
+profitTicks = input.int(40, "Profit ticks", minval = 1)
+trailTicks = input.int(10, "Trail ticks", minval = 1)
+strategy.entry("L", strategy.long)
+strategy.exit("LX", "L", loss = stopTicks, profit = profitTicks, trail_points = trailTicks)

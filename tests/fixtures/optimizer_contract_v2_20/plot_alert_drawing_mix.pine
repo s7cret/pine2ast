@@ -1,0 +1,8 @@
+//@version=6
+indicator("Plot Alert Drawing", overlay = true)
+ma = ta.sma(close, 20)
+plot(ma)
+plotshape(close > ma)
+alertcondition(close > ma, "Above", "Close above MA")
+label.new(bar_index, close, "A")
+line.new(bar_index, low, bar_index + 1, high)

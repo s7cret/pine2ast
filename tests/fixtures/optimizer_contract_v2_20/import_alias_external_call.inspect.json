@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/import_alias_external_call.pine",
+    "name": "import_alias_external_call.pine"
+  },
+  "script": {
+    "type": "indicator",
+    "title": "Import Alias",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [],
+  "strategy_calls": [],
+  "request_calls": [],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 97,
+        "end_offset": 108,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 12
+      }
+    }
+  ],
+  "alerts": [],
+  "drawings": [],
+  "dependencies": {
+    "imports": [
+      "user/ExternalLib/1"
+    ],
+    "import_aliases": [
+      "ext"
+    ],
+    "namespaces": [],
+    "builtin_calls": [
+      "indicator",
+      "plot"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [
+      "ext.score"
+    ],
+    "unknown_calls": []
+  }
+}

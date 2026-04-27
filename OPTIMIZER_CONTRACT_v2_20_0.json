@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "release": "v2.20.0",
+  "package_version": "0.2.20",
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "status": "frozen_additive_v1",
+  "ast_schema_changed": false,
+  "tradingview_compile_oracle": "pending_external_oracle",
+  "required_fields": [
+    "alerts",
+    "contract",
+    "dependencies",
+    "diagnostics",
+    "drawings",
+    "inputs",
+    "ok",
+    "plots",
+    "producer",
+    "request_calls",
+    "schema_version",
+    "script",
+    "source",
+    "strategy_calls",
+    "tool",
+    "unsupported_features"
+  ],
+  "fixtures": [
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/array_map_usage.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/array_map_usage.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "indicator",
+        "title": "Array Map Usage",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 0,
+        "strategy_calls": 0,
+        "request_calls": 0,
+        "plots": 1,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "array",
+          "map"
+        ],
+        "builtin_calls": [
+          "array.new<float>",
+          "array.push",
+          "array.size",
+          "indicator",
+          "map.new<string,float>",
+          "plot"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/basic_strategy_inputs.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/basic_strategy_inputs.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "strategy",
+        "title": "Basic Strategy Inputs",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 3,
+        "strategy_calls": 1,
+        "request_calls": 0,
+        "plots": 1,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "input",
+          "strategy",
+          "ta"
+        ],
+        "builtin_calls": [
+          "input.float",
+          "input.int",
+          "plot",
+          "strategy",
+          "strategy.entry",
+          "ta.sma"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/import_alias_external_call.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/import_alias_external_call.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "indicator",
+        "title": "Import Alias",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 0,
+        "strategy_calls": 0,
+        "request_calls": 0,
+        "plots": 1,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [
+          "user/ExternalLib/1"
+        ],
+        "import_aliases": [
+          "ext"
+        ],
+        "namespaces": [],
+        "builtin_calls": [
+          "indicator",
+          "plot"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [
+          "ext.score"
+        ],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/multiple_input_types_enum_options.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/multiple_input_types_enum_options.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "indicator",
+        "title": "Input Types",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 4,
+        "strategy_calls": 0,
+        "request_calls": 0,
+        "plots": 1,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "input",
+          "ta"
+        ],
+        "builtin_calls": [
+          "indicator",
+          "input.bool",
+          "input.int",
+          "input.source",
+          "input.string",
+          "plot",
+          "ta.sma"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/plot_alert_drawing_mix.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/plot_alert_drawing_mix.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "indicator",
+        "title": "Plot Alert Drawing",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 0,
+        "strategy_calls": 0,
+        "request_calls": 0,
+        "plots": 2,
+        "alerts": 1,
+        "drawings": 2,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "label",
+          "line",
+          "ta"
+        ],
+        "builtin_calls": [
+          "alertcondition",
+          "indicator",
+          "label.new",
+          "line.new",
+          "plot",
+          "plotshape",
+          "ta.sma"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/request_security_tuple.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/request_security_tuple.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "indicator",
+        "title": "Request Security Tuple",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 0,
+        "strategy_calls": 0,
+        "request_calls": 1,
+        "plots": 2,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "request"
+        ],
+        "builtin_calls": [
+          "indicator",
+          "plot",
+          "request.security"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    },
+    {
+      "source": "tests/fixtures/optimizer_contract_v2_20/tp_sl_trailing_strategy.pine",
+      "snapshot": "tests/fixtures/optimizer_contract_v2_20/tp_sl_trailing_strategy.inspect.json",
+      "ok": true,
+      "script": {
+        "type": "strategy",
+        "title": "TP SL Trail",
+        "pine_version": 6
+      },
+      "counts": {
+        "inputs": 3,
+        "strategy_calls": 2,
+        "request_calls": 0,
+        "plots": 0,
+        "alerts": 0,
+        "drawings": 0,
+        "diagnostics": 0,
+        "unsupported_features": 0
+      },
+      "dependencies": {
+        "imports": [],
+        "import_aliases": [],
+        "namespaces": [
+          "input",
+          "strategy"
+        ],
+        "builtin_calls": [
+          "input.int",
+          "strategy",
+          "strategy.entry",
+          "strategy.exit"
+        ],
+        "user_function_calls": [],
+        "method_calls": [],
+        "udt_constructors": [],
+        "external_calls": [],
+        "unknown_calls": []
+      }
+    }
+  ]
+}

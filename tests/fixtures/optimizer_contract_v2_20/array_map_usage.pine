@@ -1,0 +1,6 @@
+//@version=6
+indicator("Array Map Usage")
+var array<float> values = array.new<float>()
+var map<string, float> weights = map.new<string, float>()
+array.push(values, close)
+plot(array.size(values))

@@ -11,12 +11,12 @@
     "version": "0.2.20"
   },
   "source": {
-    "path": "tests/fixtures/inspect_contract/optimizer_strategy.pine",
-    "name": "optimizer_strategy.pine"
+    "path": "tests/fixtures/optimizer_contract_v2_20/basic_strategy_inputs.pine",
+    "name": "basic_strategy_inputs.pine"
   },
   "script": {
     "type": "strategy",
-    "title": "Optimizer Contract",
+    "title": "Basic Strategy Inputs",
     "pine_version": 6
   },
   "ok": true,
@@ -33,11 +33,11 @@
       "step": 0.1,
       "options": null,
       "span": {
-        "start_offset": 91,
-        "end_offset": 140,
-        "start_line": 4,
+        "start_offset": 69,
+        "end_offset": 118,
+        "start_line": 3,
         "start_col": 7,
-        "end_line": 4,
+        "end_line": 3,
         "end_col": 56
       }
     },
@@ -55,12 +55,30 @@
         21
       ],
       "span": {
-        "start_offset": 148,
-        "end_offset": 192,
+        "start_offset": 126,
+        "end_offset": 170,
+        "start_line": 4,
+        "start_col": 8,
+        "end_line": 4,
+        "end_col": 52
+      }
+    },
+    {
+      "name": "slow",
+      "title": "Slow",
+      "input_function": "input.int",
+      "default_value": 26,
+      "minval": 1,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 178,
+        "end_offset": 211,
         "start_line": 5,
         "start_col": 8,
         "end_line": 5,
-        "end_col": 52
+        "end_col": 41
       }
     }
   ],
@@ -69,92 +87,44 @@
       "name": "strategy.entry",
       "arg_count": 3,
       "span": {
-        "start_offset": 386,
-        "end_offset": 431,
-        "start_line": 11,
+        "start_offset": 265,
+        "end_offset": 310,
+        "start_line": 7,
         "start_col": 1,
-        "end_line": 11,
+        "end_line": 7,
         "end_col": 46
       }
     }
   ],
-  "request_calls": [
-    {
-      "name": "request.security",
-      "arg_count": 3,
-      "span": {
-        "start_offset": 227,
-        "end_offset": 270,
-        "start_line": 7,
-        "start_col": 10,
-        "end_line": 7,
-        "end_col": 53
-      }
-    }
-  ],
+  "request_calls": [],
   "plots": [
     {
       "name": "plot",
       "arg_count": 1,
       "span": {
-        "start_offset": 432,
-        "end_offset": 440,
-        "start_line": 12,
-        "start_col": 1,
-        "end_line": 12,
-        "end_col": 9
-      }
-    }
-  ],
-  "alerts": [
-    {
-      "name": "alertcondition",
-      "arg_count": 3,
-      "span": {
-        "start_offset": 271,
-        "end_offset": 315,
+        "start_offset": 311,
+        "end_offset": 336,
         "start_line": 8,
         "start_col": 1,
         "end_line": 8,
-        "end_col": 45
+        "end_col": 26
       }
     }
   ],
-  "drawings": [
-    {
-      "name": "line.new",
-      "arg_count": 4,
-      "span": {
-        "start_offset": 316,
-        "end_offset": 361,
-        "start_line": 9,
-        "start_col": 1,
-        "end_line": 9,
-        "end_col": 46
-      }
-    }
-  ],
+  "alerts": [],
+  "drawings": [],
   "dependencies": {
-    "imports": [
-      "user/Lib/1"
-    ],
-    "import_aliases": [
-      "lib"
-    ],
+    "imports": [],
+    "import_aliases": [],
     "namespaces": [
       "input",
-      "line",
-      "request",
       "strategy",
       "ta"
     ],
     "builtin_calls": [
-      "alertcondition",
       "input.float",
       "input.int",
-      "line.new",
       "plot",
-      "request.security",
       "strategy",
       "strategy.entry",
       "ta.sma"
@@ -162,9 +132,7 @@
     "user_function_calls": [],
     "method_calls": [],
     "udt_constructors": [],
-    "external_calls": [
-      "lib.score"
-    ],
+    "external_calls": [],
     "unknown_calls": []
   }
 }

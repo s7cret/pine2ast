@@ -1,0 +1,5 @@
+//@version=6
+indicator("Import Alias")
+import user/ExternalLib/1 as ext
+score = ext.score(close)
+plot(score)

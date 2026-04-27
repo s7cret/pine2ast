@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/plot_alert_drawing_mix.pine",
+    "name": "plot_alert_drawing_mix.pine"
+  },
+  "script": {
+    "type": "indicator",
+    "title": "Plot Alert Drawing",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [],
+  "strategy_calls": [],
+  "request_calls": [],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 84,
+        "end_offset": 92,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 9
+      }
+    },
+    {
+      "name": "plotshape",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 93,
+        "end_offset": 114,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 22
+      }
+    }
+  ],
+  "alerts": [
+    {
+      "name": "alertcondition",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 115,
+        "end_offset": 168,
+        "start_line": 6,
+        "start_col": 1,
+        "end_line": 6,
+        "end_col": 54
+      }
+    }
+  ],
+  "drawings": [
+    {
+      "name": "label.new",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 169,
+        "end_offset": 201,
+        "start_line": 7,
+        "start_col": 1,
+        "end_line": 7,
+        "end_col": 33
+      }
+    },
+    {
+      "name": "line.new",
+      "arg_count": 4,
+      "span": {
+        "start_offset": 202,
+        "end_offset": 247,
+        "start_line": 8,
+        "start_col": 1,
+        "end_line": 8,
+        "end_col": 46
+      }
+    }
+  ],
+  "dependencies": {
+    "imports": [],
+    "import_aliases": [],
+    "namespaces": [
+      "label",
+      "line",
+      "ta"
+    ],
+    "builtin_calls": [
+      "alertcondition",
+      "indicator",
+      "label.new",
+      "line.new",
+      "plot",
+      "plotshape",
+      "ta.sma"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [],
+    "unknown_calls": []
+  }
+}

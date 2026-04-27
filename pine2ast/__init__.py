@@ -1,7 +1,7 @@
 from .api import ParseOptions, ParseResult, ast_to_dict, ast_to_json, parse_code, parse_file
 from .ast.schema import SchemaReport, validate_ast_schema
 
-__version__ = "0.2.19"
+__version__ = "0.2.20"
 
 __all__ = [
     "ParseOptions",

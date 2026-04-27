@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/tp_sl_trailing_strategy.pine",
+    "name": "tp_sl_trailing_strategy.pine"
+  },
+  "script": {
+    "type": "strategy",
+    "title": "TP SL Trail",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [
+    {
+      "name": "stopTicks",
+      "title": "Stop ticks",
+      "input_function": "input.int",
+      "default_value": 20,
+      "minval": 1,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 65,
+        "end_offset": 104,
+        "start_line": 3,
+        "start_col": 13,
+        "end_line": 3,
+        "end_col": 52
+      }
+    },
+    {
+      "name": "profitTicks",
+      "title": "Profit ticks",
+      "input_function": "input.int",
+      "default_value": 40,
+      "minval": 1,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 119,
+        "end_offset": 160,
+        "start_line": 4,
+        "start_col": 15,
+        "end_line": 4,
+        "end_col": 56
+      }
+    },
+    {
+      "name": "trailTicks",
+      "title": "Trail ticks",
+      "input_function": "input.int",
+      "default_value": 10,
+      "minval": 1,
+      "maxval": null,
+      "step": null,
+      "options": null,
+      "span": {
+        "start_offset": 174,
+        "end_offset": 214,
+        "start_line": 5,
+        "start_col": 14,
+        "end_line": 5,
+        "end_col": 54
+      }
+    }
+  ],
+  "strategy_calls": [
+    {
+      "name": "strategy.entry",
+      "arg_count": 2,
+      "span": {
+        "start_offset": 215,
+        "end_offset": 249,
+        "start_line": 6,
+        "start_col": 1,
+        "end_line": 6,
+        "end_col": 35
+      }
+    },
+    {
+      "name": "strategy.exit",
+      "arg_count": 5,
+      "span": {
+        "start_offset": 250,
+        "end_offset": 341,
+        "start_line": 7,
+        "start_col": 1,
+        "end_line": 7,
+        "end_col": 92
+      }
+    }
+  ],
+  "request_calls": [],
+  "plots": [],
+  "alerts": [],
+  "drawings": [],
+  "dependencies": {
+    "imports": [],
+    "import_aliases": [],
+    "namespaces": [
+      "input",
+      "strategy"
+    ],
+    "builtin_calls": [
+      "input.int",
+      "strategy",
+      "strategy.entry",
+      "strategy.exit"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [],
+    "unknown_calls": []
+  }
+}

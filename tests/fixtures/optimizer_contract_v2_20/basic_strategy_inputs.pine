@@ -1,0 +1,8 @@
+//@version=6
+strategy("Basic Strategy Inputs", overlay = true)
+qty = input.float(1.0, "Qty", minval = 0.1, step = 0.1)
+fast = input.int(12, "Fast", options = [8, 12, 21])
+slow = input.int(26, "Slow", minval = 1)
+longCond = ta.sma(close, fast) > ta.sma(close, slow)
+strategy.entry("L", strategy.long, qty = qty)
+plot(ta.sma(close, fast))

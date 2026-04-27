@@ -1,0 +1,7 @@
+//@version=6
+indicator("Input Types")
+mode = input.string("Fast", "Mode", options = ["Fast", "Slow"])
+useFilter = input.bool(true, "Use filter")
+price = input.source(close, "Price")
+length = input.int(14, "Length", minval = 1, maxval = 200, step = 1)
+plot(ta.sma(price, length))

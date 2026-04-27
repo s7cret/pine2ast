@@ -18,10 +18,10 @@ python -m ruff check .
 python -m black --check .
 python -m mypy pine2ast
 python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
-python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_16_0.json
+python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_20_0.json
 ```
 
-Current release evidence: v2.19.0 / package `0.2.19` targets builtin registry official-coverage hardening and compatibility-layer signature validation, with stricter registry schema checks, expanded drawing/table setter metadata, and green ruff, black, mypy, tests, coverage, and real-world corpus gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+Current release evidence: v2.20.0 / package `0.2.20` freezes the AST2Python/optimizer inspect integration contract with stable producer/source/script metadata, unsupported-feature reporting, v2.20 golden inspect snapshots, contract docs, and green ruff, black, mypy, tests, coverage, builtin coverage, and real-world quality gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
 
 Fallback without pytest, only stdlib:
 
@@ -259,6 +259,6 @@ PYTHONPATH=. python -S tools/run_tests_no_pytest.py --include-integration
 
 ## v2.15.1 integration/release packaging notes
 
-- `pine2ast inspect` now declares the stable `pine2ast.inspect.optimizer.v1` JSON contract (`schema_version`, producer metadata, source trace, extractors and dependencies). See `docs/optimizer_inspect_contract.md` and the committed fixture under `tests/fixtures/inspect_contract/`.
+- `pine2ast inspect` now declares the stable `pine2ast.inspect.optimizer.v1` JSON contract (`schema_version`, producer/tool metadata, source/script trace, unsupported features, extractors and dependencies). See `docs/optimizer_contract.md`, `docs/optimizer_inspect_contract.md`, and the committed fixtures under `tests/fixtures/inspect_contract/`.
 - `pine2ast perf-baseline` emits a release-facing performance report around the existing benchmark runner.
 - `tools/build_release_zip.py` now builds deterministic archives and can write a manifest/checklist while excluding pycache, temp, venv, build and secret-like files. See `docs/release_checklist.md`.

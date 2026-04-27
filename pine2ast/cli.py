@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from pine2ast.api import ParseOptions, ast_to_json, diagnostics_to_json, parse_file
+from pine2ast.ast.nodes import DeclarationStatement, Literal
 from pine2ast.semantic.extractors import (
     extract_alertconditions,
     extract_dependencies,
@@ -67,6 +68,36 @@ def _input_dict(item):
         "options": item.options,
         "span": _span_dict(item.span),
     }
+
+
+def _script_dict(ast):
+    if ast is None or not isinstance(ast.declaration, DeclarationStatement):
+        return {"type": None, "title": None, "pine_version": None}
+    title = None
+    if ast.declaration.call.arguments:
+        first_arg = ast.declaration.call.arguments[0]
+        if first_arg.name is None and isinstance(first_arg.value, Literal):
+            title = first_arg.value.value
+    return {
+        "type": ast.declaration.script_type,
+        "title": title,
+        "pine_version": ast.version or ast.language_version,
+    }
+
+
+def _unsupported_features(result) -> list[dict[str, object]]:
+    # v1 keeps unsupported-feature reporting derived from diagnostics only; semantic
+    # rules stay in the semantic layer and parser recovery remains unchanged.
+    return [
+        {
+            "code": d.code,
+            "severity": d.severity.value,
+            "message": d.message,
+            "span": _span_dict(d.span),
+        }
+        for d in result.diagnostics
+        if d.code.startswith("P2A") and d.severity.value in {"ERROR", "FATAL"}
+    ]
 
 
 def _exit_code(result) -> int:
@@ -320,9 +351,16 @@ def main(argv: list[str] | None = None) -> int:
         payload = {
             "schema_version": 1,
             "contract": "pine2ast.inspect.optimizer.v1",
+            "producer": {
+                "name": "pine2ast",
+                "version": __version__,
+                "contract": "pine2ast.inspect.optimizer.v1",
+            },
             "tool": {"name": "pine2ast", "version": __version__},
-            "source": {"path": str(args.path)},
+            "source": {"path": str(args.path), "name": Path(args.path).name},
+            "script": _script_dict(result.ast),
             "ok": result.ok,
+            "unsupported_features": _unsupported_features(result),
             "diagnostics": [d.to_dict() for d in result.diagnostics],
             "inputs": (
                 [_input_dict(i) for i in extract_inputs(result.ast, result.semantic_model)]

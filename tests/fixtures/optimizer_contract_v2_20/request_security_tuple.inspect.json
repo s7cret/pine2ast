@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "producer": {
+    "name": "pine2ast",
+    "version": "0.2.20",
+    "contract": "pine2ast.inspect.optimizer.v1"
+  },
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.20"
+  },
+  "source": {
+    "path": "tests/fixtures/optimizer_contract_v2_20/request_security_tuple.pine",
+    "name": "request_security_tuple.pine"
+  },
+  "script": {
+    "type": "indicator",
+    "title": "Request Security Tuple",
+    "pine_version": 6
+  },
+  "ok": true,
+  "unsupported_features": [],
+  "diagnostics": [],
+  "inputs": [],
+  "strategy_calls": [],
+  "request_calls": [
+    {
+      "name": "request.security",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 79,
+        "end_offset": 135,
+        "start_line": 3,
+        "start_col": 31,
+        "end_line": 3,
+        "end_col": 87
+      }
+    }
+  ],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 136,
+        "end_offset": 153,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 18
+      }
+    },
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 154,
+        "end_offset": 172,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 19
+      }
+    }
+  ],
+  "alerts": [],
+  "drawings": [],
+  "dependencies": {
+    "imports": [],
+    "import_aliases": [],
+    "namespaces": [
+      "request"
+    ],
+    "builtin_calls": [
+      "indicator",
+      "plot",
+      "request.security"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [],
+    "unknown_calls": []
+  }
+}
