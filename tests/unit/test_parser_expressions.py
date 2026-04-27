@@ -10,13 +10,13 @@ def first_item_expr(src):
 
 
 def test_precedence():
-    expr = first_item_expr('x = 1 + 2 * 3\n')
+    expr = first_item_expr("x = 1 + 2 * 3\n")
     assert isinstance(expr, BinaryExpr)
     assert expr.op == "+"
     assert isinstance(expr.right, BinaryExpr)
 
 
 def test_ternary_and_history():
-    expr = first_item_expr('x = close > open ? close[1] : open\n')
+    expr = first_item_expr("x = close > open ? close[1] : open\n")
     assert isinstance(expr, ConditionalExpr)
     assert isinstance(expr.if_true, HistoryRefExpr)

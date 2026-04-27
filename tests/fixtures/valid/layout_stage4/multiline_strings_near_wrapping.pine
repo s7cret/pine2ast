@@ -1,0 +1,9 @@
+//@version=6
+indicator("Strings near wrap")
+s = str.format(
+    """line one
+line two""",
+    "tail"
+)
+t = "prefix" +
+    "suffix"

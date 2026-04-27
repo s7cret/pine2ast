@@ -15,7 +15,10 @@ class DiagnosticReport:
 
     @property
     def ok(self) -> bool:
-        return self.by_severity.get(Severity.ERROR.value, 0) == 0 and self.by_severity.get(Severity.FATAL.value, 0) == 0
+        return (
+            self.by_severity.get(Severity.ERROR.value, 0) == 0
+            and self.by_severity.get(Severity.FATAL.value, 0) == 0
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -28,12 +31,21 @@ class DiagnosticReport:
 
 
 def summarize_diagnostics(diagnostics: list[Diagnostic]) -> DiagnosticReport:
-    order = {Severity.INFO.value: 0, Severity.WARNING.value: 1, Severity.ERROR.value: 2, Severity.FATAL.value: 3}
+    order = {
+        Severity.INFO.value: 0,
+        Severity.WARNING.value: 1,
+        Severity.ERROR.value: 2,
+        Severity.FATAL.value: 3,
+    }
     by_severity: dict[str, int] = {}
     by_code: dict[str, int] = {}
     max_severity: str | None = None
     for diagnostic in diagnostics:
-        sev = diagnostic.severity.value if isinstance(diagnostic.severity, Severity) else str(diagnostic.severity)
+        sev = (
+            diagnostic.severity.value
+            if isinstance(diagnostic.severity, Severity)
+            else str(diagnostic.severity)
+        )
         by_severity[sev] = by_severity.get(sev, 0) + 1
         by_code[diagnostic.code] = by_code.get(diagnostic.code, 0) + 1
         if max_severity is None or order.get(sev, -1) > order.get(max_severity, -1):
@@ -65,7 +77,9 @@ class DiagnosticDiff:
         }
 
 
-def diff_diagnostic_reports(current: DiagnosticReport | dict[str, Any], baseline: DiagnosticReport | dict[str, Any]) -> DiagnosticDiff:
+def diff_diagnostic_reports(
+    current: DiagnosticReport | dict[str, Any], baseline: DiagnosticReport | dict[str, Any]
+) -> DiagnosticDiff:
     """Compare two diagnostic summaries by code.
 
     Accepts either DiagnosticReport instances or dictionaries produced by ``to_dict()`` / CLI JSON.

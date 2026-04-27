@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from pine2ast.ast.nodes import Program
-from pine2ast.ast.serialize import ast_to_dict, ast_to_json
+from pine2ast.ast.serialize import ast_to_dict as ast_to_dict, ast_to_json as ast_to_json
 from pine2ast.ast.visitors import walk
 from pine2ast.config import DEFAULT_MAX_AST_NODES, DEFAULT_MAX_FILE_SIZE_BYTES, DEFAULT_MAX_TOKENS
 from pine2ast.diagnostics import Diagnostic, Severity
@@ -44,8 +44,9 @@ class ParseResult:
 
     @property
     def ok(self) -> bool:
-        return self.ast is not None and not any(d.severity in {Severity.FATAL, Severity.ERROR} for d in self.diagnostics)
-
+        return self.ast is not None and not any(
+            d.severity in {Severity.FATAL, Severity.ERROR} for d in self.diagnostics
+        )
 
 
 def _dedupe_diagnostics(diagnostics: list[Diagnostic]) -> list[Diagnostic]:
@@ -66,13 +67,18 @@ def _dedupe_diagnostics(diagnostics: list[Diagnostic]) -> list[Diagnostic]:
         result.append(diag)
     return result
 
+
 def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseResult:
     options = options or ParseOptions()
     if isinstance(code, bytes) and len(code) > options.max_file_size_bytes:
-        diag = Diagnostic(Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero())
+        diag = Diagnostic(
+            Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero()
+        )
         return ParseResult(None, [diag])
     if isinstance(code, str) and len(code.encode("utf-8")) > options.max_file_size_bytes:
-        diag = Diagnostic(Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero())
+        diag = Diagnostic(
+            Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero()
+        )
         return ParseResult(None, [diag])
 
     normalized = SourceNormalizer().normalize(code, source_name=options.source_name)
@@ -83,7 +89,9 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
     lexed = Lexer(normalized.text, source_name=options.source_name).lex()
     diagnostics.extend(lexed.diagnostics)
     if len(lexed.tokens) > options.max_tokens:
-        diagnostics.append(Diagnostic(Severity.FATAL, codes.TOO_MANY_TOKENS, "Too many tokens.", SourceSpan.zero()))
+        diagnostics.append(
+            Diagnostic(Severity.FATAL, codes.TOO_MANY_TOKENS, "Too many tokens.", SourceSpan.zero())
+        )
         return ParseResult(None, diagnostics, lexed.tokens if options.collect_tokens else None)
     if any(d.severity is Severity.FATAL for d in diagnostics):
         return ParseResult(None, diagnostics, lexed.tokens if options.collect_tokens else None)
@@ -91,24 +99,35 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
     layout = LayoutProcessor().process(lexed.tokens)
     diagnostics.extend(layout.diagnostics)
 
-    parsed = Parser(layout.tokens, strict_v6=options.strict_v6, max_diagnostics=options.max_diagnostics).parse()
+    parsed = Parser(
+        layout.tokens, strict_v6=options.strict_v6, max_diagnostics=options.max_diagnostics
+    ).parse()
     diagnostics.extend(parsed.diagnostics)
     semantic_model = None
     ast = parsed.program
     if ast is not None and options.run_semantic:
-        semantic_model = SemanticAnalyzer(max_diagnostics=options.max_diagnostics, strict_builtin_namespaces=options.strict_builtin_namespaces).analyze(ast)
+        semantic_model = SemanticAnalyzer(
+            max_diagnostics=options.max_diagnostics,
+            strict_builtin_namespaces=options.strict_builtin_namespaces,
+        ).analyze(ast)
         diagnostics.extend(semantic_model.diagnostics)
     if ast is not None:
         ast_node_count = sum(1 for _ in walk(ast))
         if ast_node_count > options.max_ast_nodes:
-            diagnostics.append(Diagnostic(Severity.FATAL, codes.TOO_MANY_AST_NODES, "Too many AST nodes.", ast.span))
+            diagnostics.append(
+                Diagnostic(
+                    Severity.FATAL, codes.TOO_MANY_AST_NODES, "Too many AST nodes.", ast.span
+                )
+            )
             ast = None
         else:
             ast.diagnostics = diagnostics[: options.max_diagnostics]
     diagnostics = _dedupe_diagnostics(diagnostics)[: options.max_diagnostics]
     if ast is not None:
         ast.diagnostics = diagnostics
-    return ParseResult(ast, diagnostics, layout.tokens if options.collect_tokens else None, semantic_model)
+    return ParseResult(
+        ast, diagnostics, layout.tokens if options.collect_tokens else None, semantic_model
+    )
 
 
 def parse_file(path: str, options: ParseOptions | None = None) -> ParseResult:

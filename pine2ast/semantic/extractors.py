@@ -2,7 +2,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from pine2ast.ast.nodes import Argument, CallExpr, Identifier, Literal, MemberAccessExpr, Program, TupleExpr, VarDeclaration
+from pine2ast.ast.nodes import (
+    Argument,
+    CallExpr,
+    Identifier,
+    Literal,
+    MemberAccessExpr,
+    Program,
+    TupleExpr,
+    VarDeclaration,
+)
 from pine2ast.ast.visitors import walk
 from pine2ast.lexer.token import SourceSpan
 from pine2ast.semantic.type_infer import callee_name
@@ -66,20 +75,40 @@ def extract_inputs(program: Program, semantic=None) -> list[InputParameter]:
         if isinstance(node, CallExpr):
             name = callee_name(node.callee)
             if name.startswith("input."):
-                default_arg = node.arguments[0] if node.arguments and node.arguments[0].name is None else _named(node.arguments, "defval")
+                default_arg = (
+                    node.arguments[0]
+                    if node.arguments and node.arguments[0].name is None
+                    else _named(node.arguments, "defval")
+                )
                 title_arg = _named(node.arguments, "title")
                 if title_arg is None and len(node.arguments) > 1 and node.arguments[1].name is None:
                     title_arg = node.arguments[1]
-                title = title_arg.value.value if title_arg and hasattr(title_arg.value, "value") else None
+                title = (
+                    title_arg.value.value
+                    if title_arg and hasattr(title_arg.value, "value")
+                    else None
+                )
                 result.append(
                     InputParameter(
                         name=owner_names.get(id(node)) or title or name,
                         title=title,
                         input_function=name,
                         default_value=_literal_value(default_arg) if default_arg else None,
-                        minval=_literal_value(_named(node.arguments, "minval")) if _named(node.arguments, "minval") else None,
-                        maxval=_literal_value(_named(node.arguments, "maxval")) if _named(node.arguments, "maxval") else None,
-                        step=_literal_value(_named(node.arguments, "step")) if _named(node.arguments, "step") else None,
+                        minval=(
+                            _literal_value(_named(node.arguments, "minval"))
+                            if _named(node.arguments, "minval")
+                            else None
+                        ),
+                        maxval=(
+                            _literal_value(_named(node.arguments, "maxval"))
+                            if _named(node.arguments, "maxval")
+                            else None
+                        ),
+                        step=(
+                            _literal_value(_named(node.arguments, "step"))
+                            if _named(node.arguments, "step")
+                            else None
+                        ),
                         options=_literal_sequence(_named(node.arguments, "options")),
                         span=node.span,
                     )
@@ -98,11 +127,21 @@ def extract_strategy_calls(program: Program) -> list[StrategyCall]:
 
 
 def extract_request_calls(program: Program) -> list[CallExpr]:
-    return [node for node in walk(program) if isinstance(node, CallExpr) and callee_name(node.callee).startswith("request.")]
+    return [
+        node
+        for node in walk(program)
+        if isinstance(node, CallExpr) and callee_name(node.callee).startswith("request.")
+    ]
 
 
 def extract_plots(program: Program) -> list[CallExpr]:
-    return [node for node in walk(program) if isinstance(node, CallExpr) and callee_name(node.callee) in {"plot", "plotshape", "plotchar", "hline"}]
+    return [
+        node
+        for node in walk(program)
+        if isinstance(node, CallExpr)
+        and callee_name(node.callee) in {"plot", "plotshape", "plotchar", "hline"}
+    ]
+
 
 @dataclass(slots=True)
 class GenericCall:
@@ -125,20 +164,43 @@ class DependencyReport:
 
 
 def extract_alertconditions(program: Program) -> list[GenericCall]:
-    return [GenericCall(callee_name(node.callee), node.arguments, node.span) for node in walk(program) if isinstance(node, CallExpr) and callee_name(node.callee) == "alertcondition"]
+    return [
+        GenericCall(callee_name(node.callee), node.arguments, node.span)
+        for node in walk(program)
+        if isinstance(node, CallExpr) and callee_name(node.callee) == "alertcondition"
+    ]
 
 
 def extract_drawing_calls(program: Program) -> list[GenericCall]:
     drawing_names = {
-        "label.new", "line.new", "box.new", "table.new", "polyline.new",
-        "label.set_text", "label.set_xy", "line.set_xy1", "line.set_xy2", "box.set_bgcolor",
-        "table.cell", "table.clear",
+        "label.new",
+        "line.new",
+        "box.new",
+        "table.new",
+        "polyline.new",
+        "label.set_text",
+        "label.set_xy",
+        "line.set_xy1",
+        "line.set_xy2",
+        "box.set_bgcolor",
+        "table.cell",
+        "table.clear",
     }
-    return [GenericCall(callee_name(node.callee), node.arguments, node.span) for node in walk(program) if isinstance(node, CallExpr) and callee_name(node.callee) in drawing_names]
+    return [
+        GenericCall(callee_name(node.callee), node.arguments, node.span)
+        for node in walk(program)
+        if isinstance(node, CallExpr) and callee_name(node.callee) in drawing_names
+    ]
 
 
 def extract_dependencies(program: Program, semantic=None) -> DependencyReport:
-    from pine2ast.ast.nodes import FunctionDeclaration, MethodDeclaration, TypeDeclaration, ImportDeclaration, GenericInstantiationExpr
+    from pine2ast.ast.nodes import (
+        FunctionDeclaration,
+        MethodDeclaration,
+        TypeDeclaration,
+        ImportDeclaration,
+        GenericInstantiationExpr,
+    )
     from pine2ast.semantic.builtin_registry import load_builtin_registry
 
     registry = load_builtin_registry()
@@ -148,7 +210,11 @@ def extract_dependencies(program: Program, semantic=None) -> DependencyReport:
     methods = {n.name for n in walk(program) if isinstance(n, MethodDeclaration)}
     udt_types = {n.name for n in walk(program) if isinstance(n, TypeDeclaration)}
     imports = [n.path for n in walk(program) if isinstance(n, ImportDeclaration)]
-    aliases = [n.alias or n.library or n.owner or n.path for n in walk(program) if isinstance(n, ImportDeclaration)]
+    aliases = [
+        n.alias or n.library or n.owner or n.path
+        for n in walk(program)
+        if isinstance(n, ImportDeclaration)
+    ]
 
     used_namespaces: set[str] = set()
     builtin_calls: set[str] = set()

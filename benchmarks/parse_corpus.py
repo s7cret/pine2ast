@@ -14,7 +14,9 @@ def main() -> int:
     ap.add_argument("--baseline")
     ap.add_argument("--no-semantic", action="store_true")
     ns = ap.parse_args()
-    output = bench_corpus_json(ns.path, repeat=ns.repeat, baseline_path=ns.baseline, run_semantic=not ns.no_semantic)
+    output = bench_corpus_json(
+        ns.path, repeat=ns.repeat, baseline_path=ns.baseline, run_semantic=not ns.no_semantic
+    )
     if ns.json_path:
         Path(ns.json_path).write_text(output, encoding="utf-8")
     else:

@@ -25,7 +25,9 @@ def validate_corpus(path: str | Path, *, run_semantic: bool = True) -> dict[str,
     files = _pine_files(root)
     rows: list[dict[str, Any]] = []
     for file in files:
-        result = parse_file(str(file), ParseOptions(source_name=str(file), run_semantic=run_semantic))
+        result = parse_file(
+            str(file), ParseOptions(source_name=str(file), run_semantic=run_semantic)
+        )
         errors = [d for d in result.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
         rel = str(file.relative_to(root)) if root.suffix != ".pine" else str(file)
         rows.append(
@@ -47,4 +49,6 @@ def validate_corpus(path: str | Path, *, run_semantic: bool = True) -> dict[str,
 
 
 def validate_corpus_json(path: str | Path, *, run_semantic: bool = True, indent: int = 2) -> str:
-    return json.dumps(validate_corpus(path, run_semantic=run_semantic), ensure_ascii=False, indent=indent)
+    return json.dumps(
+        validate_corpus(path, run_semantic=run_semantic), ensure_ascii=False, indent=indent
+    )

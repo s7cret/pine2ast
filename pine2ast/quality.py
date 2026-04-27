@@ -58,7 +58,12 @@ class QualityGateReport:
 
     @property
     def ok(self) -> bool:
-        return self.file_count == self.ok_count and self.error_count == 0 and self.fatal_count == 0 and self.schema_error_count == 0
+        return (
+            self.file_count == self.ok_count
+            and self.error_count == 0
+            and self.fatal_count == 0
+            and self.schema_error_count == 0
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -94,7 +99,9 @@ def quality_gate(path: str | Path, *, run_semantic: bool = True) -> QualityGateR
     all_diagnostics = []
     for file in files:
         rel = str(file.relative_to(root)) if root.suffix != ".pine" else str(file)
-        result = parse_file(str(file), ParseOptions(source_name=str(file), run_semantic=run_semantic))
+        result = parse_file(
+            str(file), ParseOptions(source_name=str(file), run_semantic=run_semantic)
+        )
         all_diagnostics.extend(result.diagnostics)
         schema_report = validate_ast_schema(result.ast) if result.ast else None
         fatal_count = sum(1 for d in result.diagnostics if d.severity is Severity.FATAL)
@@ -129,4 +136,6 @@ def quality_gate(path: str | Path, *, run_semantic: bool = True) -> QualityGateR
 
 
 def quality_gate_json(path: str | Path, *, run_semantic: bool = True, indent: int = 2) -> str:
-    return json.dumps(quality_gate(path, run_semantic=run_semantic).to_dict(), ensure_ascii=False, indent=indent)
+    return json.dumps(
+        quality_gate(path, run_semantic=run_semantic).to_dict(), ensure_ascii=False, indent=indent
+    )

@@ -751,6 +751,12 @@
           "qualifier_max": "const",
           "required": false,
           "type": "bool"
+        },
+        {
+          "name": "max_lines_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
@@ -1846,6 +1852,111 @@
       "returns": "void",
       "scope": "any"
     },
+    "line.set_extend": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_extend",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "extend",
+          "required": true,
+          "type": "extend"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_style": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_style",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "style",
+          "required": true,
+          "type": "line.style"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_width": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_width",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "width",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_x1": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_x1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "x",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_x2": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_x2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "x",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "line.set_xy1": {
       "allow_extra_positional": true,
       "docs_url": null,
@@ -1891,6 +2002,48 @@
         {
           "name": "y",
           "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_y1": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_y1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "y",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "line.set_y2": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 3,
+      "name": "line.set_y2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "y",
+          "required": true,
           "type": "float"
         }
       ],
@@ -4457,6 +4610,12 @@
     "session": {},
     "shape": {},
     "size": {},
+    "splits": {
+      "docs_url": null,
+      "kind": "namespace",
+      "name": "splits",
+      "pine_version": "6"
+    },
     "str": {},
     "strategy": {},
     "strategy.closedtrades": {
@@ -4712,11 +4871,11 @@
     },
     "extend.none": {
       "qualifier": "const",
-      "type": "string"
+      "type": "extend"
     },
     "extend.right": {
       "qualifier": "const",
-      "type": "string"
+      "type": "extend"
     },
     "format.price": {
       "qualifier": "const",

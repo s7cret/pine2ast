@@ -108,4 +108,5 @@ array<float> xs = array.from(1.0, "bad")
 
 def test_array_literal_alias_is_available_without_changing_json_kind():
     from pine2ast.ast.nodes import ArrayLiteralExpr, TupleExpr
+
     assert ArrayLiteralExpr is TupleExpr

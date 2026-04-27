@@ -25,16 +25,33 @@ def test_cli_bench_json(tmp_path: Path):
 
 def test_cli_golden_and_symbols_json(tmp_path):
     from pine2ast.cli import main
+
     src = tmp_path / "script.pine"
-    src.write_text('''//@version=6
+    src.write_text(
+        """//@version=6
 indicator("cli")
 plot(close)
-''', encoding="utf-8")
+""",
+        encoding="utf-8",
+    )
     ast = tmp_path / "script.ast.json"
     diag = tmp_path / "script.diag.json"
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        assert main(["golden", str(src), "--ast", str(ast), "--diagnostics", str(diag), "--ignore-spans"]) == 0
+        assert (
+            main(
+                [
+                    "golden",
+                    str(src),
+                    "--ast",
+                    str(ast),
+                    "--diagnostics",
+                    str(diag),
+                    "--ignore-spans",
+                ]
+            )
+            == 0
+        )
         assert ast.exists()
         assert diag.exists()
         assert main(["golden", str(src), "--ast", str(ast), "--ignore-spans", "--compare"]) == 0

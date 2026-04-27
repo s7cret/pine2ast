@@ -23,6 +23,7 @@ _CONTINUATION_END = {
     TokenKind.QUESTION,
     TokenKind.COLON,
     TokenKind.COMMA,
+    TokenKind.DOT,
     TokenKind.EQ,
     TokenKind.COLONEQ,
     TokenKind.PLUSEQ,
@@ -30,6 +31,25 @@ _CONTINUATION_END = {
     TokenKind.STAREQ,
     TokenKind.SLASHEQ,
     TokenKind.PERCENTEQ,
+}
+_CONTINUATION_START = {
+    TokenKind.PLUS,
+    TokenKind.MINUS,
+    TokenKind.STAR,
+    TokenKind.SLASH,
+    TokenKind.PERCENT,
+    TokenKind.LT,
+    TokenKind.LTE,
+    TokenKind.GT,
+    TokenKind.GTE,
+    TokenKind.EQEQ,
+    TokenKind.NEQ,
+    TokenKind.AND,
+    TokenKind.OR,
+    TokenKind.QUESTION,
+    TokenKind.COLON,
+    TokenKind.COMMA,
+    TokenKind.DOT,
 }
 _OPEN = {TokenKind.LPAREN, TokenKind.LBRACKET}
 _CLOSE = {TokenKind.RPAREN, TokenKind.RBRACKET}
@@ -76,13 +96,15 @@ class LayoutProcessor:
         for idx, line in enumerate(nonempty_lines):
             first = line[0]
             indent = max(0, first.span.start_col - 1)
-            continuation = depth > 0 or (prev_last is not None and prev_last.kind in _CONTINUATION_END)
-            if not continuation and indent % 4 != 0 and indent not in indent_stack:
-                continuation = True
+            continuation = self._is_continuation_line(line, indent, depth, prev_last, indent_stack)
 
             if not continuation:
                 if previous_line_was_logical:
-                    out.append(self._layout_token(TokenKind.NEWLINE, prev_last.span if prev_last else first.span))
+                    out.append(
+                        self._layout_token(
+                            TokenKind.NEWLINE, prev_last.span if prev_last else first.span
+                        )
+                    )
                 self._apply_indent(indent, indent_stack, out, diagnostics, first.span)
                 previous_line_was_logical = True
 
@@ -94,9 +116,9 @@ class LayoutProcessor:
             if next_line is None:
                 continue
             next_indent = max(0, next_line[0].span.start_col - 1)
-            next_continuation = depth > 0 or (prev_last is not None and prev_last.kind in _CONTINUATION_END)
-            if not next_continuation and next_indent % 4 != 0 and next_indent not in indent_stack:
-                next_continuation = True
+            next_continuation = self._is_continuation_line(
+                next_line, next_indent, depth, prev_last, indent_stack
+            )
             if continuation or next_continuation:
                 # no logical newline between wrapped physical lines
                 pass
@@ -108,6 +130,25 @@ class LayoutProcessor:
             out.append(self._layout_token(TokenKind.DEDENT, eof.span))
         out.append(eof)
         return LayoutResult(out, diagnostics)
+
+    def _is_continuation_line(
+        self,
+        line: list[Token],
+        indent: int,
+        depth: int,
+        prev_last: Token | None,
+        indent_stack: list[int],
+    ) -> bool:
+        if depth > 0:
+            return True
+        if prev_last is not None and prev_last.kind in _CONTINUATION_END:
+            return True
+        first = self._first_significant(line)
+        if first is not None and first.kind in _CONTINUATION_START and indent > indent_stack[-1]:
+            return True
+        if indent % 4 != 0 and indent not in indent_stack:
+            return True
+        return False
 
     def _apply_indent(
         self,
@@ -144,6 +185,12 @@ class LayoutProcessor:
             elif tok.kind in _CLOSE:
                 depth = max(0, depth - 1)
         return depth
+
+    def _first_significant(self, line: list[Token]) -> Token | None:
+        for tok in line:
+            if tok.kind not in {TokenKind.ANNOTATION, TokenKind.VERSION_ANNOTATION}:
+                return tok
+        return None
 
     def _last_significant(self, line: list[Token]) -> Token | None:
         for tok in reversed(line):

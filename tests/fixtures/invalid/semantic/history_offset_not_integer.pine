@@ -1,0 +1,3 @@
+//@version=6
+indicator("Bad")
+x = close[1.5]

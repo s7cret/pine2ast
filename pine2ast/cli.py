@@ -16,7 +16,7 @@ from pine2ast.semantic.extractors import (
     extract_strategy_calls,
 )
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.benchmark import bench_corpus_json
+from pine2ast.benchmark import bench_corpus_json, perf_baseline_json
 from pine2ast.corpus import validate_corpus_json
 from pine2ast.testing.golden import compare_golden, generate_golden
 from pine2ast.diagnostics import Severity, format_diagnostic
@@ -34,8 +34,11 @@ def _span_dict(span):
 
 
 def _simple_call(node):
-    return {"name": callee_name(node.callee), "arg_count": len(node.arguments), "span": _span_dict(node.span)}
-
+    return {
+        "name": callee_name(node.callee),
+        "arg_count": len(node.arguments),
+        "span": _span_dict(node.span),
+    }
 
 
 def _dependency_dict(dep):
@@ -64,7 +67,6 @@ def _input_dict(item):
         "options": item.options,
         "span": _span_dict(item.span),
     }
-
 
 
 def _exit_code(result) -> int:
@@ -109,11 +111,17 @@ def main(argv: list[str] | None = None) -> int:
     p_bench.add_argument("--baseline")
     p_bench.add_argument("--no-semantic", action="store_true")
 
+    p_perf = sub.add_parser("perf-baseline")
+    p_perf.add_argument("path")
+    p_perf.add_argument("--repeat", type=int, default=20)
+    p_perf.add_argument("--json", dest="json_path")
+    p_perf.add_argument("--baseline")
+    p_perf.add_argument("--no-semantic", action="store_true")
+
     p_corpus = sub.add_parser("validate-corpus")
     p_corpus.add_argument("path")
     p_corpus.add_argument("--json", dest="json_path")
     p_corpus.add_argument("--no-semantic", action="store_true")
-
 
     p_inspect = sub.add_parser("inspect")
     p_inspect.add_argument("path")
@@ -169,6 +177,19 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.cmd == "perf-baseline":
+        output = perf_baseline_json(
+            args.path,
+            repeat=args.repeat,
+            baseline_path=args.baseline,
+            run_semantic=not args.no_semantic,
+        )
+        if args.json_path:
+            Path(args.json_path).write_text(output, encoding="utf-8")
+            print(args.json_path)
+        else:
+            print(output)
+        return 0
 
     if args.cmd == "builtin-coverage":
         output = json.dumps(builtin_registry_coverage_report(), ensure_ascii=False, indent=2)
@@ -180,8 +201,17 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "sarif":
-        result = parse_file(args.path, ParseOptions(run_semantic=not args.no_semantic, source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
-        output = diagnostics_to_sarif_json(result.diagnostics, source_name=args.path, tool_version=__version__)
+        result = parse_file(
+            args.path,
+            ParseOptions(
+                run_semantic=not args.no_semantic,
+                source_name=args.path,
+                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+            ),
+        )
+        output = diagnostics_to_sarif_json(
+            result.diagnostics, source_name=args.path, tool_version=__version__
+        )
         if args.json_path:
             Path(args.json_path).write_text(output, encoding="utf-8")
             print(args.json_path)
@@ -190,11 +220,20 @@ def main(argv: list[str] | None = None) -> int:
         return _exit_code(result)
 
     if args.cmd == "semantic-report":
-        result = parse_file(args.path, ParseOptions(run_semantic=True, source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
+        result = parse_file(
+            args.path,
+            ParseOptions(
+                run_semantic=True,
+                source_name=args.path,
+                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+            ),
+        )
         payload = {
             "ok": result.ok,
             "diagnostics": [d.to_dict() for d in result.diagnostics],
-            "semantic": semantic_report(result.semantic_model, include_builtins=args.include_builtins).to_dict(),
+            "semantic": semantic_report(
+                result.semantic_model, include_builtins=args.include_builtins
+            ).to_dict(),
         }
         output = json.dumps(payload, ensure_ascii=False, indent=2)
         if args.json_path:
@@ -224,7 +263,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if payload.get("ok") else 1
 
     if args.cmd == "schema-check":
-        result = parse_file(args.path, ParseOptions(run_semantic=not args.no_semantic, source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
+        result = parse_file(
+            args.path,
+            ParseOptions(
+                run_semantic=not args.no_semantic,
+                source_name=args.path,
+                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+            ),
+        )
         report = validate_ast_schema(result.ast) if result.ast else None
         payload = {
             "parse_ok": result.ok,
@@ -240,7 +286,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if report is not None and report.ok and result.ast is not None else 1
 
     if args.cmd == "diagnostics-report":
-        result = parse_file(args.path, ParseOptions(run_semantic=not args.no_semantic, source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
+        result = parse_file(
+            args.path,
+            ParseOptions(
+                run_semantic=not args.no_semantic,
+                source_name=args.path,
+                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+            ),
+        )
         report = summarize_diagnostics(result.diagnostics)
         payload = {
             "ok": result.ok,
@@ -256,17 +309,59 @@ def main(argv: list[str] | None = None) -> int:
         return _exit_code(result)
 
     if args.cmd == "inspect":
-        result = parse_file(args.path, ParseOptions(run_semantic=not args.no_semantic, source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
+        result = parse_file(
+            args.path,
+            ParseOptions(
+                run_semantic=not args.no_semantic,
+                source_name=args.path,
+                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+            ),
+        )
         payload = {
+            "schema_version": 1,
+            "contract": "pine2ast.inspect.optimizer.v1",
+            "tool": {"name": "pine2ast", "version": __version__},
+            "source": {"path": str(args.path)},
             "ok": result.ok,
             "diagnostics": [d.to_dict() for d in result.diagnostics],
-            "inputs": [_input_dict(i) for i in extract_inputs(result.ast, result.semantic_model)] if result.ast else [],
-            "strategy_calls": [{"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)} for c in extract_strategy_calls(result.ast)] if result.ast else [],
-            "request_calls": [_simple_call(c) for c in extract_request_calls(result.ast)] if result.ast else [],
+            "inputs": (
+                [_input_dict(i) for i in extract_inputs(result.ast, result.semantic_model)]
+                if result.ast
+                else []
+            ),
+            "strategy_calls": (
+                [
+                    {"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)}
+                    for c in extract_strategy_calls(result.ast)
+                ]
+                if result.ast
+                else []
+            ),
+            "request_calls": (
+                [_simple_call(c) for c in extract_request_calls(result.ast)] if result.ast else []
+            ),
             "plots": [_simple_call(c) for c in extract_plots(result.ast)] if result.ast else [],
-            "alerts": [{"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)} for c in extract_alertconditions(result.ast)] if result.ast else [],
-            "drawings": [{"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)} for c in extract_drawing_calls(result.ast)] if result.ast else [],
-            "dependencies": _dependency_dict(extract_dependencies(result.ast, result.semantic_model)) if result.ast else None,
+            "alerts": (
+                [
+                    {"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)}
+                    for c in extract_alertconditions(result.ast)
+                ]
+                if result.ast
+                else []
+            ),
+            "drawings": (
+                [
+                    {"name": c.name, "arg_count": len(c.arguments), "span": _span_dict(c.span)}
+                    for c in extract_drawing_calls(result.ast)
+                ]
+                if result.ast
+                else []
+            ),
+            "dependencies": (
+                _dependency_dict(extract_dependencies(result.ast, result.semantic_model))
+                if result.ast
+                else None
+            ),
         }
         output = json.dumps(payload, ensure_ascii=False, indent=2)
         if args.json_path:
@@ -278,7 +373,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "golden":
         if args.compare:
-            ok, message = compare_golden(args.path, ast_path=args.ast, ignore_spans=args.ignore_spans, run_semantic=not args.no_semantic)
+            ok, message = compare_golden(
+                args.path,
+                ast_path=args.ast,
+                ignore_spans=args.ignore_spans,
+                run_semantic=not args.no_semantic,
+            )
             print(message)
             return 0 if ok else 1
         info = generate_golden(
@@ -300,7 +400,12 @@ def main(argv: list[str] | None = None) -> int:
             print(output)
         return 0
     if args.cmd == "bench":
-        output = bench_corpus_json(args.path, repeat=args.repeat, baseline_path=args.baseline, run_semantic=not args.no_semantic)
+        output = bench_corpus_json(
+            args.path,
+            repeat=args.repeat,
+            baseline_path=args.baseline,
+            run_semantic=not args.no_semantic,
+        )
         if args.json_path:
             Path(args.json_path).write_text(output, encoding="utf-8")
             print(args.json_path)
@@ -309,12 +414,22 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "tokens":
-        result = parse_file(args.path, ParseOptions(collect_tokens=True, run_semantic=False, source_name=args.path))
+        result = parse_file(
+            args.path, ParseOptions(collect_tokens=True, run_semantic=False, source_name=args.path)
+        )
         for tok in result.tokens or []:
             print(f"{tok.kind.value:<20} {tok.text!r} {tok.span.start_line}:{tok.span.start_col}")
         return _exit_code(result)
 
-    result = parse_file(args.path, ParseOptions(collect_tokens=getattr(args, "tokens", False), run_semantic=not getattr(args, "no_semantic", False), source_name=args.path, strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False)))
+    result = parse_file(
+        args.path,
+        ParseOptions(
+            collect_tokens=getattr(args, "tokens", False),
+            run_semantic=not getattr(args, "no_semantic", False),
+            source_name=args.path,
+            strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
+        ),
+    )
 
     if args.cmd == "parse":
         if args.json_path:
@@ -348,7 +463,9 @@ def main(argv: list[str] | None = None) -> int:
                 print(json.dumps(rows, ensure_ascii=False, indent=2))
             else:
                 for sym in result.semantic_model.symbols.values():
-                    print(f"{sym.id:04d} {sym.kind.value:<13} {sym.name:<30} type={sym.type} qualifier={sym.qualifier}")
+                    print(
+                        f"{sym.id:04d} {sym.kind.value:<13} {sym.name:<30} type={sym.type} qualifier={sym.qualifier}"
+                    )
     elif args.cmd == "test-fixture":
         for d in result.diagnostics:
             print(format_diagnostic(d, args.path))

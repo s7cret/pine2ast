@@ -5,6 +5,7 @@ By default it executes test_* functions from tests/unit. Pass
 providing a temp dir Path. This runner intentionally avoids pytest and prints
 file-level progress for low-resource agents.
 """
+
 from __future__ import annotations
 
 import importlib.util
@@ -49,6 +50,10 @@ for test_dir in TEST_DIRS:
                     print(f"FAIL {path.name}::{name}: {exc!r}", flush=True)
 if failures:
     print(f"{len(failures)} failed / {count} executed", flush=True)
-    sys.stdout.flush(); sys.stderr.flush(); os._exit(1)
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(1)
 print(f"{count} passed", flush=True)
-sys.stdout.flush(); sys.stderr.flush(); os._exit(0)
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

@@ -73,25 +73,64 @@ def validate_ast_schema(program: ASTNode) -> SchemaReport:
     language_version = getattr(program, "language_version", None)
 
     if schema_version is None:
-        issues.append(SchemaIssue("AST_SCHEMA_VERSION_MISSING", "Program.schema_version is required.", getattr(program, "kind", None), getattr(program, "span", None)))
+        issues.append(
+            SchemaIssue(
+                "AST_SCHEMA_VERSION_MISSING",
+                "Program.schema_version is required.",
+                getattr(program, "kind", None),
+                getattr(program, "span", None),
+            )
+        )
     if language != "pine":
-        issues.append(SchemaIssue("AST_LANGUAGE_INVALID", "Program.language must be 'pine'.", getattr(program, "kind", None), getattr(program, "span", None)))
+        issues.append(
+            SchemaIssue(
+                "AST_LANGUAGE_INVALID",
+                "Program.language must be 'pine'.",
+                getattr(program, "kind", None),
+                getattr(program, "span", None),
+            )
+        )
     if language_version != 6:
-        issues.append(SchemaIssue("AST_LANGUAGE_VERSION_INVALID", "Program.language_version must be 6 for this package version.", getattr(program, "kind", None), getattr(program, "span", None)))
+        issues.append(
+            SchemaIssue(
+                "AST_LANGUAGE_VERSION_INVALID",
+                "Program.language_version must be 6 for this package version.",
+                getattr(program, "kind", None),
+                getattr(program, "span", None),
+            )
+        )
 
     for node in walk(program):
         node_count += 1
         obj_id = id(node)
         if obj_id in seen_ids:
-            issues.append(SchemaIssue("AST_SHARED_NODE", "AST node object is referenced more than once.", node.kind, node.span))
+            issues.append(
+                SchemaIssue(
+                    "AST_SHARED_NODE",
+                    "AST node object is referenced more than once.",
+                    node.kind,
+                    node.span,
+                )
+            )
             continue
         seen_ids.add(obj_id)
         kind_counts[node.kind] = kind_counts.get(node.kind, 0) + 1
         span = getattr(node, "span", None)
         if not isinstance(span, SourceSpan):
-            issues.append(SchemaIssue("AST_SPAN_MISSING", "Every AST node must carry SourceSpan.", node.kind, None))
+            issues.append(
+                SchemaIssue(
+                    "AST_SPAN_MISSING", "Every AST node must carry SourceSpan.", node.kind, None
+                )
+            )
         elif not _span_order_valid(span):
-            issues.append(SchemaIssue("AST_SPAN_INVALID", "AST node span has invalid ordering or coordinates.", node.kind, span))
+            issues.append(
+                SchemaIssue(
+                    "AST_SPAN_INVALID",
+                    "AST node span has invalid ordering or coordinates.",
+                    node.kind,
+                    span,
+                )
+            )
 
     return SchemaReport(
         ok=not issues,

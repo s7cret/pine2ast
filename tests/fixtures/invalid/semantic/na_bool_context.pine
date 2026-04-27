@@ -1,0 +1,4 @@
+//@version=6
+indicator("Bad")
+if na
+    x = 1

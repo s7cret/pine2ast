@@ -205,7 +205,9 @@ class Lexer:
                 self._advance()
         span = SourceSpan(start_i, self.i, start_line, start_col, self.line, self.col)
         self.diagnostics.append(
-            Diagnostic(Severity.FATAL, codes.UNTERMINATED_STRING, "Unterminated string literal.", span)
+            Diagnostic(
+                Severity.FATAL, codes.UNTERMINATED_STRING, "Unterminated string literal.", span
+            )
         )
         return Token(TokenKind.STRING, self.text[start_i : self.i], "".join(value_chars), span)
 
@@ -216,7 +218,9 @@ class Lexer:
         return Token(kind, text, value, self._span_here(len(text)))
 
     def _span_here(self, length: int) -> SourceSpan:
-        return SourceSpan(self.i, self.i + length, self.line, self.col, self.line, self.col + length)
+        return SourceSpan(
+            self.i, self.i + length, self.line, self.col, self.line, self.col + length
+        )
 
     def _peek(self, n: int = 0) -> str:
         idx = self.i + n

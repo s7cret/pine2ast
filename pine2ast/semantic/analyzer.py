@@ -60,7 +60,9 @@ class SemanticModel:
 
 
 class SemanticAnalyzer:
-    def __init__(self, *, max_diagnostics: int = 200, strict_builtin_namespaces: bool = False) -> None:
+    def __init__(
+        self, *, max_diagnostics: int = 200, strict_builtin_namespaces: bool = False
+    ) -> None:
         self.registry = load_builtin_registry()
         self.model = SemanticModel()
         self.max_diagnostics = max_diagnostics
@@ -83,7 +85,12 @@ class SemanticAnalyzer:
         self._push_scope(ScopeKind.GLOBAL)
         self._register_builtins()
         if program.declaration is None:
-            self._diag(Severity.ERROR, codes.MISSING_DECLARATION, "Program has no indicator/strategy/library declaration statement.", program.span)
+            self._diag(
+                Severity.ERROR,
+                codes.MISSING_DECLARATION,
+                "Program has no indicator/strategy/library declaration statement.",
+                program.span,
+            )
         else:
             self._analyze_declaration_statement(program.declaration)
         # Pine permits references to many global declarations before their textual body is visited.
@@ -92,23 +99,37 @@ class SemanticAnalyzer:
         seen_decls = 1 if program.declaration else 0
         for item in program.items:
             self._visit_statement(item)
-        seen_decls += sum(1 for node in walk(program) if isinstance(node, DeclarationStatement) and node is not program.declaration)
+        seen_decls += sum(
+            1
+            for node in walk(program)
+            if isinstance(node, DeclarationStatement) and node is not program.declaration
+        )
         if seen_decls > 1:
-            self._diag(Severity.ERROR, codes.MULTIPLE_DECLARATIONS, "Program has more than one declaration statement.", program.span)
+            self._diag(
+                Severity.ERROR,
+                codes.MULTIPLE_DECLARATIONS,
+                "Program has more than one declaration statement.",
+                program.span,
+            )
         self._pop_scope()
         return self.model
-
 
     def _predeclare_globals(self, items: list[Statement]) -> None:
         for item in items:
             if isinstance(item, FunctionDeclaration):
                 return_shape = self._body_return_shape(item.body) or "function"
-                if self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None) is not None:
+                if (
+                    self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None)
+                    is not None
+                ):
                     self._predeclared_nodes.add(id(item))
                     self._function_params[item.name] = item.parameters
             elif isinstance(item, MethodDeclaration):
                 return_shape = self._body_return_shape(item.body) or "method"
-                if self._define(item.name, SymbolKind.METHOD, item.span, return_shape, None) is not None:
+                if (
+                    self._define(item.name, SymbolKind.METHOD, item.span, return_shape, None)
+                    is not None
+                ):
                     self._predeclared_nodes.add(id(item))
                     self._function_params[item.name] = item.parameters
                     if item.receiver_type is not None:
@@ -124,11 +145,21 @@ class SemanticAnalyzer:
                     if m.name in members:
                         continue
                     members.add(m.name)
-                    self._define(f"{item.name}.{m.name}", SymbolKind.ENUM_MEMBER, m.span, item.name, "const", allow_existing=True)
+                    self._define(
+                        f"{item.name}.{m.name}",
+                        SymbolKind.ENUM_MEMBER,
+                        m.span,
+                        item.name,
+                        "const",
+                        allow_existing=True,
+                    )
                 self._enum_members[item.name] = members
             elif isinstance(item, ImportDeclaration):
                 alias = item.alias or item.library or item.owner or item.path
-                if self._define(alias, SymbolKind.IMPORT_ALIAS, item.span, "external", None) is not None:
+                if (
+                    self._define(alias, SymbolKind.IMPORT_ALIAS, item.span, "external", None)
+                    is not None
+                ):
                     self._external_aliases.add(alias)
                     self._predeclared_nodes.add(id(item))
 
@@ -139,7 +170,14 @@ class SemanticAnalyzer:
         for name in self.registry.get("types", {}):
             self._define(name, SymbolKind.TYPE, zero, "type", None, allow_existing=True)
         for name, meta in self.registry.get("variables", {}).items():
-            self._define(name, SymbolKind.BUILTIN, zero, meta.get("type"), meta.get("qualifier"), allow_existing=True)
+            self._define(
+                name,
+                SymbolKind.BUILTIN,
+                zero,
+                meta.get("type"),
+                meta.get("qualifier"),
+                allow_existing=True,
+            )
         for name in self.registry.get("functions", {}):
             root = name.split(".", 1)[0]
             self._define(root, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
@@ -148,13 +186,26 @@ class SemanticAnalyzer:
         self._script_type = node.script_type
         self._visit_expr(node.call)
         for arg in node.call.arguments:
-            if infer_qualifier(arg.value, self.model.symbols) not in {"const", "input"} and arg.name in {"title", "shorttitle", "overlay", None}:
-                self._diag(Severity.ERROR, codes.DECLARATION_ARGS_NOT_CONST, "Declaration statement arguments must be const-compatible in Pine.", arg.span)
+            if infer_qualifier(arg.value, self.model.symbols) not in {
+                "const",
+                "input",
+            } and arg.name in {"title", "shorttitle", "overlay", None}:
+                self._diag(
+                    Severity.ERROR,
+                    codes.DECLARATION_ARGS_NOT_CONST,
+                    "Declaration statement arguments must be const-compatible in Pine.",
+                    arg.span,
+                )
 
     def _visit_statement(self, node: Statement | ASTNode) -> None:
         if isinstance(node, DeclarationStatement):
             if self.local_depth > 0 or self.function_depth > 0:
-                self._diag(Severity.ERROR, codes.DECLARATION_NOT_GLOBAL, "indicator/strategy/library declaration must be in global scope.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.DECLARATION_NOT_GLOBAL,
+                    "indicator/strategy/library declaration must be in global scope.",
+                    node.span,
+                )
             self._analyze_declaration_statement(node)
             return
         if isinstance(node, VarDeclaration):
@@ -163,15 +214,34 @@ class SemanticAnalyzer:
             explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
             if node.type_ref is not None:
                 self._validate_type_ref(node.type_ref)
-            if explicit_type == "bool" and isinstance(node.initializer, Literal) and node.initializer.literal_type == "na":
-                self._diag(Severity.ERROR, codes.BOOL_CANNOT_BE_NA, "Pine v6 bool cannot be na.", node.initializer.span)
+            if (
+                explicit_type == "bool"
+                and isinstance(node.initializer, Literal)
+                and node.initializer.literal_type == "na"
+            ):
+                self._diag(
+                    Severity.ERROR,
+                    codes.BOOL_CANNOT_BE_NA,
+                    "Pine v6 bool cannot be na.",
+                    node.initializer.span,
+                )
             self._visit_expr(node.initializer)
             if node.type_ref is not None and not self._is_assignable_type(explicit_type, init_type):
-                self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Initializer for {node.name} expects {explicit_type}, got {init_type}.", node.initializer.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Initializer for {node.name} expects {explicit_type}, got {init_type}.",
+                    node.initializer.span,
+                )
             init_qualifier = infer_qualifier(node.initializer, self.model.symbols)
             if node.explicit_qualifier:
                 qualifier = node.explicit_qualifier
-                self._validate_qualifier_assignment(node.explicit_qualifier, init_qualifier, node.initializer.span, f"Initializer for {node.name}")
+                self._validate_qualifier_assignment(
+                    node.explicit_qualifier,
+                    init_qualifier,
+                    node.initializer.span,
+                    f"Initializer for {node.name}",
+                )
             else:
                 inferred_q = init_qualifier
                 # A variable initialized from a literal is not an immutable const declaration in Pine.
@@ -202,7 +272,13 @@ class SemanticAnalyzer:
             for index, target in enumerate(node.targets):
                 if target.name != "_":
                     target_type = element_types[index] if index < len(element_types) else "unknown"
-                    self._define(target.name, SymbolKind.VARIABLE, target.span, target_type, init_qualifier if init_qualifier == "input" else "series")
+                    self._define(
+                        target.name,
+                        SymbolKind.VARIABLE,
+                        target.span,
+                        target_type,
+                        init_qualifier if init_qualifier == "input" else "series",
+                    )
             return
         if isinstance(node, Reassignment):
             self._visit_expr(node.value)
@@ -213,49 +289,123 @@ class SemanticAnalyzer:
                 owner_type = self._member_owner_type(node.target)
                 if root_sym is None:
                     target_name = self._assignable_name(node.target) or "<expr>"
-                    code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
-                    self._diag(Severity.ERROR, code, f"Reassignment to undeclared variable {target_name}.", node.span)
+                    code = (
+                        codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
+                    )
+                    self._diag(
+                        Severity.ERROR,
+                        code,
+                        f"Reassignment to undeclared variable {target_name}.",
+                        node.span,
+                    )
                     return
                 if root_sym.qualifier == "const":
-                    self._diag(Severity.ERROR, codes.CONST_REASSIGNMENT, f"Cannot reassign const symbol {root_sym.name}.", node.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.CONST_REASSIGNMENT,
+                        f"Cannot reassign const symbol {root_sym.name}.",
+                        node.span,
+                    )
                     return
                 if owner_type in self._udt_fields and field_type is None:
-                    self._diag(Severity.ERROR, codes.UNKNOWN_FIELD, f"Unknown field {node.target.member} for type {owner_type}.", node.target.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNKNOWN_FIELD,
+                        f"Unknown field {node.target.member} for type {owner_type}.",
+                        node.target.span,
+                    )
                     return
                 if field_type is not None:
-                    if node.op in {"+=", "-=", "*=", "/=", "%="} and field_type not in {"int", "float", "unknown", None}:
-                        self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Compound assignment {node.op} requires numeric field, got {field_type}.", node.span)
+                    if node.op in {"+=", "-=", "*=", "/=", "%="} and field_type not in {
+                        "int",
+                        "float",
+                        "unknown",
+                        None,
+                    }:
+                        self._diag(
+                            Severity.ERROR,
+                            codes.TYPE_MISMATCH,
+                            f"Compound assignment {node.op} requires numeric field, got {field_type}.",
+                            node.span,
+                        )
                     elif not self._is_assignable_type(field_type, value_type):
-                        self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Cannot assign {value_type} to field {node.target.member} of type {field_type}.", node.value.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.TYPE_MISMATCH,
+                            f"Cannot assign {value_type} to field {node.target.member} of type {field_type}.",
+                            node.value.span,
+                        )
                     return
             sym = self._resolve_assignable(node.target)
             if sym is None:
                 target_name = self._assignable_name(node.target) or "<expr>"
                 code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
-                self._diag(Severity.ERROR, code, f"Reassignment to undeclared variable {target_name}.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    code,
+                    f"Reassignment to undeclared variable {target_name}.",
+                    node.span,
+                )
             elif sym.qualifier == "const":
-                self._diag(Severity.ERROR, codes.CONST_REASSIGNMENT, f"Cannot reassign const symbol {sym.name}.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.CONST_REASSIGNMENT,
+                    f"Cannot reassign const symbol {sym.name}.",
+                    node.span,
+                )
             else:
-                if node.op in {"+=", "-=", "*=", "/=", "%="} and sym.type not in {"int", "float", "unknown", None}:
-                    self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Compound assignment {node.op} requires numeric target, got {sym.type}.", node.span)
+                if node.op in {"+=", "-=", "*=", "/=", "%="} and sym.type not in {
+                    "int",
+                    "float",
+                    "unknown",
+                    None,
+                }:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Compound assignment {node.op} requires numeric target, got {sym.type}.",
+                        node.span,
+                    )
                 elif not self._is_assignable_type(sym.type, value_type):
-                    self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Cannot assign {value_type} to {sym.name} of type {sym.type}.", node.value.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Cannot assign {value_type} to {sym.name} of type {sym.type}.",
+                        node.value.span,
+                    )
             return
-        if isinstance(node, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)):
+        if isinstance(
+            node, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
             self._visit_structure(node)
             return
         if isinstance(node, BreakStatement):
             if self.loop_depth == 0:
-                self._diag(Severity.ERROR, codes.BREAK_CONTINUE_OUTSIDE_LOOP, "break is allowed only inside loops.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.BREAK_CONTINUE_OUTSIDE_LOOP,
+                    "break is allowed only inside loops.",
+                    node.span,
+                )
             return
         if isinstance(node, ContinueStatement):
             if self.loop_depth == 0:
-                self._diag(Severity.ERROR, codes.BREAK_CONTINUE_OUTSIDE_LOOP, "continue is allowed only inside loops.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.BREAK_CONTINUE_OUTSIDE_LOOP,
+                    "continue is allowed only inside loops.",
+                    node.span,
+                )
             return
         if isinstance(node, FunctionDeclaration):
             self._validate_export_policy(node)
             if self.local_depth > 0 or self.function_depth > 0:
-                self._diag(Severity.ERROR, codes.NESTED_FUNCTION, "Function definitions are allowed only in global scope.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.NESTED_FUNCTION,
+                    "Function definitions are allowed only in global scope.",
+                    node.span,
+                )
             if id(node) not in self._predeclared_nodes:
                 self._define(node.name, SymbolKind.FUNCTION, node.span, "function", None)
                 self._function_params[node.name] = node.parameters
@@ -269,10 +419,26 @@ class SemanticAnalyzer:
                     expected = self._type_ref_name(p.type_ref) if p.type_ref else None
                     actual = infer_type(p.default_value, self.model.symbols)
                     if not self._is_assignable_type(expected, actual):
-                        self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Default value for parameter {p.name} expects {expected}, got {actual}.", p.default_value.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.TYPE_MISMATCH,
+                            f"Default value for parameter {p.name} expects {expected}, got {actual}.",
+                            p.default_value.span,
+                        )
                     if p.explicit_qualifier is not None:
-                        self._validate_qualifier_assignment(p.explicit_qualifier, infer_qualifier(p.default_value, self.model.symbols), p.default_value.span, f"Default value for parameter {p.name}")
-                self._define(p.name, SymbolKind.VARIABLE, p.span, self._type_ref_name(p.type_ref) if p.type_ref else "unknown", p.explicit_qualifier)
+                        self._validate_qualifier_assignment(
+                            p.explicit_qualifier,
+                            infer_qualifier(p.default_value, self.model.symbols),
+                            p.default_value.span,
+                            f"Default value for parameter {p.name}",
+                        )
+                self._define(
+                    p.name,
+                    SymbolKind.VARIABLE,
+                    p.span,
+                    self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
+                    p.explicit_qualifier,
+                )
             self._visit_body(node.body)
             sym = self._resolve(node.name)
             if sym is not None:
@@ -283,11 +449,26 @@ class SemanticAnalyzer:
         if isinstance(node, MethodDeclaration):
             self._validate_export_policy(node)
             if self.local_depth > 0 or self.function_depth > 0:
-                self._diag(Severity.ERROR, codes.NESTED_FUNCTION, "Method definitions are allowed only in global scope.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.NESTED_FUNCTION,
+                    "Method definitions are allowed only in global scope.",
+                    node.span,
+                )
             if node.receiver_type is None or node.receiver_name is None:
-                self._diag(Severity.ERROR, codes.METHOD_RECEIVER_REQUIRED, "Method receiver must have explicit type.", node.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.METHOD_RECEIVER_REQUIRED,
+                    "Method receiver must have explicit type.",
+                    node.span,
+                )
             elif self._resolve(node.receiver_type.name) is None:
-                self._diag(Severity.ERROR, codes.METHOD_RECEIVER_TYPE_NOT_FOUND, f"Method receiver type {node.receiver_type.name} is not declared.", node.receiver_type.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.METHOD_RECEIVER_TYPE_NOT_FOUND,
+                    f"Method receiver type {node.receiver_type.name} is not declared.",
+                    node.receiver_type.span,
+                )
             if id(node) not in self._predeclared_nodes:
                 self._define(node.name, SymbolKind.METHOD, node.span, "method", None)
                 self._function_params[node.name] = node.parameters
@@ -295,7 +476,13 @@ class SemanticAnalyzer:
                     self._method_receivers[node.name] = node.receiver_type.name
             self._push_scope(ScopeKind.METHOD)
             if node.receiver_name:
-                self._define(node.receiver_name, SymbolKind.VARIABLE, node.span, self._type_ref_name(node.receiver_type) if node.receiver_type else "unknown", "series")
+                self._define(
+                    node.receiver_name,
+                    SymbolKind.VARIABLE,
+                    node.span,
+                    self._type_ref_name(node.receiver_type) if node.receiver_type else "unknown",
+                    "series",
+                )
             for p in node.parameters:
                 if p.type_ref is not None:
                     self._validate_type_ref(p.type_ref)
@@ -304,10 +491,26 @@ class SemanticAnalyzer:
                     expected = self._type_ref_name(p.type_ref) if p.type_ref else None
                     actual = infer_type(p.default_value, self.model.symbols)
                     if not self._is_assignable_type(expected, actual):
-                        self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Default value for parameter {p.name} expects {expected}, got {actual}.", p.default_value.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.TYPE_MISMATCH,
+                            f"Default value for parameter {p.name} expects {expected}, got {actual}.",
+                            p.default_value.span,
+                        )
                     if p.explicit_qualifier is not None:
-                        self._validate_qualifier_assignment(p.explicit_qualifier, infer_qualifier(p.default_value, self.model.symbols), p.default_value.span, f"Default value for parameter {p.name}")
-                self._define(p.name, SymbolKind.VARIABLE, p.span, self._type_ref_name(p.type_ref) if p.type_ref else "unknown", p.explicit_qualifier)
+                        self._validate_qualifier_assignment(
+                            p.explicit_qualifier,
+                            infer_qualifier(p.default_value, self.model.symbols),
+                            p.default_value.span,
+                            f"Default value for parameter {p.name}",
+                        )
+                self._define(
+                    p.name,
+                    SymbolKind.VARIABLE,
+                    p.span,
+                    self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
+                    p.explicit_qualifier,
+                )
             self._visit_body(node.body)
             sym = self._resolve(node.name)
             if sym is not None:
@@ -322,19 +525,36 @@ class SemanticAnalyzer:
             seen_fields: set[str] = set()
             for field in node.fields:
                 if field.name in seen_fields:
-                    self._diag(Severity.ERROR, codes.REDECLARATION, f"Duplicate field {field.name} in type {node.name}.", field.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.REDECLARATION,
+                        f"Duplicate field {field.name} in type {node.name}.",
+                        field.span,
+                    )
                 seen_fields.add(field.name)
             self._push_scope(ScopeKind.TYPE_DECL)
             for field in node.fields:
                 self._validate_type_ref(field.type_ref)
                 field_type = self._type_ref_name(field.type_ref)
                 self._define(field.name, SymbolKind.FIELD, field.span, field_type, "series")
-                self._define(f"{node.name}.{field.name}", SymbolKind.FIELD, field.span, field_type, "series", allow_existing=True)
+                self._define(
+                    f"{node.name}.{field.name}",
+                    SymbolKind.FIELD,
+                    field.span,
+                    field_type,
+                    "series",
+                    allow_existing=True,
+                )
                 if field.default_value is not None:
                     self._visit_expr(field.default_value)
                     default_type = infer_type(field.default_value, self.model.symbols)
                     if not self._is_assignable_type(field_type, default_type):
-                        self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Default value for field {field.name} expects {field_type}, got {default_type}.", field.default_value.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.TYPE_MISMATCH,
+                            f"Default value for field {field.name} expects {field_type}, got {default_type}.",
+                            field.default_value.span,
+                        )
             self._pop_scope()
             return
         if isinstance(node, EnumDeclaration):
@@ -344,10 +564,22 @@ class SemanticAnalyzer:
             seen_members: set[str] = set()
             for m in node.members:
                 if m.name in seen_members:
-                    self._diag(Severity.ERROR, codes.REDECLARATION, f"Duplicate enum member {m.name} in enum {node.name}.", m.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.REDECLARATION,
+                        f"Duplicate enum member {m.name} in enum {node.name}.",
+                        m.span,
+                    )
                     continue
                 seen_members.add(m.name)
-                self._define(f"{node.name}.{m.name}", SymbolKind.ENUM_MEMBER, m.span, node.name, "const", allow_existing=True)
+                self._define(
+                    f"{node.name}.{m.name}",
+                    SymbolKind.ENUM_MEMBER,
+                    m.span,
+                    node.name,
+                    "const",
+                    allow_existing=True,
+                )
             self._enum_members[node.name] = seen_members
             return
         if isinstance(node, ImportDeclaration):
@@ -358,7 +590,6 @@ class SemanticAnalyzer:
             return
         if hasattr(node, "expression"):
             self._visit_expr(node.expression)  # type: ignore[attr-defined]
-
 
     def _body_return_type(self, body) -> str:
         if isinstance(body, Block):
@@ -391,12 +622,20 @@ class SemanticAnalyzer:
             if not body.statements:
                 return None
             last = body.statements[-1]
-            return getattr(last, "expression", None) or getattr(last, "initializer", None) or getattr(last, "value", None)
+            return (
+                getattr(last, "expression", None)
+                or getattr(last, "initializer", None)
+                or getattr(last, "value", None)
+            )
         return body
 
     def _static_return_shape(self, expr) -> str | None:
         if isinstance(expr, TupleExpr):
-            return "tuple<" + ",".join(self._static_return_shape(item) or "unknown" for item in expr.elements) + ">"
+            return (
+                "tuple<"
+                + ",".join(self._static_return_shape(item) or "unknown" for item in expr.elements)
+                + ">"
+            )
         if isinstance(expr, Literal):
             return expr.literal_type
         if isinstance(expr, ConditionalExpr):
@@ -420,7 +659,9 @@ class SemanticAnalyzer:
         if isinstance(expr, SwitchStructure):
             shapes: list[str | None] = []
             for case in expr.cases:
-                target = self._body_return_expr(case.body) if isinstance(case.body, Block) else case.body
+                target = (
+                    self._body_return_expr(case.body) if isinstance(case.body, Block) else case.body
+                )
                 if target is not None:
                     shapes.append(self._static_return_shape(target))
             return self._merge_return_shapes(shapes)
@@ -437,7 +678,10 @@ class SemanticAnalyzer:
         if all(shape.startswith("tuple<") and shape.endswith(">") for shape in known):
             split = [self._split_type_args(shape[len("tuple<") : -1]) for shape in known]
             if split and all(len(parts) == len(split[0]) for parts in split):
-                merged = [self._merge_return_shapes([parts[i] for parts in split]) or "unknown" for i in range(len(split[0]))]
+                merged = [
+                    self._merge_return_shapes([parts[i] for parts in split]) or "unknown"
+                    for i in range(len(split[0]))
+                ]
                 return "tuple<" + ",".join(merged) + ">"
         return None
 
@@ -495,17 +739,21 @@ class SemanticAnalyzer:
         na_path = self._na_call_path(expr)
         if na_path:
             return set() if truthy else {na_path}
-        if (
-            isinstance(expr, BinaryExpr)
-            and expr.op == "and"
-            and truthy
-        ):
-            return self._non_na_paths_from_condition(expr.left, truthy=True) | self._non_na_paths_from_condition(expr.right, truthy=True)
+        if isinstance(expr, BinaryExpr) and expr.op == "and" and truthy:
+            return self._non_na_paths_from_condition(
+                expr.left, truthy=True
+            ) | self._non_na_paths_from_condition(expr.right, truthy=True)
         return set()
 
-    def _non_na_narrowing_from_condition(self, expr: Expression, *, truthy: bool = True) -> set[str]:
+    def _non_na_narrowing_from_condition(
+        self, expr: Expression, *, truthy: bool = True
+    ) -> set[str]:
         # Backward-compatible symbol-only view for existing callers/tests.
-        return {path for path in self._non_na_paths_from_condition(expr, truthy=truthy) if "." not in path}
+        return {
+            path
+            for path in self._non_na_paths_from_condition(expr, truthy=truthy)
+            if "." not in path
+        }
 
     def _validate_narrowing_condition(self, expr: Expression) -> None:
         """Report `na()` guards that cannot produce a stable flow fact.
@@ -523,7 +771,11 @@ class SemanticAnalyzer:
             self._validate_narrowing_condition(expr.left)
             self._validate_narrowing_condition(expr.right)
             return
-        if isinstance(expr, CallExpr) and callee_name(expr.callee) == "na" and len(expr.arguments) == 1:
+        if (
+            isinstance(expr, CallExpr)
+            and callee_name(expr.callee) == "na"
+            and len(expr.arguments) == 1
+        ):
             if self._expr_path(expr.arguments[0].value) is None:
                 self._diag(
                     Severity.INFO,
@@ -565,18 +817,26 @@ class SemanticAnalyzer:
             self._visit_block(node.body, kind=ScopeKind.LOOP)
             self.loop_depth -= 1
         elif isinstance(node, ForRangeStructure):
-            self._visit_expr(node.start); self._visit_expr(node.end)
-            if node.step: self._visit_expr(node.step)
+            self._visit_expr(node.start)
+            self._visit_expr(node.end)
+            if node.step:
+                self._visit_expr(node.step)
             for label, expr in (("start", node.start), ("end", node.end), ("step", node.step)):
                 if expr is not None:
                     typ = infer_type(expr, self.model.symbols)
                     if typ not in {"int", "unknown"}:
-                        self._diag(Severity.ERROR, codes.LOOP_RANGE_TYPE, f"for range {label} expression must be int-like, got {typ}.", expr.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.LOOP_RANGE_TYPE,
+                            f"for range {label} expression must be int-like, got {typ}.",
+                            expr.span,
+                        )
             self.loop_depth += 1
             self.local_depth += 1
             self._push_scope(ScopeKind.LOOP)
             self._define(node.variable, SymbolKind.VARIABLE, node.span, "int", "series")
-            for st in node.body.statements: self._visit_statement(st)
+            for st in node.body.statements:
+                self._visit_statement(st)
             self._pop_scope()
             self.local_depth -= 1
             self.loop_depth -= 1
@@ -593,7 +853,8 @@ class SemanticAnalyzer:
                     continue
                 typ = target_types[index] if index < len(target_types) else "unknown"
                 self._define(name, SymbolKind.VARIABLE, node.target.span, typ, "series")
-            for st in node.body.statements: self._visit_statement(st)
+            for st in node.body.statements:
+                self._visit_statement(st)
             self._pop_scope()
             self.local_depth -= 1
             self.loop_depth -= 1
@@ -609,8 +870,16 @@ class SemanticAnalyzer:
                     else:
                         self._visit_expr(case.condition)
                         case_type = infer_type(case.condition, self.model.symbols)
-                        if not (self._is_assignable_type(switch_type, case_type) or self._is_assignable_type(case_type, switch_type)):
-                            self._diag(Severity.ERROR, codes.SWITCH_CASE_TYPE, f"switch case type {case_type} is not comparable with switch expression type {switch_type}.", case.condition.span)
+                        if not (
+                            self._is_assignable_type(switch_type, case_type)
+                            or self._is_assignable_type(case_type, switch_type)
+                        ):
+                            self._diag(
+                                Severity.ERROR,
+                                codes.SWITCH_CASE_TYPE,
+                                f"switch case type {case_type} is not comparable with switch expression type {switch_type}.",
+                                case.condition.span,
+                            )
                 self._visit_body(case.body)
 
     def _visit_expr(self, expr: Expression) -> None:
@@ -619,7 +888,12 @@ class SemanticAnalyzer:
         if isinstance(expr, Identifier):
             if self._resolve(expr.name) is None and not expr.name.startswith("<"):
                 # Imported aliases are allowed to resolve member calls later; unknown identifiers remain errors.
-                self._diag(Severity.ERROR, codes.UNDECLARED_VARIABLE, f"Use of undeclared variable {expr.name}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNDECLARED_VARIABLE,
+                    f"Use of undeclared variable {expr.name}.",
+                    expr.span,
+                )
         elif isinstance(expr, Literal):
             return
         elif isinstance(expr, TupleExpr):
@@ -630,9 +904,15 @@ class SemanticAnalyzer:
             if expr.op == "not":
                 operand_type = infer_type(expr.operand, self.model.symbols)
                 if operand_type not in {"bool", "unknown"}:
-                    self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Unary not requires bool operand, got {operand_type}.", expr.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Unary not requires bool operand, got {operand_type}.",
+                        expr.span,
+                    )
         elif isinstance(expr, BinaryExpr):
-            self._visit_expr(expr.left); self._visit_expr(expr.right)
+            self._visit_expr(expr.left)
+            self._visit_expr(expr.right)
             self._validate_binary_expr(expr)
         elif isinstance(expr, ConditionalExpr):
             self._check_bool(expr.condition)
@@ -653,7 +933,12 @@ class SemanticAnalyzer:
             if isinstance(expr.object, Identifier):
                 root = expr.object.name
                 if self._resolve(root) is None and root not in self._external_aliases:
-                    self._diag(Severity.ERROR, codes.UNDECLARED_VARIABLE, f"Use of undeclared namespace/object {root}.", expr.object.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNDECLARED_VARIABLE,
+                        f"Use of undeclared namespace/object {root}.",
+                        expr.object.span,
+                    )
             else:
                 self._visit_expr(expr.object)
             self._validate_strategy_namespace_usage(callee_name(expr), expr.span, is_call=False)
@@ -665,12 +950,22 @@ class SemanticAnalyzer:
             self._visit_callee(expr.callee)
             entry = self.registry.get("functions", {}).get(name)
             if entry and entry.get("forbidden_in_local_blocks") and self.local_depth > 0:
-                self._diag(Severity.ERROR, codes.BUILTIN_FORBIDDEN_LOCAL, f"{name}() is forbidden in local blocks in Pine.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.BUILTIN_FORBIDDEN_LOCAL,
+                    f"{name}() is forbidden in local blocks in Pine.",
+                    expr.span,
+                )
             self._validate_strategy_call_script_type(name, expr)
             self._validate_strategy_namespace_usage(name, expr.span, is_call=True)
             self._validate_unknown_builtin_namespace_member(name, entry, expr)
             if name.startswith("request.") and entry is None:
-                self._diag(Severity.ERROR, codes.REQUEST_SIGNATURE, f"Unknown request.* builtin {name}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.REQUEST_SIGNATURE,
+                    f"Unknown request.* builtin {name}.",
+                    expr.span,
+                )
             self._validate_builtin_call(name, entry, expr)
             self._validate_collection_mutation_call(name, expr)
             self._validate_generic_constructor_call(name, expr)
@@ -685,39 +980,94 @@ class SemanticAnalyzer:
                 if arg.name:
                     named_seen = True
                     if arg.name in seen_named:
-                        self._diag(Severity.ERROR, codes.DUPLICATE_NAMED_ARGUMENT, f"Duplicate named argument {arg.name}.", arg.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.DUPLICATE_NAMED_ARGUMENT,
+                            f"Duplicate named argument {arg.name}.",
+                            arg.span,
+                        )
                     seen_named.add(arg.name)
                     if name.startswith("strategy.") and arg.name == "when":
-                        self._diag(Severity.ERROR, codes.STRATEGY_WHEN_REMOVED, "strategy.*(..., when=...) is not valid in Pine v6.", arg.span)
+                        self._diag(
+                            Severity.ERROR,
+                            codes.STRATEGY_WHEN_REMOVED,
+                            "strategy.*(..., when=...) is not valid in Pine v6.",
+                            arg.span,
+                        )
                 elif named_seen:
-                    self._diag(Severity.ERROR, codes.POSITIONAL_AFTER_NAMED, "Positional argument after named argument.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.POSITIONAL_AFTER_NAMED,
+                        "Positional argument after named argument.",
+                        arg.span,
+                    )
                 self._visit_expr(arg.value)
         elif isinstance(expr, HistoryRefExpr):
             if isinstance(expr.base, Literal):
-                self._diag(Severity.ERROR, codes.HISTORY_ON_LITERAL, "History reference cannot be applied to a literal.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.HISTORY_ON_LITERAL,
+                    "History reference cannot be applied to a literal.",
+                    expr.span,
+                )
             if isinstance(expr.base, HistoryRefExpr):
-                self._diag(Severity.ERROR, codes.REPEATED_HISTORY, "Repeated history reference x[1][2] is not allowed.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.REPEATED_HISTORY,
+                    "Repeated history reference x[1][2] is not allowed.",
+                    expr.span,
+                )
             if isinstance(expr.base, Identifier):
                 sym = self._resolve(expr.base.name)
-                if sym is not None and self._scope_kind(sym.scope_id) not in {ScopeKind.GLOBAL, None}:
-                    self._diag(Severity.WARNING, codes.HISTORY_LOCAL_SCOPE, "History reference to a value declared in a local scope can be unsafe in Pine.", expr.span)
+                if sym is not None and self._scope_kind(sym.scope_id) not in {
+                    ScopeKind.GLOBAL,
+                    None,
+                }:
+                    self._diag(
+                        Severity.WARNING,
+                        codes.HISTORY_LOCAL_SCOPE,
+                        "History reference to a value declared in a local scope can be unsafe in Pine.",
+                        expr.span,
+                    )
             offset_type = infer_type(expr.offset, self.model.symbols)
             if offset_type not in {"int", "unknown"}:
-                self._diag(Severity.ERROR, codes.HISTORY_OFFSET_NOT_INTEGER, "History reference offset must be integer-like.", expr.offset.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.HISTORY_OFFSET_NOT_INTEGER,
+                    "History reference offset must be integer-like.",
+                    expr.offset.span,
+                )
             if self._is_static_negative_history_offset(expr.offset):
-                self._diag(Severity.ERROR, codes.HISTORY_NEGATIVE_OFFSET, "History reference offset cannot be negative in Pine.", expr.offset.span)
-            self._visit_expr(expr.base); self._visit_expr(expr.offset)
-        elif isinstance(expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)):
+                self._diag(
+                    Severity.ERROR,
+                    codes.HISTORY_NEGATIVE_OFFSET,
+                    "History reference offset cannot be negative in Pine.",
+                    expr.offset.span,
+                )
+            self._visit_expr(expr.base)
+            self._visit_expr(expr.offset)
+        elif isinstance(
+            expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
             self._visit_structure(expr)
 
     def _check_bool(self, expr: Expression) -> None:
         self._visit_expr(expr)
         typ = infer_type(expr, self.model.symbols)
         if isinstance(expr, Literal) and expr.literal_type == "na":
-            self._diag(Severity.ERROR, codes.NA_IN_BOOL_CONTEXT, "na is not allowed in bool context in Pine v6.", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.NA_IN_BOOL_CONTEXT,
+                "na is not allowed in bool context in Pine v6.",
+                expr.span,
+            )
         elif typ != "bool" and typ != "unknown":
-            self._diag(Severity.ERROR, codes.NON_BOOL_CONDITION, "Non-bool expression used as condition in Pine v6.", expr.span)
-
+            self._diag(
+                Severity.ERROR,
+                codes.NON_BOOL_CONDITION,
+                "Non-bool expression used as condition in Pine v6.",
+                expr.span,
+            )
 
     def _validate_export_policy(self, node: ASTNode) -> None:
         if getattr(node, "is_exported", False) and self._script_type != "library":
@@ -778,14 +1128,21 @@ class SemanticAnalyzer:
             "strategy.wintrades",
         }
 
-    def _validate_strategy_namespace_usage(self, name: str, span: SourceSpan, *, is_call: bool) -> None:
+    def _validate_strategy_namespace_usage(
+        self, name: str, span: SourceSpan, *, is_call: bool
+    ) -> None:
         if not name.startswith("strategy."):
             return
         if name in self._strategy_constant_members():
             return
         is_state_member = name in self._strategy_state_members()
-        is_readonly_trade_member = name.startswith("strategy.closedtrades.") or name.startswith("strategy.opentrades.")
-        if (is_state_member or is_readonly_trade_member) and self._script_type not in {None, "strategy"}:
+        is_readonly_trade_member = name.startswith("strategy.closedtrades.") or name.startswith(
+            "strategy.opentrades."
+        )
+        if (is_state_member or is_readonly_trade_member) and self._script_type not in {
+            None,
+            "strategy",
+        }:
             self._diag(
                 Severity.ERROR,
                 codes.STRATEGY_STATE_WRONG_SCRIPT_TYPE,
@@ -802,7 +1159,9 @@ class SemanticAnalyzer:
             return root
         return None
 
-    def _validate_unknown_builtin_namespace_member(self, name: str, entry: dict | None, expr: CallExpr) -> None:
+    def _validate_unknown_builtin_namespace_member(
+        self, name: str, entry: dict | None, expr: CallExpr
+    ) -> None:
         if entry is not None or name.startswith("<"):
             return
         root = self._builtin_namespace_root(name)
@@ -844,14 +1203,13 @@ class SemanticAnalyzer:
                 expr.span,
             )
 
-
-
-
     def _qualifier_rank(self, qualifier: str | None) -> int:
         order = {"const": 0, "input": 1, "simple": 2, "series": 3, None: 3}
         return order.get(qualifier, 3)
 
-    def _validate_qualifier_assignment(self, expected_max: str | None, actual: str | None, span: SourceSpan, context: str) -> None:
+    def _validate_qualifier_assignment(
+        self, expected_max: str | None, actual: str | None, span: SourceSpan, context: str
+    ) -> None:
         if expected_max is None:
             return
         if self._qualifier_rank(actual) > self._qualifier_rank(expected_max):
@@ -873,19 +1231,41 @@ class SemanticAnalyzer:
         numeric = {"int", "float", "unknown", "na"}
         if expr.op in {"-", "*", "/", "%"}:
             if left_type not in numeric or right_type not in numeric:
-                self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Operator {expr.op} requires numeric operands, got {left_type} and {right_type}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Operator {expr.op} requires numeric operands, got {left_type} and {right_type}.",
+                    expr.span,
+                )
         elif expr.op == "+":
             string_concat = left_type == right_type == "string"
             numeric_add = left_type in numeric and right_type in numeric
             if not (string_concat or numeric_add):
-                self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Operator + requires numeric operands or string concatenation, got {left_type} and {right_type}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Operator + requires numeric operands or string concatenation, got {left_type} and {right_type}.",
+                    expr.span,
+                )
         elif expr.op in {"and", "or"}:
             if left_type not in {"bool", "unknown"} or right_type not in {"bool", "unknown"}:
-                self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Operator {expr.op} requires bool operands, got {left_type} and {right_type}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Operator {expr.op} requires bool operands, got {left_type} and {right_type}.",
+                    expr.span,
+                )
         elif expr.op in {"<", "<=", ">", ">="}:
-            comparable = (left_type in numeric and right_type in numeric) or (left_type == right_type == "string")
+            comparable = (left_type in numeric and right_type in numeric) or (
+                left_type == right_type == "string"
+            )
             if not comparable:
-                self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Operator {expr.op} requires comparable operands, got {left_type} and {right_type}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Operator {expr.op} requires comparable operands, got {left_type} and {right_type}.",
+                    expr.span,
+                )
 
     def _type_ref_name(self, type_ref) -> str:
         if type_ref is None:
@@ -934,7 +1314,12 @@ class SemanticAnalyzer:
         # Builtin templates such as array<float> are declared by their base name. Dotted builtins
         # such as chart.point are also registered as types in builtins_v6.json.
         if self._resolve(base) is None and base not in {"int", "float", "bool", "string", "color"}:
-            self._diag(Severity.ERROR, getattr(codes, "UNKNOWN_TYPE", codes.METHOD_RECEIVER_TYPE_NOT_FOUND), f"Unknown type {base}.", type_ref.span)
+            self._diag(
+                Severity.ERROR,
+                getattr(codes, "UNKNOWN_TYPE", codes.METHOD_RECEIVER_TYPE_NOT_FOUND),
+                f"Unknown type {base}.",
+                type_ref.span,
+            )
         for arg in getattr(type_ref, "template_args", []) or []:
             self._validate_type_ref(arg)
 
@@ -987,8 +1372,9 @@ class SemanticAnalyzer:
             "strategy.risk.type",
             "strategy.direction",
             "strategy.order_type",
+            "extend",
         }
-        if expected in enum_like_types and (actual == expected or (actual == "string" and expected != "display")):
+        if expected in enum_like_types and actual == expected:
             return True
         if expected == "float" and actual == "int":
             return True
@@ -1037,7 +1423,9 @@ class SemanticAnalyzer:
                 arg.span,
             )
 
-    def _collection_value_type(self, collection_type: str | None, *, key: bool = False) -> str | None:
+    def _collection_value_type(
+        self, collection_type: str | None, *, key: bool = False
+    ) -> str | None:
         if not collection_type:
             return None
         base, args = self._generic_type_parts(collection_type)
@@ -1047,7 +1435,9 @@ class SemanticAnalyzer:
             return args[0] if key else args[1]
         return None
 
-    def _diag_collection_value(self, name: str, expected: str | None, actual: str, span: SourceSpan) -> None:
+    def _diag_collection_value(
+        self, name: str, expected: str | None, actual: str, span: SourceSpan
+    ) -> None:
         if expected and not self._is_assignable_type(expected, actual):
             self._diag(
                 Severity.ERROR,
@@ -1079,29 +1469,74 @@ class SemanticAnalyzer:
             map_type = infer_type(args[0].value, self.model.symbols)
             expected_key = self._collection_value_type(map_type, key=True)
             expected_value = self._collection_value_type(map_type, key=False)
-            self._diag_collection_value(name + " key", expected_key, infer_type(args[1].value, self.model.symbols), args[1].span)
-            self._diag_collection_value(name + " value", expected_value, infer_type(args[2].value, self.model.symbols), args[2].span)
+            self._diag_collection_value(
+                name + " key",
+                expected_key,
+                infer_type(args[1].value, self.model.symbols),
+                args[1].span,
+            )
+            self._diag_collection_value(
+                name + " value",
+                expected_value,
+                infer_type(args[2].value, self.model.symbols),
+                args[2].span,
+            )
             return
         if name == "map.get" and len(args) >= 2:
             map_type = infer_type(args[0].value, self.model.symbols)
             expected_key = self._collection_value_type(map_type, key=True)
-            self._diag_collection_value(name + " key", expected_key, infer_type(args[1].value, self.model.symbols), args[1].span)
+            self._diag_collection_value(
+                name + " key",
+                expected_key,
+                infer_type(args[1].value, self.model.symbols),
+                args[1].span,
+            )
             return
         # Method forms: values.push(v), values.set(i, v), dict.put(k, v), matrix.set(r, c, v).
         if isinstance(expr.callee, MemberAccessExpr):
             receiver_type = infer_type(expr.callee.object, self.model.symbols)
             member = expr.callee.member
             if member in {"push", "unshift"} and len(args) >= 1:
-                self._diag_collection_value(name, self._collection_value_type(receiver_type), infer_type(args[0].value, self.model.symbols), args[0].span)
+                self._diag_collection_value(
+                    name,
+                    self._collection_value_type(receiver_type),
+                    infer_type(args[0].value, self.model.symbols),
+                    args[0].span,
+                )
             elif member == "set" and receiver_type.startswith("array<") and len(args) >= 2:
-                self._diag_collection_value(name, self._collection_value_type(receiver_type), infer_type(args[1].value, self.model.symbols), args[1].span)
+                self._diag_collection_value(
+                    name,
+                    self._collection_value_type(receiver_type),
+                    infer_type(args[1].value, self.model.symbols),
+                    args[1].span,
+                )
             elif member == "set" and receiver_type.startswith("matrix<") and len(args) >= 3:
-                self._diag_collection_value(name, self._collection_value_type(receiver_type), infer_type(args[2].value, self.model.symbols), args[2].span)
+                self._diag_collection_value(
+                    name,
+                    self._collection_value_type(receiver_type),
+                    infer_type(args[2].value, self.model.symbols),
+                    args[2].span,
+                )
             elif member == "put" and receiver_type.startswith("map<") and len(args) >= 2:
-                self._diag_collection_value(name + " key", self._collection_value_type(receiver_type, key=True), infer_type(args[0].value, self.model.symbols), args[0].span)
-                self._diag_collection_value(name + " value", self._collection_value_type(receiver_type, key=False), infer_type(args[1].value, self.model.symbols), args[1].span)
+                self._diag_collection_value(
+                    name + " key",
+                    self._collection_value_type(receiver_type, key=True),
+                    infer_type(args[0].value, self.model.symbols),
+                    args[0].span,
+                )
+                self._diag_collection_value(
+                    name + " value",
+                    self._collection_value_type(receiver_type, key=False),
+                    infer_type(args[1].value, self.model.symbols),
+                    args[1].span,
+                )
             elif member == "get" and receiver_type.startswith("map<") and len(args) >= 1:
-                self._diag_collection_value(name + " key", self._collection_value_type(receiver_type, key=True), infer_type(args[0].value, self.model.symbols), args[0].span)
+                self._diag_collection_value(
+                    name + " key",
+                    self._collection_value_type(receiver_type, key=True),
+                    infer_type(args[0].value, self.model.symbols),
+                    args[0].span,
+                )
 
     def _validate_generic_constructor_call(self, name: str, expr: CallExpr) -> None:
         # array.new<float>(size, initial), matrix.new<float>(rows, cols, initial), map.new<string,float>()
@@ -1140,31 +1575,68 @@ class SemanticAnalyzer:
         named = {a.name for a in expr.arguments if a.name}
         for arg in expr.arguments:
             if arg.name and arg.name not in field_names:
-                self._diag(Severity.ERROR, codes.UNKNOWN_PARAMETER, f"Unknown field {arg.name} for UDT constructor {type_name}.new().", arg.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNKNOWN_PARAMETER,
+                    f"Unknown field {arg.name} for UDT constructor {type_name}.new().",
+                    arg.span,
+                )
         if len(positional) > len(field_names):
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Too many positional arguments for {type_name}.new().", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Too many positional arguments for {type_name}.new().",
+                expr.span,
+            )
         supplied = set(field_names[: len(positional)]) | {n for n in named if n in field_names}
         missing = [name for name in required if name not in supplied]
         if missing:
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Missing required field(s) for {type_name}.new(): {', '.join(missing)}.", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Missing required field(s) for {type_name}.new(): {', '.join(missing)}.",
+                expr.span,
+            )
         for idx, arg in enumerate(positional):
             if idx < len(fields):
-                expected = self._type_ref_name(fields[idx].type_ref) if getattr(fields[idx], "type_ref", None) is not None else None
+                expected = (
+                    self._type_ref_name(fields[idx].type_ref)
+                    if getattr(fields[idx], "type_ref", None) is not None
+                    else None
+                )
                 actual = infer_type(arg.value, self.model.symbols)
                 if not self._is_assignable_type(expected, actual):
-                    self._diag(Severity.ERROR, codes.ARGUMENT_TYPE, f"Field {field_names[idx]} for {type_name}.new() expects {expected}, got {actual}.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        f"Field {field_names[idx]} for {type_name}.new() expects {expected}, got {actual}.",
+                        arg.span,
+                    )
         for arg in expr.arguments:
             if arg.name and arg.name in field_names:
                 field = fields[field_names.index(arg.name)]
-                expected = self._type_ref_name(field.type_ref) if getattr(field, "type_ref", None) is not None else None
+                expected = (
+                    self._type_ref_name(field.type_ref)
+                    if getattr(field, "type_ref", None) is not None
+                    else None
+                )
                 actual = infer_type(arg.value, self.model.symbols)
                 if not self._is_assignable_type(expected, actual):
-                    self._diag(Severity.ERROR, codes.ARGUMENT_TYPE, f"Field {arg.name} for {type_name}.new() expects {expected}, got {actual}.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        f"Field {arg.name} for {type_name}.new() expects {expected}, got {actual}.",
+                        arg.span,
+                    )
 
     def _is_builtin_namespace_root(self, expr: Expression) -> bool:
         if isinstance(expr, Identifier):
             sym = self._resolve(expr.name)
-            return sym is not None and sym.kind is SymbolKind.BUILTIN and sym.type in {None, "namespace"}
+            return (
+                sym is not None
+                and sym.kind is SymbolKind.BUILTIN
+                and sym.type in {None, "namespace"}
+            )
         return False
 
     def _is_external_alias_root(self, expr: Expression) -> bool:
@@ -1178,11 +1650,33 @@ class SemanticAnalyzer:
         if not receiver_type:
             return False
         if receiver_type.startswith("array<"):
-            return member in {"get", "set", "push", "unshift", "pop", "shift", "first", "last", "size", "clear", "includes", "indexof"}
+            return member in {
+                "get",
+                "set",
+                "push",
+                "unshift",
+                "pop",
+                "shift",
+                "first",
+                "last",
+                "size",
+                "clear",
+                "includes",
+                "indexof",
+            }
         if receiver_type.startswith("map<"):
             return member in {"get", "put", "remove", "contains", "keys", "values", "size", "clear"}
         if receiver_type.startswith("matrix<"):
-            return member in {"get", "set", "rows", "columns", "add_row", "add_col", "remove_row", "remove_col"}
+            return member in {
+                "get",
+                "set",
+                "rows",
+                "columns",
+                "add_row",
+                "add_col",
+                "remove_row",
+                "remove_col",
+            }
         return False
 
     def _validate_member_call_target(self, name: str, expr: CallExpr) -> None:
@@ -1196,23 +1690,40 @@ class SemanticAnalyzer:
             sym = self._resolve(receiver_expr.name)
             if sym is not None and sym.kind is SymbolKind.TYPE:
                 return
-        if self._is_external_alias_root(receiver_expr) or self._is_builtin_namespace_root(receiver_expr):
+        if self._is_external_alias_root(receiver_expr) or self._is_builtin_namespace_root(
+            receiver_expr
+        ):
             return
 
         receiver_type = infer_type(receiver_expr, self.model.symbols)
         field_type = self._member_field_type(expr.callee)
         if field_type is not None:
-            self._diag(Severity.ERROR, codes.TYPE_MISMATCH, f"Field {member} of type {receiver_type} is not callable.", expr.callee.span)
+            self._diag(
+                Severity.ERROR,
+                codes.TYPE_MISMATCH,
+                f"Field {member} of type {receiver_type} is not callable.",
+                expr.callee.span,
+            )
             return
         if member in self._method_receivers:
             return
         if self._is_collection_method(receiver_type, member):
             return
         if receiver_type in self._udt_fields:
-            self._diag(Severity.ERROR, codes.UNKNOWN_FIELD, f"Unknown method or field {member} for type {receiver_type}.", expr.callee.span)
+            self._diag(
+                Severity.ERROR,
+                codes.UNKNOWN_FIELD,
+                f"Unknown method or field {member} for type {receiver_type}.",
+                expr.callee.span,
+            )
             return
         if receiver_type and receiver_type not in {"unknown", "external", "function", "method"}:
-            self._diag(Severity.ERROR, codes.UNKNOWN_FIELD, f"Unknown method {member} for type {receiver_type}.", expr.callee.span)
+            self._diag(
+                Severity.ERROR,
+                codes.UNKNOWN_FIELD,
+                f"Unknown method {member} for type {receiver_type}.",
+                expr.callee.span,
+            )
 
     def _validate_method_call(self, expr: CallExpr) -> None:
         if not isinstance(expr.callee, MemberAccessExpr):
@@ -1223,7 +1734,12 @@ class SemanticAnalyzer:
             return
         actual = infer_type(expr.callee.object, self.model.symbols)
         if actual not in {receiver_type, "unknown"}:
-            self._diag(Severity.ERROR, codes.ARGUMENT_TYPE, f"Method {method_name} expects receiver {receiver_type}, got {actual}.", expr.callee.span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_TYPE,
+                f"Method {method_name} expects receiver {receiver_type}, got {actual}.",
+                expr.callee.span,
+            )
         params = self._function_params.get(method_name, [])
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
@@ -1233,37 +1749,69 @@ class SemanticAnalyzer:
             return
         self._validate_param_call(name, params, expr.arguments, expr.span, kind="function")
 
-    def _validate_param_call(self, name: str, params: list[Parameter], args: list, span: SourceSpan, *, kind: str) -> None:
+    def _validate_param_call(
+        self, name: str, params: list[Parameter], args: list, span: SourceSpan, *, kind: str
+    ) -> None:
         known = {p.name for p in params}
         required = [p.name for p in params if p.default_value is None]
         positional = [a for a in args if a.name is None]
         named = {a.name for a in args if a.name}
         for arg in args:
             if arg.name and arg.name not in known:
-                self._diag(Severity.ERROR, codes.UNKNOWN_PARAMETER, f"Unknown parameter {arg.name} for {kind} {name}.", arg.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNKNOWN_PARAMETER,
+                    f"Unknown parameter {arg.name} for {kind} {name}.",
+                    arg.span,
+                )
         if len(positional) > len(params):
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Too many positional arguments for {kind} {name}.", span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Too many positional arguments for {kind} {name}.",
+                span,
+            )
         positional_param_names = [p.name for p in params[: len(positional)]]
         for arg in args:
             if arg.name and arg.name in positional_param_names:
-                self._diag(Severity.ERROR, codes.DUPLICATE_NAMED_ARGUMENT, f"Parameter {arg.name} for {kind} {name} is supplied both positionally and by name.", arg.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.DUPLICATE_NAMED_ARGUMENT,
+                    f"Parameter {arg.name} for {kind} {name} is supplied both positionally and by name.",
+                    arg.span,
+                )
         supplied = set(positional_param_names) | (named & known)
         missing = [param for param in required if param not in supplied]
         if missing:
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Missing required parameter(s) for {name}: {', '.join(missing)}.", span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Missing required parameter(s) for {name}: {', '.join(missing)}.",
+                span,
+            )
         for idx, arg in enumerate(positional):
             if idx < len(params) and params[idx].type_ref is not None:
                 expected = self._type_ref_name(params[idx].type_ref)
                 actual = infer_type(arg.value, self.model.symbols)
                 if not self._is_assignable_type(expected, actual):
-                    self._diag(Severity.ERROR, codes.ARGUMENT_TYPE, f"Argument {params[idx].name} for {name} expects {expected}, got {actual}.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        f"Argument {params[idx].name} for {name} expects {expected}, got {actual}.",
+                        arg.span,
+                    )
         by_name = {p.name: p for p in params}
         for arg in args:
             if arg.name and arg.name in by_name and by_name[arg.name].type_ref is not None:
                 expected = self._type_ref_name(by_name[arg.name].type_ref)
                 actual = infer_type(arg.value, self.model.symbols)
                 if not self._is_assignable_type(expected, actual):
-                    self._diag(Severity.ERROR, codes.ARGUMENT_TYPE, f"Argument {arg.name} for {name} expects {expected}, got {actual}.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        f"Argument {arg.name} for {name} expects {expected}, got {actual}.",
+                        arg.span,
+                    )
 
     def _validate_builtin_call(self, name: str, entry: dict | None, expr: CallExpr) -> None:
         if not entry:
@@ -1279,30 +1827,57 @@ class SemanticAnalyzer:
         positional_count = len(positional)
         named = {a.name for a in expr.arguments if a.name}
         if positional_count > len(active_params) and not entry.get("allow_extra_positional"):
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Too many positional arguments for builtin {name}.", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Too many positional arguments for builtin {name}.",
+                expr.span,
+            )
         for arg_index, arg in enumerate(expr.arguments):
             param = None
             if arg.name:
                 if arg.name in removed:
                     code = removed[arg.name].get("diagnostic_code") or codes.UNKNOWN_PARAMETER
-                    self._diag(Severity.ERROR, code, f"Parameter {arg.name} was removed or is not valid for {name} in Pine v6.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        code,
+                        f"Parameter {arg.name} was removed or is not valid for {name} in Pine v6.",
+                        arg.span,
+                    )
                     continue
                 elif known and arg.name not in known:
-                    self._diag(Severity.ERROR, codes.UNKNOWN_PARAMETER, f"Unknown parameter {arg.name} for builtin {name}.", arg.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNKNOWN_PARAMETER,
+                        f"Unknown parameter {arg.name} for builtin {name}.",
+                        arg.span,
+                    )
                     continue
                 param = next((p for p in active_params if p.get("name") == arg.name), None)
             elif arg_index < len(active_params):
                 param = active_params[arg_index]
             self._validate_argument_qualifier(name, arg, param)
             self._validate_argument_type(name, arg, param)
-        positional_param_names = [p.get("name") for p in active_params[:positional_count] if p.get("name")]
+        positional_param_names = [
+            p.get("name") for p in active_params[:positional_count] if p.get("name")
+        ]
         for arg in expr.arguments:
             if arg.name and arg.name in positional_param_names:
-                self._diag(Severity.ERROR, codes.DUPLICATE_NAMED_ARGUMENT, f"Parameter {arg.name} for builtin {name} is supplied both positionally and by name.", arg.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.DUPLICATE_NAMED_ARGUMENT,
+                    f"Parameter {arg.name} for builtin {name} is supplied both positionally and by name.",
+                    arg.span,
+                )
         supplied = set(positional_param_names) | (named & known)
         missing_required = [p.get("name") for p in required if p.get("name") not in supplied]
         if missing_required:
-            self._diag(Severity.ERROR, codes.ARGUMENT_COUNT, f"Missing required parameter(s) for {name}: {', '.join(missing_required)}.", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Missing required parameter(s) for {name}: {', '.join(missing_required)}.",
+                expr.span,
+            )
 
     def _validate_argument_qualifier(self, callee: str, arg, param: dict | None) -> None:
         if not param:
@@ -1320,7 +1895,6 @@ class SemanticAnalyzer:
                 f"Argument {pname} for {callee} requires {max_q} or weaker qualifier, got {q}.",
                 arg.span,
             )
-
 
     def _member_owner_type(self, expr: MemberAccessExpr) -> str | None:
         if isinstance(expr.object, Identifier):
@@ -1342,13 +1916,23 @@ class SemanticAnalyzer:
             owner_sym = self._resolve(expr.object.name)
             if owner_sym is not None and owner_sym.kind is SymbolKind.ENUM:
                 if f"{expr.object.name}.{expr.member}" not in self.model.symbols:
-                    self._diag(Severity.ERROR, codes.UNKNOWN_FIELD, f"Unknown enum member {expr.member} for enum {expr.object.name}.", expr.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNKNOWN_FIELD,
+                        f"Unknown enum member {expr.member} for enum {expr.object.name}.",
+                        expr.span,
+                    )
                 return
         owner_type = self._member_owner_type(expr)
         if owner_type not in self._udt_fields:
             return
         if self._member_field_type(expr) is None:
-            self._diag(Severity.ERROR, codes.UNKNOWN_FIELD, f"Unknown field {expr.member} for type {owner_type}.", expr.span)
+            self._diag(
+                Severity.ERROR,
+                codes.UNKNOWN_FIELD,
+                f"Unknown field {expr.member} for type {owner_type}.",
+                expr.span,
+            )
 
     def _scope_kind(self, scope_id: int | None) -> ScopeKind | None:
         if scope_id is None:
@@ -1362,7 +1946,12 @@ class SemanticAnalyzer:
         # Validate the root of a call without treating every member segment as a standalone variable.
         if isinstance(expr, Identifier):
             if self._resolve(expr.name) is None and not expr.name.startswith("<"):
-                self._diag(Severity.ERROR, codes.UNDECLARED_VARIABLE, f"Use of undeclared function {expr.name}.", expr.span)
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNDECLARED_VARIABLE,
+                    f"Use of undeclared function {expr.name}.",
+                    expr.span,
+                )
             return
         if isinstance(expr, GenericInstantiationExpr):
             self._visit_callee(expr.base)
@@ -1371,7 +1960,12 @@ class SemanticAnalyzer:
             if isinstance(expr.object, Identifier):
                 root = expr.object.name
                 if self._resolve(root) is None and root not in self._external_aliases:
-                    self._diag(Severity.ERROR, codes.UNDECLARED_VARIABLE, f"Use of undeclared namespace/object {root}.", expr.object.span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNDECLARED_VARIABLE,
+                        f"Use of undeclared namespace/object {root}.",
+                        expr.object.span,
+                    )
             else:
                 self._visit_expr(expr.object)
 
@@ -1382,7 +1976,15 @@ class SemanticAnalyzer:
             root = self._member_root(expr)
             sym = self._resolve(root) if root else None
             if sym is None and root in self._external_aliases:
-                return Symbol(-1, root, SymbolKind.IMPORT_ALIAS, expr.span, "external", None, self.scope_stack[-1].id)
+                return Symbol(
+                    -1,
+                    root,
+                    SymbolKind.IMPORT_ALIAS,
+                    expr.span,
+                    "external",
+                    None,
+                    self.scope_stack[-1].id,
+                )
             return sym
         return None
 
@@ -1394,16 +1996,31 @@ class SemanticAnalyzer:
         return None
 
     def _assignable_name(self, expr: Expression) -> str | None:
-        if isinstance(expr, Identifier): return expr.name
+        if isinstance(expr, Identifier):
+            return expr.name
         if isinstance(expr, MemberAccessExpr):
             root = self._member_root(expr)
             return root + ".<member>" if root else None
         return None
 
-    def _define(self, name: str, kind: SymbolKind, span: SourceSpan, typ: str | None, qualifier: str | None, *, allow_existing: bool = False) -> Symbol | None:
+    def _define(
+        self,
+        name: str,
+        kind: SymbolKind,
+        span: SourceSpan,
+        typ: str | None,
+        qualifier: str | None,
+        *,
+        allow_existing: bool = False,
+    ) -> Symbol | None:
         scope = self.scope_stack[-1]
         if name in scope.symbols and not allow_existing:
-            self._diag(Severity.ERROR, codes.REDECLARATION, f"Symbol {name} is already declared in this scope.", span)
+            self._diag(
+                Severity.ERROR,
+                codes.REDECLARATION,
+                f"Symbol {name} is already declared in this scope.",
+                span,
+            )
             return None
         previous = self.model.symbols.get(name)
         sym = Symbol(self.next_symbol_id, name, kind, span, typ, qualifier, scope.id)
@@ -1429,7 +2046,15 @@ class SemanticAnalyzer:
         kind = self._scope_kind(sym.scope_id)
         if kind in {ScopeKind.GLOBAL, ScopeKind.TYPE_DECL, ScopeKind.ENUM_DECL}:
             return sym
-        if sym.kind in {SymbolKind.BUILTIN, SymbolKind.TYPE, SymbolKind.ENUM, SymbolKind.ENUM_MEMBER, SymbolKind.IMPORT_ALIAS, SymbolKind.FUNCTION, SymbolKind.METHOD}:
+        if sym.kind in {
+            SymbolKind.BUILTIN,
+            SymbolKind.TYPE,
+            SymbolKind.ENUM,
+            SymbolKind.ENUM_MEMBER,
+            SymbolKind.IMPORT_ALIAS,
+            SymbolKind.FUNCTION,
+            SymbolKind.METHOD,
+        }:
             return sym
         return None
 
@@ -1461,7 +2086,9 @@ class SemanticAnalyzer:
             current = self.model.symbols.get(name)
             if current is None or current.id != sid:
                 continue
-            keep = scope.kind is ScopeKind.GLOBAL or (scope.kind is ScopeKind.TYPE_DECL and "." in name)
+            keep = scope.kind is ScopeKind.GLOBAL or (
+                scope.kind is ScopeKind.TYPE_DECL and "." in name
+            )
             if keep:
                 continue
             history = self._symbol_history.get(name)

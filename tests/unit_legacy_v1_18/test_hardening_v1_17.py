@@ -9,11 +9,14 @@ def _error_codes(source: str):
 
 def _error_messages(source: str):
     result = parse_code(source, ParseOptions(run_semantic=True))
-    return [(d.code, d.message) for d in result.diagnostics if d.severity.value in {"ERROR", "FATAL"}]
+    return [
+        (d.code, d.message) for d in result.diagnostics if d.severity.value in {"ERROR", "FATAL"}
+    ]
 
 
 def test_multiline_method_body_is_preserved_as_block():
-    result = parse_code("""//@version=6
+    result = parse_code(
+        """//@version=6
 indicator("T")
 type Pivot
     float y
@@ -21,7 +24,9 @@ method get(Pivot p) =>
     p.y
 var Pivot p = Pivot.new(close)
 plot(p.get())
-""", ParseOptions(run_semantic=True))
+""",
+        ParseOptions(run_semantic=True),
+    )
     method = next(item for item in result.ast.items if isinstance(item, MethodDeclaration))
     assert isinstance(method.body, Block)
     assert _error_codes("""//@version=6

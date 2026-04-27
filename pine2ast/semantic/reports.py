@@ -32,7 +32,9 @@ class SemanticReport:
         }
 
 
-def semantic_report(model: SemanticModel | None, *, include_builtins: bool = False) -> SemanticReport:
+def semantic_report(
+    model: SemanticModel | None, *, include_builtins: bool = False
+) -> SemanticReport:
     if model is None:
         return SemanticReport(schema_version=2, symbol_count=0, scope_count=0)
     by_kind: dict[str, int] = {}

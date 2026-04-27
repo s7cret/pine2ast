@@ -16,7 +16,9 @@ def _valid_fixtures() -> list[Path]:
 
 def _golden_paths(source: Path) -> tuple[Path, Path]:
     rel = source.relative_to(VALID_ROOT)
-    return GOLDEN_ROOT / rel.with_suffix(".ast.json"), GOLDEN_ROOT / rel.with_suffix(".diagnostics.json")
+    return GOLDEN_ROOT / rel.with_suffix(".ast.json"), GOLDEN_ROOT / rel.with_suffix(
+        ".diagnostics.json"
+    )
 
 
 def test_curated_valid_fixture_count_is_production_sized():
@@ -58,5 +60,7 @@ def test_curated_valid_golden_ast_matches_ignore_spans():
 def test_curated_valid_golden_diagnostics_match():
     for source in _valid_fixtures():
         _, diagnostics_path = _golden_paths(source)
-        ok, message = compare_diagnostics(source, diagnostics_path=diagnostics_path, ignore_spans=False)
+        ok, message = compare_diagnostics(
+            source, diagnostics_path=diagnostics_path, ignore_spans=False
+        )
         assert ok, message

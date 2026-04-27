@@ -120,6 +120,7 @@ Additional v0.1.5 hardening:
 - Type references are validated and emit `P2A1604 UNKNOWN_TYPE` for unresolved explicit types.
 - `extract_inputs()` understands `options = array.from(...)` in addition to tuple-style options.
 - Builtin registry expanded to 165 function entries and the real-world seed corpus was expanded to 30 clean files.
+- Builtin registry schema/coverage notes: see `docs/builtin_registry.md` for strict validation and the internal-vs-official coverage taxonomy.
 
 
 ## v0.1.8 big-block hardening highlights
@@ -245,3 +246,9 @@ The stdlib fallback runner remains unit-first for constrained agents:
 PYTHONPATH=. python -S tools/run_tests_no_pytest.py
 PYTHONPATH=. python -S tools/run_tests_no_pytest.py --include-integration
 ```
+
+## v2.15.1 integration/release packaging notes
+
+- `pine2ast inspect` now declares the stable `pine2ast.inspect.optimizer.v1` JSON contract (`schema_version`, producer metadata, source trace, extractors and dependencies). See `docs/optimizer_inspect_contract.md` and the committed fixture under `tests/fixtures/inspect_contract/`.
+- `pine2ast perf-baseline` emits a release-facing performance report around the existing benchmark runner.
+- `tools/build_release_zip.py` now builds deterministic archives and can write a manifest/checklist while excluding pycache, temp, venv, build and secret-like files. See `docs/release_checklist.md`.

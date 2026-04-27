@@ -121,9 +121,13 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
                     fixture=fixture,
                     tradingview_status=status_text,
                     pine2ast_status=(
-                        item.get("pine2ast_status") if isinstance(item.get("pine2ast_status"), str) else None
+                        item.get("pine2ast_status")
+                        if isinstance(item.get("pine2ast_status"), str)
+                        else None
                     ),
-                    expected=item.get("expected") if isinstance(item.get("expected"), str) else None,
+                    expected=(
+                        item.get("expected") if isinstance(item.get("expected"), str) else None
+                    ),
                     checked_at=checked_at,
                     ok=ok,
                     pending=pending,

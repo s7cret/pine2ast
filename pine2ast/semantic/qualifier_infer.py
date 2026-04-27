@@ -40,7 +40,9 @@ def infer_qualifier(expr, symbols: dict[str, object] | None = None) -> str:
     if isinstance(expr, UnaryExpr):
         return infer_qualifier(expr.operand, symbols)
     if isinstance(expr, BinaryExpr):
-        return _join_qualifiers(infer_qualifier(expr.left, symbols), infer_qualifier(expr.right, symbols))
+        return _join_qualifiers(
+            infer_qualifier(expr.left, symbols), infer_qualifier(expr.right, symbols)
+        )
     if isinstance(expr, ConditionalExpr):
         return _join_qualifiers(
             infer_qualifier(expr.condition, symbols),

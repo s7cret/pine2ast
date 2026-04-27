@@ -1,0 +1,7 @@
+//@version=6
+indicator("Chained members")
+method set_color(line l, color c) => l
+method set_width(line l, int w) => l
+x = line.new(0, close, 1, open)
+    .set_color(color.red)
+    .set_width(2)

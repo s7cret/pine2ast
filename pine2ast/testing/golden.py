@@ -13,7 +13,9 @@ def _normalize(value: Any, *, ignore_spans: bool) -> Any:
     return strip_spans(value) if ignore_spans else value
 
 
-def diagnostics_to_contract_payload(diagnostics: Iterable[Any], *, ignore_spans: bool = False) -> list[dict[str, Any]]:
+def diagnostics_to_contract_payload(
+    diagnostics: Iterable[Any], *, ignore_spans: bool = False
+) -> list[dict[str, Any]]:
     payload = [d.to_dict() if hasattr(d, "to_dict") else dict(d) for d in diagnostics]
     return _normalize(payload, ignore_spans=ignore_spans)
 
@@ -32,12 +34,20 @@ def generate_golden(
     ast_out = Path(ast_path) if ast_path else src.with_suffix(".ast.json")
     diag_out = Path(diagnostics_path) if diagnostics_path else src.with_suffix(".diagnostics.json")
     result = parse_file(str(src), ParseOptions(source_name=str(src), run_semantic=run_semantic))
-    ast_payload = None if result.ast is None else _normalize(ast_to_dict(result.ast), ignore_spans=ignore_spans)
+    ast_payload = (
+        None
+        if result.ast is None
+        else _normalize(ast_to_dict(result.ast), ignore_spans=ignore_spans)
+    )
     diag_payload = diagnostics_to_contract_payload(result.diagnostics, ignore_spans=ignore_spans)
     ast_out.parent.mkdir(parents=True, exist_ok=True)
     diag_out.parent.mkdir(parents=True, exist_ok=True)
-    ast_out.write_text(json.dumps(ast_payload, ensure_ascii=False, indent=indent) + "\n", encoding="utf-8")
-    diag_out.write_text(json.dumps(diag_payload, ensure_ascii=False, indent=indent) + "\n", encoding="utf-8")
+    ast_out.write_text(
+        json.dumps(ast_payload, ensure_ascii=False, indent=indent) + "\n", encoding="utf-8"
+    )
+    diag_out.write_text(
+        json.dumps(diag_payload, ensure_ascii=False, indent=indent) + "\n", encoding="utf-8"
+    )
     return {
         "ast_path": ast_out,
         "diagnostics_path": diag_out,
@@ -58,8 +68,14 @@ def compare_golden(
     if not ast_file.exists():
         return False, f"Golden AST does not exist: {ast_file}"
     result = parse_file(str(src), ParseOptions(source_name=str(src), run_semantic=run_semantic))
-    actual = None if result.ast is None else _normalize(ast_to_dict(result.ast), ignore_spans=ignore_spans)
-    expected = _normalize(json.loads(ast_file.read_text(encoding="utf-8")), ignore_spans=ignore_spans)
+    actual = (
+        None
+        if result.ast is None
+        else _normalize(ast_to_dict(result.ast), ignore_spans=ignore_spans)
+    )
+    expected = _normalize(
+        json.loads(ast_file.read_text(encoding="utf-8")), ignore_spans=ignore_spans
+    )
     if actual == expected:
         return True, "OK"
     return False, "Golden AST mismatch"
@@ -79,7 +95,9 @@ def compare_diagnostics(
         return False, f"Golden diagnostics does not exist: {expected_file}"
     result = parse_file(str(src), ParseOptions(source_name=str(src), run_semantic=run_semantic))
     actual = diagnostics_to_contract_payload(result.diagnostics, ignore_spans=ignore_spans)
-    expected = _normalize(json.loads(expected_file.read_text(encoding="utf-8")), ignore_spans=ignore_spans)
+    expected = _normalize(
+        json.loads(expected_file.read_text(encoding="utf-8")), ignore_spans=ignore_spans
+    )
     if actual == expected:
         return True, "OK"
     return False, "Golden diagnostics mismatch"
@@ -98,7 +116,9 @@ def validate_invalid_diagnostic_contract(
     surface secondary syntax errors after the primary one.
     """
     src = Path(source_path)
-    contract_path = Path(diagnostics_path) if diagnostics_path else src.with_suffix(".diagnostics.json")
+    contract_path = (
+        Path(diagnostics_path) if diagnostics_path else src.with_suffix(".diagnostics.json")
+    )
     if not contract_path.exists():
         return False, f"Diagnostic contract does not exist: {contract_path}"
     contract = json.loads(contract_path.read_text(encoding="utf-8"))

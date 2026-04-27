@@ -32,7 +32,9 @@ def callee_name(expr) -> str:
 
 def _type_ref_name(type_ref) -> str:
     if getattr(type_ref, "template_args", None):
-        return f"{type_ref.name}<" + ",".join(_type_ref_name(t) for t in type_ref.template_args) + ">"
+        return (
+            f"{type_ref.name}<" + ",".join(_type_ref_name(t) for t in type_ref.template_args) + ">"
+        )
     return type_ref.name
 
 
@@ -43,7 +45,6 @@ def _symbol_type(name: str, symbols: dict[str, object] | None) -> str | None:
     if sym is None:
         return None
     return getattr(sym, "type", None) or "unknown"
-
 
 
 def _symbol_kind(name: str, symbols: dict[str, object] | None) -> str | None:
@@ -70,7 +71,11 @@ def _member_field_type(expr: MemberAccessExpr, symbols: dict[str, object] | None
 
 def _udt_constructor_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
     callee = expr.callee
-    if isinstance(callee, MemberAccessExpr) and callee.member == "new" and isinstance(callee.object, Identifier):
+    if (
+        isinstance(callee, MemberAccessExpr)
+        and callee.member == "new"
+        and isinstance(callee.object, Identifier)
+    ):
         type_name = callee.object.name
         if _symbol_kind(type_name, symbols) == "TYPE":
             return type_name
@@ -124,9 +129,27 @@ def _array_from_return(expr: CallExpr, symbols: dict[str, object] | None) -> str
 
 def _collection_call_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
     name = callee_name(expr.callee)
-    if name in {"array.get", "array.pop", "array.shift", "array.first", "array.last", "matrix.get", "map.get"} and expr.arguments:
+    if (
+        name
+        in {
+            "array.get",
+            "array.pop",
+            "array.shift",
+            "array.first",
+            "array.last",
+            "matrix.get",
+            "map.get",
+        }
+        and expr.arguments
+    ):
         return _collection_element_type(infer_type(expr.arguments[0].value, symbols))
-    if isinstance(expr.callee, MemberAccessExpr) and expr.callee.member in {"get", "pop", "shift", "first", "last"}:
+    if isinstance(expr.callee, MemberAccessExpr) and expr.callee.member in {
+        "get",
+        "pop",
+        "shift",
+        "first",
+        "last",
+    }:
         return _collection_element_type(infer_type(expr.callee.object, symbols))
     return None
 
@@ -140,7 +163,6 @@ def _request_security_return(expr: CallExpr, symbols: dict[str, object] | None) 
     return infer_type(expr.arguments[2].value, symbols)
 
 
-
 def _merge_types(types: list[str]) -> str:
     known = [t for t in types if t not in {"unknown", "na", None}]
     if not known:
@@ -150,6 +172,7 @@ def _merge_types(types: list[str]) -> str:
     if set(known) <= {"int", "float"}:
         return "float"
     return "unknown"
+
 
 def infer_type(expr, symbols: dict[str, object] | None = None) -> str:
     if isinstance(expr, Literal):
@@ -207,7 +230,11 @@ def infer_type(expr, symbols: dict[str, object] | None = None) -> str:
         name = callee_name(expr.callee)
         sym_type = _symbol_type(name, symbols)
         sym_kind = _symbol_kind(name, symbols)
-        if sym_kind in {"FUNCTION", "METHOD"} and sym_type and sym_type not in {"function", "method", "unknown"}:
+        if (
+            sym_kind in {"FUNCTION", "METHOD"}
+            and sym_type
+            and sym_type not in {"function", "method", "unknown"}
+        ):
             return sym_type
         entry = load_builtin_registry().get("functions", {}).get(name)
         if entry:

@@ -3,7 +3,9 @@ from pine2ast.api import ParseOptions, parse_code
 
 def _errors(source: str):
     result = parse_code(source, ParseOptions(run_semantic=True))
-    return [(d.code, d.message) for d in result.diagnostics if d.severity.value in {"ERROR", "FATAL"}]
+    return [
+        (d.code, d.message) for d in result.diagnostics if d.severity.value in {"ERROR", "FATAL"}
+    ]
 
 
 def _codes(source: str):

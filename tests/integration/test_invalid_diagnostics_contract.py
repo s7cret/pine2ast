@@ -15,7 +15,11 @@ def _invalid_fixtures() -> list[Path]:
 def test_invalid_fixture_count_is_production_sized():
     fixtures = _invalid_fixtures()
     assert len(fixtures) >= 20
-    categories = {path.relative_to(INVALID_ROOT).parts[0] for path in fixtures if len(path.relative_to(INVALID_ROOT).parts) > 1}
+    categories = {
+        path.relative_to(INVALID_ROOT).parts[0]
+        for path in fixtures
+        if len(path.relative_to(INVALID_ROOT).parts) > 1
+    }
     assert {"syntax", "semantic", "v6_migration", "layout"}.issubset(categories)
 
 

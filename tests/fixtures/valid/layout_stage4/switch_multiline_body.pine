@@ -1,0 +1,10 @@
+//@version=6
+indicator("Switch multiline body")
+mode = "a"
+value = switch mode
+    "a" =>
+        basis = close + open
+        basis / 2
+    =>
+        fallback = open
+        fallback

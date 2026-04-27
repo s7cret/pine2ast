@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/semantic/local_scope_history_warning.pine",
+  "expected_codes": [
+    "P2A1304",
+    "P2A1701"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A1304",
+    "P2A1701"
+  ],
+  "notes": "Expected-code contract generated for P1 Stage 5 semantic hardening. Tests require every expected code to be emitted; additional recovery diagnostics are allowed."
+}

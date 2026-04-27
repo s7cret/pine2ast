@@ -6,7 +6,9 @@ from pine2ast.corpus import validate_corpus
 
 
 def test_validate_corpus_summary(tmp_path: Path):
-    (tmp_path / "ok.pine").write_text('//@version=6\nindicator("ok")\nplot(close)\n', encoding="utf-8")
+    (tmp_path / "ok.pine").write_text(
+        '//@version=6\nindicator("ok")\nplot(close)\n', encoding="utf-8"
+    )
     (tmp_path / "bad.pine").write_text('//@version=6\nindicator("bad")\nx := 1\n', encoding="utf-8")
     summary = validate_corpus(tmp_path)
     assert summary["file_count"] == 2

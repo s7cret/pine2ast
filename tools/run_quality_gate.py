@@ -4,6 +4,7 @@ Normal dev environments should run with ``--strict-dev-tools``. Minimal agent
 sandboxes can still execute the parser-owned release gates and will record
 missing optional dev tools explicitly instead of silently pretending they passed.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -110,9 +111,17 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     if has_module("pytest"):
-        steps.append(run_cmd([py, "-m", "pytest", "--cov=pine2ast", "--cov-report=term-missing"], required=True))
+        steps.append(
+            run_cmd(
+                [py, "-m", "pytest", "--cov=pine2ast", "--cov-report=term-missing"], required=True
+            )
+        )
     else:
-        steps.append(skipped("pytest-cov", "pytest/pytest-cov are not installed", required=args.strict_dev_tools))
+        steps.append(
+            skipped(
+                "pytest-cov", "pytest/pytest-cov are not installed", required=args.strict_dev_tools
+            )
+        )
 
     for module, command in [
         ("ruff", [py, "-m", "ruff", "check", "."]),
@@ -122,7 +131,9 @@ def main(argv: list[str] | None = None) -> int:
         if has_module(module):
             steps.append(run_cmd(command, required=args.strict_dev_tools))
         else:
-            steps.append(skipped(module, f"{module} is not installed", required=args.strict_dev_tools))
+            steps.append(
+                skipped(module, f"{module} is not installed", required=args.strict_dev_tools)
+            )
 
     from pine2ast.quality import quality_gate_json
     from pine2ast.semantic.builtin_registry import builtin_registry_coverage_report
@@ -140,7 +151,17 @@ def main(argv: list[str] | None = None) -> int:
             "returncode": 0 if q_payload.get("ok") else 1,
             "duration_ms": round((time.perf_counter() - q_started) * 1000, 3),
             "output_tail": json.dumps(
-                {k: q_payload.get(k) for k in ["ok", "file_count", "ok_count", "error_count", "fatal_count", "warning_count"]},
+                {
+                    k: q_payload.get(k)
+                    for k in [
+                        "ok",
+                        "file_count",
+                        "ok_count",
+                        "error_count",
+                        "fatal_count",
+                        "warning_count",
+                    ]
+                },
                 ensure_ascii=False,
             ),
             "artifact": args.quality_json,
@@ -159,7 +180,10 @@ def main(argv: list[str] | None = None) -> int:
             "returncode": 0 if not b_payload.get("missing_expected") else 1,
             "duration_ms": round((time.perf_counter() - b_started) * 1000, 3),
             "output_tail": json.dumps(
-                {k: b_payload.get(k) for k in ["function_count", "variable_count", "missing_expected"]},
+                {
+                    k: b_payload.get(k)
+                    for k in ["function_count", "variable_count", "missing_expected"]
+                },
                 ensure_ascii=False,
             ),
             "artifact": args.builtin_json,

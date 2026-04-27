@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "contract": "pine2ast.inspect.optimizer.v1",
+  "tool": {
+    "name": "pine2ast",
+    "version": "0.2.15"
+  },
+  "source": {
+    "path": "tests/fixtures/inspect_contract/optimizer_strategy.pine"
+  },
+  "ok": true,
+  "diagnostics": [],
+  "inputs": [
+    {
+      "name": "qty",
+      "title": "Qty",
+      "input_function": "input.float",
+      "default_value": 1.0,
+      "minval": 0.1,
+      "maxval": null,
+      "step": 0.1,
+      "options": null,
+      "span": {
+        "start_offset": 91,
+        "end_offset": 140,
+        "start_line": 4,
+        "start_col": 7,
+        "end_line": 4,
+        "end_col": 56
+      }
+    },
+    {
+      "name": "fast",
+      "title": "Fast",
+      "input_function": "input.int",
+      "default_value": 12,
+      "minval": null,
+      "maxval": null,
+      "step": null,
+      "options": [
+        8,
+        12,
+        21
+      ],
+      "span": {
+        "start_offset": 148,
+        "end_offset": 192,
+        "start_line": 5,
+        "start_col": 8,
+        "end_line": 5,
+        "end_col": 52
+      }
+    }
+  ],
+  "strategy_calls": [
+    {
+      "name": "strategy.entry",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 386,
+        "end_offset": 431,
+        "start_line": 11,
+        "start_col": 1,
+        "end_line": 11,
+        "end_col": 46
+      }
+    }
+  ],
+  "request_calls": [
+    {
+      "name": "request.security",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 227,
+        "end_offset": 270,
+        "start_line": 7,
+        "start_col": 10,
+        "end_line": 7,
+        "end_col": 53
+      }
+    }
+  ],
+  "plots": [
+    {
+      "name": "plot",
+      "arg_count": 1,
+      "span": {
+        "start_offset": 432,
+        "end_offset": 440,
+        "start_line": 12,
+        "start_col": 1,
+        "end_line": 12,
+        "end_col": 9
+      }
+    }
+  ],
+  "alerts": [
+    {
+      "name": "alertcondition",
+      "arg_count": 3,
+      "span": {
+        "start_offset": 271,
+        "end_offset": 315,
+        "start_line": 8,
+        "start_col": 1,
+        "end_line": 8,
+        "end_col": 45
+      }
+    }
+  ],
+  "drawings": [
+    {
+      "name": "line.new",
+      "arg_count": 4,
+      "span": {
+        "start_offset": 316,
+        "end_offset": 361,
+        "start_line": 9,
+        "start_col": 1,
+        "end_line": 9,
+        "end_col": 46
+      }
+    }
+  ],
+  "dependencies": {
+    "imports": [
+      "user/Lib/1"
+    ],
+    "import_aliases": [
+      "lib"
+    ],
+    "namespaces": [
+      "input",
+      "line",
+      "request",
+      "strategy",
+      "ta"
+    ],
+    "builtin_calls": [
+      "alertcondition",
+      "input.float",
+      "input.int",
+      "line.new",
+      "plot",
+      "request.security",
+      "strategy",
+      "strategy.entry",
+      "ta.sma"
+    ],
+    "user_function_calls": [],
+    "method_calls": [],
+    "udt_constructors": [],
+    "external_calls": [
+      "lib.score"
+    ],
+    "unknown_calls": []
+  }
+}

@@ -1,0 +1,10 @@
+//@version=6
+indicator("Ambiguous continuations")
+x = close
+  + open
+  - low
+y = close
+    + open
+z = close > open ?
+    close :
+    open

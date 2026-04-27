@@ -15,7 +15,9 @@ from pine2ast.semantic import SemanticAnalyzer
 from pine2ast.source import SourceNormalizer
 
 
-def _parse_once(source: str | bytes, *, source_name: str, run_semantic: bool = True) -> dict[str, Any]:
+def _parse_once(
+    source: str | bytes, *, source_name: str, run_semantic: bool = True
+) -> dict[str, Any]:
     metrics: dict[str, Any] = {}
 
     t0 = time.perf_counter()
@@ -42,11 +44,19 @@ def _parse_once(source: str | bytes, *, source_name: str, run_semantic: bool = T
         semantic_diagnostics = semantic_model.diagnostics
     metrics["semantic_ms"] = (time.perf_counter() - t0) * 1000
 
-    diagnostics = normalized.diagnostics + lexed.diagnostics + layout.diagnostics + parsed.diagnostics + semantic_diagnostics
+    diagnostics = (
+        normalized.diagnostics
+        + lexed.diagnostics
+        + layout.diagnostics
+        + parsed.diagnostics
+        + semantic_diagnostics
+    )
     metrics["token_count"] = len(layout.tokens)
     metrics["ast_node_count"] = sum(1 for _ in walk(parsed.program)) if parsed.program else 0
     metrics["diagnostic_count"] = len(diagnostics)
-    metrics["ok"] = parsed.program is not None and not any(getattr(d, "severity", None).value in {"ERROR", "FATAL"} for d in diagnostics)
+    metrics["ok"] = parsed.program is not None and not any(
+        getattr(d, "severity", None).value in {"ERROR", "FATAL"} for d in diagnostics
+    )
     return metrics
 
 
@@ -65,7 +75,13 @@ def _pine_files(root: Path) -> list[Path]:
     return sorted(rows)
 
 
-def bench_corpus(path: str | Path, *, repeat: int = 20, baseline: dict[str, Any] | None = None, run_semantic: bool = True) -> dict[str, Any]:
+def bench_corpus(
+    path: str | Path,
+    *,
+    repeat: int = 20,
+    baseline: dict[str, Any] | None = None,
+    run_semantic: bool = True,
+) -> dict[str, Any]:
     root = Path(path)
     files = _pine_files(root)
     baseline_by_file = {row.get("file"): row for row in (baseline or {}).get("files", [])}
@@ -79,7 +95,10 @@ def bench_corpus(path: str | Path, *, repeat: int = 20, baseline: dict[str, Any]
         total_start = time.perf_counter()
         for _ in range(max(1, repeat)):
             m = _parse_once(src, source_name=str(file), run_semantic=run_semantic)
-            m["total_ms"] = sum(float(m.get(k, 0.0)) for k in ("normalizer_ms", "lexer_ms", "layout_ms", "parser_ms", "semantic_ms"))
+            m["total_ms"] = sum(
+                float(m.get(k, 0.0))
+                for k in ("normalizer_ms", "lexer_ms", "layout_ms", "parser_ms", "semantic_ms")
+            )
             measurements.append(m)
         _, peak = tracemalloc.get_traced_memory()
         tracemalloc.stop()
@@ -121,14 +140,83 @@ def bench_corpus(path: str | Path, *, repeat: int = 20, baseline: dict[str, Any]
             "ok_count": sum(1 for r in rows if r.get("ok")),
             "diagnostic_count": sum(int(r.get("diagnostic_count", 0)) for r in rows),
             "total_ms_avg": _avg(rows, "total_ms") if rows else 0.0,
-            "peak_memory_mb_max": max((float(r.get("peak_memory_mb", 0.0)) for r in rows), default=0.0),
+            "peak_memory_mb_max": max(
+                (float(r.get("peak_memory_mb", 0.0)) for r in rows), default=0.0
+            ),
         },
     }
     return result
 
 
-def bench_corpus_json(path: str | Path, *, repeat: int = 20, baseline_path: str | Path | None = None, run_semantic: bool = True, indent: int = 2) -> str:
+def bench_corpus_json(
+    path: str | Path,
+    *,
+    repeat: int = 20,
+    baseline_path: str | Path | None = None,
+    run_semantic: bool = True,
+    indent: int = 2,
+) -> str:
     baseline = None
     if baseline_path:
         baseline = json.loads(Path(baseline_path).read_text(encoding="utf-8"))
-    return json.dumps(bench_corpus(path, repeat=repeat, baseline=baseline, run_semantic=run_semantic), ensure_ascii=False, indent=indent)
+    return json.dumps(
+        bench_corpus(path, repeat=repeat, baseline=baseline, run_semantic=run_semantic),
+        ensure_ascii=False,
+        indent=indent,
+    )
+
+
+def perf_baseline(
+    path: str | Path,
+    *,
+    repeat: int = 20,
+    baseline: dict[str, Any] | None = None,
+    run_semantic: bool = True,
+) -> dict[str, Any]:
+    """Return a stable performance baseline/report for release packaging.
+
+    This wraps the raw benchmark payload with a named contract, summary budget
+    status and enough environment metadata for reproducible release notes while
+    keeping machine-specific values out of pass/fail decisions.
+    """
+    import platform
+
+    bench = bench_corpus(path, repeat=repeat, baseline=baseline, run_semantic=run_semantic)
+    warnings = []
+    for row in bench.get("files", []):
+        if row.get("regression_warning"):
+            warnings.append(
+                {"file": row.get("file"), "baseline_growth_pct": row.get("baseline_growth_pct")}
+            )
+    return {
+        "schema_version": 1,
+        "report": "pine2ast.performance_baseline",
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "path": str(path),
+        "repeat": repeat,
+        "run_semantic": run_semantic,
+        "ok": not warnings and bench.get("summary", {}).get("file_count", 0) > 0,
+        "warnings": warnings,
+        "bench": bench,
+    }
+
+
+def perf_baseline_json(
+    path: str | Path,
+    *,
+    repeat: int = 20,
+    baseline_path: str | Path | None = None,
+    run_semantic: bool = True,
+    indent: int = 2,
+) -> str:
+    baseline = None
+    if baseline_path:
+        baseline = json.loads(Path(baseline_path).read_text(encoding="utf-8"))
+        if "bench" in baseline:
+            baseline = baseline["bench"]
+    return json.dumps(
+        perf_baseline(path, repeat=repeat, baseline=baseline, run_semantic=run_semantic),
+        ensure_ascii=False,
+        indent=indent,
+    )

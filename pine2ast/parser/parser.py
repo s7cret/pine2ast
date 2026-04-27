@@ -56,7 +56,11 @@ _ASSIGN_KINDS = {
     TokenKind.SLASHEQ: "/=",
     TokenKind.PERCENTEQ: "%=",
 }
-_TYPE_QUALIFIERS = {TokenKind.CONST: "const", TokenKind.SIMPLE: "simple", TokenKind.SERIES: "series"}
+_TYPE_QUALIFIERS = {
+    TokenKind.CONST: "const",
+    TokenKind.SIMPLE: "simple",
+    TokenKind.SERIES: "series",
+}
 _DECL_MODES = {TokenKind.VAR: "var", TokenKind.VARIP: "varip"}
 _LITERAL_KINDS = {
     TokenKind.INTEGER: "int",
@@ -75,11 +79,15 @@ class ParserResult:
 
 
 def join_span(a: SourceSpan, b: SourceSpan) -> SourceSpan:
-    return SourceSpan(a.start_offset, b.end_offset, a.start_line, a.start_col, b.end_line, b.end_col)
+    return SourceSpan(
+        a.start_offset, b.end_offset, a.start_line, a.start_col, b.end_line, b.end_col
+    )
 
 
 class Parser:
-    def __init__(self, tokens: list[Token], *, strict_v6: bool = True, max_diagnostics: int = 200) -> None:
+    def __init__(
+        self, tokens: list[Token], *, strict_v6: bool = True, max_diagnostics: int = 200
+    ) -> None:
         self.tokens = tokens
         self.i = 0
         self.strict_v6 = strict_v6
@@ -127,8 +135,12 @@ class Parser:
             else:
                 self._recover_to_line_end()
         end_span = self._peek().span
-        start_span = annotations[0].span if annotations else (declaration.span if declaration else end_span)
-        program = Program(join_span(start_span, end_span), version, annotations, declaration, items, [])
+        start_span = (
+            annotations[0].span if annotations else (declaration.span if declaration else end_span)
+        )
+        program = Program(
+            join_span(start_span, end_span), version, annotations, declaration, items, []
+        )
         return ParserResult(program, self.diagnostics)
 
     def parse_top_level_item(self):
@@ -167,7 +179,9 @@ class Parser:
         owner = split[0] if len(split) >= 1 else None
         library = split[1] if len(split) >= 2 else None
         version = split[2] if len(split) >= 3 else None
-        return ImportDeclaration(join_span(start.span, self._previous().span), path, owner, library, version, alias)
+        return ImportDeclaration(
+            join_span(start.span, self._previous().span), path, owner, library, version, alias
+        )
 
     def parse_type_decl(self, *, exported: bool = False) -> TypeDeclaration:
         start = self._expect(TokenKind.TYPE)
@@ -185,7 +199,11 @@ class Parser:
             if self._match(TokenKind.EQ):
                 default = self.parse_expression()
             self._consume_optional_newline()
-            fields.append(FieldDeclaration(join_span(type_ref.span, field_name.span), field_name.text, type_ref, default))
+            fields.append(
+                FieldDeclaration(
+                    join_span(type_ref.span, field_name.span), field_name.text, type_ref, default
+                )
+            )
         end = self._expect(TokenKind.DEDENT)
         return TypeDeclaration(join_span(start.span, end.span), name, fields, exported)
 
@@ -215,7 +233,9 @@ class Parser:
         self._expect(TokenKind.RPAREN)
         self._expect(TokenKind.FAT_ARROW)
         body = self.parse_function_body()
-        return FunctionDeclaration(join_span(name.span, body.span), name.text, params, body, exported)
+        return FunctionDeclaration(
+            join_span(name.span, body.span), name.text, params, body, exported
+        )
 
     def parse_method_decl(self, *, exported: bool = False) -> MethodDeclaration:
         start = self._expect(TokenKind.METHOD)
@@ -233,7 +253,14 @@ class Parser:
         self._expect(TokenKind.RPAREN)
         self._expect(TokenKind.FAT_ARROW)
         body = self.parse_function_body()
-        return MethodDeclaration(join_span(start.span, body.span), name.text, receiver_type, receiver_name, params, exported)
+        return MethodDeclaration(
+            join_span(start.span, body.span),
+            name.text,
+            receiver_type,
+            receiver_name,
+            params,
+            exported,
+        )
 
     def parse_params(self, *, until_rparen: bool = True) -> list[Parameter]:
         params: list[Parameter] = []
@@ -316,9 +343,13 @@ class Parser:
         if self._at(TokenKind.WHILE):
             return self.parse_while()
         if self._at(TokenKind.BREAK):
-            tok = self._advance(); self._consume_optional_newline(); return BreakStatement(tok.span)
+            tok = self._advance()
+            self._consume_optional_newline()
+            return BreakStatement(tok.span)
         if self._at(TokenKind.CONTINUE):
-            tok = self._advance(); self._consume_optional_newline(); return ContinueStatement(tok.span)
+            tok = self._advance()
+            self._consume_optional_newline()
+            return ContinueStatement(tok.span)
         if self._at(TokenKind.METHOD):
             return self.parse_method_decl(exported=False)
         if self._looks_like_function_decl():
@@ -339,7 +370,12 @@ class Parser:
             self._consume_optional_newline()
             return Reassignment(join_span(expr.span, value.span), expr, _ASSIGN_KINDS[op_tok.kind], value)  # type: ignore[arg-type]
         if not self._at(TokenKind.NEWLINE, TokenKind.DEDENT, TokenKind.EOF):
-            self._diag(Severity.ERROR, codes.SYNTAX_ERROR, f"Unexpected token {self._peek().kind.value} after expression statement.", self._peek().span)
+            self._diag(
+                Severity.ERROR,
+                codes.SYNTAX_ERROR,
+                f"Unexpected token {self._peek().kind.value} after expression statement.",
+                self._peek().span,
+            )
             self._recover_to_line_end()
         else:
             self._consume_optional_newline()
@@ -360,7 +396,15 @@ class Parser:
         self._expect(TokenKind.EQ)
         initializer = self.parse_expression()
         self._consume_optional_newline()
-        return VarDeclaration(join_span(start_tok.span, initializer.span), name.text, mode, qualifier, type_ref, initializer, is_exported)
+        return VarDeclaration(
+            join_span(start_tok.span, initializer.span),
+            name.text,
+            mode,
+            qualifier,
+            type_ref,
+            initializer,
+            is_exported,
+        )
 
     def parse_tuple_decl(self) -> TupleDeclaration:
         start = self._expect(TokenKind.LBRACKET)
@@ -385,13 +429,20 @@ class Parser:
         else_if: list[ElseIfBranch] = []
         else_block = None
         while self._at(TokenKind.ELSE) and self._peek(1).kind is TokenKind.IF:
-            else_tok = self._advance(); self._advance()
+            else_tok = self._advance()
+            self._advance()
             econd = self.parse_expression()
             eblock = self.parse_required_block()
             else_if.append(ElseIfBranch(join_span(else_tok.span, eblock.span), econd, eblock))
         if self._match(TokenKind.ELSE):
             else_block = self.parse_required_block()
-        return IfStructure(join_span(start.span, (else_block or then_block).span), cond, then_block, else_if, else_block)
+        return IfStructure(
+            join_span(start.span, (else_block or then_block).span),
+            cond,
+            then_block,
+            else_if,
+            else_block,
+        )
 
     def parse_required_block(self) -> Block:
         self._expect(TokenKind.NEWLINE)
@@ -403,11 +454,13 @@ class Parser:
         expr = None
         if not self._at(TokenKind.NEWLINE):
             expr = self.parse_expression()
-        self._expect(TokenKind.NEWLINE); self._expect(TokenKind.INDENT)
+        self._expect(TokenKind.NEWLINE)
+        self._expect(TokenKind.INDENT)
         cases: list[SwitchCase] = []
         while not self._at(TokenKind.DEDENT, TokenKind.EOF):
             self._skip_newlines()
-            if self._at(TokenKind.DEDENT, TokenKind.EOF): break
+            if self._at(TokenKind.DEDENT, TokenKind.EOF):
+                break
             cond = None
             case_start = self._peek().span
             if not self._at(TokenKind.FAT_ARROW):
@@ -437,7 +490,12 @@ class Parser:
                     names.append(tok.text)
                     last_span = tok.span
                 else:
-                    self._diag(Severity.ERROR, codes.SYNTAX_ERROR, f"Expected for-in target identifier, got {self._peek().kind.value}.", self._peek().span)
+                    self._diag(
+                        Severity.ERROR,
+                        codes.SYNTAX_ERROR,
+                        f"Expected for-in target identifier, got {self._peek().kind.value}.",
+                        self._peek().span,
+                    )
                     self._advance()
                     continue
                 if not self._match(TokenKind.COMMA):
@@ -460,14 +518,20 @@ class Parser:
             return ForInStructure(join_span(start.span, body.span), target, iterable, body)
         name = self._expect(TokenKind.IDENTIFIER)
         if self._match(TokenKind.EQ):
-            begin = self.parse_expression(); self._expect(TokenKind.TO); end_expr = self.parse_expression()
+            begin = self.parse_expression()
+            self._expect(TokenKind.TO)
+            end_expr = self.parse_expression()
             step = self.parse_expression() if self._match(TokenKind.BY) else None
             body = self.parse_required_block()
-            return ForRangeStructure(join_span(start.span, body.span), name.text, begin, end_expr, step, body)
+            return ForRangeStructure(
+                join_span(start.span, body.span), name.text, begin, end_expr, step, body
+            )
         self._expect(TokenKind.IN)
         iterable = self.parse_expression()
         body = self.parse_required_block()
-        return ForInStructure(join_span(start.span, body.span), ForInTarget(name.span, [name.text]), iterable, body)
+        return ForInStructure(
+            join_span(start.span, body.span), ForInTarget(name.span, [name.text]), iterable, body
+        )
 
     def parse_while(self) -> WhileStructure:
         start = self._expect(TokenKind.WHILE)
@@ -489,7 +553,9 @@ class Parser:
                 true_expr = self.parse_expression()
                 self._expect(TokenKind.COLON)
                 false_expr = self.parse_expression(5)
-                left = ConditionalExpr(join_span(left.span, false_expr.span), left, true_expr, false_expr)
+                left = ConditionalExpr(
+                    join_span(left.span, false_expr.span), left, true_expr, false_expr
+                )
                 continue
             break
         return left
@@ -525,7 +591,12 @@ class Parser:
             end = self._expect(TokenKind.RPAREN)
             expr.span = join_span(tok.span, end.span)  # type: ignore[misc]
             return expr
-        self._diag(Severity.ERROR, codes.SYNTAX_ERROR, f"Expected expression, got {tok.kind.value}.", tok.span)
+        self._diag(
+            Severity.ERROR,
+            codes.SYNTAX_ERROR,
+            f"Expected expression, got {tok.kind.value}.",
+            tok.span,
+        )
         self._advance()
         return Identifier(tok.span, "<error>")
 
@@ -536,7 +607,7 @@ class Parser:
                 expr = MemberAccessExpr(join_span(expr.span, member.span), expr, member.text)
                 continue
             if self._at(TokenKind.LT) and self._looks_like_template_suffix():
-                lt = self._advance()
+                self._advance()
                 type_args: list[TypeRef] = []
                 while not self._at(TokenKind.GT, TokenKind.EOF):
                     type_args.append(self.parse_type_ref())
@@ -614,11 +685,14 @@ class Parser:
         j = self.i
         while j < len(self.tokens):
             k = self.tokens[j].kind
-            if k is TokenKind.LPAREN: depth += 1
+            if k is TokenKind.LPAREN:
+                depth += 1
             elif k is TokenKind.RPAREN:
                 depth -= 1
                 if depth == 0:
-                    return j + 1 < len(self.tokens) and self.tokens[j + 1].kind is TokenKind.FAT_ARROW
+                    return (
+                        j + 1 < len(self.tokens) and self.tokens[j + 1].kind is TokenKind.FAT_ARROW
+                    )
             elif k in {TokenKind.NEWLINE, TokenKind.EOF}:
                 return False
             j += 1
@@ -654,7 +728,9 @@ class Parser:
         if self.tokens[j].kind is not TokenKind.IDENTIFIER:
             return None
         j += 1
-        while self.tokens[j].kind is TokenKind.DOT and self.tokens[j + 1].kind is TokenKind.IDENTIFIER:
+        while (
+            self.tokens[j].kind is TokenKind.DOT and self.tokens[j + 1].kind is TokenKind.IDENTIFIER
+        ):
             j += 2
         if self.tokens[j].kind is TokenKind.LT:
             j += 1
@@ -687,13 +763,17 @@ class Parser:
             if nested_end is None:
                 return False
             j = nested_end
-        return self.tokens[j].kind is TokenKind.GT and self.tokens[j + 1].kind in {TokenKind.LPAREN, TokenKind.DOT}
+        return self.tokens[j].kind is TokenKind.GT and self.tokens[j + 1].kind in {
+            TokenKind.LPAREN,
+            TokenKind.DOT,
+        }
 
     def _looks_like_tuple_decl(self) -> bool:
         j = self.i + 1
         saw_comma = False
         while j < len(self.tokens) and self.tokens[j].kind is not TokenKind.RBRACKET:
-            if self.tokens[j].kind is TokenKind.COMMA: saw_comma = True
+            if self.tokens[j].kind is TokenKind.COMMA:
+                saw_comma = True
             j += 1
         return saw_comma and j + 1 < len(self.tokens) and self.tokens[j + 1].kind is TokenKind.EQ
 
@@ -717,7 +797,8 @@ class Parser:
         annotations: list[Annotation] = []
         while self._at(TokenKind.VERSION_ANNOTATION, TokenKind.ANNOTATION, TokenKind.NEWLINE):
             if self._at(TokenKind.NEWLINE):
-                self._advance(); continue
+                self._advance()
+                continue
             tok = self._advance()
             if isinstance(tok.value, Annotation):
                 annotations.append(tok.value)
@@ -745,14 +826,28 @@ class Parser:
     def _expect_member_name(self) -> Token:
         # Pine allows member/namespace names after a dot that can lex as keywords, e.g. input.enum().
         disallowed = {
-            TokenKind.EOF, TokenKind.NEWLINE, TokenKind.INDENT, TokenKind.DEDENT,
-            TokenKind.LPAREN, TokenKind.RPAREN, TokenKind.LBRACKET, TokenKind.RBRACKET,
-            TokenKind.COMMA, TokenKind.DOT, TokenKind.EQ, TokenKind.FAT_ARROW,
+            TokenKind.EOF,
+            TokenKind.NEWLINE,
+            TokenKind.INDENT,
+            TokenKind.DEDENT,
+            TokenKind.LPAREN,
+            TokenKind.RPAREN,
+            TokenKind.LBRACKET,
+            TokenKind.RBRACKET,
+            TokenKind.COMMA,
+            TokenKind.DOT,
+            TokenKind.EQ,
+            TokenKind.FAT_ARROW,
         }
         tok = self._peek()
         if tok.kind not in disallowed:
             return self._advance()
-        self._diag(Severity.ERROR, codes.SYNTAX_ERROR, f"Expected member name after '.', got {tok.kind.value}.", tok.span)
+        self._diag(
+            Severity.ERROR,
+            codes.SYNTAX_ERROR,
+            f"Expected member name after '.', got {tok.kind.value}.",
+            tok.span,
+        )
         if tok.kind is not TokenKind.EOF:
             self._advance()
         return tok
@@ -761,7 +856,12 @@ class Parser:
         if self._at(kind):
             return self._advance()
         tok = self._peek()
-        self._diag(Severity.ERROR, codes.SYNTAX_ERROR, f"Expected {kind.value}, got {tok.kind.value}.", tok.span)
+        self._diag(
+            Severity.ERROR,
+            codes.SYNTAX_ERROR,
+            f"Expected {kind.value}, got {tok.kind.value}.",
+            tok.span,
+        )
         # Recovery: consume one unexpected token so callers inside loops cannot stall forever.
         if tok.kind is not TokenKind.EOF:
             self._advance()

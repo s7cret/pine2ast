@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal as TypingLiteral
 
 from pine2ast.ast.base import ASTNode, Declaration, Expression, Statement
 from pine2ast.ast.types import TypeRef
@@ -32,7 +32,7 @@ class Block(ASTNode):
 @dataclass(slots=True)
 class DeclarationStatement(Declaration):
     span: SourceSpan
-    script_type: Literal["indicator", "strategy", "library"]
+    script_type: TypingLiteral["indicator", "strategy", "library"]
     call: "CallExpr"
 
 
@@ -110,8 +110,8 @@ class MethodDeclaration(Declaration):
 class VarDeclaration(Statement):
     span: SourceSpan
     name: str
-    mode: Literal["var", "varip"] | None
-    explicit_qualifier: Literal["const", "simple", "series"] | None
+    mode: TypingLiteral["var", "varip"] | None
+    explicit_qualifier: TypingLiteral["const", "simple", "series"] | None
     type_ref: TypeRef | None
     initializer: Expression
     is_exported: bool = False
@@ -134,7 +134,7 @@ class TupleDeclaration(Statement):
 class Reassignment(Statement):
     span: SourceSpan
     target: Expression
-    op: Literal[":=", "+=", "-=", "*=", "/=", "%="]
+    op: TypingLiteral[":=", "+=", "-=", "*=", "/=", "%="]
     value: Expression
 
 
@@ -225,9 +225,7 @@ class Identifier(Expression):
 class Literal(Expression):
     span: SourceSpan
     value: object
-    literal_type: Literal["int", "float", "bool", "string", "color", "na"]
-
-
+    literal_type: TypingLiteral["int", "float", "bool", "string", "color", "na"]
 
 
 @dataclass(slots=True)
