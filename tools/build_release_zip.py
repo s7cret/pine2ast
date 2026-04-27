@@ -24,7 +24,7 @@ EXCLUDE_PARTS = {
     "dist",
     "build",
 }
-EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".pyd", ".so"}
+EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".pyd", ".so", ".zip", ".tar", ".gz", ".tgz"}
 SECRET_NAME_FRAGMENTS = {"secret", "secrets", ".env", "id_rsa", "id_ed25519"}
 REPRODUCIBLE_TS = (1980, 1, 1, 0, 0, 0)
 

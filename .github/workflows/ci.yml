@@ -25,11 +25,12 @@ jobs:
         run: python -m black --check .
       - name: Tests with coverage
         run: python -m pytest --cov=pine2ast --cov-report=term-missing --cov-report=xml
-      - name: Mypy advisory baseline
-        continue-on-error: true
+      - name: Mypy
         run: python -m mypy pine2ast
+      - name: Compile oracle report
+        run: python tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json COMPILE_ORACLE_CI.json --allow-pending
       - name: Release quality wrapper
-        run: python tools/run_quality_gate.py --strict-dev-tools --json QUALITY_GATE_LOCAL_CI.json
+        run: python tools/run_quality_gate.py --strict-dev-tools --json QUALITY_GATE_LOCAL_CI.json --quality-json QUALITY_GATE_CI.json --builtin-json BUILTIN_COVERAGE_CI.json --test-log TEST_RUN_CI.log --coverage-md COVERAGE_CI.md
       - name: Upload reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -40,3 +41,6 @@ jobs:
             QUALITY_GATE_LOCAL_CI.json
             QUALITY_GATE_CI.json
             BUILTIN_COVERAGE_CI.json
+            COMPILE_ORACLE_CI.json
+            TEST_RUN_CI.log
+            COVERAGE_CI.md

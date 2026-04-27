@@ -55,7 +55,8 @@ def _parse_once(
     metrics["ast_node_count"] = sum(1 for _ in walk(parsed.program)) if parsed.program else 0
     metrics["diagnostic_count"] = len(diagnostics)
     metrics["ok"] = parsed.program is not None and not any(
-        getattr(d, "severity", None).value in {"ERROR", "FATAL"} for d in diagnostics
+        getattr(getattr(d, "severity", None), "value", None) in {"ERROR", "FATAL"}
+        for d in diagnostics
     )
     return metrics
 

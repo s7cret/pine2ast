@@ -42,6 +42,7 @@ class Annotation:
 
 def parse_annotation(raw: str, span: SourceSpan) -> Annotation:
     text = raw.strip()
+    value: str | None
     if text.startswith("//@"):
         body = text[3:].strip()
         if "=" in body:

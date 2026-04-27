@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 from pine2ast.ast.nodes import (
     BinaryExpr,
     CallExpr,
@@ -23,7 +25,7 @@ def _join_qualifiers(*values: str) -> str:
     return max(values or ("series",), key=lambda q: _ORDER.get(q, 3))
 
 
-def _symbol_qualifier(name: str, symbols: dict[str, object] | None) -> str | None:
+def _symbol_qualifier(name: str, symbols: Mapping[str, object] | None) -> str | None:
     if not symbols:
         return None
     sym = symbols.get(name)
@@ -32,7 +34,7 @@ def _symbol_qualifier(name: str, symbols: dict[str, object] | None) -> str | Non
     return getattr(sym, "qualifier", None) or "series"
 
 
-def infer_qualifier(expr, symbols: dict[str, object] | None = None) -> str:
+def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
     if isinstance(expr, Literal):
         return "const"
     if isinstance(expr, TupleExpr):
@@ -81,7 +83,7 @@ def infer_qualifier(expr, symbols: dict[str, object] | None = None) -> str:
     return "series"
 
 
-def _last_statement_qualifier(statement, symbols: dict[str, object] | None) -> str:
+def _last_statement_qualifier(statement, symbols: Mapping[str, object] | None) -> str:
     expression = getattr(statement, "expression", None)
     if expression is not None:
         return infer_qualifier(expression, symbols)
@@ -94,7 +96,7 @@ def _last_statement_qualifier(statement, symbols: dict[str, object] | None) -> s
     return "series"
 
 
-def _case_body_qualifier(body, symbols: dict[str, object] | None) -> str:
+def _case_body_qualifier(body, symbols: Mapping[str, object] | None) -> str:
     statements = getattr(body, "statements", None)
     if statements:
         return _last_statement_qualifier(statements[-1], symbols)

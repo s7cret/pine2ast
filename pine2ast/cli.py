@@ -271,10 +271,10 @@ def main(argv: list[str] | None = None) -> int:
                 strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
             ),
         )
-        report = validate_ast_schema(result.ast) if result.ast else None
+        schema_report = validate_ast_schema(result.ast) if result.ast else None
         payload = {
             "parse_ok": result.ok,
-            "schema": report.to_dict() if report else None,
+            "schema": schema_report.to_dict() if schema_report else None,
             "diagnostics": [d.to_dict() for d in result.diagnostics],
         }
         output = json.dumps(payload, ensure_ascii=False, indent=2)
@@ -283,7 +283,7 @@ def main(argv: list[str] | None = None) -> int:
             print(args.json_path)
         else:
             print(output)
-        return 0 if report is not None and report.ok and result.ast is not None else 1
+        return 0 if schema_report is not None and schema_report.ok and result.ast is not None else 1
 
     if args.cmd == "diagnostics-report":
         result = parse_file(
@@ -294,10 +294,10 @@ def main(argv: list[str] | None = None) -> int:
                 strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
             ),
         )
-        report = summarize_diagnostics(result.diagnostics)
+        diagnostics_report = summarize_diagnostics(result.diagnostics)
         payload = {
             "ok": result.ok,
-            "summary": report.to_dict(),
+            "summary": diagnostics_report.to_dict(),
             "diagnostics": [d.to_dict() for d in result.diagnostics],
         }
         output = json.dumps(payload, ensure_ascii=False, indent=2)

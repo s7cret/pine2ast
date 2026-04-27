@@ -234,6 +234,7 @@ class SemanticAnalyzer:
                     node.initializer.span,
                 )
             init_qualifier = infer_qualifier(node.initializer, self.model.symbols)
+            qualifier: str
             if node.explicit_qualifier:
                 qualifier = node.explicit_qualifier
                 self._validate_qualifier_assignment(
@@ -657,14 +658,14 @@ class SemanticAnalyzer:
                     shapes.append(self._static_return_shape(target))
             return self._merge_return_shapes(shapes)
         if isinstance(expr, SwitchStructure):
-            shapes: list[str | None] = []
+            switch_shapes: list[str | None] = []
             for case in expr.cases:
                 target = (
                     self._body_return_expr(case.body) if isinstance(case.body, Block) else case.body
                 )
                 if target is not None:
-                    shapes.append(self._static_return_shape(target))
-            return self._merge_return_shapes(shapes)
+                    switch_shapes.append(self._static_return_shape(target))
+            return self._merge_return_shapes(switch_shapes)
         return None
 
     def _merge_return_shapes(self, shapes: list[str | None]) -> str | None:
@@ -2040,13 +2041,13 @@ class SemanticAnalyzer:
                 for sym in self.model.symbols.values():
                     if sym.id == sid:
                         return sym
-        sym = self.model.symbols.get(name)
-        if sym is None:
+        resolved = self.model.symbols.get(name)
+        if resolved is None:
             return None
-        kind = self._scope_kind(sym.scope_id)
+        kind = self._scope_kind(resolved.scope_id)
         if kind in {ScopeKind.GLOBAL, ScopeKind.TYPE_DECL, ScopeKind.ENUM_DECL}:
-            return sym
-        if sym.kind in {
+            return resolved
+        if resolved.kind in {
             SymbolKind.BUILTIN,
             SymbolKind.TYPE,
             SymbolKind.ENUM,
@@ -2055,7 +2056,7 @@ class SemanticAnalyzer:
             SymbolKind.FUNCTION,
             SymbolKind.METHOD,
         }:
-            return sym
+            return resolved
         return None
 
     def _push_scope(

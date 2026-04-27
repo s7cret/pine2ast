@@ -88,27 +88,18 @@ def extract_inputs(program: Program, semantic=None) -> list[InputParameter]:
                     if title_arg and hasattr(title_arg.value, "value")
                     else None
                 )
+                minval_arg = _named(node.arguments, "minval")
+                maxval_arg = _named(node.arguments, "maxval")
+                step_arg = _named(node.arguments, "step")
                 result.append(
                     InputParameter(
                         name=owner_names.get(id(node)) or title or name,
                         title=title,
                         input_function=name,
                         default_value=_literal_value(default_arg) if default_arg else None,
-                        minval=(
-                            _literal_value(_named(node.arguments, "minval"))
-                            if _named(node.arguments, "minval")
-                            else None
-                        ),
-                        maxval=(
-                            _literal_value(_named(node.arguments, "maxval"))
-                            if _named(node.arguments, "maxval")
-                            else None
-                        ),
-                        step=(
-                            _literal_value(_named(node.arguments, "step"))
-                            if _named(node.arguments, "step")
-                            else None
-                        ),
+                        minval=_literal_value(minval_arg) if minval_arg else None,
+                        maxval=_literal_value(maxval_arg) if maxval_arg else None,
+                        step=_literal_value(step_arg) if step_arg else None,
                         options=_literal_sequence(_named(node.arguments, "options")),
                         span=node.span,
                     )

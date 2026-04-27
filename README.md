@@ -13,9 +13,19 @@ SourceNormalizer -> Lexer -> LayoutProcessor -> Parser -> AST -> SemanticAnalyze
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-pip install -e .[dev]
-pytest
-# fallback without pytest, only stdlib:
+python -m pip install -e .[dev]
+python -m ruff check .
+python -m black --check .
+python -m mypy pine2ast
+python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
+python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_16_0.json
+```
+
+Current release evidence: v2.16.0 / package `0.2.16` has green ruff, black, mypy, tests, `90.18%` coverage, and `300/300` real-world corpus. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+
+Fallback without pytest, only stdlib:
+
+```bash
 /usr/bin/python tools/run_tests_no_pytest.py
 ```
 

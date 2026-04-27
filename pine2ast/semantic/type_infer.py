@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 from pine2ast.ast.nodes import (
     BinaryExpr,
     CallExpr,
@@ -38,7 +40,7 @@ def _type_ref_name(type_ref) -> str:
     return type_ref.name
 
 
-def _symbol_type(name: str, symbols: dict[str, object] | None) -> str | None:
+def _symbol_type(name: str, symbols: Mapping[str, object] | None) -> str | None:
     if not symbols:
         return None
     sym = symbols.get(name)
@@ -47,7 +49,7 @@ def _symbol_type(name: str, symbols: dict[str, object] | None) -> str | None:
     return getattr(sym, "type", None) or "unknown"
 
 
-def _symbol_kind(name: str, symbols: dict[str, object] | None) -> str | None:
+def _symbol_kind(name: str, symbols: Mapping[str, object] | None) -> str | None:
     if not symbols:
         return None
     sym = symbols.get(name)
@@ -55,7 +57,7 @@ def _symbol_kind(name: str, symbols: dict[str, object] | None) -> str | None:
     return getattr(kind, "value", kind)
 
 
-def _member_field_type(expr: MemberAccessExpr, symbols: dict[str, object] | None) -> str | None:
+def _member_field_type(expr: MemberAccessExpr, symbols: Mapping[str, object] | None) -> str | None:
     if not symbols:
         return None
     if isinstance(expr.object, Identifier):
@@ -69,7 +71,7 @@ def _member_field_type(expr: MemberAccessExpr, symbols: dict[str, object] | None
     return None
 
 
-def _udt_constructor_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
+def _udt_constructor_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
     callee = expr.callee
     if (
         isinstance(callee, MemberAccessExpr)
@@ -112,7 +114,7 @@ def _collection_element_type(typ: str, *, map_value: bool = True) -> str | None:
     return None
 
 
-def _array_from_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
+def _array_from_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
     name = callee_name(expr.callee)
     if name != "array.from" or not expr.arguments:
         return None
@@ -127,7 +129,7 @@ def _array_from_return(expr: CallExpr, symbols: dict[str, object] | None) -> str
     return "array<mixed>"
 
 
-def _collection_call_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
+def _collection_call_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
     name = callee_name(expr.callee)
     if (
         name
@@ -154,7 +156,7 @@ def _collection_call_return(expr: CallExpr, symbols: dict[str, object] | None) -
     return None
 
 
-def _request_security_return(expr: CallExpr, symbols: dict[str, object] | None) -> str | None:
+def _request_security_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
     name = callee_name(expr.callee)
     if name not in {"request.security", "request.security_lower_tf"} or len(expr.arguments) < 3:
         return None
@@ -174,7 +176,7 @@ def _merge_types(types: list[str]) -> str:
     return "unknown"
 
 
-def infer_type(expr, symbols: dict[str, object] | None = None) -> str:
+def infer_type(expr, symbols: Mapping[str, object] | None = None) -> str:
     if isinstance(expr, Literal):
         return expr.literal_type
     if isinstance(expr, TupleExpr):
@@ -253,7 +255,7 @@ def infer_type(expr, symbols: dict[str, object] | None = None) -> str:
     return "unknown"
 
 
-def _last_statement_type(statement, symbols: dict[str, object] | None) -> str:
+def _last_statement_type(statement, symbols: Mapping[str, object] | None) -> str:
     expression = getattr(statement, "expression", None)
     if expression is not None:
         return infer_type(expression, symbols)
@@ -266,7 +268,7 @@ def _last_statement_type(statement, symbols: dict[str, object] | None) -> str:
     return "unknown"
 
 
-def _case_body_type(body, symbols: dict[str, object] | None) -> str:
+def _case_body_type(body, symbols: Mapping[str, object] | None) -> str:
     statements = getattr(body, "statements", None)
     if statements:
         return _last_statement_type(statements[-1], symbols)

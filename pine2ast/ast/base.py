@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import fields, is_dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, cast
 
 from pine2ast.lexer.token import SourceSpan
 
@@ -33,7 +33,7 @@ class Declaration(Statement):
 def _to_plain(value: Any) -> Any:
     if isinstance(value, ASTNode):
         result: dict[str, Any] = {"kind": value.kind}
-        for f in fields(value):
+        for f in fields(cast(Any, value)):
             result[f.name] = _to_plain(getattr(value, f.name))
         return result
     if isinstance(value, SourceSpan):

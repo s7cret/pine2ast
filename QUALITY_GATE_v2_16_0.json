@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "ok": true,
-  "path": "tests/fixtures/real_world",
+  "path": "[local-home]/pine2ast/tests/fixtures/real_world",
   "file_count": 300,
   "ok_count": 300,
   "error_count": 0,
@@ -3503,7 +3503,7 @@
       "error_count": 0,
       "fatal_count": 0,
       "warning_count": 0,
-      "node_count": 26,
+      "node_count": 27,
       "codes": []
     },
     {

@@ -333,7 +333,7 @@ def builtin_registry_coverage_report() -> dict[str, Any]:
         | set(KNOWN_DEFERRED_NAMESPACE_MEMBERS)
         | set(KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS)
     )
-    namespace_reports = {}
+    namespace_reports: dict[str, dict[str, Any]] = {}
     all_entries = functions | variables
     for namespace in tracked_namespaces:
         prefix = namespace + "."

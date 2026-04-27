@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal as TypingLiteral, cast
 
 from pine2ast.ast.nodes import (
     Argument,
@@ -41,6 +42,7 @@ from pine2ast.ast.nodes import (
     VarDeclaration,
     WhileStructure,
 )
+from pine2ast.ast.base import Expression
 from pine2ast.ast.types import TypeRef
 from pine2ast.diagnostics import Diagnostic, Severity
 from pine2ast.diagnostics import codes
@@ -259,7 +261,7 @@ class Parser:
             receiver_type,
             receiver_name,
             params,
-            exported,
+            cast(Block | Expression, exported),
         )
 
     def parse_params(self, *, until_rparen: bool = True) -> list[Parameter]:
@@ -386,9 +388,11 @@ class Parser:
         mode = None
         qualifier = None
         if self._peek().kind in _DECL_MODES:
-            mode = _DECL_MODES[self._advance().kind]
+            mode = cast(TypingLiteral["var", "varip"], _DECL_MODES[self._advance().kind])
         if self._peek().kind in _TYPE_QUALIFIERS:
-            qualifier = _TYPE_QUALIFIERS[self._advance().kind]
+            qualifier = cast(
+                TypingLiteral["const", "simple", "series"], _TYPE_QUALIFIERS[self._advance().kind]
+            )
         type_ref = None
         if self._looks_like_type_annotation(self.i):
             type_ref = self.parse_type_ref()
@@ -572,7 +576,14 @@ class Parser:
         tok = self._peek()
         if tok.kind in _LITERAL_KINDS:
             self._advance()
-            return Literal(tok.span, tok.value, _LITERAL_KINDS[tok.kind])
+            return Literal(
+                tok.span,
+                tok.value,
+                cast(
+                    TypingLiteral["int", "float", "bool", "string", "color", "na"],
+                    _LITERAL_KINDS[tok.kind],
+                ),
+            )
         if tok.kind is TokenKind.IDENTIFIER:
             self._advance()
             return Identifier(tok.span, tok.text)

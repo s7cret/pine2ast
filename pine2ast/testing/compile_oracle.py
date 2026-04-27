@@ -100,7 +100,8 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
                 )
                 continue
 
-            fixture = item.get("fixture") if isinstance(item.get("fixture"), str) else "<missing>"
+            fixture_value = item.get("fixture")
+            fixture = fixture_value if isinstance(fixture_value, str) else "<missing>"
             status = item.get("tradingview_status")
             status_text = status if isinstance(status, str) else "missing"
             pending = status_text == PENDING_STATUS
