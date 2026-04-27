@@ -1,0 +1,7 @@
+//@version=6
+indicator("UDT method")
+type Point
+    float x
+method get(Point this) => this.x
+p = Point.new(close)
+plot(p.get())

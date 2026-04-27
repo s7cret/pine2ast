@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "pine_version": 6,
+  "checked_at": "2026-04-27",
+  "oracle": "Pending TradingView Pine Editor external compile oracle; intentionally not counted as oracle_verified.",
+  "policy": [
+    {
+      "fixture": "wrapped_indicator_args.pine",
+      "context": "layout_wrapping",
+      "usage": "wrapped declaration arguments",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    },
+    {
+      "fixture": "wrapped_call_args.pine",
+      "context": "layout_wrapping",
+      "usage": "wrapped call arguments",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    },
+    {
+      "fixture": "wrapped_binary_expr.pine",
+      "context": "layout_wrapping",
+      "usage": "line-wrapped binary expression",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    },
+    {
+      "fixture": "wrapped_ternary_expr.pine",
+      "context": "layout_wrapping",
+      "usage": "line-wrapped ternary expression",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    },
+    {
+      "fixture": "wrapped_array_from.pine",
+      "context": "layout_wrapping",
+      "usage": "wrapped array.from call",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    },
+    {
+      "fixture": "wrapped_function_body.pine",
+      "context": "layout_wrapping",
+      "usage": "wrapped function body",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "pending_external_oracle",
+      "checked_at": null,
+      "oracle": "pending TradingView Pine Editor v6 manual compile check",
+      "message": "Added in v3.6 as oracle expansion preparation metadata; Pine2AST local parse/semantic regression passes; no external TradingView evidence captured in this run."
+    }
+  ],
+  "checked_by": "openclaw-local-fixture-prep"
+}

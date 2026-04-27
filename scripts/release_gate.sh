@@ -30,7 +30,7 @@ run_log QUALITY_GATE_FINAL.log "$PYTHON" -m pine2ast quality-gate tests/fixtures
 run_log BUILTIN_COVERAGE_FINAL.log "$PYTHON" -m pine2ast builtin-coverage --json "$OUT_DIR/BUILTIN_COVERAGE_FINAL.json"
 
 if [[ "$ALLOW_PENDING_ORACLE" -eq 1 ]]; then
-  run_log COMPILE_ORACLE_FINAL.log "$PYTHON" tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json "$OUT_DIR/COMPILE_ORACLE_FINAL.json" --allow-pending
+  run_log COMPILE_ORACLE_FINAL.log "$PYTHON" tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json "$OUT_DIR/COMPILE_ORACLE_FINAL.json" --allow-pending --pending-release-suffix oracle_expansion_pending
 else
   run_log COMPILE_ORACLE_FINAL.log "$PYTHON" tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json "$OUT_DIR/COMPILE_ORACLE_FINAL.json"
 fi

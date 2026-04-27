@@ -1,0 +1,7 @@
+//@version=6
+indicator("Method param")
+type Box
+    float v
+method add(Box this, float x) => this.v + x
+b = Box.new(close)
+plot(b.add(1))

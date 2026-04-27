@@ -1,0 +1,7 @@
+//@version=6
+indicator("Enum switch")
+enum Mode
+    Fast
+    Slow
+mode = Mode.Fast
+plot(mode == Mode.Fast ? close : open)

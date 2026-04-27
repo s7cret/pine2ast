@@ -1,0 +1,6 @@
+//@version=6
+indicator("Wrapped call")
+plot(
+    close,
+    title = "Close"
+)

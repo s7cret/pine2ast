@@ -1,0 +1,7 @@
+//@version=6
+indicator("Enum input")
+enum Side
+    Long
+    Short
+side = input.enum(Side.Long, "Side")
+plot(side == Side.Long ? close : open)

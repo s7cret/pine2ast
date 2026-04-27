@@ -1,0 +1,4 @@
+//@version=6
+indicator("Lower TF")
+a = request.security_lower_tf(syminfo.tickerid, "5", close)
+plot(array.size(a))

@@ -1,0 +1,5 @@
+//@version=6
+library("TypesLib")
+export type Point
+    float x
+    float y

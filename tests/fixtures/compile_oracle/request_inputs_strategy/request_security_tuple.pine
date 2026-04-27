@@ -1,0 +1,4 @@
+//@version=6
+indicator("Request tuple")
+[o, h] = request.security(syminfo.tickerid, "D", [open, high])
+plot(o + h)

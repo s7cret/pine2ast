@@ -26,6 +26,17 @@ def _is_release_candidate(version: str | None) -> bool:
     return version is not None and "rc" in version.lower()
 
 
+def _allows_pending_release_suffix(value: str | None) -> bool:
+    """Allow honest non-verified production packaging names for pending expansions.
+
+    Pending oracle metadata must never be packaged as `oracle_verified`.  v3.6 uses
+    the explicit `oracle_expansion_pending` suffix so release gates can pass while
+    the compile-oracle report still records pending external TradingView work.
+    """
+
+    return value == "oracle_expansion_pending"
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Validate TradingView compile-oracle metadata.")
     parser.add_argument("--path", default="tests/fixtures/compile_oracle")
@@ -34,6 +45,10 @@ def main(argv: list[str] | None = None) -> int:
         "--allow-pending",
         action="store_true",
         help="Return success even when external TradingView checks are still pending.",
+    )
+    parser.add_argument(
+        "--pending-release-suffix",
+        help="Required non-RC suffix for honest pending-oracle production packages.",
     )
     args = parser.parse_args(argv)
 
@@ -46,8 +61,15 @@ def main(argv: list[str] | None = None) -> int:
     else:
         sys.stdout.write(text)
 
-    if args.allow_pending and not _is_release_candidate(_project_version()):
-        print("--allow-pending is only permitted for rc package versions", file=sys.stderr)
+    if args.allow_pending and not (
+        _is_release_candidate(_project_version())
+        or _allows_pending_release_suffix(args.pending_release_suffix)
+    ):
+        print(
+            "--allow-pending requires an rc package version or "
+            "--pending-release-suffix oracle_expansion_pending",
+            file=sys.stderr,
+        )
         return 2
     if report.invalid_count:
         return 2

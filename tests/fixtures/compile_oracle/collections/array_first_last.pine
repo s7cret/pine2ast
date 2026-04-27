@@ -1,0 +1,4 @@
+//@version=6
+indicator("Array first last")
+a = array.from(close, open)
+plot(array.first(a) + array.last(a))

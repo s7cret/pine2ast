@@ -6,19 +6,31 @@ from pathlib import Path
 from pine2ast.testing.compile_oracle import build_compile_oracle_report, report_to_dict
 
 
-def test_compile_oracle_report_tracks_verified_external_checks() -> None:
+def test_compile_oracle_report_tracks_verified_external_checks_and_pending_expansion() -> None:
     report = build_compile_oracle_report("tests/fixtures/compile_oracle")
 
-    assert report.metadata_count >= 1
-    assert report.fixture_count >= 5
+    assert report.metadata_count >= 6
+    assert report.fixture_count >= 35
     assert report.invalid_count == 0
-    assert report.pending_count == 0
-    assert report.ok
+    assert report.ok_count >= 5
+    assert report.pending_count >= 30
+    assert not report.ok
 
     payload = report_to_dict(report)
     assert payload["schema_version"] == 1
     assert payload["pending_count"] == report.pending_count
     assert all(entry["fixture"].endswith(".pine") for entry in payload["entries"])
+    assert any(
+        entry["metadata_file"] == "strategy_namespace/metadata.json" and entry["ok"]
+        for entry in payload["entries"]
+    )
+    pending_expansion_entries = [
+        entry
+        for entry in payload["entries"]
+        if entry["metadata_file"] != "strategy_namespace/metadata.json"
+    ]
+    assert all(entry["pending"] for entry in pending_expansion_entries)
+    assert all(entry["pine2ast_status"] == "pass" for entry in pending_expansion_entries)
 
 
 def test_compile_oracle_report_accepts_legacy_and_requested_verified_statuses(
