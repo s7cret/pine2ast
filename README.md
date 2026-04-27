@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release: `v3.4 oracle_verified hardening` / package `0.3.4`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.4 does not claim wider oracle verification. Strict `bash scripts/release_gate.sh` is the production release gate.
+Current release: `v3.5 parser modularization hardening` / package `0.3.5`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.5 does not claim wider oracle verification. Parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` is the production release gate.
 
 Fallback without pytest, only stdlib-compatible tests:
 
