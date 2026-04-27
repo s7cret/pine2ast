@@ -3,7 +3,7 @@
   "contract": "pine2ast.inspect.optimizer.v1",
   "tool": {
     "name": "pine2ast",
-    "version": "0.2.17"
+    "version": "0.2.18"
   },
   "source": {
     "path": "tests/fixtures/inspect_contract/optimizer_strategy.pine"

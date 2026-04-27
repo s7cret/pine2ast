@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "release": "v2.18.0",
+  "basis": "delimiter_and_layout_token_snapshot_contract",
+  "source": "tests/fixtures/valid/layout_stage4/layout_token_snapshots_v2_18.json",
+  "snapshots": {
+    "ambiguous_continuations.pine": [
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 1
+      },
+      {
+        "kind": "LPAREN",
+        "line": 2,
+        "col": 10
+      },
+      {
+        "kind": "RPAREN",
+        "line": 2,
+        "col": 36
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 36
+      },
+      {
+        "kind": "EQ",
+        "line": 3,
+        "col": 3
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 5,
+        "col": 5
+      },
+      {
+        "kind": "EQ",
+        "line": 6,
+        "col": 3
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 7,
+        "col": 7
+      },
+      {
+        "kind": "EQ",
+        "line": 8,
+        "col": 3
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 10,
+        "col": 5
+      }
+    ],
+    "comments_only_wrapped_expression.pine": [
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 1
+      },
+      {
+        "kind": "LPAREN",
+        "line": 2,
+        "col": 10
+      },
+      {
+        "kind": "RPAREN",
+        "line": 2,
+        "col": 29
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 29
+      },
+      {
+        "kind": "EQ",
+        "line": 3,
+        "col": 3
+      },
+      {
+        "kind": "DOT",
+        "line": 3,
+        "col": 9
+      },
+      {
+        "kind": "LPAREN",
+        "line": 3,
+        "col": 13
+      },
+      {
+        "kind": "COMMA",
+        "line": 4,
+        "col": 10
+      },
+      {
+        "kind": "RPAREN",
+        "line": 8,
+        "col": 1
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 8,
+        "col": 1
+      }
+    ],
+    "multiline_declaration_call.pine": [
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 1
+      },
+      {
+        "kind": "LPAREN",
+        "line": 2,
+        "col": 10
+      },
+      {
+        "kind": "COMMA",
+        "line": 3,
+        "col": 28
+      },
+      {
+        "kind": "EQ",
+        "line": 4,
+        "col": 13
+      },
+      {
+        "kind": "COMMA",
+        "line": 4,
+        "col": 19
+      },
+      {
+        "kind": "EQ",
+        "line": 5,
+        "col": 21
+      },
+      {
+        "kind": "RPAREN",
+        "line": 6,
+        "col": 1
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 6,
+        "col": 1
+      },
+      {
+        "kind": "EQ",
+        "line": 7,
+        "col": 3
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 7,
+        "col": 5
+      }
+    ],
+    "tuple_wrapped_targets.pine": [
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 1
+      },
+      {
+        "kind": "LPAREN",
+        "line": 2,
+        "col": 10
+      },
+      {
+        "kind": "RPAREN",
+        "line": 2,
+        "col": 34
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 2,
+        "col": 34
+      },
+      {
+        "kind": "LBRACKET",
+        "line": 3,
+        "col": 1
+      },
+      {
+        "kind": "COMMA",
+        "line": 4,
+        "col": 10
+      },
+      {
+        "kind": "COMMA",
+        "line": 5,
+        "col": 10
+      },
+      {
+        "kind": "RBRACKET",
+        "line": 7,
+        "col": 1
+      },
+      {
+        "kind": "EQ",
+        "line": 7,
+        "col": 3
+      },
+      {
+        "kind": "DOT",
+        "line": 7,
+        "col": 7
+      },
+      {
+        "kind": "LPAREN",
+        "line": 7,
+        "col": 10
+      },
+      {
+        "kind": "COMMA",
+        "line": 8,
+        "col": 10
+      },
+      {
+        "kind": "COMMA",
+        "line": 9,
+        "col": 7
+      },
+      {
+        "kind": "RPAREN",
+        "line": 11,
+        "col": 1
+      },
+      {
+        "kind": "NEWLINE",
+        "line": 11,
+        "col": 1
+      }
+    ]
+  }
+}

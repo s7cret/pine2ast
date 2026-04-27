@@ -97,6 +97,12 @@ class LayoutProcessor:
             first = line[0]
             indent = max(0, first.span.start_col - 1)
             continuation = self._is_continuation_line(line, indent, depth, prev_last, indent_stack)
+            if depth > 0 and not continuation:
+                # Recovery for an unclosed delimiter on a prior physical line.  A new line at an
+                # active block indentation is much more likely to be the next Pine statement than
+                # another argument/expression fragment; let the parser report the missing closer
+                # instead of hiding the rest of the file inside one logical line.
+                depth = 0
 
             if not continuation:
                 if previous_line_was_logical:
@@ -139,11 +145,20 @@ class LayoutProcessor:
         prev_last: Token | None,
         indent_stack: list[int],
     ) -> bool:
+        first = self._first_significant(line)
         if depth > 0:
+            if (
+                indent <= indent_stack[-1]
+                and first is not None
+                and first.kind not in _CLOSE
+                and prev_last is not None
+                and prev_last.kind not in _CONTINUATION_END
+                and prev_last.kind not in _OPEN
+            ):
+                return False
             return True
         if prev_last is not None and prev_last.kind in _CONTINUATION_END:
             return True
-        first = self._first_significant(line)
         if first is not None and first.kind in _CONTINUATION_START and indent > indent_stack[-1]:
             return True
         if indent % 4 != 0 and indent not in indent_stack:

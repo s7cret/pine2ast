@@ -449,8 +449,17 @@ class Parser:
         )
 
     def parse_required_block(self) -> Block:
-        self._expect(TokenKind.NEWLINE)
-        self._expect(TokenKind.INDENT)
+        newline = self._expect(TokenKind.NEWLINE)
+        if not self._at(TokenKind.INDENT):
+            tok = self._peek()
+            self._diag(
+                Severity.ERROR,
+                codes.SYNTAX_ERROR,
+                f"Expected {TokenKind.INDENT.value}, got {tok.kind.value}.",
+                tok.span,
+            )
+            return Block(join_span(newline.span, newline.span), [])
+        self._advance()
         return self.parse_block_after_indent()
 
     def parse_switch(self) -> SwitchStructure:
@@ -599,7 +608,7 @@ class Parser:
             return self.parse_while()
         if self._match(TokenKind.LPAREN):
             expr = self.parse_expression()
-            end = self._expect(TokenKind.RPAREN)
+            end = self._expect_closing(TokenKind.RPAREN)
             expr.span = join_span(tok.span, end.span)  # type: ignore[misc]
             return expr
         self._diag(
@@ -644,12 +653,12 @@ class Parser:
                         break
                     if self._at(TokenKind.RPAREN):
                         break
-                end = self._expect(TokenKind.RPAREN)
+                end = self._expect_closing(TokenKind.RPAREN)
                 expr = CallExpr(join_span(expr.span, end.span), expr, args)
                 continue
             if self._match(TokenKind.LBRACKET):
                 offset = self.parse_expression()
-                end = self._expect(TokenKind.RBRACKET)
+                end = self._expect_closing(TokenKind.RBRACKET)
                 expr = HistoryRefExpr(join_span(expr.span, end.span), expr, offset)
                 continue
             break
@@ -664,7 +673,7 @@ class Parser:
                 break
             if self._at(TokenKind.RBRACKET):
                 break
-        end = self._expect(TokenKind.RBRACKET)
+        end = self._expect_closing(TokenKind.RBRACKET)
         return TupleExpr(join_span(start.span, end.span), elements)
 
     def parse_type_ref(self) -> TypeRef:
@@ -875,6 +884,22 @@ class Parser:
         )
         # Recovery: consume one unexpected token so callers inside loops cannot stall forever.
         if tok.kind is not TokenKind.EOF:
+            self._advance()
+        return tok
+
+    def _expect_closing(self, kind: TokenKind) -> Token:
+        if self._at(kind):
+            return self._advance()
+        tok = self._peek()
+        self._diag(
+            Severity.ERROR,
+            codes.SYNTAX_ERROR,
+            f"Expected {kind.value}, got {tok.kind.value}.",
+            tok.span,
+        )
+        # Missing delimiters are usually followed by a statement boundary.  Keep synchronizing
+        # tokens in place so the outer statement/block parser can recover subsequent statements.
+        if tok.kind not in {TokenKind.NEWLINE, TokenKind.DEDENT, TokenKind.EOF}:
             self._advance()
         return tok
 

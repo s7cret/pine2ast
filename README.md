@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_LOCAL_v2_16_0.json
 ```
 
-Current release evidence: v2.17.0 / package `0.2.17` targets semantic, typing, and diagnostics stabilization with green ruff, black, mypy, tests, coverage, and real-world corpus gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
+Current release evidence: v2.18.0 / package `0.2.18` targets layout/parser hardening for ambiguous Real Pine continuations, delimiter-aware token snapshots, and recovery for malformed layout/delimiters with green ruff, black, mypy, tests, coverage, and real-world corpus gates. External TradingView compile-oracle remains honestly marked `pending_external_oracle` until manual Pine Editor checks are performed.
 
 Fallback without pytest, only stdlib:
 
