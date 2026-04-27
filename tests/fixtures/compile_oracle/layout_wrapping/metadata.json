@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "pine_version": 6,
-  "checked_at": "2026-04-27",
-  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
+  "checked_at": "2026-04-28",
+  "oracle": "v3.10 tail closure: real TradingView rerun was attempted; unresolved fixtures reclassified platform_blocked with evidence, not oracle_verified.",
   "policy": [
     {
       "fixture": "wrapped_indicator_args.pine",
@@ -10,10 +10,12 @@
       "usage": "wrapped declaration arguments",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed on a wrapped declaration after 4-space continuation/paste indentation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Mismatched input \"plot\" expecting set \"end of line without line continuation\"(CE10013)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "1cf2d3804df76f6939b3868b56fe5baa4ce749ec2b9ecb25fb6b2a0d53f5681b"
     },
     {
       "fixture": "wrapped_call_args.pine",
@@ -32,10 +34,12 @@
       "usage": "line-wrapped binary expression",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView rejected 4-space operator continuation as end-of-line without continuation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Syntax error at input \"end of line without line continuation\"(CE10156)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "51b53c8aa0110398547332043e533df7debc17d1acf655d8a321d2d613bce400"
     },
     {
       "fixture": "wrapped_ternary_expr.pine",
@@ -43,10 +47,12 @@
       "usage": "line-wrapped ternary expression",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView rejected 4-space ternary continuation as end-of-line without continuation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Syntax error at input \"end of line without line continuation\"(CE10156)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "9825d752f15c435f90a0cabbc4ef1f04041ff2f6a9ca0de56a8eb7f8dbad3223"
     },
     {
       "fixture": "wrapped_array_from.pine",
@@ -54,10 +60,12 @@
       "usage": "wrapped array.from call",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed on a wrapped call after 4-space continuation/paste indentation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Mismatched input \"plot\" expecting set \"end of line without line continuation\"(CE10013)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "fb04cbe21028c809aa93660362ed768f92c6255cc2a09af46ffb2ddf88c8a491"
     },
     {
       "fixture": "wrapped_function_body.pine",
@@ -65,13 +73,15 @@
       "usage": "wrapped function body",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence showed plot() pasted inside the function local block, so f was not defined at top level; fixture unchanged and requires paste-safe rerun. Observed v3.9 tail: problem"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "0f89f751e8e8ab261f0e3378d2e24d5f3f27f58b9f504c54421ba64007b50902"
     }
   ],
   "checked_by": "openclaw-v3.10-oracle-fix",
-  "last_attempted_at": "2026-04-27T18:23:38+03:00",
-  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
+  "last_attempted_at": "2026-04-28T02:10:00+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json"
 }

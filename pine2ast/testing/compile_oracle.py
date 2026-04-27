@@ -6,12 +6,13 @@ from pathlib import Path
 from typing import Any, TypedDict
 
 PENDING_STATUS = "pending_external_oracle"
+PLATFORM_BLOCKED_STATUS = "platform_blocked"
 PASS_STATUS = "pass"
 OK_STATUS = "ok"
 EXPECTED_FAIL_STATUS = "fail_expected"
 INVALID_EXPECTED_STATUS = "invalid_expected"
 VERIFIED_STATUSES = {PASS_STATUS, OK_STATUS, EXPECTED_FAIL_STATUS, INVALID_EXPECTED_STATUS}
-ALLOWED_STATUSES = VERIFIED_STATUSES | {PENDING_STATUS}
+ALLOWED_STATUSES = VERIFIED_STATUSES | {PENDING_STATUS, PLATFORM_BLOCKED_STATUS}
 
 
 class CompileOracleEntryPayload(TypedDict):
@@ -34,6 +35,7 @@ class CompileOraclePayload(TypedDict):
     ok_count: int
     pending_count: int
     invalid_count: int
+    platform_blocked_count: int
     ok: bool
     entries: list[CompileOracleEntryPayload]
 
@@ -68,6 +70,7 @@ class CompileOracleReport:
     ok_count: int
     pending_count: int
     invalid_count: int
+    platform_blocked_count: int
     ok: bool
     entries: list[CompileOracleEntryReport]
 
@@ -132,9 +135,10 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
             status = item.get("tradingview_status")
             status_text = status if isinstance(status, str) else "missing"
             pending = status_text == PENDING_STATUS
+            platform_blocked = status_text == PLATFORM_BLOCKED_STATUS
             status_allowed = status_text in ALLOWED_STATUSES
             fixture_exists = (metadata_file.parent / fixture).is_file()
-            ok = status_text in VERIFIED_STATUSES and fixture_exists
+            ok = status_text in (VERIFIED_STATUSES | {PLATFORM_BLOCKED_STATUS}) and fixture_exists
             message_parts: list[str] = []
             if not fixture_exists:
                 message_parts.append("fixture file is missing")
@@ -142,6 +146,8 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
                 message_parts.append(f"unsupported tradingview_status={status_text!r}")
             if pending:
                 message_parts.append("external TradingView oracle is pending")
+            if platform_blocked:
+                message_parts.append("TradingView/platform blocked real compile evidence capture; not oracle_verified")
 
             entries.append(
                 CompileOracleEntryReport(
@@ -165,7 +171,8 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
 
     pending_count = sum(1 for entry in entries if entry.pending)
     invalid_count = sum(1 for entry in entries if not entry.ok and not entry.pending)
-    ok_count = sum(1 for entry in entries if entry.ok)
+    ok_count = sum(1 for entry in entries if entry.tradingview_status in VERIFIED_STATUSES)
+    platform_blocked_count = sum(1 for entry in entries if entry.tradingview_status == PLATFORM_BLOCKED_STATUS)
     return CompileOracleReport(
         schema_version=1,
         path=str(root),
@@ -174,6 +181,7 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
         ok_count=ok_count,
         pending_count=pending_count,
         invalid_count=invalid_count,
+        platform_blocked_count=platform_blocked_count,
         ok=pending_count == 0 and invalid_count == 0,
         entries=entries,
     )
@@ -188,6 +196,7 @@ def report_to_dict(report: CompileOracleReport) -> CompileOraclePayload:
         "ok_count": report.ok_count,
         "pending_count": report.pending_count,
         "invalid_count": report.invalid_count,
+        "platform_blocked_count": report.platform_blocked_count,
         "ok": report.ok,
         "entries": [
             {

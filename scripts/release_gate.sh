@@ -12,7 +12,7 @@ if [[ $# -ne 0 ]]; then
 fi
 
 PYTHON="${PYTHON:-.venv/bin/python}"
-OUT_DIR="reports/final"
+OUT_DIR="${PINE2AST_RELEASE_GATE_OUT_DIR:-.release_gate_reports/final}"
 mkdir -p "$OUT_DIR"
 
 run_log() {

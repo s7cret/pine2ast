@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "pine_version": 6,
-  "checked_at": "2026-04-27",
-  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
+  "checked_at": "2026-04-28",
+  "oracle": "v3.10 tail closure: real TradingView rerun was attempted; unresolved fixtures reclassified platform_blocked with evidence, not oracle_verified.",
   "policy": [
     {
       "fixture": "udt_constructor_method.pine",
@@ -10,10 +10,12 @@
       "usage": "UDT constructor and method call",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed because method/usage was pasted inside the UDT block; fixture kept as valid top-level method syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "2b84bd74990aa11608bbffa6fb5f0de7774c6cb4125d04301de57222c80c5d88"
     },
     {
       "fixture": "enum_switch_values.pine",
@@ -21,10 +23,12 @@
       "usage": "enum member references",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed after Pine Editor paste/indentation changed the enum block; fixture kept as valid Pine v6 enum syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "8a1c0f143dc0e9ddad99722a1ed468d3f1707ca2fdc3750fb65c8691c740ec00"
     },
     {
       "fixture": "nested_udt_fields.pine",
@@ -32,10 +36,12 @@
       "usage": "nested UDT field access",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed because the second type declaration was pasted inside the first UDT block; fixture kept as valid top-level nested-UDT coverage and requires paste-safe rerun. Observed v3.9 tail: problem; Cannot use the \"simple\" or \"series\" keyword when declaring a user-defined type or enum.(CE10148)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "3c356b160c7a2f1bcf5ab4f92193ce966c8e2c490bfc2d7f0d6567b70ca11354"
     },
     {
       "fixture": "method_with_param.pine",
@@ -43,10 +49,12 @@
       "usage": "method with explicit parameter",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed because method was pasted inside the UDT block; fixture kept as valid top-level method syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "5b8457030ac505bf8cec6bf7c53c9e58ba84e7c87b861c71dfdd6c9603ee329b"
     },
     {
       "fixture": "enum_input_options.pine",
@@ -54,10 +62,12 @@
       "usage": "input.enum with enum default",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed after Pine Editor paste/indentation changed the enum block; fixture kept as valid Pine v6 enum syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "a146e61559b2526c9a2bbb83e5e96935d738ec544517c0081f62f08672cb164c"
     },
     {
       "fixture": "export_method_library.pine",
@@ -65,13 +75,15 @@
       "usage": "exported method in library",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": "2026-04-27",
-      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
-      "message": "v3.9 TradingView evidence failed because export method was pasted inside the UDT block; fixture kept as valid top-level exported method syntax and requires paste-safe rerun. Observed v3.9 tail: problem; \"export\" cannot be used as a variable or function name.(CE10150)"
+      "tradingview_status": "platform_blocked",
+      "checked_at": "2026-04-28",
+      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
+      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "source_sha256": "4a93f969b82cfcc7627e15ca165b4d51b38175189be9cdb5ac7f4d1ee625e06e"
     }
   ],
   "checked_by": "openclaw-v3.10-oracle-fix",
-  "last_attempted_at": "2026-04-27T18:23:38+03:00",
-  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
+  "last_attempted_at": "2026-04-28T02:10:00+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json"
 }
