@@ -3,10 +3,27 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 from pine2ast.testing.compile_oracle import build_compile_oracle_report, report_to_dict
+
+
+def _project_version() -> str | None:
+    pyproject = Path("pyproject.toml")
+    if not pyproject.is_file():
+        return None
+    match = re.search(
+        r"^version\s*=\s*['\"]([^'\"]+)['\"]",
+        pyproject.read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+    return match.group(1) if match else None
+
+
+def _is_release_candidate(version: str | None) -> bool:
+    return version is not None and "rc" in version.lower()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -29,6 +46,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         sys.stdout.write(text)
 
+    if args.allow_pending and not _is_release_candidate(_project_version()):
+        print("--allow-pending is only permitted for rc package versions", file=sys.stderr)
+        return 2
     if report.invalid_count:
         return 2
     if report.pending_count and not args.allow_pending:

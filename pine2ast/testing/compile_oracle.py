@@ -7,8 +7,11 @@ from typing import Any, TypedDict
 
 PENDING_STATUS = "pending_external_oracle"
 PASS_STATUS = "pass"
+OK_STATUS = "ok"
 EXPECTED_FAIL_STATUS = "fail_expected"
-ALLOWED_STATUSES = {PASS_STATUS, EXPECTED_FAIL_STATUS, PENDING_STATUS}
+INVALID_EXPECTED_STATUS = "invalid_expected"
+VERIFIED_STATUSES = {PASS_STATUS, OK_STATUS, EXPECTED_FAIL_STATUS, INVALID_EXPECTED_STATUS}
+ALLOWED_STATUSES = VERIFIED_STATUSES | {PENDING_STATUS}
 
 
 class CompileOracleEntryPayload(TypedDict):
@@ -131,7 +134,7 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
             pending = status_text == PENDING_STATUS
             status_allowed = status_text in ALLOWED_STATUSES
             fixture_exists = (metadata_file.parent / fixture).is_file()
-            ok = status_text in {PASS_STATUS, EXPECTED_FAIL_STATUS} and fixture_exists
+            ok = status_text in VERIFIED_STATUSES and fixture_exists
             message_parts: list[str] = []
             if not fixture_exists:
                 message_parts.append("fixture file is missing")
