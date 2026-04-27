@@ -1,0 +1,801 @@
+AAPL
+D
+Indicators
+Alert
+Replay
+Unnamed
+Save
+Trade
+Publish
+A
+Apple Inc
+1D
+NASDAQ
+O
+266.09
+H
+268.36
+L
+265.07
+C
+267.09
+−3.97 (−1.46%)
+267.11
+SELL
+0.02
+267.13
+BUY
+Vol
+13.48 M
+indicator strategy.long constant
+267.09
+Exit
+1D
+5D
+1M
+3M
+6M
+YTD
+1Y
+5Y
+All
+15:31:47 UTC
+ADJ
+Watchlist
+Symbol
+Last
+Chg
+Chg%
+A
+AAPL
+Apple Inc
+NASDAQ
+Electronic Technology
+Telecommunications Equipment
+267.09
+USD
+−3.97
+−1.46%
+Market open
+Wedbush analysts stated their view that Apple (AAPL) potential for 2026 is being underestimated by market analysts, suggesting they see upside relative to current expectations for the company.
+Key stats
+Next earnings report
+In 3 days
+Volume
+‪13.48 M‬
+Average Volume (30D)
+‪41.12 M‬
+Market capitalization
+‪3.92 T‬
+Earnings
+3
+Q2 '25
+Q3 '25
+Q4 '25
+Q1 '26
+Q2 '26
+‪0.00‬
+‪0.80‬
+‪1.60‬
+‪2.40‬
+‪3.20‬
+Actual
+Estimate
+More info
+Dividends
+13.03%
+Earnings retained
+Payout ratio (TTM)
+Dividend yield TTM
+0.38%
+Last payment
+0.26
+Last ex-dividend date
+Feb 9, 2026
+Last payment date
+Feb 12, 2026
+More info
+Income statement
+Annual
+Quarterly
+Q1 '25
+Q2 '25
+Q3 '25
+Q4 '25
+Q1 '26
+‪0.00‬
+‪‪40.00 B‬‬
+‪‪80.00 B‬‬
+‪‪120.00 B‬‬
+‪‪160.00 B‬‬
+Revenue
+Net income
+Net margin %
+More financials
+Performance
+−1.31%
+1W
+5.08%
+1M
+2.94%
+3M
+−0.92%
+6M
+−2.01%
+YTD
+29.28%
+1Y
+Seasonals
+	
+	
+	
+	
+2026
+2025
+2024
+More seasonals
+Technicals
+Neutral
+Sell
+Buy
+Strong sell
+Strong buy
+Strong sell
+Sell
+Neutral
+Buy
+Strong buy
+More technicals
+Analyst rating
+Neutral
+Sell
+Buy
+Strong sell
+Strong buy
+Strong sell
+Sell
+Neutral
+Buy
+Strong buy
+1 year price target
+301.62
+(12.93%)
+See forecast
+Highest YTM bonds
+Jul 31, 2042
+5.85%
+Aug 8, 2062
+5.59%
+Aug 20, 2050
+5.56%
+More bonds
+ATM IV term structure
+1W
+2W
+1M
+2M
+3M
+6M
+9M
+1Y
+‪25.0%‬
+‪28.5%‬
+‪32.0%‬
+‪35.5%‬
+‪39.0%‬
+Volatility curve (32 days)
+	
+	
+
+	
+	
+More on options
+Profile
+Website
+apple.com
+Employees (FY)
+‪166 K‬
+ISIN
+US0378331005
+CUSIP
+037833100
+FIGI
+BBG000B9XRY4
+CFI code
+ESVUFR
+
+Apple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of related services. It operates through the following geographical segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. The Americas segment includes North and South America. The Europe segment consists of European countries, as well as India, the Middle East, and Africa. The Greater China segment comprises China, Hong Kong, and Taiwan. The Rest of Asia Pacific segment includes Australia and Asian countries. Its products and services include iPhone, Mac, iPad, AirPods, Apple TV, Apple Watch, Beats products, AppleCare, iCloud, digital content stores, streaming, and licensing services. The company was founded by Steven Paul Jobs, Ronald Gerald Wayne, and Stephen G. Wozniak in April 1976 and is headquartered in Cupertino, CA.
+
+Strategy Report
+Exit
+Dec 12, 1980 — Apr 27, 2026
+Metrics
+List of trades
+More
+Total P&L
++177.30
+USD
++0.02%
+Max equity drawdown
+22.79
+USD
+0.00%
+Total trades
+9,847
+Profitable trades
+31.11%
+3063/9847
+Profit factor
+1.275
+Equity chart
+Equity
+Buy & hold
+Trades excursions
+Run-up / Drawdowns
+	
+	
+
+	
+	
+Performance
+Profit structure
+‪0.00‬
+‪210.00‬
+‪420.00‬
+‪630.00‬
+‪840.00‬
+Total profit
+Total loss
+Commission
+Total P&L
+Benchmarking
+	
+	
+P&L for buy & hold
+P&L for strategy
+Returns
+Metric
+	
+All
+	
+Long
+	
+Short
+	
+
+
+Initial capital
+	
+1,000,000.00
+USD
+			
+
+Open P&L
+	
+0
+USD
+0.00%
+			
+
+Net P&L
+	
++177.30
+USD
++0.02%
+	
++177.30
+USD
++0.02%
+	
+0
+USD
+0.00%
+	
+
+Gross profit
+	
+823.02
+USD
+0.08%
+	
+823.02
+USD
+0.08%
+	
+0
+USD
+0.00%
+	
+
+Gross loss
+	
+645.72
+USD
+0.06%
+	
+645.72
+USD
+0.06%
+	
+0
+USD
+0.00%
+	
+
+Profit factor
+	
+1.275
+	
+1.275
+	
+—
+	
+
+Commission paid
+	
+0
+USD
+	
+0
+USD
+	
+0
+USD
+	
+
+Expected payoff
+	
+0.02
+USD
+	
+0.02
+USD
+	
+0
+USD
+	
+Benchmark comparison
+Metric
+	
+All
+	
+	
+	
+
+
+Buy & hold return
+	
++2,224,666,577.68
+USD
++222,466.66%
+			
+
+Buy & hold % gain
+	
+222,466.67%
+			
+
+Strategy outperformance
+	
+−2,224,666,400.38
+USD
+			
+Risk-adjusted performance
+Metric
+	
+All
+	
+	
+	
+
+
+Sharpe ratio
+	
+−683.482
+			
+
+Sortino ratio
+	
+−1
+			
+Trades analysis
+P&L Distribution
+	
+	
+
+	
+	
+Loss
+Profit
+Average loss
+−0.68%
+Average profit
+0.67%
+Win/loss ratio
+9847
+Total trades
+Wins
+3063 trades
+31.11%
+Losses
+2727 trades
+27.69%
+Break even
+4057 trades
+41.20%
+Details
+Metric
+	
+All
+	
+Long
+	
+Short
+	
+
+
+Total trades
+	
+9,847
+	
+9,847
+	
+0
+	
+
+Total open trades
+	
+0
+	
+0
+	
+0
+	
+
+Winning trades
+	
+3,063
+	
+3,063
+	
+0
+	
+
+Losing trades
+	
+2,727
+	
+2,727
+	
+0
+	
+
+Percent profitable
+	
+31.11%
+	
+31.11%
+	
+—
+	
+
+Avg P&L
+	
+0.02
+USD
+0.05%
+	
+0.02
+USD
+0.05%
+	
+—
+	
+
+Avg winning trade
+	
+0.27
+USD
+2.09%
+	
+0.27
+USD
+2.09%
+	
+—
+	
+
+Avg losing trade
+	
+0.24
+USD
+2.16%
+	
+0.24
+USD
+2.16%
+	
+—
+	
+
+Ratio avg win / avg loss
+	
+1.135
+	
+1.135
+	
+—
+	
+
+Largest winning trade
+	
+18.39
+USD
+	
+18.39
+USD
+	
+—
+	
+
+Largest winning trade percent
+	
+14.29%
+	
+14.29%
+	
+—
+	
+
+Largest winner as % of gross profit
+	
+2.23%
+	
+2.23%
+	
+0.00%
+	
+
+Largest losing trade
+	
+12.08
+USD
+	
+12.08
+USD
+	
+—
+	
+
+Largest losing trade percent
+	
+14.29%
+	
+14.29%
+	
+—
+	
+
+Largest loser as % of gross loss
+	
+1.87%
+	
+1.87%
+	
+0.00%
+	
+
+Avg # bars in trades
+	
+1
+	
+1
+	
+0
+	
+
+Avg # bars in winning trades
+	
+1
+	
+1
+	
+0
+	
+
+Avg # bars in losing trades
+	
+1
+	
+1
+	
+0
+	
+Capital efficiency
+Capital usage
+Metric
+	
+All
+	
+Long
+	
+Short
+	
+
+
+Annualized return (CAGR)
+	
+0.00%
+	
+0.00%
+	
+0.00%
+	
+
+Return on initial capital
+	
+0.02%
+	
+0.02%
+	
+0.00%
+	
+
+Account size required
+	
+308.99
+USD
+			
+
+Return on account size required
+	
+57.38%
+	
+57.38%
+	
+0.00%
+	
+
+Net profit as % of largest loss
+	
+1,467.72%
+	
+1,467.72%
+	
+0.00%
+	
+Margin usage
+Metric
+	
+All
+	
+	
+	
+
+
+Avg margin used
+	
+3.25
+USD
+			
+
+Max margin used
+	
+286.20
+USD
+			
+
+Margin efficiency
+	
+0.02
+USD
+			
+
+Margin calls
+	
+0
+			
+Run-ups and drawdowns
+Run-ups
+Metric
+	
+All
+	
+	
+	
+
+
+Avg equity run-up duration (close-to-close)
+	
+30 days
+			
+
+Avg equity run-up (close-to-close)
+	
+4.64
+USD
+0.00%
+			
+
+Max equity run-up (close-to-close)
+	
+24.15
+USD
+0.00%
+			
+
+Max equity run-up (intrabar)
+	
+186.11
+USD
+0.02%
+			
+
+Max equity run-up as % of initial capital (intrabar)
+	
+0.02%
+			
+Drawdowns
+Metric
+	
+All
+	
+	
+	
+
+
+Avg equity drawdown duration (close-to-close)
+	
+38 days
+			
+
+Avg equity drawdown (close-to-close)
+	
+4.44
+USD
+0.00%
+			
+
+Max equity drawdown (close-to-close)
+	
+22.04
+USD
+0.00%
+			
+
+Max equity drawdown (intrabar)
+	
+22.79
+USD
+0.00%
+			
+
+Max equity drawdown as % of initial capital (intrabar)
+	
+0.00%
+			
+
+Return of max equity drawdown
+	
+7.78
+USD
+			
+Magnet mode is On. Drawing anchors will be snapped to the closest OHLC or indicators values of nearby bars or plots.
+Got it!
+Pine Editor
+Untitled script
+Save
+Publish script
+1
+2
+3
+4
+5
+//@version=6
+strategy("Exit")
+strategy.entry("L", strategy.long)
+strategy.exit("X", "L", stop=low, limit=high)
+Line 5, Col 1
+Pine Script® v6
+You can now toggle word wrap in Pine Editor settings
+Got it

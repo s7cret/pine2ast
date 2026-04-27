@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "Pending TradingView Pine Editor external compile oracle; v3.7 attempt blocked by unauthenticated TradingView profile; intentionally not counted as oracle_verified.",
+  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
   "policy": [
     {
       "fixture": "udt_constructor_method.pine",
@@ -11,9 +11,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed because method/usage was pasted inside the UDT block; fixture kept as valid top-level method syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
     },
     {
       "fixture": "enum_switch_values.pine",
@@ -22,9 +22,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed after Pine Editor paste/indentation changed the enum block; fixture kept as valid Pine v6 enum syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
     },
     {
       "fixture": "nested_udt_fields.pine",
@@ -33,9 +33,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed because the second type declaration was pasted inside the first UDT block; fixture kept as valid top-level nested-UDT coverage and requires paste-safe rerun. Observed v3.9 tail: problem; Cannot use the \"simple\" or \"series\" keyword when declaring a user-defined type or enum.(CE10148)"
     },
     {
       "fixture": "method_with_param.pine",
@@ -44,9 +44,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed because method was pasted inside the UDT block; fixture kept as valid top-level method syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
     },
     {
       "fixture": "enum_input_options.pine",
@@ -55,9 +55,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed after Pine Editor paste/indentation changed the enum block; fixture kept as valid Pine v6 enum syntax and requires paste-safe rerun. Observed v3.9 tail: problem"
     },
     {
       "fixture": "export_method_library.pine",
@@ -66,13 +66,12 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed because export method was pasted inside the UDT block; fixture kept as valid top-level exported method syntax and requires paste-safe rerun. Observed v3.9 tail: problem; \"export\" cannot be used as a variable or function name.(CE10150)"
     }
   ],
-  "checked_by": "openclaw-local-fixture-prep",
-  "last_attempted_at": "2026-04-27T15:18:00+03:00",
-  "last_attempt_blocker": "TradingView displayed Sign in with email modal after Pine Editor fixture insertion and Ctrl+Enter; no fixture-specific compile result was available.",
-  "attempt_evidence": "TV_ORACLE_ATTEMPT_v3_7/"
+  "checked_by": "openclaw-v3.10-oracle-fix",
+  "last_attempted_at": "2026-04-27T18:23:38+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
 }

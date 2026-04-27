@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "Pending TradingView Pine Editor external compile oracle; v3.7 attempt blocked by unauthenticated TradingView profile; intentionally not counted as oracle_verified.",
+  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
   "policy": [
     {
       "fixture": "wrapped_indicator_args.pine",
@@ -11,9 +11,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed on a wrapped declaration after 4-space continuation/paste indentation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Mismatched input \"plot\" expecting set \"end of line without line continuation\"(CE10013)"
     },
     {
       "fixture": "wrapped_call_args.pine",
@@ -21,10 +21,10 @@
       "usage": "wrapped call arguments",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
     },
     {
       "fixture": "wrapped_binary_expr.pine",
@@ -33,9 +33,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView rejected 4-space operator continuation as end-of-line without continuation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Syntax error at input \"end of line without line continuation\"(CE10156)"
     },
     {
       "fixture": "wrapped_ternary_expr.pine",
@@ -44,9 +44,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView rejected 4-space ternary continuation as end-of-line without continuation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Syntax error at input \"end of line without line continuation\"(CE10156)"
     },
     {
       "fixture": "wrapped_array_from.pine",
@@ -55,9 +55,9 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed on a wrapped call after 4-space continuation/paste indentation; fixture rewritten to 2-space Pine continuation and requires rerun. Observed v3.9 tail: problem; Mismatched input \"plot\" expecting set \"end of line without line continuation\"(CE10013)"
     },
     {
       "fixture": "wrapped_function_body.pine",
@@ -66,13 +66,12 @@
       "expected": "accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence showed plot() pasted inside the function local block, so f was not defined at top level; fixture unchanged and requires paste-safe rerun. Observed v3.9 tail: problem"
     }
   ],
-  "checked_by": "openclaw-local-fixture-prep",
-  "last_attempted_at": "2026-04-27T15:18:00+03:00",
-  "last_attempt_blocker": "TradingView displayed Sign in with email modal after Pine Editor fixture insertion and Ctrl+Enter; no fixture-specific compile result was available.",
-  "attempt_evidence": "TV_ORACLE_ATTEMPT_v3_7/"
+  "checked_by": "openclaw-v3.10-oracle-fix",
+  "last_attempted_at": "2026-04-27T18:23:38+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
 }

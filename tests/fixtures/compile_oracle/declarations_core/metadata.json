@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "Pending TradingView Pine Editor external compile oracle; v3.7 attempt blocked by unauthenticated TradingView profile; intentionally not counted as oracle_verified.",
+  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
   "policy": [
     {
       "fixture": "indicator_minimal_decl.pine",
@@ -10,10 +10,10 @@
       "usage": "indicator declaration with positional title",
       "expected": "declaration accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
     },
     {
       "fixture": "strategy_decl_params.pine",
@@ -21,10 +21,10 @@
       "usage": "strategy declaration with common keyword parameters",
       "expected": "declaration accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
     },
     {
       "fixture": "library_export_function.pine",
@@ -32,21 +32,21 @@
       "usage": "library declaration with exported function",
       "expected": "declaration accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
     },
     {
       "fixture": "import_alias_decl.pine",
       "context": "declarations_core",
       "usage": "import declaration with alias",
-      "expected": "declaration accepted",
+      "expected": "invalid_external_dependency",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "TradingView evidence is conclusive for this exact fixture: import syntax parsed, but the placeholder library user/lib/1 is unpublished (\"The user 'user' does not have a published library titled 'lib'\"). Parser acceptance remains correct; this is not a parser diagnostic."
     },
     {
       "fixture": "export_udt_decl.pine",
@@ -55,9 +55,9 @@
       "expected": "declaration accepted",
       "pine2ast_status": "pass",
       "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 TradingView evidence failed after Pine Editor paste/indentation changed the second UDT field to column 9; fixture kept as valid Pine v6 syntax and requires rerun with paste-safe insertion. Observed v3.9 tail: problem; Mismatched input \"float\" expecting set \"end of line without line continuation\"(CE10013)"
     },
     {
       "fixture": "function_defaults_decl.pine",
@@ -65,14 +65,13 @@
       "usage": "function parameter default declaration",
       "expected": "declaration accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "pending_external_oracle",
-      "checked_at": null,
-      "oracle": "pending TradingView Pine Editor v6 manual compile check; v3.7 browser attempt blocked by sign-in requirement",
-      "message": "v3.7 TradingView oracle verification attempt was blocked before fixture-specific compile evidence: existing profile [local-home]/.config/tradingview-oracle-profile opened the Pine Editor, but Ctrl+Enter/Add-to-chart required sign-in. Status remains pending_external_oracle; blocker evidence is recorded in TV_ORACLE_ATTEMPT_v3_7/."
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
     }
   ],
-  "checked_by": "openclaw-local-fixture-prep",
-  "last_attempted_at": "2026-04-27T15:18:00+03:00",
-  "last_attempt_blocker": "TradingView displayed Sign in with email modal after Pine Editor fixture insertion and Ctrl+Enter; no fixture-specific compile result was available.",
-  "attempt_evidence": "TV_ORACLE_ATTEMPT_v3_7/"
+  "checked_by": "openclaw-v3.10-oracle-fix",
+  "last_attempted_at": "2026-04-27T18:23:38+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
 }

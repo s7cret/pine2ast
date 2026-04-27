@@ -1,6 +1,6 @@
 //@version=6
 indicator("Wrapped ternary")
 x = close > open ?
-    high :
-    low
+  high :
+  low
 plot(x)

@@ -12,8 +12,8 @@ def test_compile_oracle_report_tracks_verified_external_checks_and_pending_expan
     assert report.metadata_count >= 6
     assert report.fixture_count >= 35
     assert report.invalid_count == 0
-    assert report.ok_count >= 5
-    assert report.pending_count >= 30
+    assert report.ok_count >= 23
+    assert report.pending_count >= 12
     assert not report.ok
 
     payload = report_to_dict(report)
@@ -24,13 +24,14 @@ def test_compile_oracle_report_tracks_verified_external_checks_and_pending_expan
         entry["metadata_file"] == "strategy_namespace/metadata.json" and entry["ok"]
         for entry in payload["entries"]
     )
-    pending_expansion_entries = [
+    expansion_entries = [
         entry
         for entry in payload["entries"]
         if entry["metadata_file"] != "strategy_namespace/metadata.json"
     ]
-    assert all(entry["pending"] for entry in pending_expansion_entries)
-    assert all(entry["pine2ast_status"] == "pass" for entry in pending_expansion_entries)
+    assert any(entry["tradingview_status"] == "ok" for entry in expansion_entries)
+    assert any(entry["pending"] for entry in expansion_entries)
+    assert all(entry["pine2ast_status"] == "pass" for entry in expansion_entries)
 
 
 def test_compile_oracle_report_accepts_legacy_and_requested_verified_statuses(

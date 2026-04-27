@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-27",
-  "oracle": "TradingView Pine Editor external compile oracle, authenticated browser session; evidence in TV_ORACLE_EVIDENCE_v3_3/",
+  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
   "policy": [
     {
       "fixture": "indicator_strategy_long_allowed.pine",
@@ -11,9 +11,9 @@
       "expected": "allowed as constant",
       "pine2ast_status": "pass",
       "tradingview_status": "ok",
-      "checked_at": "2026-04-27T13:55:12+03:00",
-      "oracle": "TradingView Pine Editor v6",
-      "message": "TradingView Pine Editor v6 compiled successfully (Ctrl+Enter, 2026-04-27).",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled.",
       "evidence": {
         "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_long_allowed.pine.body.txt",
         "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_long_allowed.pine.dom.json",
@@ -27,9 +27,9 @@
       "expected": "allowed as constant",
       "pine2ast_status": "pass",
       "tradingview_status": "ok",
-      "checked_at": "2026-04-27T13:55:12+03:00",
-      "oracle": "TradingView Pine Editor v6",
-      "message": "TradingView Pine Editor v6 compiled successfully after using valid library title identifier.",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled.",
       "evidence": {
         "body_text": "TV_ORACLE_EVIDENCE_v3_3/library_strategy_long_allowed.pine.body.txt",
         "dom_json": "TV_ORACLE_EVIDENCE_v3_3/library_strategy_long_allowed.pine.dom.json",
@@ -43,9 +43,9 @@
       "expected": "forbidden",
       "pine2ast_status": "pass",
       "tradingview_status": "invalid_expected",
-      "checked_at": "2026-04-27T13:55:12+03:00",
-      "oracle": "TradingView Pine Editor v6",
-      "message": "TradingView CE10027: strategy.equity cannot be used in indicator script.",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile produced expected invalid result: problem; You cannot use strategy functions (strategy.equity) in indicator script. Please replace \"indicator\" with \"strategy\".(CE10027)",
       "evidence": {
         "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_equity_forbidden.pine.body.txt",
         "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_strategy_equity_forbidden.pine.dom.json",
@@ -59,9 +59,9 @@
       "expected": "allowed",
       "pine2ast_status": "pass",
       "tradingview_status": "ok",
-      "checked_at": "2026-04-27T13:55:12+03:00",
-      "oracle": "TradingView Pine Editor v6",
-      "message": "TradingView Pine Editor v6 compiled successfully for strategy.closedtrades accessors in strategy context.",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled.",
       "evidence": {
         "body_text": "TV_ORACLE_EVIDENCE_v3_3/strategy_closedtrades_allowed.pine.body.txt",
         "dom_json": "TV_ORACLE_EVIDENCE_v3_3/strategy_closedtrades_allowed.pine.dom.json",
@@ -75,9 +75,9 @@
       "expected": "forbidden",
       "pine2ast_status": "pass",
       "tradingview_status": "invalid_expected",
-      "checked_at": "2026-04-27T13:55:12+03:00",
-      "oracle": "TradingView Pine Editor v6",
-      "message": "TradingView CE10027: strategy.closedtrades.entry_price cannot be used in indicator script.",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile produced expected invalid result: problem; You cannot use strategy functions (strategy.closedtrades.entry_price) in indicator script. Please replace \"indicator\" with \"strategy\".(CE10027)",
       "evidence": {
         "body_text": "TV_ORACLE_EVIDENCE_v3_3/indicator_closedtrades_forbidden.pine.body.txt",
         "dom_json": "TV_ORACLE_EVIDENCE_v3_3/indicator_closedtrades_forbidden.pine.dom.json",
@@ -85,5 +85,7 @@
       }
     }
   ],
-  "checked_by": "openclaw-assisted-playwright"
+  "checked_by": "openclaw-v3.10-oracle-fix",
+  "last_attempted_at": "2026-04-27T18:23:38+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
 }

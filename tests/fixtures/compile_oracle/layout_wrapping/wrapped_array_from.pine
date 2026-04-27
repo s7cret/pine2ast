@@ -1,8 +1,8 @@
 //@version=6
 indicator("Wrapped array")
 a = array.from(
-    close,
-    open,
-    high
+  close,
+  open,
+  high
 )
 plot(array.get(a, 0))
