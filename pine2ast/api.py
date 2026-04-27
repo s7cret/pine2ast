@@ -33,6 +33,23 @@ class ParseOptions:
     max_tokens: int = DEFAULT_MAX_TOKENS
     max_ast_nodes: int = DEFAULT_MAX_AST_NODES
     strict_builtin_namespaces: bool = False
+    runtime_contract_profile: str | None = None
+
+
+def runtime_contract_v1_4_options(**overrides: object) -> ParseOptions:
+    """Return parse options for AST2Python/PineLib runtime_contract v1.4 consumers.
+
+    Default parsing remains a compatibility mode. This profile is the fail-closed
+    consumer mode: unknown builtin namespace members are errors and AST nodes that
+    the v1.4 stack cannot lower are surfaced as blocking diagnostics.
+    """
+
+    options = ParseOptions(strict_builtin_namespaces=True, runtime_contract_profile="v1.4")
+    for name, value in overrides.items():
+        if not hasattr(options, name):
+            raise TypeError(f"Unknown ParseOptions field: {name}")
+        setattr(options, name, value)
+    return options
 
 
 @dataclass(slots=True)
@@ -111,6 +128,19 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
             strict_builtin_namespaces=options.strict_builtin_namespaces,
         ).analyze(ast)
         diagnostics.extend(semantic_model.diagnostics)
+    if ast is not None and options.runtime_contract_profile in {"v1.4", "runtime_contract_v1_4"}:
+        from pine2ast.runtime_contract import unsupported_features_for_program
+
+        for feature in unsupported_features_for_program(ast):
+            diagnostics.append(
+                Diagnostic(
+                    Severity.ERROR,
+                    str(feature["code"]),
+                    f"Not lowerable under runtime_contract v1.4: {feature['message']}",
+                    ast.span.__class__(**feature["span"]),
+                    hint="Use compatibility parse mode only for non-runtime consumers.",
+                )
+            )
     if ast is not None:
         ast_node_count = sum(1 for _ in walk(ast))
         if ast_node_count > options.max_ast_nodes:

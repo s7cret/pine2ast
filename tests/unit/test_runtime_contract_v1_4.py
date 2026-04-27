@@ -5,7 +5,7 @@ import json
 from dataclasses import fields, is_dataclass
 from pathlib import Path
 
-from pine2ast.api import parse_code
+from pine2ast.api import parse_code, runtime_contract_v1_4_options
 from pine2ast.ast.base import ASTNode
 from pine2ast.ast.types import TypeRef
 import pine2ast.ast.nodes as nodes
@@ -60,19 +60,35 @@ def test_mapping_unsupported_feature_catalog_is_consistent() -> None:
     assert "ImportDeclaration" in unsupported
 
 
-def test_imports_have_runtime_contract_unsupported_marker_without_diagnostic_drift() -> None:
+def test_imports_have_runtime_contract_marker_and_profile_blocks_lowering() -> None:
     src = """//@version=6
 library("L")
 import user/lib/1 as lib
 """
-    result = parse_code(src)
-    assert result.ok
-    assert not [diag for diag in result.diagnostics if diag.code == codes.UNSUPPORTED_FEATURE]
-    assert result.ast is not None
-    unsupported = unsupported_features_for_program(result.ast)
+    compatibility = parse_code(src)
+    assert compatibility.ok
+    assert not [
+        diag for diag in compatibility.diagnostics if diag.code == codes.UNSUPPORTED_FEATURE
+    ]
+    assert compatibility.ast is not None
+    unsupported = unsupported_features_for_program(compatibility.ast)
     assert unsupported
     assert unsupported[0]["code"] == codes.UNSUPPORTED_FEATURE
     assert unsupported[0]["severity"] == "WARNING"
+
+    runtime_safe = parse_code(src, runtime_contract_v1_4_options())
+    assert not runtime_safe.ok
+    assert [diag for diag in runtime_safe.diagnostics if diag.code == codes.UNSUPPORTED_FEATURE]
+
+
+def test_runtime_contract_profile_blocks_unknown_builtin_namespace_members() -> None:
+    src = """//@version=6
+indicator("x")
+plot(ta.future_unknown(close))
+"""
+    result = parse_code(src, runtime_contract_v1_4_options())
+    assert not result.ok
+    assert any(diag.severity.value == "ERROR" for diag in result.diagnostics)
 
 
 def test_semantic_pass_pipeline_names_frontend_contract_phases() -> None:

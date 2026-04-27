@@ -5,7 +5,13 @@ import json
 import sys
 from pathlib import Path
 
-from pine2ast.api import ParseOptions, ast_to_json, diagnostics_to_json, parse_file
+from pine2ast.api import (
+    ParseOptions,
+    ast_to_json,
+    diagnostics_to_json,
+    parse_file,
+    runtime_contract_v1_4_options,
+)
 from pine2ast.ast.nodes import DeclarationStatement, Literal
 from pine2ast.semantic.extractors import (
     extract_alertconditions,
@@ -108,6 +114,19 @@ def _exit_code(result) -> int:
     return 0
 
 
+def _parse_options(args, **overrides: object) -> ParseOptions:
+    values = {
+        "collect_tokens": getattr(args, "tokens", False),
+        "run_semantic": not getattr(args, "no_semantic", False),
+        "source_name": args.path,
+        "strict_builtin_namespaces": getattr(args, "strict_builtin_namespaces", False),
+    }
+    values.update(overrides)
+    if getattr(args, "runtime_contract_v1_4", False):
+        return runtime_contract_v1_4_options(**values)
+    return ParseOptions(**values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="pine2ast")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -118,6 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     p_parse.add_argument("--no-semantic", action="store_true")
     p_parse.add_argument("--tokens", action="store_true")
     p_parse.add_argument("--strict-builtin-namespaces", action="store_true")
+    p_parse.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_tokens = sub.add_parser("tokens")
     p_tokens.add_argument("path")
@@ -125,6 +145,7 @@ def main(argv: list[str] | None = None) -> int:
     p_validate = sub.add_parser("validate")
     p_validate.add_argument("path")
     p_validate.add_argument("--strict-builtin-namespaces", action="store_true")
+    p_validate.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_symbols = sub.add_parser("dump-symbols")
     p_symbols.add_argument("path")
@@ -159,18 +180,21 @@ def main(argv: list[str] | None = None) -> int:
     p_inspect.add_argument("--json", dest="json_path")
     p_inspect.add_argument("--no-semantic", action="store_true")
     p_inspect.add_argument("--strict-builtin-namespaces", action="store_true")
+    p_inspect.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_schema = sub.add_parser("schema-check")
     p_schema.add_argument("path")
     p_schema.add_argument("--json", dest="json_path")
     p_schema.add_argument("--no-semantic", action="store_true")
     p_schema.add_argument("--strict-builtin-namespaces", action="store_true")
+    p_schema.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_diag_report = sub.add_parser("diagnostics-report")
     p_diag_report.add_argument("path")
     p_diag_report.add_argument("--json", dest="json_path")
     p_diag_report.add_argument("--no-semantic", action="store_true")
     p_diag_report.add_argument("--strict-builtin-namespaces", action="store_true")
+    p_diag_report.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_sarif = sub.add_parser("sarif")
     p_sarif.add_argument("path")
@@ -294,14 +318,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if payload.get("ok") else 1
 
     if args.cmd == "schema-check":
-        result = parse_file(
-            args.path,
-            ParseOptions(
-                run_semantic=not args.no_semantic,
-                source_name=args.path,
-                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
-            ),
-        )
+        result = parse_file(args.path, _parse_options(args))
         schema_report = validate_ast_schema(result.ast) if result.ast else None
         payload = {
             "parse_ok": result.ok,
@@ -317,14 +334,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if schema_report is not None and schema_report.ok and result.ast is not None else 1
 
     if args.cmd == "diagnostics-report":
-        result = parse_file(
-            args.path,
-            ParseOptions(
-                run_semantic=not args.no_semantic,
-                source_name=args.path,
-                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
-            ),
-        )
+        result = parse_file(args.path, _parse_options(args))
         diagnostics_report = summarize_diagnostics(result.diagnostics)
         payload = {
             "ok": result.ok,
@@ -340,14 +350,7 @@ def main(argv: list[str] | None = None) -> int:
         return _exit_code(result)
 
     if args.cmd == "inspect":
-        result = parse_file(
-            args.path,
-            ParseOptions(
-                run_semantic=not args.no_semantic,
-                source_name=args.path,
-                strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
-            ),
-        )
+        result = parse_file(args.path, _parse_options(args))
         payload = {
             "schema_version": 1,
             "contract": "pine2ast.inspect.optimizer.v1",
@@ -459,15 +462,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{tok.kind.value:<20} {tok.text!r} {tok.span.start_line}:{tok.span.start_col}")
         return _exit_code(result)
 
-    result = parse_file(
-        args.path,
-        ParseOptions(
-            collect_tokens=getattr(args, "tokens", False),
-            run_semantic=not getattr(args, "no_semantic", False),
-            source_name=args.path,
-            strict_builtin_namespaces=getattr(args, "strict_builtin_namespaces", False),
-        ),
-    )
+    result = parse_file(args.path, _parse_options(args))
 
     if args.cmd == "parse":
         if args.json_path:
