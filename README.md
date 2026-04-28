@@ -23,6 +23,12 @@ python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FI
 
 Current release: `v3.9 runtime_contract_v1.4 frontend bridge` / package `0.3.9`. Stack train metadata: `pain-stack-pine-v6-2026.04-r1`, `pine_language_version=6`, `pine_docs_baseline=2026-04`, `runtime_contract=1.4` (see `RELEASE_STACK_MANIFEST_2026_04_R1.json`). TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.9 does not claim full Pine v6 parity, does not claim wider oracle verification, and keeps the 30-fixture expansion pending. Runtime bridge notes live in `docs/runtime_contract_v1_4_frontend_mapping.md`; parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` remains verified-only; use `bash scripts/release_gate.sh --allow-pending-oracle` only for honest `oracle_expansion_pending` packaging.
 
+## Release scope and stack boundaries
+
+`pine2ast` is the frontend/parser component for the April 2026 `runtime_contract=1.4` stack snapshot. It owns syntax, normalized AST JSON, semantic diagnostics, and frontend-to-runtime compatibility metadata. It does **not** execute Pine, run backtests, optimize parameters, fetch market data, or promise full TradingView parity outside fixture-specific evidence.
+
+Future Backtest Engine and Optimizer work is intentionally outside this package and outside the current `pain-stack-pine-v6-2026.04-r1` release claim. If added later, those layers should consume explicit parser/runtime contracts rather than being documented here as implemented scope.
+
 Fallback without pytest, only stdlib-compatible tests:
 
 ```bash
@@ -86,6 +92,10 @@ Exit codes:
 - CLI and pytest suite.
 - Hardening: generic type annotations (`array<float>`), generic calls (`array.new<float>()`), comma-separated one-line function bodies, stricter second declaration detection, `input`-qualifier rejection, loop-local forbidden builtin checks, method receiver type diagnostics.
 - v0.1.2: tuple-expression returns (`[a, b]`), stricter declaration-in-local diagnostics, data-driven builtin named-parameter validation, history reference warning for local-scope values, stronger optimizer extractors, golden AST regression, and `pine2ast bench`.
+
+## License
+
+MIT. See `LICENSE`.
 
 ## Ограничения текущей версии
 
