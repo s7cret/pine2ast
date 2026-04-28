@@ -72,6 +72,13 @@ exclude_lines = [
 [tool.mypy]
 python_version = "3.11"
 packages = ["pine2ast"]
+exclude = [
+  "^build/",
+  "^dist/",
+  "^\\.setuptools-build/",
+  "^tests/",
+  "^tools/",
+]
 ignore_missing_imports = true
 warn_unused_configs = true
 check_untyped_defs = true
