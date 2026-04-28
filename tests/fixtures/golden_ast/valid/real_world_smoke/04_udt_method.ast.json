@@ -181,7 +181,54 @@
       },
       "receiver_name": "p",
       "parameters": [],
-      "body": false,
+      "body": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 98,
+          "end_offset": 109,
+          "start_line": 6,
+          "start_col": 30,
+          "end_line": 6,
+          "end_col": 41
+        },
+        "op": ">",
+        "left": {
+          "kind": "MemberAccessExpr",
+          "span": {
+            "start_offset": 98,
+            "end_offset": 101,
+            "start_line": 6,
+            "start_col": 30,
+            "end_line": 6,
+            "end_col": 33
+          },
+          "object": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 98,
+              "end_offset": 99,
+              "start_line": 6,
+              "start_col": 30,
+              "end_line": 6,
+              "end_col": 31
+            },
+            "name": "p"
+          },
+          "member": "y"
+        },
+        "right": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 104,
+            "end_offset": 109,
+            "start_line": 6,
+            "start_col": 36,
+            "end_line": 6,
+            "end_col": 41
+          },
+          "name": "close"
+        }
+      },
       "is_exported": false
     },
     {

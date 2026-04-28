@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-from pine2ast import parse_code, validate_ast_schema
+from pine2ast import ParseOptions, parse_code, validate_ast_schema
 from pine2ast.diagnostics import codes
 from pine2ast.diagnostics.reports import summarize_diagnostics
 from pine2ast.cli import main
@@ -97,3 +97,24 @@ plot(close)
     diag_payload = json.loads(diag_json.read_text(encoding="utf-8"))
     assert schema_payload["schema"]["ok"] is True
     assert diag_payload["summary"]["ok"] is True
+
+
+def test_ast_schema_validator_rejects_primitive_function_and_method_bodies():
+    src = """//@version=6
+indicator("schema")
+f() => 1
+method m(float x) => x
+"""
+    result = parse_code(src, ParseOptions(run_semantic=False))
+    assert result.ast is not None
+    declarations = [
+        item
+        for item in result.ast.items
+        if item.kind in {"FunctionDeclaration", "MethodDeclaration"}
+    ]
+    assert len(declarations) == 2
+    for declaration in declarations:
+        declaration.body = False
+    report = validate_ast_schema(result.ast)
+    assert report.ok is False
+    assert [issue.code for issue in report.issues].count("AST_DECLARATION_BODY_INVALID") == 2

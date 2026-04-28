@@ -47,6 +47,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Return success even when external TradingView checks are still pending.",
     )
     parser.add_argument(
+        "--allow-platform-blocked",
+        action="store_true",
+        help=(
+            "Return success for explicit non-verified/platform-blocked oracle mode. "
+            "Never use this for oracle_verified release claims."
+        ),
+    )
+    parser.add_argument(
         "--pending-release-suffix",
         help="Required non-RC suffix for honest pending-oracle production packages.",
     )
@@ -74,6 +82,13 @@ def main(argv: list[str] | None = None) -> int:
     if report.invalid_count:
         return 2
     if report.pending_count and not args.allow_pending:
+        return 1
+    if report.platform_blocked_count and not args.allow_platform_blocked:
+        print(
+            "platform_blocked compile-oracle entries are non-verified; use "
+            "--allow-platform-blocked only for explicitly labeled non-verified modes",
+            file=sys.stderr,
+        )
         return 1
     return 0
 

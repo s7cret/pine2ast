@@ -45,7 +45,7 @@ def test_compile_oracle_report_tracks_authenticated_external_checks_without_pend
     assert all(entry["pine2ast_status"] == "pass" for entry in expansion_entries)
 
 
-def test_compile_oracle_report_accepts_legacy_requested_and_platform_blocked_statuses(
+def test_compile_oracle_report_accepts_legacy_requested_but_fails_platform_blocked_statuses(
     tmp_path: Path,
 ) -> None:
     category = tmp_path / "oracle"
@@ -70,8 +70,8 @@ def test_compile_oracle_report_accepts_legacy_requested_and_platform_blocked_sta
 
     report = build_compile_oracle_report(tmp_path)
 
-    assert report.ok
+    assert not report.ok
     assert report.ok_count == 4
     assert report.platform_blocked_count == 1
     assert report.pending_count == 0
-    assert report.invalid_count == 0
+    assert report.invalid_count == 1

@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from typing import cast
-
 from pine2ast.ast.nodes import (
-    Block,
     EnumDeclaration,
     EnumMember,
     FieldDeclaration,
@@ -15,7 +12,6 @@ from pine2ast.ast.nodes import (
     Parameter,
     TypeDeclaration,
 )
-from pine2ast.ast.base import Expression
 from pine2ast.ast.types import TypeRef
 from pine2ast.lexer.token import TokenKind
 
@@ -123,7 +119,8 @@ class DeclarationsMixin(BaseParser):
             receiver_type,
             receiver_name,
             params,
-            cast(Block | Expression, exported),
+            body,
+            exported,
         )
 
     def parse_params(self, *, until_rparen: bool = True) -> list[Parameter]:

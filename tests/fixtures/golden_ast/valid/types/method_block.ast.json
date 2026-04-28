@@ -181,7 +181,78 @@
       },
       "receiver_name": "p",
       "parameters": [],
-      "body": false,
+      "body": {
+        "kind": "Block",
+        "span": {
+          "start_offset": 99,
+          "end_offset": 112,
+          "start_line": 7,
+          "start_col": 5,
+          "end_line": 8,
+          "end_col": 2
+        },
+        "statements": [
+          {
+            "kind": "ExpressionStatement",
+            "span": {
+              "start_offset": 99,
+              "end_offset": 110,
+              "start_line": 7,
+              "start_col": 5,
+              "end_line": 7,
+              "end_col": 16
+            },
+            "expression": {
+              "kind": "BinaryExpr",
+              "span": {
+                "start_offset": 99,
+                "end_offset": 110,
+                "start_line": 7,
+                "start_col": 5,
+                "end_line": 7,
+                "end_col": 16
+              },
+              "op": ">",
+              "left": {
+                "kind": "MemberAccessExpr",
+                "span": {
+                  "start_offset": 99,
+                  "end_offset": 102,
+                  "start_line": 7,
+                  "start_col": 5,
+                  "end_line": 7,
+                  "end_col": 8
+                },
+                "object": {
+                  "kind": "Identifier",
+                  "span": {
+                    "start_offset": 99,
+                    "end_offset": 100,
+                    "start_line": 7,
+                    "start_col": 5,
+                    "end_line": 7,
+                    "end_col": 6
+                  },
+                  "name": "p"
+                },
+                "member": "y"
+              },
+              "right": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 105,
+                  "end_offset": 110,
+                  "start_line": 7,
+                  "start_col": 11,
+                  "end_line": 7,
+                  "end_col": 16
+                },
+                "name": "close"
+              }
+            }
+          }
+        ]
+      },
       "is_exported": false
     },
     {

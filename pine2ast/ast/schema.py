@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from pine2ast.ast.base import ASTNode
+from pine2ast.ast.base import ASTNode, Expression
+from pine2ast.ast.nodes import Block, FunctionDeclaration, MethodDeclaration
 from pine2ast.ast.visitors import walk
 from pine2ast.lexer.token import SourceSpan
 
@@ -129,6 +130,18 @@ def validate_ast_schema(program: ASTNode) -> SchemaReport:
                     "AST node span has invalid ordering or coordinates.",
                     node.kind,
                     span,
+                )
+            )
+
+        if isinstance(node, (FunctionDeclaration, MethodDeclaration)) and not isinstance(
+            node.body, (Block, Expression)
+        ):
+            issues.append(
+                SchemaIssue(
+                    "AST_DECLARATION_BODY_INVALID",
+                    "FunctionDeclaration and MethodDeclaration body must be a Block or Expression.",
+                    node.kind,
+                    span if isinstance(span, SourceSpan) else None,
                 )
             )
 

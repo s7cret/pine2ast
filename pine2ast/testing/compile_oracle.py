@@ -138,7 +138,7 @@ def build_compile_oracle_report(path: str | Path) -> CompileOracleReport:
             platform_blocked = status_text == PLATFORM_BLOCKED_STATUS
             status_allowed = status_text in ALLOWED_STATUSES
             fixture_exists = (metadata_file.parent / fixture).is_file()
-            ok = status_text in (VERIFIED_STATUSES | {PLATFORM_BLOCKED_STATUS}) and fixture_exists
+            ok = status_text in VERIFIED_STATUSES and fixture_exists
             message_parts: list[str] = []
             if not fixture_exists:
                 message_parts.append("fixture file is missing")

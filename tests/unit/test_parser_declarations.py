@@ -39,3 +39,22 @@ method isBullish(Pivot p) => p.y > close
     assert any(isinstance(x, TupleDeclaration) for x in items)
     assert any(isinstance(x, FunctionDeclaration) for x in items)
     assert any(isinstance(x, MethodDeclaration) for x in items)
+
+
+def test_method_body_export_and_receiver_shape_regression():
+    src = """//@version=6
+library("Lib")
+type Pivot
+    float y
+export method isBullish(Pivot p, int len = 14) => p.y > close and len > 0
+"""
+    items = parse_items(src)
+    method = next(x for x in items if isinstance(x, MethodDeclaration))
+    assert not isinstance(method.body, bool)
+    assert method.is_exported is True
+    assert method.receiver_type is not None
+    assert method.receiver_type.name == "Pivot"
+    assert method.receiver_name == "p"
+    assert [param.name for param in method.parameters] == ["len"]
+    assert method.parameters[0].type_ref is not None
+    assert method.parameters[0].type_ref.name == "int"

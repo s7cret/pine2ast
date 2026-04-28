@@ -155,8 +155,55 @@
       },
       "receiver_name": "p",
       "parameters": [],
-      "body": true,
-      "is_exported": false
+      "body": {
+        "kind": "Block",
+        "span": {
+          "start_offset": 94,
+          "end_offset": 98,
+          "start_line": 6,
+          "start_col": 5,
+          "end_line": 7,
+          "end_col": 1
+        },
+        "statements": [
+          {
+            "kind": "ExpressionStatement",
+            "span": {
+              "start_offset": 94,
+              "end_offset": 97,
+              "start_line": 6,
+              "start_col": 5,
+              "end_line": 6,
+              "end_col": 8
+            },
+            "expression": {
+              "kind": "MemberAccessExpr",
+              "span": {
+                "start_offset": 94,
+                "end_offset": 97,
+                "start_line": 6,
+                "start_col": 5,
+                "end_line": 6,
+                "end_col": 8
+              },
+              "object": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 94,
+                  "end_offset": 95,
+                  "start_line": 6,
+                  "start_col": 5,
+                  "end_line": 6,
+                  "end_col": 6
+                },
+                "name": "p"
+              },
+              "member": "y"
+            }
+          }
+        ]
+      },
+      "is_exported": true
     }
   ],
   "diagnostics": [],
