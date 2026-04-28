@@ -141,3 +141,12 @@ MIT. See `LICENSE`.
 ## Acknowledgements
 
 This project was developed with AI-assisted engineering workflows. The license and release obligations are defined only by `LICENSE` and the repository documentation above.
+
+## Support / Donations
+
+If this project saves you time or helps your trading/research infrastructure, tips are appreciated:
+
+- TON: `UQAyIr2sQ4-_Q5L-4VINcU18khDas5GPbAlYEkQN6S_qzui2`
+- SOL: `EbxMUK2W4RGeQZCTRFrdgpEJvnqtyczPZvBrQa1cYJnQ`
+
+Donations are optional and do not affect the MIT license terms.
