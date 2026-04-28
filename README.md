@@ -21,7 +21,7 @@ python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-m
 python -m pine2ast quality-gate tests/fixtures/real_world --json QUALITY_GATE_FINAL.json
 ```
 
-Current release: `v3.9 runtime_contract_v1.4 frontend bridge` / package `0.3.9`. TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.9 does not claim wider oracle verification and keeps the 30-fixture expansion pending. Runtime bridge notes live in `docs/runtime_contract_v1_4_frontend_mapping.md`; parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` remains verified-only; use `bash scripts/release_gate.sh --allow-pending-oracle` only for honest `oracle_expansion_pending` packaging.
+Current release: `v3.9 runtime_contract_v1.4 frontend bridge` / package `0.3.9`. Stack train metadata: `pain-stack-pine-v6-2026.04-r1`, `pine_language_version=6`, `pine_docs_baseline=2026-04`, `runtime_contract=1.4` (see `RELEASE_STACK_MANIFEST_2026_04_R1.json`). TradingView Pine Editor compile-oracle evidence is retained for the P0 strategy namespace fixtures in `TV_ORACLE_EVIDENCE_v3_3/`; v3.9 does not claim full Pine v6 parity, does not claim wider oracle verification, and keeps the 30-fixture expansion pending. Runtime bridge notes live in `docs/runtime_contract_v1_4_frontend_mapping.md`; parser implementation notes live in `docs/parser_architecture.md`. Strict `bash scripts/release_gate.sh` remains verified-only; use `bash scripts/release_gate.sh --allow-pending-oracle` only for honest `oracle_expansion_pending` packaging.
 
 Fallback without pytest, only stdlib-compatible tests:
 
