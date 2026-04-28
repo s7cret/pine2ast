@@ -28,7 +28,7 @@ pine2ast = "pine2ast.cli:main"
 include = ["pine2ast*"]
 
 [tool.setuptools.package-data]
-pine2ast = ["semantic/*.json", "runtime_contract_v1_4/*.json"]
+pine2ast = ["semantic/*.json", "runtime_contract_v1_4/*.json", "reference_catalog/*.json"]
 
 [tool.black]
 line-length = 100

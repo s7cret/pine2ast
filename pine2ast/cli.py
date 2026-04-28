@@ -33,6 +33,12 @@ from pine2ast.quality import quality_gate_json
 from pine2ast.diagnostics.sarif import diagnostics_to_sarif_json
 from pine2ast.semantic.reports import semantic_report
 from pine2ast.semantic.builtin_registry import builtin_registry_coverage_report
+from pine2ast.reference_catalog import (
+    ReferenceCatalogError,
+    export_catalog_markdown,
+    validate_catalog,
+    validate_matrix,
+)
 from pine2ast import __version__
 
 
@@ -221,6 +227,13 @@ def main(argv: list[str] | None = None) -> int:
     p_builtin_coverage = sub.add_parser("builtin-coverage")
     p_builtin_coverage.add_argument("--json", dest="json_path")
 
+    p_catalog = sub.add_parser("catalog")
+    p_catalog.add_argument("action", choices=["validate", "export-md"])
+    p_catalog.add_argument("output", nargs="?", default="docs/REFERENCE_CATALOG.md")
+
+    p_matrix = sub.add_parser("matrix")
+    p_matrix.add_argument("action", choices=["validate"])
+
     p_golden = sub.add_parser("golden")
     p_golden.add_argument("path")
     p_golden.add_argument("--ast")
@@ -231,6 +244,28 @@ def main(argv: list[str] | None = None) -> int:
     p_golden.add_argument("--strict-builtin-namespaces", action="store_true")
 
     args = parser.parse_args(argv)
+
+    if args.cmd == "catalog":
+        try:
+            if args.action == "validate":
+                validate_catalog()
+                print("OK reference catalog")
+            elif args.action == "export-md":
+                validate_catalog()
+                print(export_catalog_markdown(args.output))
+        except ReferenceCatalogError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+        return 0
+
+    if args.cmd == "matrix":
+        try:
+            validate_matrix()
+        except ReferenceCatalogError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+        print("OK parity matrix")
+        return 0
 
     if args.cmd == "perf-baseline":
         output = perf_baseline_json(

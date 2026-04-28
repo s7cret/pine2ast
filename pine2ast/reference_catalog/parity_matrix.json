@@ -1,0 +1,917 @@
+{
+  "schema_version": "pain.parity_matrix.v1",
+  "pine_version": 6,
+  "scope": "amended_6pkg_p0",
+  "items": [
+    {
+      "id": "array.avg",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.clear",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.copy",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.get",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.includes",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.indexof",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.max",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.min",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.new_bool",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.new_float",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.new_int",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.new_string",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.pop",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.push",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.set",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.shift",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.size",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.sum",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "array.unshift",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.collections"
+    },
+    {
+      "id": "bar_index",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "barcolor",
+      "priority": "P0",
+      "parser_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.visual"
+    },
+    {
+      "id": "barstate.isconfirmed",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "barstate.isfirst",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "barstate.ishistory",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "barstate.islast",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "barstate.isnew",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "barstate.isrealtime",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.barstate"
+    },
+    {
+      "id": "bgcolor",
+      "priority": "P0",
+      "parser_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.visual"
+    },
+    {
+      "id": "close",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "fill",
+      "priority": "P0",
+      "parser_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.visual"
+    },
+    {
+      "id": "high",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "hline",
+      "priority": "P0",
+      "parser_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.visual"
+    },
+    {
+      "id": "indicator",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pine2ast.declarations"
+    },
+    {
+      "id": "input",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.bool",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.float",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.int",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.session",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.source",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.string",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "input.timeframe",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.inputs"
+    },
+    {
+      "id": "last_bar_index",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "library",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pine2ast.declarations"
+    },
+    {
+      "id": "low",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "math.abs",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.ceil",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.floor",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.max",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.min",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.pow",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.round",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "math.sqrt",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.math"
+    },
+    {
+      "id": "open",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "plot",
+      "priority": "P0",
+      "parser_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.visual"
+    },
+    {
+      "id": "request.security",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "PARTIAL",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.request"
+    },
+    {
+      "id": "strategy",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pine2ast.declarations"
+    },
+    {
+      "id": "strategy.cancel",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.cancel_all",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.close",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.close_all",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.entry",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.exit",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "strategy.order",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "backtest_engine.strategy_context"
+    },
+    {
+      "id": "syminfo.basecurrency",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "syminfo.currency",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "syminfo.mintick",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "syminfo.pointvalue",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "syminfo.ticker",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "syminfo.tickerid",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.syminfo"
+    },
+    {
+      "id": "ta.atr",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.change",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.cross",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.crossover",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.crossunder",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.ema",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.highest",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.lowest",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.macd",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.rma",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.rsi",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.sma",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "ta.tr",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.ta"
+    },
+    {
+      "id": "time",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "time_close",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    },
+    {
+      "id": "timeframe.isdaily",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "timeframe.isminutes",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "timeframe.ismonthly",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "timeframe.isweekly",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "timeframe.multiplier",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "timeframe.period",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "runtime_owner": "pinelib.timeframe"
+    },
+    {
+      "id": "volume",
+      "priority": "P0",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "codegen_status": "DONE_VERIFIED",
+      "runtime_status": "DONE_VERIFIED",
+      "golden_status": "IMPLEMENTED_UNVERIFIED",
+      "runtime_owner": "pinelib.runtime"
+    }
+  ]
+}
