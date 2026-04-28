@@ -3464,6 +3464,96 @@
           "qualifier_max": "const",
           "required": false,
           "type": "bool"
+        },
+        {
+          "name": "initial_capital",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "default_qty_type",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "default_qty_value",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "pyramiding",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "commission_type",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "commission_value",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "slippage",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "process_orders_on_close",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_on_order_fills",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_on_every_tick",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "use_bar_magnifier",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "backtest_fill_limits_assumption",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "margin_long",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "margin_short",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
         }
       ],
       "pine_version": "6",
@@ -3499,6 +3589,21 @@
           "name": "qty",
           "required": false,
           "type": "float"
+        },
+        {
+          "name": "qty_percent",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "immediately",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
