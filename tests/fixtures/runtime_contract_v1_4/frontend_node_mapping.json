@@ -7,7 +7,7 @@
     "no_schema_drift": true,
     "history_ref_expr_for_square_brackets": true,
     "unsupported_must_have_diagnostic": "P2A1507",
-    "tradingview_oracle_verified_claim": "unchanged; pending entries remain pending without fixture-specific evidence"
+    "tradingview_oracle_verified_claim": "v3.11 closed: 35/35 compile-oracle fixtures have real TradingView-derived terminal evidence; 0 pending, 0 platform_blocked"
   },
   "unsupported_features": [
     {

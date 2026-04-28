@@ -6,15 +6,17 @@ from pathlib import Path
 from pine2ast.testing.compile_oracle import build_compile_oracle_report, report_to_dict
 
 
-def test_compile_oracle_report_tracks_verified_external_checks_and_pending_expansion() -> None:
+def test_compile_oracle_report_tracks_authenticated_external_checks_without_pending_or_blocked() -> (
+    None
+):
     report = build_compile_oracle_report("tests/fixtures/compile_oracle")
 
     assert report.metadata_count >= 6
     assert report.fixture_count >= 35
     assert report.invalid_count == 0
-    assert report.ok_count >= 23
+    assert report.ok_count >= 35
     assert report.pending_count == 0
-    assert report.platform_blocked_count >= 12
+    assert report.platform_blocked_count == 0
     assert report.ok
 
     payload = report_to_dict(report)
@@ -32,7 +34,14 @@ def test_compile_oracle_report_tracks_verified_external_checks_and_pending_expan
         if entry["metadata_file"] != "strategy_namespace/metadata.json"
     ]
     assert any(entry["tradingview_status"] == "ok" for entry in expansion_entries)
-    assert any(entry["tradingview_status"] == "platform_blocked" for entry in expansion_entries)
+    assert all(
+        entry["tradingview_status"] in {"ok", "pass", "fail_expected", "invalid_expected"}
+        for entry in expansion_entries
+    )
+    assert not any(
+        entry["tradingview_status"] in {"pending_external_oracle", "platform_blocked"}
+        for entry in expansion_entries
+    )
     assert all(entry["pine2ast_status"] == "pass" for entry in expansion_entries)
 
 

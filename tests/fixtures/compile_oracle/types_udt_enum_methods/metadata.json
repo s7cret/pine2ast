@@ -2,7 +2,7 @@
   "schema_version": 2,
   "pine_version": 6,
   "checked_at": "2026-04-28",
-  "oracle": "v3.10 tail closure: real TradingView rerun was attempted; unresolved fixtures reclassified platform_blocked with evidence, not oracle_verified.",
+  "oracle": "v3.11 authenticated TradingView oracle closure: all 35 compile-oracle fixtures have terminal real TradingView-derived status; 35/35 are verified statuses, 0 pending, 0 platform_blocked, 0 invalid metadata. Late closure evidence for prior blocked fixtures is in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/.",
   "policy": [
     {
       "fixture": "udt_constructor_method.pine",
@@ -10,11 +10,11 @@
       "usage": "UDT constructor and method call",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__udt_constructor_method.pine",
       "source_sha256": "2b84bd74990aa11608bbffa6fb5f0de7774c6cb4125d04301de57222c80c5d88"
     },
     {
@@ -23,11 +23,11 @@
       "usage": "enum member references",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__enum_switch_values.pine",
       "source_sha256": "8a1c0f143dc0e9ddad99722a1ed468d3f1707ca2fdc3750fb65c8691c740ec00"
     },
     {
@@ -36,11 +36,11 @@
       "usage": "nested UDT field access",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__nested_udt_fields.pine",
       "source_sha256": "3c356b160c7a2f1bcf5ab4f92193ce966c8e2c490bfc2d7f0d6567b70ca11354"
     },
     {
@@ -49,11 +49,11 @@
       "usage": "method with explicit parameter",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__method_with_param.pine",
       "source_sha256": "5b8457030ac505bf8cec6bf7c53c9e58ba84e7c87b861c71dfdd6c9603ee329b"
     },
     {
@@ -62,11 +62,11 @@
       "usage": "input.enum with enum default",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__enum_input_options.pine",
       "source_sha256": "a146e61559b2526c9a2bbb83e5e96935d738ec544517c0081f62f08672cb164c"
     },
     {
@@ -75,15 +75,14 @@
       "usage": "exported method in library",
       "expected": "accepted",
       "pine2ast_status": "pass",
-      "tradingview_status": "platform_blocked",
+      "tradingview_status": "ok",
       "checked_at": "2026-04-28",
-      "oracle": "TradingView platform/auth blocker evidence in TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/: authenticated compile rerun could not be completed; Pine Editor opened but Add to chart showed sign-in modal for existing oracle profile. Not oracle_verified.",
-      "message": "platform_blocked: rerun attempted with [local-home]/.config/tradingview-oracle-profile via Chromium/Playwright; Pine Editor source insertion reached Add to chart, but TradingView opened Sign in modal instead of returning compile status. Existing v3.9 evidence was paste/indentation-corrupted, so this fixture remains non-oracle-verified without fake green.",
-      "evidence_artifact": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/types_udt_enum_methods__export_method_library.pine",
       "source_sha256": "4a93f969b82cfcc7627e15ca165b4d51b38175189be9cdb5ac7f4d1ee625e06e"
     }
   ],
-  "checked_by": "openclaw-v3.10-oracle-fix",
-  "last_attempted_at": "2026-04-28T02:10:00+03:00",
-  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_10_ATTEMPT_20260428/platform_blocked_manifest.json"
+  "checked_by": "openclaw-v3.11-authenticated-tv-oracle",
+  "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/results.json"
 }

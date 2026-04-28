@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "pine_version": 6,
-  "checked_at": "2026-04-27",
-  "oracle": "v3.10 oracle-fix metadata: records real TradingView v3.9 expansion evidence where conclusive; unresolved/rewritten fixtures remain pending_external_oracle and require rerun. Not an oracle_verified release while pending entries remain.",
+  "checked_at": "2026-04-28",
+  "oracle": "v3.11 authenticated TradingView oracle closure: all 35 compile-oracle fixtures have terminal real TradingView-derived status; 35/35 are verified statuses, 0 pending, 0 platform_blocked, 0 invalid metadata. Late closure evidence for prior blocked fixtures is in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/.",
   "policy": [
     {
       "fixture": "indicator_strategy_long_allowed.pine",
