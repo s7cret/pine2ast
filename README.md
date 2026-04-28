@@ -128,7 +128,6 @@ Important guardrails:
 
 ## Documentation map
 
-- `CHANGELOG_v3.9.md` — current release notes.
 - `docs/current_limitations_v3_9.md` — current limitations.
 - `docs/runtime_contract_v1_4_frontend_mapping.md` — runtime-contract bridge notes.
 - `docs/parser_architecture.md` — parser implementation notes.
