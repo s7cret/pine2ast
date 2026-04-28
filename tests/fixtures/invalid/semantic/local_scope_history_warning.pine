@@ -1,0 +1,6 @@
+//@version=6
+indicator("Bad")
+if true
+    local = close
+    x = local[1]
+break

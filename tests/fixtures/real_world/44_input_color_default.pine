@@ -1,0 +1,6 @@
+//@version=6
+indicator("Input Color")
+upColor = input.color(color.green, "Up color")
+downColor = input.color(color.red, "Down color")
+c = close >= open ? upColor : downColor
+plot(close, color = c)

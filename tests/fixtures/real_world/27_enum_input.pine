@@ -1,0 +1,10 @@
+//@version=6
+indicator("Enum Input")
+enum Mode
+    Fast "Fast"
+    Slow "Slow"
+mode = input.enum(Mode.Fast, "Mode")
+value = switch mode
+    Mode.Fast => ta.ema(close, 9)
+    Mode.Slow => ta.ema(close, 21)
+plot(value)

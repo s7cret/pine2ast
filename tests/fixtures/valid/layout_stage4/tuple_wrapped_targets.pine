@@ -1,0 +1,11 @@
+//@version=6
+indicator("Tuple wrapped targets")
+[
+    basis,
+    upper,
+    lower
+] = ta.bb(
+    close,
+    20,
+    2
+)

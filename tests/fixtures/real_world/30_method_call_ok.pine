@@ -1,0 +1,9 @@
+//@version=6
+indicator("Method Call OK")
+type Pivot
+    int x
+    float y
+method distance(Pivot p, float level) => math.abs(p.y - level)
+p = Pivot.new(bar_index, close)
+d = p.distance(open)
+plot(d)

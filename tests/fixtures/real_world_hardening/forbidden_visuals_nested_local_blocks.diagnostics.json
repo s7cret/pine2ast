@@ -1,0 +1,4 @@
+{
+  "expected_codes": ["P2A1503"],
+  "notes": "plot() is forbidden in local Pine blocks; semantic layer must retain this contract."
+}

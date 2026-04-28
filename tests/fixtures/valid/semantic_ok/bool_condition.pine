@@ -1,0 +1,9 @@
+//@version=6
+indicator("Bool")
+flag = close > open
+x = 0
+if flag
+    x := 1
+else
+    x := 0
+plot(x)

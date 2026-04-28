@@ -1,0 +1,9 @@
+//@version=6
+indicator("Arrays")
+var array<float> values = array.new<float>()
+array.push(values, close)
+sum = 0.0
+for item in values
+    sum += item
+avg = sum / array.size(values)
+plot(avg)

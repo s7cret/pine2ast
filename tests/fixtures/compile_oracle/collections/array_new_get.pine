@@ -1,0 +1,5 @@
+//@version=6
+indicator("Array")
+a = array.new<float>()
+array.push(a, close)
+plot(array.get(a, 0))

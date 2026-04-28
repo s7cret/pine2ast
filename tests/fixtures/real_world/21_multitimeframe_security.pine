@@ -1,0 +1,6 @@
+//@version=6
+indicator("MTF Security")
+tf = input.timeframe("D", "Timeframe")
+dailyClose = request.security(syminfo.tickerid, tf, close)
+trend = dailyClose > dailyClose[1]
+plot(dailyClose)

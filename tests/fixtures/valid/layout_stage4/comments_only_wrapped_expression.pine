@@ -1,0 +1,8 @@
+//@version=6
+indicator("Comments in wrap")
+x = math.max(
+    close,
+    // comments-only physical lines inside an open call should not emit layout
+    // or terminate the argument list
+    open
+)

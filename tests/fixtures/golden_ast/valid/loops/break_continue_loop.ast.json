@@ -1,0 +1,431 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 138,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 11,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 40,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 28
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 40,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 28
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 39,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 27
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 39,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 27
+            },
+            "value": "Break continue",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 41,
+        "end_offset": 46,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 6
+      },
+      "name": "i",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "Literal",
+        "span": {
+          "start_offset": 45,
+          "end_offset": 46,
+          "start_line": 3,
+          "start_col": 5,
+          "end_line": 3,
+          "end_col": 6
+        },
+        "value": 0,
+        "literal_type": "int"
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "WhileStructure",
+      "span": {
+        "start_offset": 47,
+        "end_offset": 134,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 10,
+        "end_col": 5
+      },
+      "condition": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 53,
+          "end_offset": 59,
+          "start_line": 4,
+          "start_col": 7,
+          "end_line": 4,
+          "end_col": 13
+        },
+        "op": "<",
+        "left": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 53,
+            "end_offset": 54,
+            "start_line": 4,
+            "start_col": 7,
+            "end_line": 4,
+            "end_col": 8
+          },
+          "name": "i"
+        },
+        "right": {
+          "kind": "Literal",
+          "span": {
+            "start_offset": 57,
+            "end_offset": 59,
+            "start_line": 4,
+            "start_col": 11,
+            "end_line": 4,
+            "end_col": 13
+          },
+          "value": 10,
+          "literal_type": "int"
+        }
+      },
+      "body": {
+        "kind": "Block",
+        "span": {
+          "start_offset": 64,
+          "end_offset": 134,
+          "start_line": 5,
+          "start_col": 5,
+          "end_line": 10,
+          "end_col": 5
+        },
+        "statements": [
+          {
+            "kind": "Reassignment",
+            "span": {
+              "start_offset": 64,
+              "end_offset": 70,
+              "start_line": 5,
+              "start_col": 5,
+              "end_line": 5,
+              "end_col": 11
+            },
+            "target": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 64,
+                "end_offset": 65,
+                "start_line": 5,
+                "start_col": 5,
+                "end_line": 5,
+                "end_col": 6
+              },
+              "name": "i"
+            },
+            "op": "+=",
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 69,
+                "end_offset": 70,
+                "start_line": 5,
+                "start_col": 10,
+                "end_line": 5,
+                "end_col": 11
+              },
+              "value": 1,
+              "literal_type": "int"
+            }
+          },
+          {
+            "kind": "IfStructure",
+            "span": {
+              "start_offset": 75,
+              "end_offset": 108,
+              "start_line": 6,
+              "start_col": 5,
+              "end_line": 8,
+              "end_col": 7
+            },
+            "condition": {
+              "kind": "BinaryExpr",
+              "span": {
+                "start_offset": 78,
+                "end_offset": 84,
+                "start_line": 6,
+                "start_col": 8,
+                "end_line": 6,
+                "end_col": 14
+              },
+              "op": "==",
+              "left": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 78,
+                  "end_offset": 79,
+                  "start_line": 6,
+                  "start_col": 8,
+                  "end_line": 6,
+                  "end_col": 9
+                },
+                "name": "i"
+              },
+              "right": {
+                "kind": "Literal",
+                "span": {
+                  "start_offset": 83,
+                  "end_offset": 84,
+                  "start_line": 6,
+                  "start_col": 13,
+                  "end_line": 6,
+                  "end_col": 14
+                },
+                "value": 2,
+                "literal_type": "int"
+              }
+            },
+            "then_block": {
+              "kind": "Block",
+              "span": {
+                "start_offset": 93,
+                "end_offset": 108,
+                "start_line": 7,
+                "start_col": 9,
+                "end_line": 8,
+                "end_col": 7
+              },
+              "statements": [
+                {
+                  "kind": "ContinueStatement",
+                  "span": {
+                    "start_offset": 93,
+                    "end_offset": 101,
+                    "start_line": 7,
+                    "start_col": 9,
+                    "end_line": 7,
+                    "end_col": 17
+                  }
+                }
+              ]
+            },
+            "else_if_branches": [],
+            "else_block": null
+          },
+          {
+            "kind": "IfStructure",
+            "span": {
+              "start_offset": 106,
+              "end_offset": 134,
+              "start_line": 8,
+              "start_col": 5,
+              "end_line": 10,
+              "end_col": 5
+            },
+            "condition": {
+              "kind": "BinaryExpr",
+              "span": {
+                "start_offset": 109,
+                "end_offset": 115,
+                "start_line": 8,
+                "start_col": 8,
+                "end_line": 8,
+                "end_col": 14
+              },
+              "op": "==",
+              "left": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 109,
+                  "end_offset": 110,
+                  "start_line": 8,
+                  "start_col": 8,
+                  "end_line": 8,
+                  "end_col": 9
+                },
+                "name": "i"
+              },
+              "right": {
+                "kind": "Literal",
+                "span": {
+                  "start_offset": 114,
+                  "end_offset": 115,
+                  "start_line": 8,
+                  "start_col": 13,
+                  "end_line": 8,
+                  "end_col": 14
+                },
+                "value": 5,
+                "literal_type": "int"
+              }
+            },
+            "then_block": {
+              "kind": "Block",
+              "span": {
+                "start_offset": 124,
+                "end_offset": 134,
+                "start_line": 9,
+                "start_col": 9,
+                "end_line": 10,
+                "end_col": 5
+              },
+              "statements": [
+                {
+                  "kind": "BreakStatement",
+                  "span": {
+                    "start_offset": 124,
+                    "end_offset": 129,
+                    "start_line": 9,
+                    "start_col": 9,
+                    "end_line": 9,
+                    "end_col": 14
+                  }
+                }
+              ]
+            },
+            "else_if_branches": [],
+            "else_block": null
+          }
+        ]
+      }
+    },
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 130,
+        "end_offset": 137,
+        "start_line": 10,
+        "start_col": 1,
+        "end_line": 10,
+        "end_col": 8
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 130,
+          "end_offset": 137,
+          "start_line": 10,
+          "start_col": 1,
+          "end_line": 10,
+          "end_col": 8
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 130,
+            "end_offset": 134,
+            "start_line": 10,
+            "start_col": 1,
+            "end_line": 10,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 135,
+              "end_offset": 136,
+              "start_line": 10,
+              "start_col": 6,
+              "end_line": 10,
+              "end_col": 7
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 135,
+                "end_offset": 136,
+                "start_line": 10,
+                "start_col": 6,
+                "end_line": 10,
+                "end_col": 7
+              },
+              "name": "i"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

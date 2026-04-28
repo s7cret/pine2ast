@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/semantic/if_non_bool_condition.pine",
+  "expected_codes": [
+    "P2A1201"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A1201"
+  ],
+  "notes": "Expected-code contract generated for v2.15.0 fixture hardening. Tests require every expected code to be emitted; additional recovery diagnostics are allowed."
+}

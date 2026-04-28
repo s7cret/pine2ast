@@ -1,0 +1,4 @@
+//@version=6
+indicator("Input bounds")
+len = input.int(14, "Length", minval=1, maxval=100, step=1)
+plot(ta.sma(close, len))

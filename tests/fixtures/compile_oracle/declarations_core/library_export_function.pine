@@ -1,0 +1,3 @@
+//@version=6
+library("DeclLib")
+export f(float x) => x

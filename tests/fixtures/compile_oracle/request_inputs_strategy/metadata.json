@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "pine_version": 6,
+  "checked_at": "2026-04-28",
+  "oracle": "v3.11 authenticated TradingView oracle closure: all 35 compile-oracle fixtures have terminal real TradingView-derived status; 35/35 are verified statuses, 0 pending, 0 platform_blocked, 0 invalid metadata. Late closure evidence for prior blocked fixtures is in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/.",
+  "policy": [
+    {
+      "fixture": "request_security_tuple.pine",
+      "context": "request_inputs_strategy",
+      "usage": "request.security tuple expression",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "request_lower_tf_array.pine",
+      "context": "request_inputs_strategy",
+      "usage": "request.security_lower_tf array return",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "input_int_bounds.pine",
+      "context": "request_inputs_strategy",
+      "usage": "input.int bounds",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "input_source_strategy_state.pine",
+      "context": "request_inputs_strategy",
+      "usage": "input.source used in strategy call",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_exit_bracket.pine",
+      "context": "request_inputs_strategy",
+      "usage": "strategy.exit bracket parameters",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "request_financial_input_symbol.pine",
+      "context": "request_inputs_strategy",
+      "usage": "request.financial with input symbol",
+      "expected": "accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    }
+  ],
+  "checked_by": "openclaw-v3.10-oracle-fix",
+  "last_attempted_at": "2026-04-27T18:23:38+03:00",
+  "attempt_evidence": "TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/"
+}

@@ -1,0 +1,7 @@
+//@version=6
+indicator("Enum Input Extraction")
+enum Mode
+    Fast "Fast"
+    Slow "Slow"
+mode = input.enum(Mode.Fast, "Mode", options = [Mode.Fast, Mode.Slow])
+plot(close)

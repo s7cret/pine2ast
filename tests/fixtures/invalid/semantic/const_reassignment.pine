@@ -1,0 +1,5 @@
+//@version=6
+indicator("x")
+const float x = 1.0
+x := 2.0
+plot(x)

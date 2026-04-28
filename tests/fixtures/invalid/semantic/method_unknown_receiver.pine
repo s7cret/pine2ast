@@ -1,0 +1,5 @@
+//@version=6
+indicator("x")
+method bad(Unknown p) =>
+    1
+plot(close)

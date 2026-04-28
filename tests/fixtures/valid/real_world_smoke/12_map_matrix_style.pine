@@ -1,0 +1,5 @@
+//@version=6
+indicator("Collections")
+var map<string, float> values = map.new<string, float>()
+var matrix<float> mx = matrix.new<float>()
+plot(close)

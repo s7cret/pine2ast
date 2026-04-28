@@ -1,0 +1,8 @@
+//@version=6
+indicator("collections")
+arr = array.new<float>()
+arr.push(close)
+last = arr.get(arr.size() - 1)
+m = map.new<string, float>()
+m.put("last", last)
+plot(m.get("last"))

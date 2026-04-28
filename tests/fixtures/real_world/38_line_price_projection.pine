@@ -1,0 +1,5 @@
+//@version=6
+indicator("Line Price Projection")
+ln = line.new(bar_index - 10, close[10], bar_index, close)
+px = line.get_price(ln, bar_index)
+plot(px)

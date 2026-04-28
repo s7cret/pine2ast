@@ -1,0 +1,6 @@
+//@version=6
+strategy("Inputs")
+len = input.int(14, minval = 1, maxval = 100, step = 1)
+risk = input.float(1.5, minval = 0.1, step = 0.1)
+useLong = input.bool(true)
+plot(ta.sma(close, len))

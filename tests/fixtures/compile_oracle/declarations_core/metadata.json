@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "pine_version": 6,
+  "checked_at": "2026-04-28",
+  "oracle": "v3.11 authenticated TradingView oracle closure: all 35 compile-oracle fixtures have terminal real TradingView-derived status; 35/35 are verified statuses, 0 pending, 0 platform_blocked, 0 invalid metadata. Late closure evidence for prior blocked fixtures is in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/.",
+  "policy": [
+    {
+      "fixture": "indicator_minimal_decl.pine",
+      "context": "declarations_core",
+      "usage": "indicator declaration with positional title",
+      "expected": "declaration accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_decl_params.pine",
+      "context": "declarations_core",
+      "usage": "strategy declaration with common keyword parameters",
+      "expected": "declaration accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "library_export_function.pine",
+      "context": "declarations_core",
+      "usage": "library declaration with exported function",
+      "expected": "declaration accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "import_alias_decl.pine",
+      "context": "declarations_core",
+      "usage": "import declaration with alias",
+      "expected": "invalid_external_dependency",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "TradingView evidence is conclusive for this exact fixture: import syntax parsed, but the placeholder library user/lib/1 is unpublished (\"The user 'user' does not have a published library titled 'lib'\"). Parser acceptance remains correct; this is not a parser diagnostic."
+    },
+    {
+      "fixture": "export_udt_decl.pine",
+      "context": "declarations_core",
+      "usage": "exported UDT declaration",
+      "expected": "declaration accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-28",
+      "oracle": "Authenticated TradingView Pine Editor v6 compile evidence in TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/: fresh logged-in Chromium profile, chart studies cleared through TradingView API before each run, source pasted via clipboard to preserve indentation, Add to chart returned Compiled/Added to chart without sign-in, plan-limit, or compiler error.",
+      "message": "v3.11 authenticated TradingView compile succeeded: Compiled; Added to chart.",
+      "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/declarations_core__export_udt_decl.pine",
+      "source_sha256": "27f827fc4c49de59b5b58138f3daa538ea004f0559c3ef949a9da8745d8ce7e2"
+    },
+    {
+      "fixture": "function_defaults_decl.pine",
+      "context": "declarations_core",
+      "usage": "function parameter default declaration",
+      "expected": "declaration accepted",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-04-27",
+      "oracle": "TradingView Pine Editor v6 evidence in TV_ORACLE_EVIDENCE_v3_9_EXPANSION_20260427/; v3.10 triage records only conclusive statuses and leaves rerun-needed fixtures pending.",
+      "message": "v3.9 authenticated TradingView compile succeeded: Compiled."
+    }
+  ],
+  "checked_by": "openclaw-v3.11-authenticated-tv-oracle",
+  "evidence_artifact": "TV_ORACLE_EVIDENCE_AUTHED_FRESH_12_20260428/results.json"
+}

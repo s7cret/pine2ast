@@ -1,0 +1,9 @@
+//@version=6
+indicator("LinReg Channel", overlay = true)
+len = input.int(100, "Length", minval = 1)
+mult = input.float(2.0, "Deviation")
+basis = ta.linreg(close, len, 0)
+dev = ta.stdev(close, len) * mult
+plot(basis)
+plot(basis + dev)
+plot(basis - dev)

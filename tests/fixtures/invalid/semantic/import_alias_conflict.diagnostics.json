@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/semantic/import_alias_conflict.pine",
+  "expected_codes": [
+    "P2A1102"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A1102"
+  ],
+  "notes": "Expected-code contract generated for P1 Stage 5 semantic hardening. Tests require every expected code to be emitted; additional recovery diagnostics are allowed."
+}

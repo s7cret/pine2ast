@@ -1,0 +1,4 @@
+//@version=6
+indicator("Fn defaults")
+f(float x, float y = 1.0) => x + y
+plot(f(close))

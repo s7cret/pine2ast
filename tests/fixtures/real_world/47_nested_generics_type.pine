@@ -1,0 +1,4 @@
+//@version=6
+indicator("Nested Generics")
+var map<string, array<float>> buckets = map.new<string, array<float>>()
+plot(close)

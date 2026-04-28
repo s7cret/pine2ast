@@ -1,0 +1,445 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 185,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 6,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 38,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 26
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 38,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 26
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 37,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 25
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 37,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 25
+            },
+            "value": "Financial NA",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 39,
+        "end_offset": 108,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 70
+      },
+      "name": "eps",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 45,
+          "end_offset": 108,
+          "start_line": 3,
+          "start_col": 7,
+          "end_line": 3,
+          "end_col": 70
+        },
+        "callee": {
+          "kind": "MemberAccessExpr",
+          "span": {
+            "start_offset": 45,
+            "end_offset": 62,
+            "start_line": 3,
+            "start_col": 7,
+            "end_line": 3,
+            "end_col": 24
+          },
+          "object": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 45,
+              "end_offset": 52,
+              "start_line": 3,
+              "start_col": 7,
+              "end_line": 3,
+              "end_col": 14
+            },
+            "name": "request"
+          },
+          "member": "financial"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 63,
+              "end_offset": 79,
+              "start_line": 3,
+              "start_col": 25,
+              "end_line": 3,
+              "end_col": 41
+            },
+            "name": null,
+            "value": {
+              "kind": "MemberAccessExpr",
+              "span": {
+                "start_offset": 63,
+                "end_offset": 79,
+                "start_line": 3,
+                "start_col": 25,
+                "end_line": 3,
+                "end_col": 41
+              },
+              "object": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 63,
+                  "end_offset": 70,
+                  "start_line": 3,
+                  "start_col": 25,
+                  "end_line": 3,
+                  "end_col": 32
+                },
+                "name": "syminfo"
+              },
+              "member": "tickerid"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 81,
+              "end_offset": 101,
+              "start_line": 3,
+              "start_col": 43,
+              "end_line": 3,
+              "end_col": 63
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 81,
+                "end_offset": 101,
+                "start_line": 3,
+                "start_col": 43,
+                "end_line": 3,
+                "end_col": 63
+              },
+              "value": "EARNINGS_PER_SHARE",
+              "literal_type": "string"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 103,
+              "end_offset": 107,
+              "start_line": 3,
+              "start_col": 65,
+              "end_line": 3,
+              "end_col": 69
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 103,
+                "end_offset": 107,
+                "start_line": 3,
+                "start_col": 65,
+                "end_line": 3,
+                "end_col": 69
+              },
+              "value": "FQ",
+              "literal_type": "string"
+            }
+          }
+        ]
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 109,
+        "end_offset": 157,
+        "start_line": 4,
+        "start_col": 1,
+        "end_line": 4,
+        "end_col": 49
+      },
+      "name": "confirmed",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 121,
+          "end_offset": 157,
+          "start_line": 4,
+          "start_col": 13,
+          "end_line": 4,
+          "end_col": 49
+        },
+        "op": "and",
+        "left": {
+          "kind": "MemberAccessExpr",
+          "span": {
+            "start_offset": 121,
+            "end_offset": 141,
+            "start_line": 4,
+            "start_col": 13,
+            "end_line": 4,
+            "end_col": 33
+          },
+          "object": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 121,
+              "end_offset": 129,
+              "start_line": 4,
+              "start_col": 13,
+              "end_line": 4,
+              "end_col": 21
+            },
+            "name": "barstate"
+          },
+          "member": "isconfirmed"
+        },
+        "right": {
+          "kind": "UnaryExpr",
+          "span": {
+            "start_offset": 146,
+            "end_offset": 157,
+            "start_line": 4,
+            "start_col": 38,
+            "end_line": 4,
+            "end_col": 49
+          },
+          "op": "not",
+          "operand": {
+            "kind": "CallExpr",
+            "span": {
+              "start_offset": 150,
+              "end_offset": 157,
+              "start_line": 4,
+              "start_col": 42,
+              "end_line": 4,
+              "end_col": 49
+            },
+            "callee": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 150,
+                "end_offset": 152,
+                "start_line": 4,
+                "start_col": 42,
+                "end_line": 4,
+                "end_col": 44
+              },
+              "value": null,
+              "literal_type": "na"
+            },
+            "arguments": [
+              {
+                "kind": "Argument",
+                "span": {
+                  "start_offset": 153,
+                  "end_offset": 156,
+                  "start_line": 4,
+                  "start_col": 45,
+                  "end_line": 4,
+                  "end_col": 48
+                },
+                "name": null,
+                "value": {
+                  "kind": "Identifier",
+                  "span": {
+                    "start_offset": 153,
+                    "end_offset": 156,
+                    "start_line": 4,
+                    "start_col": 45,
+                    "end_line": 4,
+                    "end_col": 48
+                  },
+                  "name": "eps"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 158,
+        "end_offset": 184,
+        "start_line": 5,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 27
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 158,
+          "end_offset": 184,
+          "start_line": 5,
+          "start_col": 1,
+          "end_line": 5,
+          "end_col": 27
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 158,
+            "end_offset": 162,
+            "start_line": 5,
+            "start_col": 1,
+            "end_line": 5,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 163,
+              "end_offset": 183,
+              "start_line": 5,
+              "start_col": 6,
+              "end_line": 5,
+              "end_col": 26
+            },
+            "name": null,
+            "value": {
+              "kind": "ConditionalExpr",
+              "span": {
+                "start_offset": 163,
+                "end_offset": 183,
+                "start_line": 5,
+                "start_col": 6,
+                "end_line": 5,
+                "end_col": 26
+              },
+              "condition": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 163,
+                  "end_offset": 172,
+                  "start_line": 5,
+                  "start_col": 6,
+                  "end_line": 5,
+                  "end_col": 15
+                },
+                "name": "confirmed"
+              },
+              "if_true": {
+                "kind": "Identifier",
+                "span": {
+                  "start_offset": 175,
+                  "end_offset": 178,
+                  "start_line": 5,
+                  "start_col": 18,
+                  "end_line": 5,
+                  "end_col": 21
+                },
+                "name": "eps"
+              },
+              "if_false": {
+                "kind": "Literal",
+                "span": {
+                  "start_offset": 181,
+                  "end_offset": 183,
+                  "start_line": 5,
+                  "start_col": 24,
+                  "end_line": 5,
+                  "end_col": 26
+                },
+                "value": null,
+                "literal_type": "na"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

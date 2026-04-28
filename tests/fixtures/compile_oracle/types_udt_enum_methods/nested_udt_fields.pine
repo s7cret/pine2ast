@@ -1,0 +1,8 @@
+//@version=6
+indicator("Nested UDT")
+type Inner
+    float x
+type Outer
+    Inner inner
+o = Outer.new(Inner.new(close))
+plot(o.inner.x)

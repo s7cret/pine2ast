@@ -1,0 +1,5 @@
+//@version=6
+indicator("External")
+import user/Lib/1 as lib
+x = lib.someFunction(close)
+plot(x)

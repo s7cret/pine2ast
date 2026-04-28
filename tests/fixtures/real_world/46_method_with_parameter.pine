@@ -1,0 +1,9 @@
+//@version=6
+indicator("Method With Parameter")
+type Pivot
+    int x
+    float y
+method above(Pivot p, float level) => p.y > level
+p = Pivot.new(bar_index, high)
+ok = p.above(close)
+plot(ok ? high : low)

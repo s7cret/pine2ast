@@ -1,0 +1,5 @@
+//@version=6
+indicator("String Format", overlay = true)
+txt = str.format("Close {0}", close)
+l = label.new(bar_index, high, txt)
+plot(close)

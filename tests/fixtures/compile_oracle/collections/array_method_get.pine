@@ -1,0 +1,4 @@
+//@version=6
+indicator("Array method")
+a = array.from(close, open)
+plot(a.get(0))

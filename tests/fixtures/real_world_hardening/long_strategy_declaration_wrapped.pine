@@ -1,0 +1,7 @@
+//@version=6
+strategy(
+    "Wrapped declaration",
+    overlay=true)
+if ta.crossover(close, ta.sma(close, 14))
+    strategy.entry("L", strategy.long)
+plot(close)

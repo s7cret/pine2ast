@@ -1,0 +1,5 @@
+//@version=6
+indicator("String Format")
+text = str.format("Close {0} Volume {1}", close, volume)
+label.new(bar_index, high, text)
+plot(close)

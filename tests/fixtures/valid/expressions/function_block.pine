@@ -1,0 +1,7 @@
+//@version=6
+indicator("Func block")
+calc(float price, int len = 14) =>
+    ma = ta.sma(price, len)
+    ma
+y = calc(close)
+plot(y)

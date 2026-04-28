@@ -1,0 +1,7 @@
+//@version=6
+indicator("If Expr")
+c = if close > open
+    color.green
+else
+    color.red
+plot(close)

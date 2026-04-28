@@ -1,0 +1,7 @@
+//@version=6
+indicator("if initializer")
+basis = if close > open
+    high
+else
+    low
+plot(basis)

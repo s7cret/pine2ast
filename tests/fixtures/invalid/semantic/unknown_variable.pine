@@ -1,0 +1,4 @@
+//@version=6
+indicator("x")
+y = missingValue + 1
+plot(y)

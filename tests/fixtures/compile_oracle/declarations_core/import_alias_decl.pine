@@ -1,0 +1,4 @@
+//@version=6
+indicator("Import")
+import user/lib/1 as lib
+plot(close)

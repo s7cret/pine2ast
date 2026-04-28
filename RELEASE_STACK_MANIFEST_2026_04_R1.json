@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "stack_train": "pain-stack-pine-v6-2026.04-r1",
+  "pine_language_version": 6,
+  "pine_docs_baseline": "2026-04",
+  "runtime_contract": "1.4",
+  "claim_scope": "verified Pine v6 subset / oracle snapshot; not full Pine v6 parity",
+  "language_relevant_april_2026_change": "UDT collection sorting via sort_field for array.sort, array.sort_indices, and matrix.sort",
+  "non_runtime_april_2026_change": "Pine Editor word-wrap; not a runtime/compiler parity feature",
+  "overclaim_guardrail": "Do not label this stack as full Pine Script v6 compatible until every claimed builtin/runtime/editor-visible behavior has fixture-specific evidence.",
+  "component": "pine2ast",
+  "version": "0.3.9",
+  "role": "Pine v6 subset parser/frontend and compile-oracle metadata owner",
+  "oracle_status": "P0 strategy namespace evidence retained; wider 30-fixture expansion pending external TradingView evidence",
+  "release_artifact": "pine2ast_interpipe_v3_9_runtime_contract_v1_4_oracle_expansion_pending.zip"
+}

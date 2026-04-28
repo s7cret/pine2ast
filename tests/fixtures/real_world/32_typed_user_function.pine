@@ -1,0 +1,7 @@
+//@version=6
+indicator("Typed User Function")
+calc(float price, int len = 14) =>
+    ma = ta.sma(price, len)
+    price - ma
+spread = calc(close, 20)
+plot(spread)

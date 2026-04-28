@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "fixture": "tests/fixtures/invalid/syntax/braced_type_block.pine",
+  "expected_codes": [
+    "P2A0401",
+    "P2A0501"
+  ],
+  "expected_min_severity": "ERROR",
+  "actual_codes_at_generation": [
+    "P2A0401",
+    "P2A0401",
+    "P2A0501",
+    "P2A0501",
+    "P2A0501"
+  ],
+  "notes": "Expected-code contract generated for v2.15.0 fixture hardening. Tests require every expected code to be emitted; additional recovery diagnostics are allowed."
+}

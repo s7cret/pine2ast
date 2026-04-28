@@ -1,0 +1,5 @@
+//@version=6
+indicator("HTF Close")
+htf = input.timeframe("D", title = "HTF")
+htfClose = request.security(syminfo.tickerid, htf, close)
+plot(htfClose)

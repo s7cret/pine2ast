@@ -1,0 +1,311 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 138,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 11,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 49,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 37
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 49,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 37
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 48,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 36
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 48,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 36
+            },
+            "value": "Ambiguous continuations",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 50,
+        "end_offset": 76,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 5,
+        "end_col": 8
+      },
+      "name": "x",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 54,
+          "end_offset": 76,
+          "start_line": 3,
+          "start_col": 5,
+          "end_line": 5,
+          "end_col": 8
+        },
+        "op": "-",
+        "left": {
+          "kind": "BinaryExpr",
+          "span": {
+            "start_offset": 54,
+            "end_offset": 68,
+            "start_line": 3,
+            "start_col": 5,
+            "end_line": 4,
+            "end_col": 9
+          },
+          "op": "+",
+          "left": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 54,
+              "end_offset": 59,
+              "start_line": 3,
+              "start_col": 5,
+              "end_line": 3,
+              "end_col": 10
+            },
+            "name": "close"
+          },
+          "right": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 64,
+              "end_offset": 68,
+              "start_line": 4,
+              "start_col": 5,
+              "end_line": 4,
+              "end_col": 9
+            },
+            "name": "open"
+          }
+        },
+        "right": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 73,
+            "end_offset": 76,
+            "start_line": 5,
+            "start_col": 5,
+            "end_line": 5,
+            "end_col": 8
+          },
+          "name": "low"
+        }
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 77,
+        "end_offset": 97,
+        "start_line": 6,
+        "start_col": 1,
+        "end_line": 7,
+        "end_col": 11
+      },
+      "name": "y",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 81,
+          "end_offset": 97,
+          "start_line": 6,
+          "start_col": 5,
+          "end_line": 7,
+          "end_col": 11
+        },
+        "op": "+",
+        "left": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 81,
+            "end_offset": 86,
+            "start_line": 6,
+            "start_col": 5,
+            "end_line": 6,
+            "end_col": 10
+          },
+          "name": "close"
+        },
+        "right": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 93,
+            "end_offset": 97,
+            "start_line": 7,
+            "start_col": 7,
+            "end_line": 7,
+            "end_col": 11
+          },
+          "name": "open"
+        }
+      },
+      "is_exported": false
+    },
+    {
+      "kind": "VarDeclaration",
+      "span": {
+        "start_offset": 98,
+        "end_offset": 137,
+        "start_line": 8,
+        "start_col": 1,
+        "end_line": 10,
+        "end_col": 9
+      },
+      "name": "z",
+      "mode": null,
+      "explicit_qualifier": null,
+      "type_ref": null,
+      "initializer": {
+        "kind": "ConditionalExpr",
+        "span": {
+          "start_offset": 102,
+          "end_offset": 137,
+          "start_line": 8,
+          "start_col": 5,
+          "end_line": 10,
+          "end_col": 9
+        },
+        "condition": {
+          "kind": "BinaryExpr",
+          "span": {
+            "start_offset": 102,
+            "end_offset": 114,
+            "start_line": 8,
+            "start_col": 5,
+            "end_line": 8,
+            "end_col": 17
+          },
+          "op": ">",
+          "left": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 102,
+              "end_offset": 107,
+              "start_line": 8,
+              "start_col": 5,
+              "end_line": 8,
+              "end_col": 10
+            },
+            "name": "close"
+          },
+          "right": {
+            "kind": "Identifier",
+            "span": {
+              "start_offset": 110,
+              "end_offset": 114,
+              "start_line": 8,
+              "start_col": 13,
+              "end_line": 8,
+              "end_col": 17
+            },
+            "name": "open"
+          }
+        },
+        "if_true": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 121,
+            "end_offset": 126,
+            "start_line": 9,
+            "start_col": 5,
+            "end_line": 9,
+            "end_col": 10
+          },
+          "name": "close"
+        },
+        "if_false": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 133,
+            "end_offset": 137,
+            "start_line": 10,
+            "start_col": 5,
+            "end_line": 10,
+            "end_col": 9
+          },
+          "name": "open"
+        }
+      },
+      "is_exported": false
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

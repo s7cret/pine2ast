@@ -1,0 +1,4 @@
+//@version=6
+indicator("indicator strategy.long constant")
+dir = strategy.long
+plot(close)

@@ -1,0 +1,175 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 55,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 4,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 27,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 15
+    },
+    "script_type": "library",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 27,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 15
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 20,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 8
+        },
+        "name": "library"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 21,
+            "end_offset": 26,
+            "start_line": 2,
+            "start_col": 9,
+            "end_line": 2,
+            "end_col": 14
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 21,
+              "end_offset": 26,
+              "start_line": 2,
+              "start_col": 9,
+              "end_line": 2,
+              "end_col": 14
+            },
+            "value": "Lib",
+            "literal_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "FunctionDeclaration",
+      "span": {
+        "start_offset": 35,
+        "end_offset": 54,
+        "start_line": 3,
+        "start_col": 8,
+        "end_line": 3,
+        "end_col": 27
+      },
+      "name": "f",
+      "parameters": [
+        {
+          "kind": "Parameter",
+          "span": {
+            "start_offset": 43,
+            "end_offset": 44,
+            "start_line": 3,
+            "start_col": 16,
+            "end_line": 3,
+            "end_col": 17
+          },
+          "name": "x",
+          "type_ref": {
+            "kind": "TypeRef",
+            "name": "float",
+            "template_args": [],
+            "span": {
+              "start_offset": 37,
+              "end_offset": 42,
+              "start_line": 3,
+              "start_col": 10,
+              "end_line": 3,
+              "end_col": 15
+            }
+          },
+          "explicit_qualifier": null,
+          "default_value": null
+        }
+      ],
+      "body": {
+        "kind": "BinaryExpr",
+        "span": {
+          "start_offset": 49,
+          "end_offset": 54,
+          "start_line": 3,
+          "start_col": 22,
+          "end_line": 3,
+          "end_col": 27
+        },
+        "op": "+",
+        "left": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 49,
+            "end_offset": 50,
+            "start_line": 3,
+            "start_col": 22,
+            "end_line": 3,
+            "end_col": 23
+          },
+          "name": "x"
+        },
+        "right": {
+          "kind": "Literal",
+          "span": {
+            "start_offset": 53,
+            "end_offset": 54,
+            "start_line": 3,
+            "start_col": 26,
+            "end_line": 3,
+            "end_col": 27
+          },
+          "value": 1,
+          "literal_type": "int"
+        }
+      },
+      "is_exported": true
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

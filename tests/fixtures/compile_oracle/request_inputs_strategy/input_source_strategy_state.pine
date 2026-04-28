@@ -1,0 +1,5 @@
+//@version=6
+strategy("Input source")
+src = input.source(close, "Source")
+strategy.entry("L", strategy.long)
+plot(src)

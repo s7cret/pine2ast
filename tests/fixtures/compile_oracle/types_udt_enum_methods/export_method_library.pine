@@ -1,0 +1,5 @@
+//@version=6
+library("MethodLib")
+export type T
+    float x
+export method get(T this) => this.x

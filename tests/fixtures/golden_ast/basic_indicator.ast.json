@@ -1,0 +1,181 @@
+{
+  "kind": "Program",
+  "span": {
+    "start_offset": 0,
+    "end_offset": 67,
+    "start_line": 1,
+    "start_col": 1,
+    "end_line": 4,
+    "end_col": 1
+  },
+  "version": 6,
+  "annotations": [
+    {
+      "kind": "VERSION",
+      "raw": "//@version=6",
+      "name": "version",
+      "value": "6",
+      "span": {
+        "start_offset": 0,
+        "end_offset": 12,
+        "start_line": 1,
+        "start_col": 1,
+        "end_line": 1,
+        "end_col": 13
+      }
+    }
+  ],
+  "declaration": {
+    "kind": "DeclarationStatement",
+    "span": {
+      "start_offset": 13,
+      "end_offset": 54,
+      "start_line": 2,
+      "start_col": 1,
+      "end_line": 2,
+      "end_col": 42
+    },
+    "script_type": "indicator",
+    "call": {
+      "kind": "CallExpr",
+      "span": {
+        "start_offset": 13,
+        "end_offset": 54,
+        "start_line": 2,
+        "start_col": 1,
+        "end_line": 2,
+        "end_col": 42
+      },
+      "callee": {
+        "kind": "Identifier",
+        "span": {
+          "start_offset": 13,
+          "end_offset": 22,
+          "start_line": 2,
+          "start_col": 1,
+          "end_line": 2,
+          "end_col": 10
+        },
+        "name": "indicator"
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 23,
+            "end_offset": 37,
+            "start_line": 2,
+            "start_col": 11,
+            "end_line": 2,
+            "end_col": 25
+          },
+          "name": null,
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 23,
+              "end_offset": 37,
+              "start_line": 2,
+              "start_col": 11,
+              "end_line": 2,
+              "end_col": 25
+            },
+            "value": "My Indicator",
+            "literal_type": "string"
+          }
+        },
+        {
+          "kind": "Argument",
+          "span": {
+            "start_offset": 47,
+            "end_offset": 53,
+            "start_line": 2,
+            "start_col": 35,
+            "end_line": 2,
+            "end_col": 41
+          },
+          "name": "overlay",
+          "value": {
+            "kind": "Literal",
+            "span": {
+              "start_offset": 49,
+              "end_offset": 53,
+              "start_line": 2,
+              "start_col": 37,
+              "end_line": 2,
+              "end_col": 41
+            },
+            "value": true,
+            "literal_type": "bool"
+          }
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "kind": "ExpressionStatement",
+      "span": {
+        "start_offset": 55,
+        "end_offset": 66,
+        "start_line": 3,
+        "start_col": 1,
+        "end_line": 3,
+        "end_col": 12
+      },
+      "expression": {
+        "kind": "CallExpr",
+        "span": {
+          "start_offset": 55,
+          "end_offset": 66,
+          "start_line": 3,
+          "start_col": 1,
+          "end_line": 3,
+          "end_col": 12
+        },
+        "callee": {
+          "kind": "Identifier",
+          "span": {
+            "start_offset": 55,
+            "end_offset": 59,
+            "start_line": 3,
+            "start_col": 1,
+            "end_line": 3,
+            "end_col": 5
+          },
+          "name": "plot"
+        },
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 60,
+              "end_offset": 65,
+              "start_line": 3,
+              "start_col": 6,
+              "end_line": 3,
+              "end_col": 11
+            },
+            "name": null,
+            "value": {
+              "kind": "Identifier",
+              "span": {
+                "start_offset": 60,
+                "end_offset": 65,
+                "start_line": 3,
+                "start_col": 6,
+                "end_line": 3,
+                "end_col": 11
+              },
+              "name": "close"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostics": [],
+  "schema_version": "1.0",
+  "language": "pine",
+  "language_version": 6
+}

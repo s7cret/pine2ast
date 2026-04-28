@@ -1,0 +1,5 @@
+//@version=6
+indicator("Label State Report")
+if barstate.islast
+    label.new(bar_index, high, str.format("Last close {0}", close))
+plot(close)

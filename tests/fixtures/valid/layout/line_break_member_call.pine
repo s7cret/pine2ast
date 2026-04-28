@@ -1,0 +1,6 @@
+//@version=6
+indicator("Chain")
+x = str.tostring(
+    ta.sma(close, 20)
+)
+plot(close, title = x)

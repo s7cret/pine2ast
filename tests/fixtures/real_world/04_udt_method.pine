@@ -1,0 +1,9 @@
+//@version=6
+indicator("Pivot UDT")
+type Pivot
+    int x
+    float y
+method isBullish(Pivot p) => p.y > close
+p = Pivot.new(bar_index, high)
+ok = p.isBullish()
+plot(high)

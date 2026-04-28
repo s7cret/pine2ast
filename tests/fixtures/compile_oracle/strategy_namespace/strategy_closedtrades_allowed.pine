@@ -1,0 +1,5 @@
+//@version=6
+strategy("closed trades accessor")
+price = strategy.closedtrades.entry_price(0)
+comment = strategy.closedtrades.entry_comment(0)
+plot(price)

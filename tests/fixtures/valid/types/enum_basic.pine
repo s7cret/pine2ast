@@ -1,0 +1,7 @@
+//@version=6
+indicator("Enum")
+enum Trend
+    UP
+    DOWN
+trend = Trend.UP
+plot(close)

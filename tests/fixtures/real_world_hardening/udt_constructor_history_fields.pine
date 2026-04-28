@@ -1,0 +1,7 @@
+//@version=6
+indicator("udt history")
+type BarBox
+    float hi
+    float lo
+b = BarBox.new(high[1], low[1])
+plot(b.hi)

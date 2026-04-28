@@ -1,0 +1,7 @@
+//@version=6
+indicator("Wrapped call")
+x = ta.sma(
+    close,
+    20
+)
+plot(x)

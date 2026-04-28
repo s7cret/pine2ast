@@ -1,0 +1,7 @@
+//@version=6
+indicator("UDT defaults")
+type Pivot
+    int x = 0
+    float y = na
+p = Pivot.new()
+plot(close)

@@ -1,0 +1,3 @@
+//@version=6
+indicator("x")
+input int len = input.int(14)

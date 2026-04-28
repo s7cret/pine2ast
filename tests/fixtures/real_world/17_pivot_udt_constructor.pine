@@ -1,0 +1,8 @@
+//@version=6
+indicator("Pivot UDT", overlay = true)
+type Pivot
+    int x
+    float y
+method above(Pivot p, float level) => p.y > level
+p = Pivot.new(bar_index, high)
+plot(p.y)

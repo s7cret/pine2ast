@@ -1,0 +1,8 @@
+//@version=6
+strategy("Input Source Strategy", overlay = true)
+src = input.source(close, "Source")
+len = input.int(21, "Length", minval = 1, options = [10, 21, 50])
+ma = ta.ema(src, len)
+if ta.crossover(src, ma) and strategy.position_size <= 0
+    strategy.entry("L", strategy.long)
+plot(ma, color = color.orange, display = display.all)
