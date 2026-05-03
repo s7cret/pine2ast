@@ -774,5 +774,18 @@
   "diagnostics": [],
   "schema_version": "1.0",
   "language": "pine",
-  "language_version": 6
+  "language_version": 6,
+  "producer_metadata": {
+    "contract": "pain.ast_contract.v1",
+    "producer": {
+      "name": "pine2ast",
+      "version": "0.3.9"
+    },
+    "schema_version": "1.0",
+    "pine_language_version": 6,
+    "runtime_contract_profile": null,
+    "runtime_contract": null,
+    "parser_gate": "pass",
+    "semantic_gate": "pass"
+  }
 }

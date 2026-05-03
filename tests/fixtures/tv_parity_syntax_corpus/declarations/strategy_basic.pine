@@ -1,0 +1,4 @@
+//@version=6
+strategy("TV Parity Basic Strategy", initial_capital = 10000, process_orders_on_close = true)
+if close > open
+    strategy.entry("L", strategy.long)

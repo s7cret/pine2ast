@@ -1,0 +1,4 @@
+//@version=6
+import Vendor/Lib/1 as lib
+indicator("External Import Boundary")
+plot(lib.f(close))

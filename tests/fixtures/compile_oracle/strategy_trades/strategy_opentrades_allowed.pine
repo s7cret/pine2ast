@@ -1,0 +1,3 @@
+//@version=6
+strategy("OpenTrades Test")
+plot(strategy.opentrades)

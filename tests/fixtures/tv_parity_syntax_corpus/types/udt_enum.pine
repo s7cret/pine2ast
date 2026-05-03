@@ -1,0 +1,10 @@
+//@version=6
+indicator("UDT Enum")
+type Box
+    float top
+    float bottom
+enum Direction
+    up
+    down
+b = Box.new(high, low)
+plot(b.top)

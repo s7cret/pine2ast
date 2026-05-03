@@ -1,0 +1,4 @@
+//@version=6
+indicator("Unsupported Boundary")
+for [i, v] in close
+    plot(v)

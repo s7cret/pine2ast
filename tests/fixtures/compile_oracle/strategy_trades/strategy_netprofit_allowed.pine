@@ -1,0 +1,3 @@
+//@version=6
+strategy("NetProfit Test")
+plot(strategy.netprofit)

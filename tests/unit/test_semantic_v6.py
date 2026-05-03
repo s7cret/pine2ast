@@ -33,6 +33,34 @@ if close > open
     assert "P2A1503" in got
 
 
+def test_strategy_commission_constants_are_const_qualified():
+    src = """//@version=6
+strategy("S", commission_type=strategy.commission.percent, commission_value=0.1)
+strategy.entry("L", strategy.long)
+"""
+    got = codes(src)
+    assert "P2A1405" not in got
+    assert "P2A1101" not in got
+
+
+def test_strategy_default_qty_type_constants_are_const_strings():
+    src = """//@version=6
+strategy("S", default_qty_type=strategy.cash, default_qty_value=100)
+strategy.entry("L", strategy.long)
+"""
+    got = codes(src)
+    assert "P2A1406" not in got
+    assert "P2A1101" not in got
+
+    src = """//@version=6
+strategy("S", default_qty_type=strategy.percent_of_equity, default_qty_value=10)
+strategy.entry("L", strategy.long)
+"""
+    got = codes(src)
+    assert "P2A1406" not in got
+    assert "P2A1101" not in got
+
+
 def test_reassignment_break_continue():
     src = """//@version=6
 indicator("bad")
@@ -42,3 +70,19 @@ break
     got = codes(src)
     assert "P2A1103" in got
     assert "P2A1701" in got
+
+
+def test_varip_declaration_parses_with_mode_and_type_ref():
+    src = """//@version=6
+strategy("S", calc_on_every_tick=true)
+varip int ticks = 0
+ticks := ticks + 1
+"""
+    result = parse_code(src)
+    assert result.diagnostics == []
+    ast = result.ast.to_dict()
+    decl = ast["items"][0]
+    assert decl["kind"] == "VarDeclaration"
+    assert decl["mode"] == "varip"
+    assert decl["type_ref"]["name"] == "int"
+    assert ast["items"][1]["kind"] == "Reassignment"

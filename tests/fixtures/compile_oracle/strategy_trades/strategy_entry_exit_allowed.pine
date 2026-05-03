@@ -1,0 +1,6 @@
+//@version=6
+strategy("Entry Exit Test")
+if ta.crossover(ta.sma(close, 10), ta.sma(close, 20))
+    strategy.entry("Long", strategy.long)
+if ta.crossunder(ta.sma(close, 10), ta.sma(close, 20))
+    strategy.close("Long")

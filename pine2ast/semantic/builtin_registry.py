@@ -35,6 +35,7 @@ _ALLOWED_PARAM_KEYS = {
     "removed_in",
     "replacement",
     "diagnostic_code",
+    "allow_extra_positional",
 }
 _ALLOWED_OVERLOAD_KEYS = {"parameters", "returns", "metadata_version", "docs_url"}
 _ALLOWED_TYPE_ATOMS = {

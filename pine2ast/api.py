@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from importlib import metadata as importlib_metadata
 from pathlib import Path
 from typing import Optional
 
@@ -17,6 +18,13 @@ from pine2ast.layout import LayoutProcessor
 from pine2ast.parser import Parser
 from pine2ast.semantic import SemanticAnalyzer, SemanticModel
 from pine2ast.source import SourceNormalizer
+
+
+def _producer_version() -> str:
+    try:
+        return importlib_metadata.version("pine2ast")
+    except importlib_metadata.PackageNotFoundError:
+        return "0.3.9"
 
 
 @dataclass(slots=True)
@@ -155,6 +163,20 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
     diagnostics = _dedupe_diagnostics(diagnostics)[: options.max_diagnostics]
     if ast is not None:
         ast.diagnostics = diagnostics
+        profile = options.runtime_contract_profile
+        gate_ok = not any(d.severity in {Severity.ERROR, Severity.FATAL} for d in diagnostics)
+        ast.producer_metadata = {
+            "contract": "pain.ast_contract.v1",
+            "producer": {"name": "pine2ast", "version": _producer_version()},
+            "schema_version": ast.schema_version,
+            "pine_language_version": ast.language_version,
+            "runtime_contract_profile": profile,
+            "runtime_contract": "runtime_contract_v1_4"
+            if profile in {"v1.4", "runtime_contract_v1_4"}
+            else profile,
+            "parser_gate": "pass" if gate_ok else "fail",
+            "semantic_gate": "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail"),
+        }
     return ParseResult(
         ast, diagnostics, layout.tokens if options.collect_tokens else None, semantic_model
     )

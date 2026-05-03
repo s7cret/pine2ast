@@ -368,12 +368,13 @@
         "items"
       ],
       "optional_fields": [
-        "version",
         "declaration",
         "diagnostics",
-        "schema_version",
         "language",
-        "language_version"
+        "language_version",
+        "producer_metadata",
+        "schema_version",
+        "version"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,

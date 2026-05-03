@@ -1,0 +1,3 @@
+//@version=6
+strategy("Equity Test")
+plot(strategy.equity)

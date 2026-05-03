@@ -1,0 +1,4 @@
+//@version=6
+indicator("Method Basic")
+method twice(float x) => x * 2.0
+plot(close.twice())

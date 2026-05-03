@@ -1,0 +1,5 @@
+//@version=6
+indicator("Collections")
+a = array.new_float()
+array.push(a, close)
+plot(array.get(a, 0))

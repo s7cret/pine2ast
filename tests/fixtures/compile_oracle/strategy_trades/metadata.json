@@ -1,0 +1,110 @@
+{
+  "schema_version": 2,
+  "pine_version": 6,
+  "checked_at": "2026-05-03",
+  "oracle": "v3.12 authenticated TradingView oracle closure: all 10 compile-oracle fixtures have terminal real TradingView-derived status; 10/10 are verified statuses, 0 pending, 0 platform_blocked, 0 invalid metadata.",
+  "policy": [
+    {
+      "fixture": "strategy_entry_exit_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.entry/strategy.close",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_equity_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.equity",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_netprofit_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.netprofit",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_opentrades_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.opentrades",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_position_size_allowed.pine",
+      "context": "strategy",
+      "usage": "strategy.position_size",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "indicator_strategy_entry_forbidden.pine",
+      "context": "indicator",
+      "usage": "strategy.entry",
+      "expected": "forbidden",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile produced expected invalid result: problem; You cannot use strategy functions (strategy.entry) in indicator script. Please replace \"indicator\" with \"strategy\".(CE10027)"
+    },
+    {
+      "fixture": "indicator_strategy_exit_forbidden.pine",
+      "context": "indicator",
+      "usage": "strategy.close",
+      "expected": "forbidden",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile produced expected invalid result: problem; You cannot use strategy functions (strategy.close) in indicator script. Please replace \"indicator\" with \"strategy\".(CE10027)"
+    },
+    {
+      "fixture": "indicator_strategy_equity_forbidden.pine",
+      "context": "indicator",
+      "usage": "strategy.equity",
+      "expected": "forbidden",
+      "pine2ast_status": "pass",
+      "tradingview_status": "invalid_expected",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile produced expected invalid result: problem; You cannot use strategy functions (strategy.equity) in indicator script. Please replace \"indicator\" with \"strategy\".(CE10027)"
+    },
+    {
+      "fixture": "strategy_risk_allowed.pine",
+      "context": "strategy",
+      "usage": "risk_free_rate",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    },
+    {
+      "fixture": "strategy_commission_allowed.pine",
+      "context": "strategy",
+      "usage": "commission_type/commission_value",
+      "expected": "allowed",
+      "pine2ast_status": "pass",
+      "tradingview_status": "ok",
+      "checked_at": "2026-05-03",
+      "message": "v3.12 authenticated TradingView compile succeeded: Compiled."
+    }
+  ],
+  "checked_by": "openclaw-v3.12-oracle-fix",
+  "last_attempted_at": "2026-05-03T19:44:38+03:00"
+}

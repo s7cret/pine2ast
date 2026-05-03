@@ -1,0 +1,6 @@
+//@version=6
+indicator("Function Block")
+f(float x) =>
+    y = x + 1.0
+    y
+plot(f(close))

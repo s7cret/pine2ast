@@ -21,6 +21,7 @@ class Program(ASTNode):
     schema_version: str = "1.0"
     language: str = "pine"
     language_version: int = 6
+    producer_metadata: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

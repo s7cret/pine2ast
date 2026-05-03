@@ -1,0 +1,3 @@
+//@version=6
+strategy("Commission Test", commission_type=strategy.commission.percent, commission_value=0.1)
+plot(close)
