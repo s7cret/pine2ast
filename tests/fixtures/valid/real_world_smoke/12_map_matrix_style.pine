@@ -1,5 +1,5 @@
 //@version=6
 indicator("Collections")
 var map<string, float> values = map.new<string, float>()
-var matrix<float> mx = matrix.new<float>()
+var matrix<float> mx = matrix.new<float>(2, 2)
 plot(close)

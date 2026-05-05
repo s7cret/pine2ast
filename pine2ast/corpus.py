@@ -28,6 +28,9 @@ def validate_corpus(path: str | Path, *, run_semantic: bool = True) -> dict[str,
         result = parse_file(
             str(file), ParseOptions(source_name=str(file), run_semantic=run_semantic)
         )
+        print(f"DEBUG corpus: {file} -> ok={result.ok}, diag_count={len(result.diagnostics)}")
+        for d in result.diagnostics:
+            print(f"  diag: {d}")
         errors = [d for d in result.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
         rel = str(file.relative_to(root)) if root.suffix != ".pine" else str(file)
         rows.append(

@@ -503,12 +503,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.json_path:
             if result.ast is None:
                 print(diagnostics_to_json(result.diagnostics), file=sys.stderr)
+                return 1
             else:
                 Path(args.json_path).write_text(ast_to_json(result.ast), encoding="utf-8")
                 print(args.json_path)
+                return 0
         else:
             if result.ast is not None:
                 print(ast_to_json(result.ast))
+                return 0
+            else:
+                return 1
     elif args.cmd == "validate":
         for d in result.diagnostics:
             print(format_diagnostic(d, args.path))

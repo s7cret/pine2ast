@@ -5797,7 +5797,7 @@
         {
           "name": "source",
           "required": true,
-          "type": "float"
+          "type": "series<float>"
         },
         {
           "name": "length",

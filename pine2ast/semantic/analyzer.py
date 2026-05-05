@@ -1415,6 +1415,11 @@ class SemanticAnalyzer:
         if expected == "float" and actual == "int":
             return True
         if expected.startswith("series<") and expected.endswith(">"):
+            # Allow series<any> to be assigned where series<T> is expected
+            if actual.startswith("series<") and actual.endswith(">"):
+                inner_actual = actual[len("series<") : -1]
+                if inner_actual == "any":
+                    return True
             return self._is_assignable_type(expected[len("series<") : -1], actual)
         exp_base, exp_args = self._generic_type_parts(expected)
         act_base, act_args = self._generic_type_parts(actual)
@@ -1450,6 +1455,14 @@ class SemanticAnalyzer:
             # remains a single signature snapshot, so accept chart.point for the first two
             # positional slots without weakening x/y validation for numeric overloads.
             return
+        # Allow plain "any" (e.g. from input.source) where a series<T> is expected
+        if actual == "any" and expected.startswith("series<") and expected.endswith(">"):
+            return
+        # Allow series<any> arguments where series<T> is expected (e.g. input.source -> ta.sma)
+        if actual.startswith("series<") and actual.endswith(">"):
+            inner = actual[len("series<"):-1]
+            if inner == "any":
+                return
         if not self._is_assignable_type(expected, actual):
             pname = param.get("name") or "<positional>"
             self._diag(
