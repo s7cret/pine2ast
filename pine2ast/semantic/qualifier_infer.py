@@ -70,7 +70,7 @@ def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
         name = callee_name(expr.callee)
         if name.startswith("input."):
             return "input"
-        if name in {"na", "str.tostring", "array.from"} and expr.arguments:
+        if name in {"na", "str.tostring", "array.from", "timestamp"} and expr.arguments:
             return _join_qualifiers(*(infer_qualifier(a.value, symbols) for a in expr.arguments))
         return "series"
     if isinstance(expr, GenericInstantiationExpr):
