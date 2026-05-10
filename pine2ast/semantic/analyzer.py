@@ -1412,6 +1412,10 @@ class SemanticAnalyzer:
         }
         if expected in enum_like_types and actual == expected:
             return True
+        # Enum display values (display.data_window, etc.) are stored as integers internally.
+        # Allow int parameters to accept enum-like display values.
+        if expected == "int" and actual in enum_like_types:
+            return True
         if expected == "float" and actual == "int":
             return True
         if expected.startswith("series<") and expected.endswith(">"):
