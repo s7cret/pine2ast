@@ -2,7 +2,7 @@
   "kind": "Program",
   "span": {
     "start_offset": 0,
-    "end_offset": 150,
+    "end_offset": 154,
     "start_line": 1,
     "start_col": 1,
     "end_line": 6,
@@ -222,11 +222,11 @@
       "kind": "VarDeclaration",
       "span": {
         "start_offset": 95,
-        "end_offset": 137,
+        "end_offset": 141,
         "start_line": 4,
         "start_col": 1,
         "end_line": 4,
-        "end_col": 43
+        "end_col": 47
       },
       "name": "mx",
       "mode": "var",
@@ -262,11 +262,11 @@
         "kind": "CallExpr",
         "span": {
           "start_offset": 118,
-          "end_offset": 137,
+          "end_offset": 141,
           "start_line": 4,
           "start_col": 24,
           "end_line": 4,
-          "end_col": 43
+          "end_col": 47
         },
         "callee": {
           "kind": "GenericInstantiationExpr",
@@ -318,15 +318,66 @@
             }
           ]
         },
-        "arguments": []
+        "arguments": [
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 136,
+              "end_offset": 137,
+              "start_line": 4,
+              "start_col": 42,
+              "end_line": 4,
+              "end_col": 43
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 136,
+                "end_offset": 137,
+                "start_line": 4,
+                "start_col": 42,
+                "end_line": 4,
+                "end_col": 43
+              },
+              "value": 2,
+              "literal_type": "int"
+            }
+          },
+          {
+            "kind": "Argument",
+            "span": {
+              "start_offset": 139,
+              "end_offset": 140,
+              "start_line": 4,
+              "start_col": 45,
+              "end_line": 4,
+              "end_col": 46
+            },
+            "name": null,
+            "value": {
+              "kind": "Literal",
+              "span": {
+                "start_offset": 139,
+                "end_offset": 140,
+                "start_line": 4,
+                "start_col": 45,
+                "end_line": 4,
+                "end_col": 46
+              },
+              "value": 2,
+              "literal_type": "int"
+            }
+          }
+        ]
       },
       "is_exported": false
     },
     {
       "kind": "ExpressionStatement",
       "span": {
-        "start_offset": 138,
-        "end_offset": 149,
+        "start_offset": 142,
+        "end_offset": 153,
         "start_line": 5,
         "start_col": 1,
         "end_line": 5,
@@ -335,8 +386,8 @@
       "expression": {
         "kind": "CallExpr",
         "span": {
-          "start_offset": 138,
-          "end_offset": 149,
+          "start_offset": 142,
+          "end_offset": 153,
           "start_line": 5,
           "start_col": 1,
           "end_line": 5,
@@ -345,8 +396,8 @@
         "callee": {
           "kind": "Identifier",
           "span": {
-            "start_offset": 138,
-            "end_offset": 142,
+            "start_offset": 142,
+            "end_offset": 146,
             "start_line": 5,
             "start_col": 1,
             "end_line": 5,
@@ -358,8 +409,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 143,
-              "end_offset": 148,
+              "start_offset": 147,
+              "end_offset": 152,
               "start_line": 5,
               "start_col": 6,
               "end_line": 5,
@@ -369,8 +420,8 @@
             "value": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 143,
-                "end_offset": 148,
+                "start_offset": 147,
+                "end_offset": 152,
                 "start_line": 5,
                 "start_col": 6,
                 "end_line": 5,

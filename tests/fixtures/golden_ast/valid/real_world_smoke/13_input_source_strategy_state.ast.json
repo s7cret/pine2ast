@@ -2,7 +2,7 @@
   "kind": "Program",
   "span": {
     "start_offset": 0,
-    "end_offset": 337,
+    "end_offset": 290,
     "start_line": 1,
     "start_col": 1,
     "end_line": 9,
@@ -117,109 +117,35 @@
       "kind": "VarDeclaration",
       "span": {
         "start_offset": 63,
-        "end_offset": 98,
+        "end_offset": 74,
         "start_line": 3,
         "start_col": 1,
         "end_line": 3,
-        "end_col": 36
+        "end_col": 12
       },
       "name": "src",
       "mode": null,
       "explicit_qualifier": null,
       "type_ref": null,
       "initializer": {
-        "kind": "CallExpr",
+        "kind": "Identifier",
         "span": {
           "start_offset": 69,
-          "end_offset": 98,
+          "end_offset": 74,
           "start_line": 3,
           "start_col": 7,
           "end_line": 3,
-          "end_col": 36
+          "end_col": 12
         },
-        "callee": {
-          "kind": "MemberAccessExpr",
-          "span": {
-            "start_offset": 69,
-            "end_offset": 81,
-            "start_line": 3,
-            "start_col": 7,
-            "end_line": 3,
-            "end_col": 19
-          },
-          "object": {
-            "kind": "Identifier",
-            "span": {
-              "start_offset": 69,
-              "end_offset": 74,
-              "start_line": 3,
-              "start_col": 7,
-              "end_line": 3,
-              "end_col": 12
-            },
-            "name": "input"
-          },
-          "member": "source"
-        },
-        "arguments": [
-          {
-            "kind": "Argument",
-            "span": {
-              "start_offset": 82,
-              "end_offset": 87,
-              "start_line": 3,
-              "start_col": 20,
-              "end_line": 3,
-              "end_col": 25
-            },
-            "name": null,
-            "value": {
-              "kind": "Identifier",
-              "span": {
-                "start_offset": 82,
-                "end_offset": 87,
-                "start_line": 3,
-                "start_col": 20,
-                "end_line": 3,
-                "end_col": 25
-              },
-              "name": "close"
-            }
-          },
-          {
-            "kind": "Argument",
-            "span": {
-              "start_offset": 89,
-              "end_offset": 97,
-              "start_line": 3,
-              "start_col": 27,
-              "end_line": 3,
-              "end_col": 35
-            },
-            "name": null,
-            "value": {
-              "kind": "Literal",
-              "span": {
-                "start_offset": 89,
-                "end_offset": 97,
-                "start_line": 3,
-                "start_col": 27,
-                "end_line": 3,
-                "end_col": 35
-              },
-              "value": "Source",
-              "literal_type": "string"
-            }
-          }
-        ]
+        "name": "close"
       },
       "is_exported": false
     },
     {
       "kind": "VarDeclaration",
       "span": {
-        "start_offset": 99,
-        "end_offset": 164,
+        "start_offset": 75,
+        "end_offset": 140,
         "start_line": 4,
         "start_col": 1,
         "end_line": 4,
@@ -232,8 +158,8 @@
       "initializer": {
         "kind": "CallExpr",
         "span": {
-          "start_offset": 105,
-          "end_offset": 164,
+          "start_offset": 81,
+          "end_offset": 140,
           "start_line": 4,
           "start_col": 7,
           "end_line": 4,
@@ -242,8 +168,8 @@
         "callee": {
           "kind": "MemberAccessExpr",
           "span": {
-            "start_offset": 105,
-            "end_offset": 114,
+            "start_offset": 81,
+            "end_offset": 90,
             "start_line": 4,
             "start_col": 7,
             "end_line": 4,
@@ -252,8 +178,8 @@
           "object": {
             "kind": "Identifier",
             "span": {
-              "start_offset": 105,
-              "end_offset": 110,
+              "start_offset": 81,
+              "end_offset": 86,
               "start_line": 4,
               "start_col": 7,
               "end_line": 4,
@@ -267,8 +193,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 115,
-              "end_offset": 117,
+              "start_offset": 91,
+              "end_offset": 93,
               "start_line": 4,
               "start_col": 17,
               "end_line": 4,
@@ -278,8 +204,8 @@
             "value": {
               "kind": "Literal",
               "span": {
-                "start_offset": 115,
-                "end_offset": 117,
+                "start_offset": 91,
+                "end_offset": 93,
                 "start_line": 4,
                 "start_col": 17,
                 "end_line": 4,
@@ -292,8 +218,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 119,
-              "end_offset": 127,
+              "start_offset": 95,
+              "end_offset": 103,
               "start_line": 4,
               "start_col": 21,
               "end_line": 4,
@@ -303,8 +229,8 @@
             "value": {
               "kind": "Literal",
               "span": {
-                "start_offset": 119,
-                "end_offset": 127,
+                "start_offset": 95,
+                "end_offset": 103,
                 "start_line": 4,
                 "start_col": 21,
                 "end_line": 4,
@@ -317,8 +243,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 136,
-              "end_offset": 139,
+              "start_offset": 112,
+              "end_offset": 115,
               "start_line": 4,
               "start_col": 38,
               "end_line": 4,
@@ -328,8 +254,8 @@
             "value": {
               "kind": "Literal",
               "span": {
-                "start_offset": 138,
-                "end_offset": 139,
+                "start_offset": 114,
+                "end_offset": 115,
                 "start_line": 4,
                 "start_col": 40,
                 "end_line": 4,
@@ -342,8 +268,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 149,
-              "end_offset": 163,
+              "start_offset": 125,
+              "end_offset": 139,
               "start_line": 4,
               "start_col": 51,
               "end_line": 4,
@@ -353,8 +279,8 @@
             "value": {
               "kind": "TupleExpr",
               "span": {
-                "start_offset": 151,
-                "end_offset": 163,
+                "start_offset": 127,
+                "end_offset": 139,
                 "start_line": 4,
                 "start_col": 53,
                 "end_line": 4,
@@ -364,8 +290,8 @@
                 {
                   "kind": "Literal",
                   "span": {
-                    "start_offset": 152,
-                    "end_offset": 154,
+                    "start_offset": 128,
+                    "end_offset": 130,
                     "start_line": 4,
                     "start_col": 54,
                     "end_line": 4,
@@ -377,8 +303,8 @@
                 {
                   "kind": "Literal",
                   "span": {
-                    "start_offset": 156,
-                    "end_offset": 158,
+                    "start_offset": 132,
+                    "end_offset": 134,
                     "start_line": 4,
                     "start_col": 58,
                     "end_line": 4,
@@ -390,8 +316,8 @@
                 {
                   "kind": "Literal",
                   "span": {
-                    "start_offset": 160,
-                    "end_offset": 162,
+                    "start_offset": 136,
+                    "end_offset": 138,
                     "start_line": 4,
                     "start_col": 62,
                     "end_line": 4,
@@ -410,8 +336,8 @@
     {
       "kind": "VarDeclaration",
       "span": {
-        "start_offset": 165,
-        "end_offset": 186,
+        "start_offset": 141,
+        "end_offset": 162,
         "start_line": 5,
         "start_col": 1,
         "end_line": 5,
@@ -424,8 +350,8 @@
       "initializer": {
         "kind": "CallExpr",
         "span": {
-          "start_offset": 170,
-          "end_offset": 186,
+          "start_offset": 146,
+          "end_offset": 162,
           "start_line": 5,
           "start_col": 6,
           "end_line": 5,
@@ -434,8 +360,8 @@
         "callee": {
           "kind": "MemberAccessExpr",
           "span": {
-            "start_offset": 170,
-            "end_offset": 176,
+            "start_offset": 146,
+            "end_offset": 152,
             "start_line": 5,
             "start_col": 6,
             "end_line": 5,
@@ -444,8 +370,8 @@
           "object": {
             "kind": "Identifier",
             "span": {
-              "start_offset": 170,
-              "end_offset": 172,
+              "start_offset": 146,
+              "end_offset": 148,
               "start_line": 5,
               "start_col": 6,
               "end_line": 5,
@@ -459,8 +385,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 177,
-              "end_offset": 180,
+              "start_offset": 153,
+              "end_offset": 156,
               "start_line": 5,
               "start_col": 13,
               "end_line": 5,
@@ -470,8 +396,8 @@
             "value": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 177,
-                "end_offset": 180,
+                "start_offset": 153,
+                "end_offset": 156,
                 "start_line": 5,
                 "start_col": 13,
                 "end_line": 5,
@@ -483,8 +409,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 182,
-              "end_offset": 185,
+              "start_offset": 158,
+              "end_offset": 161,
               "start_line": 5,
               "start_col": 18,
               "end_line": 5,
@@ -494,8 +420,8 @@
             "value": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 182,
-                "end_offset": 185,
+                "start_offset": 158,
+                "end_offset": 161,
                 "start_line": 5,
                 "start_col": 18,
                 "end_line": 5,
@@ -511,8 +437,8 @@
     {
       "kind": "IfStructure",
       "span": {
-        "start_offset": 187,
-        "end_offset": 287,
+        "start_offset": 163,
+        "end_offset": 263,
         "start_line": 6,
         "start_col": 1,
         "end_line": 8,
@@ -521,8 +447,8 @@
       "condition": {
         "kind": "BinaryExpr",
         "span": {
-          "start_offset": 190,
-          "end_offset": 243,
+          "start_offset": 166,
+          "end_offset": 219,
           "start_line": 6,
           "start_col": 4,
           "end_line": 6,
@@ -532,8 +458,8 @@
         "left": {
           "kind": "CallExpr",
           "span": {
-            "start_offset": 190,
-            "end_offset": 211,
+            "start_offset": 166,
+            "end_offset": 187,
             "start_line": 6,
             "start_col": 4,
             "end_line": 6,
@@ -542,8 +468,8 @@
           "callee": {
             "kind": "MemberAccessExpr",
             "span": {
-              "start_offset": 190,
-              "end_offset": 202,
+              "start_offset": 166,
+              "end_offset": 178,
               "start_line": 6,
               "start_col": 4,
               "end_line": 6,
@@ -552,8 +478,8 @@
             "object": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 190,
-                "end_offset": 192,
+                "start_offset": 166,
+                "end_offset": 168,
                 "start_line": 6,
                 "start_col": 4,
                 "end_line": 6,
@@ -567,8 +493,8 @@
             {
               "kind": "Argument",
               "span": {
-                "start_offset": 203,
-                "end_offset": 206,
+                "start_offset": 179,
+                "end_offset": 182,
                 "start_line": 6,
                 "start_col": 17,
                 "end_line": 6,
@@ -578,8 +504,8 @@
               "value": {
                 "kind": "Identifier",
                 "span": {
-                  "start_offset": 203,
-                  "end_offset": 206,
+                  "start_offset": 179,
+                  "end_offset": 182,
                   "start_line": 6,
                   "start_col": 17,
                   "end_line": 6,
@@ -591,8 +517,8 @@
             {
               "kind": "Argument",
               "span": {
-                "start_offset": 208,
-                "end_offset": 210,
+                "start_offset": 184,
+                "end_offset": 186,
                 "start_line": 6,
                 "start_col": 22,
                 "end_line": 6,
@@ -602,8 +528,8 @@
               "value": {
                 "kind": "Identifier",
                 "span": {
-                  "start_offset": 208,
-                  "end_offset": 210,
+                  "start_offset": 184,
+                  "end_offset": 186,
                   "start_line": 6,
                   "start_col": 22,
                   "end_line": 6,
@@ -617,8 +543,8 @@
         "right": {
           "kind": "BinaryExpr",
           "span": {
-            "start_offset": 216,
-            "end_offset": 243,
+            "start_offset": 192,
+            "end_offset": 219,
             "start_line": 6,
             "start_col": 30,
             "end_line": 6,
@@ -628,8 +554,8 @@
           "left": {
             "kind": "MemberAccessExpr",
             "span": {
-              "start_offset": 216,
-              "end_offset": 238,
+              "start_offset": 192,
+              "end_offset": 214,
               "start_line": 6,
               "start_col": 30,
               "end_line": 6,
@@ -638,8 +564,8 @@
             "object": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 216,
-                "end_offset": 224,
+                "start_offset": 192,
+                "end_offset": 200,
                 "start_line": 6,
                 "start_col": 30,
                 "end_line": 6,
@@ -652,8 +578,8 @@
           "right": {
             "kind": "Literal",
             "span": {
-              "start_offset": 242,
-              "end_offset": 243,
+              "start_offset": 218,
+              "end_offset": 219,
               "start_line": 6,
               "start_col": 56,
               "end_line": 6,
@@ -667,8 +593,8 @@
       "then_block": {
         "kind": "Block",
         "span": {
-          "start_offset": 248,
-          "end_offset": 287,
+          "start_offset": 224,
+          "end_offset": 263,
           "start_line": 7,
           "start_col": 5,
           "end_line": 8,
@@ -678,8 +604,8 @@
           {
             "kind": "ExpressionStatement",
             "span": {
-              "start_offset": 248,
-              "end_offset": 282,
+              "start_offset": 224,
+              "end_offset": 258,
               "start_line": 7,
               "start_col": 5,
               "end_line": 7,
@@ -688,8 +614,8 @@
             "expression": {
               "kind": "CallExpr",
               "span": {
-                "start_offset": 248,
-                "end_offset": 282,
+                "start_offset": 224,
+                "end_offset": 258,
                 "start_line": 7,
                 "start_col": 5,
                 "end_line": 7,
@@ -698,8 +624,8 @@
               "callee": {
                 "kind": "MemberAccessExpr",
                 "span": {
-                  "start_offset": 248,
-                  "end_offset": 262,
+                  "start_offset": 224,
+                  "end_offset": 238,
                   "start_line": 7,
                   "start_col": 5,
                   "end_line": 7,
@@ -708,8 +634,8 @@
                 "object": {
                   "kind": "Identifier",
                   "span": {
-                    "start_offset": 248,
-                    "end_offset": 256,
+                    "start_offset": 224,
+                    "end_offset": 232,
                     "start_line": 7,
                     "start_col": 5,
                     "end_line": 7,
@@ -723,8 +649,8 @@
                 {
                   "kind": "Argument",
                   "span": {
-                    "start_offset": 263,
-                    "end_offset": 266,
+                    "start_offset": 239,
+                    "end_offset": 242,
                     "start_line": 7,
                     "start_col": 20,
                     "end_line": 7,
@@ -734,8 +660,8 @@
                   "value": {
                     "kind": "Literal",
                     "span": {
-                      "start_offset": 263,
-                      "end_offset": 266,
+                      "start_offset": 239,
+                      "end_offset": 242,
                       "start_line": 7,
                       "start_col": 20,
                       "end_line": 7,
@@ -748,8 +674,8 @@
                 {
                   "kind": "Argument",
                   "span": {
-                    "start_offset": 268,
-                    "end_offset": 281,
+                    "start_offset": 244,
+                    "end_offset": 257,
                     "start_line": 7,
                     "start_col": 25,
                     "end_line": 7,
@@ -759,8 +685,8 @@
                   "value": {
                     "kind": "MemberAccessExpr",
                     "span": {
-                      "start_offset": 268,
-                      "end_offset": 281,
+                      "start_offset": 244,
+                      "end_offset": 257,
                       "start_line": 7,
                       "start_col": 25,
                       "end_line": 7,
@@ -769,8 +695,8 @@
                     "object": {
                       "kind": "Identifier",
                       "span": {
-                        "start_offset": 268,
-                        "end_offset": 276,
+                        "start_offset": 244,
+                        "end_offset": 252,
                         "start_line": 7,
                         "start_col": 25,
                         "end_line": 7,
@@ -792,28 +718,28 @@
     {
       "kind": "ExpressionStatement",
       "span": {
-        "start_offset": 283,
-        "end_offset": 336,
+        "start_offset": 259,
+        "end_offset": 289,
         "start_line": 8,
         "start_col": 1,
         "end_line": 8,
-        "end_col": 54
+        "end_col": 31
       },
       "expression": {
         "kind": "CallExpr",
         "span": {
-          "start_offset": 283,
-          "end_offset": 336,
+          "start_offset": 259,
+          "end_offset": 289,
           "start_line": 8,
           "start_col": 1,
           "end_line": 8,
-          "end_col": 54
+          "end_col": 31
         },
         "callee": {
           "kind": "Identifier",
           "span": {
-            "start_offset": 283,
-            "end_offset": 287,
+            "start_offset": 259,
+            "end_offset": 263,
             "start_line": 8,
             "start_col": 1,
             "end_line": 8,
@@ -825,8 +751,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 288,
-              "end_offset": 290,
+              "start_offset": 264,
+              "end_offset": 266,
               "start_line": 8,
               "start_col": 6,
               "end_line": 8,
@@ -836,8 +762,8 @@
             "value": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 288,
-                "end_offset": 290,
+                "start_offset": 264,
+                "end_offset": 266,
                 "start_line": 8,
                 "start_col": 6,
                 "end_line": 8,
@@ -849,8 +775,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 298,
-              "end_offset": 312,
+              "start_offset": 274,
+              "end_offset": 288,
               "start_line": 8,
               "start_col": 16,
               "end_line": 8,
@@ -860,8 +786,8 @@
             "value": {
               "kind": "MemberAccessExpr",
               "span": {
-                "start_offset": 300,
-                "end_offset": 312,
+                "start_offset": 276,
+                "end_offset": 288,
                 "start_line": 8,
                 "start_col": 18,
                 "end_line": 8,
@@ -870,8 +796,8 @@
               "object": {
                 "kind": "Identifier",
                 "span": {
-                  "start_offset": 300,
-                  "end_offset": 305,
+                  "start_offset": 276,
+                  "end_offset": 281,
                   "start_line": 8,
                   "start_col": 18,
                   "end_line": 8,
@@ -880,42 +806,6 @@
                 "name": "color"
               },
               "member": "orange"
-            }
-          },
-          {
-            "kind": "Argument",
-            "span": {
-              "start_offset": 322,
-              "end_offset": 335,
-              "start_line": 8,
-              "start_col": 40,
-              "end_line": 8,
-              "end_col": 53
-            },
-            "name": "display",
-            "value": {
-              "kind": "MemberAccessExpr",
-              "span": {
-                "start_offset": 324,
-                "end_offset": 335,
-                "start_line": 8,
-                "start_col": 42,
-                "end_line": 8,
-                "end_col": 53
-              },
-              "object": {
-                "kind": "Identifier",
-                "span": {
-                  "start_offset": 324,
-                  "end_offset": 331,
-                  "start_line": 8,
-                  "start_col": 42,
-                  "end_line": 8,
-                  "end_col": 49
-                },
-                "name": "display"
-              },
-              "member": "all"
             }
           }
         ]

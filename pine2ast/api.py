@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from importlib import metadata as importlib_metadata
 from pathlib import Path
 from typing import Optional
 
+from pine2ast._version import __version__
 from pine2ast.ast.nodes import Program
 from pine2ast.ast.serialize import ast_to_dict as ast_to_dict, ast_to_json as ast_to_json
 from pine2ast.ast.visitors import walk
@@ -21,10 +21,7 @@ from pine2ast.source import SourceNormalizer
 
 
 def _producer_version() -> str:
-    try:
-        return importlib_metadata.version("pine2ast")
-    except importlib_metadata.PackageNotFoundError:
-        return "0.3.9"
+    return __version__
 
 
 @dataclass(slots=True)

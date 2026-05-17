@@ -44,7 +44,8 @@ ignore = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit", "tests/integration"]
-addopts = "-q"
+addopts = "-q --import-mode=importlib"
+pythonpath = ["."]
 python_files = ["test_*.py"]
 
 [tool.coverage.run]
