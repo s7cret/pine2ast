@@ -2935,14 +2935,14 @@
       "scope": "any"
     },
     "math.max": {
+      "allow_extra_positional": true,
       "kind": "builtin",
       "name": "math.max",
       "parameters": [
         {
           "name": "values",
           "required": true,
-          "type": "float",
-          "allow_extra_positional": true
+          "type": "float"
         }
       ],
       "pine_version": "6",
@@ -2950,14 +2950,14 @@
       "scope": "any"
     },
     "math.min": {
+      "allow_extra_positional": true,
       "kind": "builtin",
       "name": "math.min",
       "parameters": [
         {
           "name": "values",
           "required": true,
-          "type": "float",
-          "allow_extra_positional": true
+          "type": "float"
         }
       ],
       "pine_version": "6",
@@ -3432,7 +3432,7 @@
         {
           "name": "series",
           "required": true,
-          "type": "float"
+          "type": "bool"
         },
         {
           "name": "title",
@@ -3612,7 +3612,7 @@
         {
           "name": "series",
           "required": true,
-          "type": "float"
+          "type": "bool"
         },
         {
           "name": "title",
@@ -3682,7 +3682,7 @@
         {
           "name": "series",
           "required": true,
-          "type": "float"
+          "type": "bool"
         },
         {
           "name": "title",
@@ -3985,7 +3985,7 @@
         }
       ],
       "pine_version": "6",
-      "returns": "series<any>",
+      "returns": "series<float>",
       "scope": "any"
     },
     "request.quandl": {
