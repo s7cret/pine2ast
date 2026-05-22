@@ -24,7 +24,7 @@ from pine2ast.ast.nodes import (
 )
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-from pine2ast.lexer.token import TokenKind
+from pine2ast.lexer.token import Token, TokenKind
 
 from pine2ast.parser.base import BaseParser, _ASSIGN_KINDS, _DECL_MODES, _TYPE_QUALIFIERS, join_span
 
@@ -217,8 +217,16 @@ class StatementsMixin(BaseParser):
         expr = None
         if not self._at(TokenKind.NEWLINE):
             expr = self.parse_expression()
+        # Consume newline after switch header; if case arms are on the same logical
+        # line (no INDENT emitted by layout), treat the first case arm as direct
+        # continuation and skip the INDENT check for the first iteration only.
         self._expect(TokenKind.NEWLINE)
+        first_iteration = True
+        if not self._at(TokenKind.INDENT):
+            synthetic_indent = Token(TokenKind.INDENT, "", None, self._peek().span)
+            self.tokens.insert(self.i, synthetic_indent)
         self._expect(TokenKind.INDENT)
+        self._skip_newlines()  # consume blank lines / comments before first case
         cases: list[SwitchCase] = []
         while not self._at(TokenKind.DEDENT, TokenKind.EOF):
             self._skip_newlines()
@@ -230,11 +238,18 @@ class StatementsMixin(BaseParser):
                 cond = self.parse_expression()
             self._expect(TokenKind.FAT_ARROW)
             if self._match(TokenKind.NEWLINE):
-                self._expect(TokenKind.INDENT)
-                body = self.parse_block_after_indent()
+                if self._at(TokenKind.INDENT):
+                    self._advance()
+                    body = self.parse_block_after_indent()
+                else:
+                    synthetic = Token(TokenKind.INDENT, "", None, self._peek().span)
+                    self.tokens.insert(self.i, synthetic)
+                    self._advance()
+                    body = self.parse_block_after_indent()
             else:
                 body = self.parse_inline_sequence_body()
             cases.append(SwitchCase(join_span(case_start, body.span), cond, body))
+            first_iteration = False
         end = self._expect(TokenKind.DEDENT)
         return SwitchStructure(join_span(start.span, end.span), expr, cases)
 

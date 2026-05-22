@@ -186,7 +186,7 @@ class SemanticAnalyzer:
             if infer_qualifier(arg.value, self.model.symbols) not in {
                 "const",
                 "input",
-            } and arg.name in {"title", "shorttitle", "overlay", None}:
+            } and arg.name in {"title", "overlay", None}:
                 self._diag(
                     Severity.ERROR,
                     codes.DECLARATION_ARGS_NOT_CONST,

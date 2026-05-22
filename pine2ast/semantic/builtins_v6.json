@@ -1212,12 +1212,6 @@
           "type": "string"
         },
         {
-          "name": "shorttitle",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "string"
-        },
-        {
           "name": "overlay",
           "qualifier_max": "const",
           "required": false,
