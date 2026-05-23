@@ -6744,6 +6744,45 @@
       "pine_version": "6",
       "returns": "chart.point",
       "scope": "any"
+    },
+    "ta.stoch": {
+      "kind": "builtin",
+      "name": "ta.stoch",
+      "returns": "tuple<float,float,float>",
+      "parameters": [
+        {
+          "name": "source",
+          "type": "series<float>",
+          "required": false
+        },
+        {
+          "name": "high",
+          "type": "series<float>",
+          "required": false
+        },
+        {
+          "name": "low",
+          "type": "series<float>",
+          "required": false
+        },
+        {
+          "name": "length",
+          "type": "int",
+          "required": true
+        },
+        {
+          "name": "smoothK",
+          "type": "int",
+          "required": false
+        },
+        {
+          "name": "smoothD",
+          "type": "int",
+          "required": false
+        }
+      ],
+      "scope": "any",
+      "pine_version": "6"
     }
   },
   "generated_at": null,
