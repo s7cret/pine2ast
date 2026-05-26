@@ -12,3 +12,15 @@ dist/
 *.egg-info/
 
 .release_gate_reports/
+
+# Release artifacts
+*.zip
+*.tar.gz
+*.tar
+
+# Release logs
+RELEASE_*.log
+*.log
+
+# Node modules
+node_modules/
