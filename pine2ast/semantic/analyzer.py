@@ -1392,6 +1392,8 @@ class SemanticAnalyzer:
             return True
         if not actual or actual in {"unknown", "na"}:
             return True
+        if actual == "any":
+            return True
         if expected == actual:
             return True
         enum_like_types = {
@@ -1459,8 +1461,9 @@ class SemanticAnalyzer:
             # remains a single signature snapshot, so accept chart.point for the first two
             # positional slots without weakening x/y validation for numeric overloads.
             return
-        # Allow plain "any" (e.g. from input.source) where a series<T> is expected
-        if actual == "any" and expected.startswith("series<") and expected.endswith(">"):
+        # Allow plain "any" from user functions/input/source in oracle probes; downstream
+        # lowerers/runtime preserve Pine's na/value behavior for the actual operation.
+        if actual == "any":
             return
         # Allow series<any> arguments where series<T> is expected (e.g. input.source -> ta.sma)
         if actual.startswith("series<") and actual.endswith(">"):

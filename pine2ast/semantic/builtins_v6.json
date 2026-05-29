@@ -1159,9 +1159,20 @@
       "docs_url": null,
       "kind": "builtin",
       "name": "fixnan",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "replacement",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
-      "returns": "series<any>",
+      "returns": "float",
       "scope": "any"
     },
     "float": {
@@ -3029,6 +3040,11 @@
           "name": "value",
           "required": true,
           "type": "float"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
@@ -3389,9 +3405,20 @@
       "docs_url": null,
       "kind": "builtin",
       "name": "nz",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "replacement",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
-      "returns": "series<any>",
+      "returns": "float",
       "scope": "any"
     },
     "plot": {
@@ -3402,7 +3429,7 @@
         {
           "name": "series",
           "required": true,
-          "type": "float"
+          "type": "any"
         },
         {
           "name": "title",
@@ -5503,7 +5530,12 @@
         {
           "name": "source",
           "required": true,
-          "type": "float"
+          "type": "any"
+        },
+        {
+          "name": "length",
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
@@ -5690,7 +5722,7 @@
         },
         {
           "name": "offset",
-          "required": true,
+          "required": false,
           "type": "int"
         }
       ],
@@ -5757,7 +5789,18 @@
     "ta.mfi": {
       "kind": "builtin",
       "name": "ta.mfi",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
       "pine_version": "6",
       "returns": "float",
       "scope": "any"
@@ -6408,16 +6451,48 @@
       "docs_url": null,
       "kind": "builtin",
       "name": "time",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "timeframe",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "session",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
       "pine_version": "6",
-      "returns": "bool",
+      "returns": "int",
       "scope": "any"
     },
     "time_close": {
       "docs_url": null,
       "kind": "builtin",
       "name": "time_close",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "timeframe",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "session",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
       "pine_version": "6",
       "returns": "int",
       "scope": "any"
@@ -6826,7 +6901,7 @@
     "ta.stoch": {
       "kind": "builtin",
       "name": "ta.stoch",
-      "returns": "tuple<float,float,float>",
+      "returns": "float",
       "parameters": [
         {
           "name": "source",
@@ -6861,6 +6936,92 @@
       ],
       "scope": "any",
       "pine_version": "6"
+    },
+    "ta.correlation": {
+      "kind": "builtin",
+      "name": "ta.correlation",
+      "parameters": [
+        {
+          "name": "source1",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "source2",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.bbw": {
+      "kind": "builtin",
+      "name": "ta.bbw",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "mult",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.wpr": {
+      "kind": "builtin",
+      "name": "ta.wpr",
+      "parameters": [
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.tsi": {
+      "kind": "builtin",
+      "name": "ta.tsi",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "short_length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "long_length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
     }
   },
   "generated_at": null,
