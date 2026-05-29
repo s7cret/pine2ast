@@ -196,7 +196,10 @@ def _request_security_return(expr: CallExpr, symbols: Mapping[str, object] | Non
         return None
     # Pine returns the expression shape requested from another context. Preserve tuple shapes
     # for AST2Python/optimizer instead of collapsing everything to unknown.
-    return infer_type(expr.arguments[2].value, symbols)
+    requested_type = infer_type(expr.arguments[2].value, symbols)
+    if name == "request.security_lower_tf":
+        return f"array<{requested_type or 'unknown'}>"
+    return requested_type
 
 
 def _merge_types(types: list[str]) -> str:

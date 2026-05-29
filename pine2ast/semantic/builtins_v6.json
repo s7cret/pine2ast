@@ -1218,7 +1218,43 @@
           "type": "bool"
         },
         {
+          "name": "format",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_bars_back",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
           "name": "max_lines_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_labels_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_boxes_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_polylines_count",
           "qualifier_max": "const",
           "required": false,
           "type": "int"
@@ -4016,13 +4052,13 @@
           "name": "gaps",
           "qualifier_max": "const",
           "required": false,
-          "type": "string"
+          "type": "barmerge.gaps"
         },
         {
           "name": "lookahead",
           "qualifier_max": "const",
           "required": false,
-          "type": "string"
+          "type": "barmerge.lookahead"
         },
         {
           "name": "ignore_invalid_symbol",
@@ -4371,6 +4407,18 @@
           "type": "bool"
         },
         {
+          "name": "format",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
           "name": "initial_capital",
           "qualifier_max": "const",
           "required": false,
@@ -4459,6 +4507,36 @@
           "qualifier_max": "const",
           "required": false,
           "type": "float"
+        },
+        {
+          "name": "max_bars_back",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_lines_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_labels_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_boxes_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "max_polylines_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
@@ -6788,6 +6866,7 @@
   "generated_at": null,
   "namespaces": {
     "array": {},
+    "barmerge": {},
     "barstate": {},
     "box": {},
     "chart": {},
