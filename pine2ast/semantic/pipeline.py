@@ -14,6 +14,7 @@ PASS_PIPELINE = (
     "builtin_validation",
     "strategy_context_validation",
     "unsupported_feature_extraction",
+    "declaration_cardinality",
 )
 
 

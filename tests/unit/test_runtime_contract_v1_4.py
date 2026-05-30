@@ -107,4 +107,5 @@ def test_semantic_pass_pipeline_names_frontend_contract_phases() -> None:
         "builtin_validation",
         "strategy_context_validation",
         "unsupported_feature_extraction",
+        "declaration_cardinality",
     )
