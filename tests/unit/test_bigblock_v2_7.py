@@ -50,13 +50,25 @@ for [_, item] in values
 def test_export_is_allowed_only_in_library_scripts():
     indicator_src = """//@version=6
 indicator("bad export")
+export float threshold = 1.0
+export type Pivot
+    float x
+export enum Direction
+    up
 export f() => close
+export method get(Pivot p) => p.x
 """
     library_src = """//@version=6
 library("ok export")
+export float threshold = 1.0
+export type Pivot
+    float x
+export enum Direction
+    up
 export f(float x) => x
+export method get(Pivot p) => p.x
 """
-    assert codes.EXPORT_NOT_LIBRARY in error_codes(indicator_src)
+    assert error_codes(indicator_src).count(codes.EXPORT_NOT_LIBRARY) == 5
     assert codes.EXPORT_NOT_LIBRARY not in error_codes(library_src)
 
 

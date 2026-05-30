@@ -57,6 +57,7 @@ from pine2ast.semantic.passes import (
     TypeInferencePass,
     UnsupportedFeatureExtractionPass,
 )
+from pine2ast.semantic.passes.export_policy import validate_export_policy
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
 
 
@@ -211,7 +212,7 @@ class SemanticAnalyzer:
             self._analyze_declaration_statement(node)
             return
         if isinstance(node, VarDeclaration):
-            self._validate_export_policy(node)
+            validate_export_policy(self, node)
             init_type = infer_type(node.initializer, self.model.symbols)
             explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
             if node.type_ref is not None:
@@ -401,7 +402,7 @@ class SemanticAnalyzer:
                 )
             return
         if isinstance(node, FunctionDeclaration):
-            self._validate_export_policy(node)
+            validate_export_policy(self, node)
             if self.local_depth > 0 or self.function_depth > 0:
                 self._diag(
                     Severity.ERROR,
@@ -450,7 +451,7 @@ class SemanticAnalyzer:
             self.function_depth -= 1
             return
         if isinstance(node, MethodDeclaration):
-            self._validate_export_policy(node)
+            validate_export_policy(self, node)
             if self.local_depth > 0 or self.function_depth > 0:
                 self._diag(
                     Severity.ERROR,
@@ -521,7 +522,7 @@ class SemanticAnalyzer:
             self._pop_scope()
             return
         if isinstance(node, TypeDeclaration):
-            self._validate_export_policy(node)
+            validate_export_policy(self, node)
             if id(node) not in self._predeclared_nodes:
                 self._define(node.name, SymbolKind.TYPE, node.span, "type", None)
             self._udt_fields[node.name] = node.fields
@@ -561,7 +562,7 @@ class SemanticAnalyzer:
             self._pop_scope()
             return
         if isinstance(node, EnumDeclaration):
-            self._validate_export_policy(node)
+            validate_export_policy(self, node)
             if id(node) not in self._predeclared_nodes:
                 self._define(node.name, SymbolKind.ENUM, node.span, "enum", None)
             seen_members: set[str] = set()
@@ -1075,15 +1076,6 @@ class SemanticAnalyzer:
                 codes.NON_BOOL_CONDITION,
                 "Non-bool expression used as condition in Pine v6.",
                 expr.span,
-            )
-
-    def _validate_export_policy(self, node: ASTNode) -> None:
-        if getattr(node, "is_exported", False) and self._script_type != "library":
-            self._diag(
-                Severity.ERROR,
-                codes.EXPORT_NOT_LIBRARY,
-                "export declarations are allowed only in library() scripts.",
-                node.span,
             )
 
     def _validate_for_in_target(self, node: ForInStructure) -> None:
