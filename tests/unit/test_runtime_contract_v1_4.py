@@ -91,6 +91,13 @@ plot(ta.future_unknown(close))
     assert any(diag.severity.value == "ERROR" for diag in result.diagnostics)
 
 
+def test_runtime_contract_profile_forbids_implicit_version_assumption() -> None:
+    import pytest
+
+    with pytest.raises(ValueError, match="forbids implicit version assumption"):
+        runtime_contract_v1_4_options(strict_v6=False)
+
+
 def test_semantic_pass_pipeline_names_frontend_contract_phases() -> None:
     assert PASS_PIPELINE == (
         "declaration_index",

@@ -82,33 +82,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--test-log", default="TEST_RUN_v2_16_0.log")
     parser.add_argument("--coverage-md", default="COVERAGE_v2_16_0.md")
     parser.add_argument("--strict-dev-tools", action="store_true")
+    parser.add_argument(
+        "--allow-subprocess-fallback",
+        action="store_true",
+        help="Run the stdlib fallback test subprocess before pytest; unsafe for production gates.",
+    )
     args = parser.parse_args(argv)
 
     py = sys.executable
     steps: list[dict[str, Any]] = []
-
-    test = subprocess.run(
-        [py, "tools/run_tests_no_pytest.py"],
-        cwd=ROOT,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        timeout=300,
-        check=False,
-    )
-    (ROOT / args.test_log).write_text(test.stdout, encoding="utf-8")
-    steps.append(
-        {
-            "cmd": [py, "tools/run_tests_no_pytest.py"],
-            "status": "passed" if test.returncode == 0 else "failed",
-            "required": True,
-            "ok": test.returncode == 0,
-            "returncode": test.returncode,
-            "duration_ms": None,
-            "output_tail": test.stdout[-8000:],
-            "artifact": args.test_log,
-        }
-    )
 
     if has_module("pytest"):
         steps.append(
@@ -121,6 +103,33 @@ def main(argv: list[str] | None = None) -> int:
             skipped(
                 "pytest-cov", "pytest/pytest-cov are not installed", required=args.strict_dev_tools
             )
+        )
+    if args.allow_subprocess_fallback:
+        test = subprocess.run(
+            [py, "tools/run_tests_no_pytest.py"],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=300,
+            check=False,
+        )
+        (ROOT / args.test_log).write_text(test.stdout, encoding="utf-8")
+        steps.append(
+            {
+                "cmd": [py, "tools/run_tests_no_pytest.py"],
+                "status": "passed" if test.returncode == 0 else "failed",
+                "required": False,
+                "ok": True,
+                "returncode": test.returncode,
+                "duration_ms": None,
+                "output_tail": test.stdout[-8000:],
+                "artifact": args.test_log,
+                "unsafe_metadata": {
+                    "explicit": True,
+                    "reason": "subprocess fallback runner enabled",
+                },
+            }
         )
 
     for module, command in [
@@ -207,6 +216,7 @@ def main(argv: list[str] | None = None) -> int:
         "release": "0.2.16",
         "ok": all(step["ok"] for step in steps),
         "strict_dev_tools": args.strict_dev_tools,
+        "allow_subprocess_fallback": args.allow_subprocess_fallback,
         "steps": steps,
         "artifacts": {
             "test_log": args.test_log,

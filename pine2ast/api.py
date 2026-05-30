@@ -53,6 +53,10 @@ def runtime_contract_v1_4_options(**overrides: object) -> ParseOptions:
     for name, value in overrides.items():
         if not hasattr(options, name):
             raise TypeError(f"Unknown ParseOptions field: {name}")
+        if name == "strict_v6" and value is not True:
+            raise ValueError(
+                "runtime_contract_v1_4 production profile forbids implicit version assumption"
+            )
         setattr(options, name, value)
     return options
 
