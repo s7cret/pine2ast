@@ -49,10 +49,15 @@ from pine2ast.semantic.symbols import Symbol, SymbolKind
 from pine2ast.semantic.type_infer import callee_name, infer_type
 from pine2ast.ast.visitors import walk
 from pine2ast.semantic.passes import (
+    BuiltinValidationPass,
     DeclarationIndexPass,
+    QualifierInferencePass,
     ScopeSymbolPass,
+    StrategyContextValidationPass,
+    TypeInferencePass,
     UnsupportedFeatureExtractionPass,
 )
+from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
 
 
 @dataclass(slots=True)
@@ -89,12 +94,30 @@ class SemanticAnalyzer:
         self._enum_members: dict[str, set[str]] = {}
         self._symbol_history: dict[str, list[Symbol]] = {}
         self._script_type: str | None = None
+        self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
         self._push_scope(ScopeKind.GLOBAL)
-        DeclarationIndexPass(self).run(program)
+        pipeline = AnalyzerPassPipeline(
+            (
+                DeclarationIndexPass(self),
+                ScopeSymbolPass(self),
+                TypeInferencePass(self),
+                QualifierInferencePass(self),
+                BuiltinValidationPass(self),
+                StrategyContextValidationPass(self),
+                UnsupportedFeatureExtractionPass(self),
+            )
+        )
+        self.pass_results = pipeline.run(
+            program, diagnostics_count=lambda: len(self.model.diagnostics)
+        )
+        self._validate_declaration_cardinality(program)
+        self._pop_scope()
+        return self.model
+
+    def _validate_declaration_cardinality(self, program: Program) -> None:
         seen_decls = 1 if program.declaration else 0
-        ScopeSymbolPass(self).run(program)
         seen_decls += sum(
             1
             for node in walk(program)
@@ -107,9 +130,6 @@ class SemanticAnalyzer:
                 "Program has more than one declaration statement.",
                 program.span,
             )
-        UnsupportedFeatureExtractionPass(self).run(program)
-        self._pop_scope()
-        return self.model
 
     def _predeclare_globals(self, items: list[Statement]) -> None:
         for item in items:
