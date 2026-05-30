@@ -117,3 +117,15 @@ def _error_codes(source: str, *, strict_builtin_namespaces: bool = False) -> set
 )
 def test_v217_semantic_rule_matrix(name: str, source: str, expected: str, strict: bool) -> None:
     assert expected in _error_codes(source, strict_builtin_namespaces=strict), name
+
+
+def test_loop_control_is_allowed_inside_loop_body() -> None:
+    source = """//@version=6
+indicator("T")
+while true
+    if close > open
+        continue
+    break
+"""
+
+    assert codes.BREAK_CONTINUE_OUTSIDE_LOOP not in _error_codes(source)

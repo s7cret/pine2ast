@@ -58,6 +58,7 @@ from pine2ast.semantic.passes import (
     UnsupportedFeatureExtractionPass,
 )
 from pine2ast.semantic.passes.export_policy import validate_export_policy
+from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
 
 
@@ -384,22 +385,10 @@ class SemanticAnalyzer:
             self._visit_structure(node)
             return
         if isinstance(node, BreakStatement):
-            if self.loop_depth == 0:
-                self._diag(
-                    Severity.ERROR,
-                    codes.BREAK_CONTINUE_OUTSIDE_LOOP,
-                    "break is allowed only inside loops.",
-                    node.span,
-                )
+            validate_loop_control_statement(self, node)
             return
         if isinstance(node, ContinueStatement):
-            if self.loop_depth == 0:
-                self._diag(
-                    Severity.ERROR,
-                    codes.BREAK_CONTINUE_OUTSIDE_LOOP,
-                    "continue is allowed only inside loops.",
-                    node.span,
-                )
+            validate_loop_control_statement(self, node)
             return
         if isinstance(node, FunctionDeclaration):
             validate_export_policy(self, node)
