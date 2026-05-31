@@ -6,10 +6,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
 
-from tools.build_release_zip import build_manifest, build_zip  # noqa: E402
+from build_release_zip import build_manifest, build_zip
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_PROFILE = Path("[local-home]/.config/tradingview-oracle-profile")
+DEFAULT_PROFILE = Path.home() / ".config/tradingview-oracle-profile"
 DEFAULT_OUT_ROOT = Path("TV_ORACLE_AUTH_PREFLIGHT_20260428")
 CHART_URL = "https://www.tradingview.com/chart/"
 SMOKE_SOURCE = '//@version=6\nindicator("OC oracle smoke")\nplot(close)\n'

@@ -22,7 +22,6 @@ include_integration = "--include-integration" in sys.argv
 TEST_DIRS = [ROOT / "tests" / "unit"]
 if include_integration:
     TEST_DIRS.append(ROOT / "tests" / "integration")
-sys.path.insert(0, str(ROOT))
 
 
 def _pytest_available() -> bool:
