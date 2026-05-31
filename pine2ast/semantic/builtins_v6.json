@@ -80,47 +80,83 @@
       ],
       "pine_version": "6",
       "returns": "unknown",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.from<bool>": {
       "kind": "builtin",
       "name": "array.from<bool>",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "values",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
       "returns": "array<bool>",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.from<color>": {
       "kind": "builtin",
       "name": "array.from<color>",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "values",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
       "returns": "array<color>",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.from<float>": {
       "kind": "builtin",
       "name": "array.from<float>",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "values",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
       "returns": "array<float>",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.from<int>": {
       "kind": "builtin",
       "name": "array.from<int>",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "values",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
       "returns": "array<int>",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.from<string>": {
       "kind": "builtin",
       "name": "array.from<string>",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "values",
+          "required": false,
+          "type": "any"
+        }
+      ],
       "pine_version": "6",
       "returns": "array<string>",
-      "scope": "any"
+      "scope": "any",
+      "allow_extra_positional": true
     },
     "array.get": {
       "kind": "builtin",
@@ -1028,11 +1064,6 @@
       "kind": "builtin",
       "name": "chart.point.now",
       "parameters": [
-        {
-          "name": "time",
-          "required": true,
-          "type": "int"
-        },
         {
           "name": "price",
           "required": true,
@@ -3223,12 +3254,12 @@
       "parameters": [
         {
           "name": "rows",
-          "required": true,
+          "required": false,
           "type": "int"
         },
         {
           "name": "columns",
-          "required": true,
+          "required": false,
           "type": "int"
         },
         {
@@ -3247,12 +3278,12 @@
       "parameters": [
         {
           "name": "rows",
-          "required": true,
+          "required": false,
           "type": "int"
         },
         {
           "name": "columns",
-          "required": true,
+          "required": false,
           "type": "int"
         },
         {
