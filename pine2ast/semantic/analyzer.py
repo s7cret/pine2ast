@@ -1332,7 +1332,7 @@ class SemanticAnalyzer:
 
     def _tuple_element_types(self, typ: str) -> list[str]:
         if not typ.startswith("tuple<") or not typ.endswith(">"):
-            return []
+            return list()
         inner = typ[len("tuple<") : -1]
         result: list[str] = []
         depth = 0

@@ -11,7 +11,7 @@ class TypeInferencePass:
     """Type inference phase boundary.
 
     Type facts are currently produced during the stable statement/expression walk;
-    this no-op boundary documents the phase without changing diagnostics.
+    this explicit boundary documents the phase without changing diagnostics.
     """
 
     name = "type_inference"

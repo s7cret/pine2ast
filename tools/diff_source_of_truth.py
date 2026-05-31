@@ -164,7 +164,7 @@ def is_identifier(value: str) -> bool:
 def parse_params(text: str) -> list[Parameter]:
     text = text.strip()
     if not text:
-        return []
+        return list()
     return [parse_parameter(part, i) for i, part in enumerate(split_params(text))]
 
 
