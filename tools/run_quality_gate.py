@@ -1,8 +1,8 @@
 """Run the Pine2AST release quality gate.
 
-Normal dev environments should run with ``--strict-dev-tools``. Minimal agent
-sandboxes can still execute the parser-owned release gates and will record
-missing optional dev tools explicitly instead of silently pretending they passed.
+Release gates require dev tools by default. Minimal agent sandboxes can pass
+``--allow-missing-dev-tools`` to execute parser-owned release gates while
+recording missing tools explicitly instead of pretending they passed.
 """
 
 from __future__ import annotations
@@ -22,6 +22,10 @@ DEFAULT_ARTIFACT_DIR = ".release_gate_reports"
 
 def has_module(name: str) -> bool:
     return importlib.util.find_spec(name) is not None
+
+
+def should_require_dev_tools(*, strict_dev_tools: bool, allow_missing_dev_tools: bool) -> bool:
+    return strict_dev_tools or not allow_missing_dev_tools
 
 
 def pytest_gate_steps(py: str, *, strict_dev_tools: bool) -> list[dict[str, Any]]:
@@ -106,7 +110,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--builtin-json", default=f"{DEFAULT_ARTIFACT_DIR}/BUILTIN_COVERAGE_v2_16_0.json")
     parser.add_argument("--test-log", default=f"{DEFAULT_ARTIFACT_DIR}/TEST_RUN_v2_16_0.log")
     parser.add_argument("--coverage-md", default=f"{DEFAULT_ARTIFACT_DIR}/COVERAGE_v2_16_0.md")
-    parser.add_argument("--strict-dev-tools", action="store_true")
+    parser.add_argument(
+        "--strict-dev-tools",
+        action="store_true",
+        help="Require pytest-cov, ruff, black, and mypy; this is the default for release gates.",
+    )
+    parser.add_argument(
+        "--allow-missing-dev-tools",
+        action="store_true",
+        help="Allow missing pytest-cov, ruff, black, or mypy in minimal local sandboxes.",
+    )
     parser.add_argument(
         "--allow-subprocess-fallback",
         action="store_true",
@@ -118,11 +131,15 @@ def main(argv: list[str] | None = None) -> int:
     builtin_json_path = artifact_path(args.builtin_json)
     test_log_path = artifact_path(args.test_log)
     coverage_md_path = artifact_path(args.coverage_md)
+    dev_tools_required = should_require_dev_tools(
+        strict_dev_tools=args.strict_dev_tools,
+        allow_missing_dev_tools=args.allow_missing_dev_tools,
+    )
 
     py = sys.executable
     steps: list[dict[str, Any]] = []
 
-    steps.extend(pytest_gate_steps(py, strict_dev_tools=args.strict_dev_tools))
+    steps.extend(pytest_gate_steps(py, strict_dev_tools=dev_tools_required))
     if args.allow_subprocess_fallback:
         test = subprocess.run(
             [py, "tools/run_tests_no_pytest.py"],
@@ -158,10 +175,10 @@ def main(argv: list[str] | None = None) -> int:
         ("mypy", [py, "-m", "mypy", "pine2ast"]),
     ]:
         if has_module(module):
-            steps.append(run_cmd(command, required=args.strict_dev_tools))
+            steps.append(run_cmd(command, required=dev_tools_required))
         else:
             steps.append(
-                skipped(module, f"{module} is not installed", required=args.strict_dev_tools)
+                skipped(module, f"{module} is not installed", required=dev_tools_required)
             )
 
     from pine2ast.quality import quality_gate_json
@@ -237,7 +254,8 @@ def main(argv: list[str] | None = None) -> int:
         "project": "pine2ast",
         "release": "0.2.16",
         "ok": all(step["ok"] for step in steps),
-        "strict_dev_tools": args.strict_dev_tools,
+        "strict_dev_tools": dev_tools_required,
+        "allow_missing_dev_tools": args.allow_missing_dev_tools,
         "allow_subprocess_fallback": args.allow_subprocess_fallback,
         "steps": steps,
         "artifacts": {

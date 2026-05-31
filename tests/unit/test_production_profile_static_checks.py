@@ -11,6 +11,30 @@ def test_quality_gate_subprocess_fallback_is_explicitly_unsafe() -> None:
     assert '"unsafe_metadata"' in source
 
 
+def test_quality_gate_requires_dev_tools_by_default() -> None:
+    assert (
+        run_quality_gate.should_require_dev_tools(
+            strict_dev_tools=False,
+            allow_missing_dev_tools=False,
+        )
+        is True
+    )
+    assert (
+        run_quality_gate.should_require_dev_tools(
+            strict_dev_tools=False,
+            allow_missing_dev_tools=True,
+        )
+        is False
+    )
+    assert (
+        run_quality_gate.should_require_dev_tools(
+            strict_dev_tools=True,
+            allow_missing_dev_tools=True,
+        )
+        is True
+    )
+
+
 def test_quality_gate_default_artifacts_do_not_write_repo_root() -> None:
     parser_defaults = [
         run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_LOCAL_v2_16_0.json"),
