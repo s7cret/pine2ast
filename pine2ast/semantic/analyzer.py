@@ -908,7 +908,12 @@ class SemanticAnalyzer:
             self._visit_expr(expr.if_false)
             true_type = infer_type(expr.if_true, self.model.symbols)
             false_type = infer_type(expr.if_false, self.model.symbols)
-            if not self._branch_types_compatible(true_type, false_type):
+            if not (
+                true_type in {None, "unknown", "na"}
+                or false_type in {None, "unknown", "na"}
+                or self._is_assignable_type(true_type, false_type)
+                or self._is_assignable_type(false_type, true_type)
+            ):
                 self._diag(
                     Severity.ERROR,
                     codes.BRANCH_TYPE_MISMATCH,
@@ -1234,11 +1239,6 @@ class SemanticAnalyzer:
                 f"{context} requires {expected_max} or weaker qualifier, got {actual or 'unknown'}.",
                 span,
             )
-
-    def _branch_types_compatible(self, left: str | None, right: str | None) -> bool:
-        if left in {None, "unknown", "na"} or right in {None, "unknown", "na"}:
-            return True
-        return self._is_assignable_type(left, right) or self._is_assignable_type(right, left)
 
     def _validate_binary_expr(self, expr: BinaryExpr) -> None:
         left_type = infer_type(expr.left, self.model.symbols)
