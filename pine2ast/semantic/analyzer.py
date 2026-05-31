@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-
 from pine2ast.ast.base import ASTNode, Expression, Statement
 from pine2ast.ast.nodes import (
     BinaryExpr,
@@ -43,6 +41,7 @@ from pine2ast.semantic.builtin_registry import (
     KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
     load_builtin_registry,
 )
+from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.qualifier_infer import infer_qualifier
 from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
@@ -60,20 +59,6 @@ from pine2ast.semantic.passes import (
 from pine2ast.semantic.passes.export_policy import validate_export_policy
 from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
-
-
-@dataclass(slots=True)
-class SemanticModel:
-    symbols: dict[str, Symbol] = field(default_factory=dict)
-    scopes: list[Scope] = field(default_factory=list)
-    node_types: dict[int, str] = field(default_factory=dict)
-    node_qualifiers: dict[int, str] = field(default_factory=dict)
-    non_na_scopes: dict[int, set[str]] = field(default_factory=dict)
-    # Scope-local flow facts for `not na(x)`, `not na(obj.field)`, and `if na(x) ... else`.
-    # Values are stable source-level paths, not object references, so reports remain JSON-safe.
-    non_na_paths: dict[int, set[str]] = field(default_factory=dict)
-    diagnostics: list[Diagnostic] = field(default_factory=list)
-
 
 class SemanticAnalyzer:
     def __init__(
