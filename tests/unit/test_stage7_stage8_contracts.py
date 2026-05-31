@@ -11,7 +11,7 @@ if str(ROOT) not in sys.path:
 
 from pine2ast.benchmark import perf_baseline  # noqa: E402
 from pine2ast.cli import main  # noqa: E402
-from tools.build_release_zip import build_manifest, build_zip  # noqa: E402
+from tools.build_release_zip import ReleaseBuildError, build_manifest, build_zip  # noqa: E402
 
 INSPECT_FIXTURE = ROOT / "tests" / "fixtures" / "inspect_contract" / "optimizer_strategy.pine"
 INSPECT_CONTRACT = (
@@ -68,3 +68,51 @@ def test_release_zip_is_reproducible_and_excludes_temp_venv_pycache_and_secrets(
     with zipfile.ZipFile(out1) as zf:
         names = zf.namelist()
     assert names == ["pkg/pine2ast/__init__.py"]
+
+
+def test_release_zip_refuses_missing_file_and_empty_roots(tmp_path: Path):
+    out = tmp_path / "out.zip"
+
+    missing_root = tmp_path / "missing"
+    try:
+        build_zip(missing_root, out)
+    except ReleaseBuildError as exc:
+        assert "does not exist" in str(exc)
+    else:
+        raise AssertionError("missing release root should be refused")
+    assert not out.exists()
+
+    file_root = tmp_path / "file-root"
+    file_root.write_text("not a directory\n", encoding="utf-8")
+    try:
+        build_zip(file_root, out)
+    except ReleaseBuildError as exc:
+        assert "must be a directory" in str(exc)
+    else:
+        raise AssertionError("file release root should be refused")
+    assert not out.exists()
+
+    empty_root = tmp_path / "empty"
+    empty_root.mkdir()
+    try:
+        build_zip(empty_root, out)
+    except ReleaseBuildError as exc:
+        assert "no includable files" in str(exc)
+    else:
+        raise AssertionError("empty release root should be refused")
+    assert not out.exists()
+
+
+def test_release_manifest_refuses_empty_archive(tmp_path: Path):
+    root = tmp_path / "pkg"
+    root.mkdir()
+    out = tmp_path / "empty.zip"
+    with zipfile.ZipFile(out, "w"):
+        pass
+
+    try:
+        build_manifest(root, out, "0" * 64)
+    except ReleaseBuildError as exc:
+        assert "empty" in str(exc)
+    else:
+        raise AssertionError("empty release archive should be refused")

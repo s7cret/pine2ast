@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from tools import run_quality_gate
+
 
 def test_quality_gate_subprocess_fallback_is_explicitly_unsafe() -> None:
     source = Path("tools/run_quality_gate.py").read_text(encoding="utf-8")
@@ -7,3 +9,50 @@ def test_quality_gate_subprocess_fallback_is_explicitly_unsafe() -> None:
     assert "--allow-subprocess-fallback" in source
     assert source.index(fallback_call) > source.index("if args.allow_subprocess_fallback:")
     assert '"unsafe_metadata"' in source
+
+
+def test_quality_gate_runs_pytest_without_cov_args_when_pytest_cov_is_missing(monkeypatch) -> None:
+    calls = []
+
+    def fake_has_module(name: str) -> bool:
+        return name == "pytest"
+
+    def fake_run_cmd(cmd, *, required, timeout=300):
+        calls.append((cmd, required, timeout))
+        return {"cmd": cmd, "ok": True, "required": required}
+
+    monkeypatch.setattr(run_quality_gate, "has_module", fake_has_module)
+    monkeypatch.setattr(run_quality_gate, "run_cmd", fake_run_cmd)
+
+    steps = run_quality_gate.pytest_gate_steps("/python", strict_dev_tools=True)
+
+    assert calls == [(["/python", "-m", "pytest"], True, 300)]
+    assert not any(arg.startswith("--cov") for arg in calls[0][0])
+    assert steps[1]["cmd"] == ["pytest-cov"]
+    assert steps[1]["required"] is True
+    assert steps[1]["ok"] is False
+
+
+def test_quality_gate_uses_cov_args_when_pytest_cov_is_available(monkeypatch) -> None:
+    calls = []
+
+    def fake_has_module(name: str) -> bool:
+        return name in {"pytest", "pytest_cov"}
+
+    def fake_run_cmd(cmd, *, required, timeout=300):
+        calls.append((cmd, required, timeout))
+        return {"cmd": cmd, "ok": True, "required": required}
+
+    monkeypatch.setattr(run_quality_gate, "has_module", fake_has_module)
+    monkeypatch.setattr(run_quality_gate, "run_cmd", fake_run_cmd)
+
+    steps = run_quality_gate.pytest_gate_steps("/python", strict_dev_tools=True)
+
+    assert calls == [
+        (
+            ["/python", "-m", "pytest", "--cov=pine2ast", "--cov-report=term-missing"],
+            True,
+            300,
+        )
+    ]
+    assert steps == [{"cmd": calls[0][0], "ok": True, "required": True}]

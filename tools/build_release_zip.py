@@ -29,6 +29,10 @@ SECRET_NAME_FRAGMENTS = {"secret", "secrets", ".env", "id_rsa", "id_ed25519"}
 REPRODUCIBLE_TS = (1980, 1, 1, 0, 0, 0)
 
 
+class ReleaseBuildError(ValueError):
+    """Raised when release inputs would produce an invalid archive."""
+
+
 def should_include(path: Path, *, root: Path | None = None) -> bool:
     check_path = path.relative_to(root) if root is not None else path
     parts = set(check_path.parts)
@@ -53,13 +57,22 @@ def _zip_info(root: Path, file: Path) -> zipfile.ZipInfo:
 
 
 def build_zip(root: Path, out: Path) -> str:
-    out.parent.mkdir(parents=True, exist_ok=True)
+    root = root.resolve()
+    if not root.exists():
+        raise ReleaseBuildError(f"release root does not exist: {root}")
+    if not root.is_dir():
+        raise ReleaseBuildError(f"release root must be a directory: {root}")
+
     out_resolved = out.resolve()
     files = [
         file
         for file in sorted(root.rglob("*"))
         if file.resolve() != out_resolved and should_include(file, root=root)
     ]
+    if not files:
+        raise ReleaseBuildError(f"release root contains no includable files: {root}")
+
+    out.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(out, "w") as zf:
         for file in files:
             zf.writestr(_zip_info(root, file), file.read_bytes())
@@ -70,6 +83,8 @@ def build_zip(root: Path, out: Path) -> str:
 def build_manifest(root: Path, out: Path, digest: str) -> dict[str, Any]:
     with zipfile.ZipFile(out) as zf:
         names = sorted(zf.namelist())
+    if not names:
+        raise ReleaseBuildError(f"release archive is empty: {out}")
     return {
         "schema_version": 1,
         "archive": str(out),
@@ -105,11 +120,19 @@ def main(argv: list[str] | None = None) -> int:
 
     root = Path(args.root).resolve()
     out = Path(args.out).resolve() if args.out else root.parent / f"{root.name}.zip"
-    digest = build_zip(root, out)
+    try:
+        digest = build_zip(root, out)
+    except ReleaseBuildError as exc:
+        print(f"release build failed: {exc}", file=sys.stderr)
+        return 2
     print(out)
     print(digest)
     if args.manifest:
-        manifest = build_manifest(root, out, digest)
+        try:
+            manifest = build_manifest(root, out, digest)
+        except ReleaseBuildError as exc:
+            print(f"release manifest failed: {exc}", file=sys.stderr)
+            return 2
         Path(args.manifest).write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )

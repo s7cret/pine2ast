@@ -19,8 +19,12 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root).resolve()
     out = root / f"pine2ast_interpipe_{args.version}.zip"
     manifest_path = root / f"RELEASE_MANIFEST_{args.version}.json"
-    digest = build_release_zip.build_zip(root, out)
-    manifest = build_release_zip.build_manifest(root, out, digest)
+    try:
+        digest = build_release_zip.build_zip(root, out)
+        manifest = build_release_zip.build_manifest(root, out, digest)
+    except build_release_zip.ReleaseBuildError as exc:
+        print(f"release build failed: {exc}", file=sys.stderr)
+        return 2
     manifest["release"] = args.version
     manifest["archive_name"] = out.name
     manifest_path.write_text(

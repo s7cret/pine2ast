@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any, TypeAlias
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
 from pine2ast.ast.nodes import (
@@ -70,6 +71,10 @@ from pine2ast.semantic.passes import (
 from pine2ast.semantic.passes.export_policy import validate_export_policy
 from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+
+StatementHandler: TypeAlias = Callable[["SemanticAnalyzer", Any], None]
+ExpressionHandler: TypeAlias = Callable[["SemanticAnalyzer", Any], None]
+
 
 class SemanticAnalyzer:
     def __init__(
@@ -2059,7 +2064,7 @@ class SemanticAnalyzer:
 # Dispatch table for _visit_statement.  Populated by class body at
 # module level so unbound references to SemanticAnalyzer._s_xxx resolve.
 # ------------------------------------------------------------------
-_STATEMENT_HANDLERS: dict[type, Callable[["SemanticAnalyzer", Statement], None]] = {
+_STATEMENT_HANDLERS: dict[type, StatementHandler] = {
     DeclarationStatement: SemanticAnalyzer._s_declaration_statement,
     VarDeclaration: SemanticAnalyzer._s_var_declaration,
     TupleDeclaration: SemanticAnalyzer._s_tuple_declaration,
@@ -2074,7 +2079,7 @@ _STATEMENT_HANDLERS: dict[type, Callable[["SemanticAnalyzer", Statement], None]]
 # ------------------------------------------------------------------
 # Dispatch table for _visit_expr.  Uses exact type as key for speed.
 # ------------------------------------------------------------------
-_EXPR_HANDLERS: dict[type, Callable[["SemanticAnalyzer", Expression], None]] = {
+_EXPR_HANDLERS: dict[type, ExpressionHandler] = {
     Identifier: SemanticAnalyzer._e_identifier,
     Literal: SemanticAnalyzer._e_literal,
     TupleExpr: SemanticAnalyzer._e_tuple_expr,
