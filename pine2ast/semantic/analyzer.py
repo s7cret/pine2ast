@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from pine2ast.ast.base import ASTNode, Expression, Statement
 from pine2ast.ast.nodes import (
     BinaryExpr,
@@ -2084,4 +2086,3 @@ _EXPR_HANDLERS: dict[type, Callable[["SemanticAnalyzer", Expression], None]] = {
     CallExpr: SemanticAnalyzer._e_call_expr,
     HistoryRefExpr: SemanticAnalyzer._e_history_ref_expr,
 }
-

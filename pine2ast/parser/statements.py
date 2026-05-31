@@ -221,7 +221,6 @@ class StatementsMixin(BaseParser):
         # line (no INDENT emitted by layout), treat the first case arm as direct
         # continuation and skip the INDENT check for the first iteration only.
         self._expect(TokenKind.NEWLINE)
-        first_iteration = True
         if not self._at(TokenKind.INDENT):
             synthetic_indent = Token(TokenKind.INDENT, "", None, self._peek().span)
             self.tokens.insert(self.i, synthetic_indent)
@@ -249,7 +248,6 @@ class StatementsMixin(BaseParser):
             else:
                 body = self.parse_inline_sequence_body()
             cases.append(SwitchCase(join_span(case_start, body.span), cond, body))
-            first_iteration = False
         end = self._expect(TokenKind.DEDENT)
         return SwitchStructure(join_span(start.span, end.span), expr, cases)
 
