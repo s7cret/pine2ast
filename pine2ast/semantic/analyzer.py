@@ -42,6 +42,14 @@ from pine2ast.semantic.builtin_registry import (
     load_builtin_registry,
 )
 from pine2ast.semantic.model import SemanticModel
+from pine2ast.semantic.type_helpers import (
+    for_in_target_types,
+    generic_type_parts,
+    is_assignable_type,
+    split_type_args,
+    tuple_element_types,
+    type_ref_name,
+)
 from pine2ast.semantic.qualifier_infer import infer_qualifier
 from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
@@ -1275,46 +1283,13 @@ class SemanticAnalyzer:
                 )
 
     def _type_ref_name(self, type_ref) -> str:
-        if type_ref is None:
-            return "unknown"
-        args = getattr(type_ref, "template_args", None) or []
-        if not args:
-            return type_ref.name
-        return type_ref.name + "<" + ",".join(self._type_ref_name(arg) for arg in args) + ">"
+        return type_ref_name(type_ref)
 
     def _for_in_target_types(self, iterable_type: str, target_count: int) -> list[str]:
-        # Infer target types for Pine `for ... in ...` over common collections.
-        if iterable_type.startswith("array<") and iterable_type.endswith(">"):
-            element = iterable_type[len("array<") : -1].strip() or "unknown"
-            return ["int", element] if target_count == 2 else [element]
-        if iterable_type.startswith("matrix<") and iterable_type.endswith(">"):
-            element = iterable_type[len("matrix<") : -1].strip() or "unknown"
-            return ["int", element] if target_count == 2 else [element]
-        if iterable_type.startswith("map<") and iterable_type.endswith(">"):
-            parts = self._split_type_args(iterable_type[len("map<") : -1])
-            if target_count == 2 and len(parts) >= 2:
-                return [parts[0], parts[1]]
-            return ["tuple<" + ",".join(parts[:2]) + ">" if parts else "unknown"]
-        if iterable_type.startswith("tuple<") and iterable_type.endswith(">"):
-            return self._split_type_args(iterable_type[len("tuple<") : -1])
-        return ["unknown"] * target_count
+        return for_in_target_types(iterable_type, target_count)
 
     def _split_type_args(self, inner: str) -> list[str]:
-        result: list[str] = []
-        depth = 0
-        start = 0
-        for idx, ch in enumerate(inner):
-            if ch == "<":
-                depth += 1
-            elif ch == ">":
-                depth -= 1
-            elif ch == "," and depth == 0:
-                result.append(inner[start:idx].strip() or "unknown")
-                start = idx + 1
-        tail = inner[start:].strip()
-        if tail:
-            result.append(tail)
-        return result
+        return split_type_args(inner)
 
     def _validate_type_ref(self, type_ref) -> None:
         base = type_ref.name
@@ -1331,94 +1306,13 @@ class SemanticAnalyzer:
             self._validate_type_ref(arg)
 
     def _tuple_element_types(self, typ: str) -> list[str]:
-        if not typ.startswith("tuple<") or not typ.endswith(">"):
-            return list()
-        inner = typ[len("tuple<") : -1]
-        result: list[str] = []
-        depth = 0
-        start = 0
-        for idx, ch in enumerate(inner):
-            if ch == "<":
-                depth += 1
-            elif ch == ">":
-                depth -= 1
-            elif ch == "," and depth == 0:
-                result.append(inner[start:idx].strip() or "unknown")
-                start = idx + 1
-        tail = inner[start:].strip()
-        if tail:
-            result.append(tail)
-        return result
+        return tuple_element_types(typ)
 
     def _generic_type_parts(self, typ: str | None) -> tuple[str | None, list[str]]:
-        if not typ:
-            return None, []
-        if "<" not in typ or not typ.endswith(">"):
-            return typ, []
-        base, inner = typ.split("<", 1)
-        return base.strip(), self._split_type_args(inner[:-1])
+        return generic_type_parts(typ)
 
     def _is_assignable_type(self, expected: str | None, actual: str | None) -> bool:
-        if not expected or expected in {"any", "unknown"}:
-            return True
-        if not actual or actual in {"unknown", "na"}:
-            return True
-        if actual == "any":
-            return True
-        if expected == actual:
-            return True
-        enum_like_types = {
-            "display",
-            "line.style",
-            "label.style",
-            "box.style",
-            "table.position",
-            "barmerge.gaps",
-            "barmerge.lookahead",
-            "dividends.field",
-            "earnings.field",
-            "splits.field",
-            "strategy.risk.type",
-            "strategy.direction",
-            "strategy.order_type",
-            "extend",
-        }
-        if expected in enum_like_types and actual == expected:
-            return True
-        # Enum display values (display.data_window, etc.) are stored as integers internally.
-        # Allow int parameters to accept enum-like display values.
-        if expected == "int" and actual in enum_like_types:
-            return True
-        if expected == "float" and actual == "int":
-            return True
-        if expected.startswith("series<") and expected.endswith(">"):
-            # Allow series<any> to be assigned where series<T> is expected
-            if actual.startswith("series<") and actual.endswith(">"):
-                inner_actual = actual[len("series<") : -1]
-                if inner_actual == "any":
-                    return True
-            return self._is_assignable_type(expected[len("series<") : -1], actual)
-        exp_base, exp_args = self._generic_type_parts(expected)
-        act_base, act_args = self._generic_type_parts(actual)
-        if exp_base in {"array", "map", "matrix"}:
-            if exp_base == "array" and act_base == "tuple":
-                # Pine input options are often written as inline tuple/list syntax. Treat a
-                # tuple<T...> as array<T> compatible when all elements match the array element type.
-                if not exp_args or exp_args[0] in {"any", "unknown"}:
-                    return True
-                return all(self._is_assignable_type(exp_args[0], a) for a in act_args)
-            if act_base != exp_base:
-                return False
-            if not exp_args:
-                return True
-            if not act_args:
-                return True
-            if len(exp_args) != len(act_args):
-                return False
-            return all(self._is_assignable_type(e, a) for e, a in zip(exp_args, act_args))
-        if expected.endswith("_direction") and actual.startswith("strategy."):
-            return True
-        return False
+        return is_assignable_type(expected, actual)
 
     def _validate_argument_type(self, callee: str, arg, param: dict | None) -> None:
         if not param:
