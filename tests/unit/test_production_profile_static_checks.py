@@ -11,6 +11,16 @@ def test_quality_gate_subprocess_fallback_is_explicitly_unsafe() -> None:
     assert '"unsafe_metadata"' in source
 
 
+def test_quality_gate_default_artifacts_do_not_write_repo_root() -> None:
+    parser_defaults = [
+        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_LOCAL_v2_16_0.json"),
+        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_v2_16_0.json"),
+        run_quality_gate.artifact_path(".release_gate_reports/BUILTIN_COVERAGE_v2_16_0.json"),
+    ]
+
+    assert all(".release_gate_reports" in path.parts for path in parser_defaults)
+
+
 def test_quality_gate_runs_pytest_without_cov_args_when_pytest_cov_is_missing(monkeypatch) -> None:
     calls = []
 
