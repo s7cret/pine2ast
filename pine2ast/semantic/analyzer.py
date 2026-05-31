@@ -51,6 +51,7 @@ from pine2ast.semantic.type_helpers import (
     type_ref_name,
 )
 from pine2ast.semantic.qualifier_infer import infer_qualifier
+from pine2ast.semantic.qualifier_validation import qualifier_rank
 from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
 from pine2ast.semantic.type_infer import callee_name, infer_type
@@ -1219,8 +1220,7 @@ class SemanticAnalyzer:
             )
 
     def _qualifier_rank(self, qualifier: str | None) -> int:
-        order = {"const": 0, "input": 1, "simple": 2, "series": 3, None: 3}
-        return order.get(qualifier, 3)
+        return qualifier_rank(qualifier)
 
     def _validate_qualifier_assignment(
         self, expected_max: str | None, actual: str | None, span: SourceSpan, context: str
