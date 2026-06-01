@@ -68,6 +68,17 @@ plot(syminfo.mintick)
     assert res.semantic_model.symbols["syminfo.mintick"].qualifier == "simple"
 
 
+def test_strategy_commission_namespace_and_initial_capital_are_known():
+    res, errors = _codes("""//@version=6
+strategy("Strategy metadata", commission_type=strategy.commission.percent, initial_capital=10000)
+plot(strategy.initial_capital)
+""")
+    assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
+    assert codes.UNDECLARED_VARIABLE not in errors
+    assert res.semantic_model.symbols["strategy.initial_capital"].type == "float"
+    assert res.semantic_model.symbols["strategy.initial_capital"].qualifier == "simple"
+
+
 def test_strategy_entry_qty_type_is_validated_but_direction_constant_is_ok():
     res, errors = _codes("""//@version=6
 strategy("Strategy type checks")

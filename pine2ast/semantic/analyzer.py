@@ -1239,7 +1239,11 @@ class SemanticAnalyzer:
             or self._is_known_deferred_or_unsupported_builtin(name)
         ):
             return
-        if name in self.registry.get("variables", {}) or name in self.registry.get("functions", {}):
+        if (
+            name in self.registry.get("variables", {})
+            or name in self.registry.get("functions", {})
+            or name in self.registry.get("namespaces", {})
+        ):
             return
         self._diag(
             Severity.ERROR,
