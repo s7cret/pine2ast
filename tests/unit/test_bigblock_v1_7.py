@@ -38,10 +38,34 @@ def test_builtin_argument_type_and_count_are_validated():
 indicator("Builtin call checks")
 a = ta.linreg(close, "20", 0)
 b = ta.linreg(close, 20, 0, 1)
+c = ta.linreg(close, 20)
 plot(close)
 """)
     assert codes.ARGUMENT_TYPE in errors
     assert codes.ARGUMENT_COUNT in errors
+    messages = [d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
+    assert any("Missing required parameter(s) for ta.linreg: offset" in msg for msg in messages)
+
+
+def test_unknown_builtin_namespace_value_is_rejected():
+    res, errors = _codes("""//@version=6
+indicator("Builtin namespace value checks")
+plot(ta.atr20)
+""")
+    assert codes.UNKNOWN_BUILTIN_MEMBER in errors
+    messages = [d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
+    assert any("Builtin namespace member ta.atr20" in msg for msg in messages)
+
+
+def test_syminfo_mintick_is_known_simple_float():
+    res, errors = _codes("""//@version=6
+indicator("Syminfo mintick")
+plot(syminfo.mintick)
+""")
+    assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
+    assert codes.UNDECLARED_VARIABLE not in errors
+    assert res.semantic_model.symbols["syminfo.mintick"].type == "float"
+    assert res.semantic_model.symbols["syminfo.mintick"].qualifier == "simple"
 
 
 def test_strategy_entry_qty_type_is_validated_but_direction_constant_is_ok():

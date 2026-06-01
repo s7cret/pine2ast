@@ -961,6 +961,7 @@ class SemanticAnalyzer:
         else:
             self._visit_expr(expr.object)
         self._validate_strategy_namespace_usage(callee_name(expr), expr.span, is_call=False)
+        self._validate_unknown_builtin_namespace_value(expr)
         self._validate_member_access(expr)
 
     def _e_generic_instantiation_expr(self, expr: GenericInstantiationExpr) -> None:
@@ -1222,6 +1223,26 @@ class SemanticAnalyzer:
         severity = Severity.ERROR if self.strict_builtin_namespaces else Severity.INFO
         self._diag(
             severity,
+            codes.UNKNOWN_BUILTIN_MEMBER,
+            f"Builtin namespace member {name} is not present in the current registry snapshot.",
+            expr.span,
+        )
+
+    def _validate_unknown_builtin_namespace_value(self, expr: MemberAccessExpr) -> None:
+        name = callee_name(expr)
+        if "." not in name:
+            return
+        root = self._builtin_namespace_root(name)
+        if (
+            root is None
+            or root in self._external_aliases
+            or self._is_known_deferred_or_unsupported_builtin(name)
+        ):
+            return
+        if name in self.registry.get("variables", {}) or name in self.registry.get("functions", {}):
+            return
+        self._diag(
+            Severity.ERROR,
             codes.UNKNOWN_BUILTIN_MEMBER,
             f"Builtin namespace member {name} is not present in the current registry snapshot.",
             expr.span,

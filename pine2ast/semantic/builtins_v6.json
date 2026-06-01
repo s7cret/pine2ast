@@ -5753,7 +5753,7 @@
         },
         {
           "name": "offset",
-          "required": false,
+          "required": true,
           "type": "int"
         }
       ],
@@ -7644,6 +7644,10 @@
     "strategy.wintrades": {
       "qualifier": "series",
       "type": "int"
+    },
+    "syminfo.mintick": {
+      "qualifier": "simple",
+      "type": "float"
     },
     "syminfo.prefix": {
       "qualifier": "simple",
