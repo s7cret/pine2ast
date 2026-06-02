@@ -97,9 +97,11 @@ class SemanticAnalyzer:
         self._enum_members: dict[str, set[str]] = {}
         self._symbol_history: dict[str, list[Symbol]] = {}
         self._script_type: str | None = None
+        self._reassigned_names: set[str] = set()
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
+        self._reassigned_names = self._collect_reassigned_names(program)
         self._push_scope(ScopeKind.GLOBAL)
         pipeline = AnalyzerPassPipeline(
             (
@@ -118,6 +120,31 @@ class SemanticAnalyzer:
         )
         self._pop_scope()
         return self.model
+
+    def _collect_reassigned_names(self, node: ASTNode) -> set[str]:
+        names: set[str] = set()
+
+        def visit(value: object) -> None:
+            if isinstance(value, Reassignment):
+                root = self._assignment_root(value.target)
+                if root:
+                    names.add(root)
+            if isinstance(value, ASTNode):
+                for attr in getattr(value, "__dataclass_fields__", ()):
+                    visit(getattr(value, attr))
+            elif isinstance(value, list):
+                for item in value:
+                    visit(item)
+
+        visit(node)
+        return names
+
+    def _assignment_root(self, target: Expression) -> str | None:
+        if isinstance(target, Identifier):
+            return target.name
+        if isinstance(target, MemberAccessExpr):
+            return self._assignment_root(target.object)
+        return None
 
     def _predeclare_globals(self, items: list[Statement]) -> None:
         for item in items:
@@ -270,7 +297,12 @@ class SemanticAnalyzer:
                 f"Initializer for {node.name}",
             )
         else:
-            qualifier = "input" if init_qualifier == "input" else "series"
+            if init_qualifier == "input":
+                qualifier = "input"
+            elif init_qualifier == "const" and node.name not in self._reassigned_names:
+                qualifier = "const"
+            else:
+                qualifier = "series"
         self._define(node.name, SymbolKind.VARIABLE, node.span, explicit_type, qualifier)
 
     def _s_tuple_declaration(self, node: TupleDeclaration) -> None:
@@ -1128,12 +1160,14 @@ class SemanticAnalyzer:
             "strategy.short",
             "strategy.cash",
             "strategy.percent_of_equity",
+            "strategy.commission.percent",
         }
 
     def _strategy_state_members(self) -> set[str]:
         return {
             "strategy.closedtrades",
             "strategy.equity",
+            "strategy.eventrades",
             "strategy.losstrades",
             "strategy.netprofit",
             "strategy.openprofit",
@@ -1621,6 +1655,8 @@ class SemanticAnalyzer:
     def _is_collection_method(self, receiver_type: str | None, member: str) -> bool:
         if not receiver_type:
             return False
+        if receiver_type == "footprint":
+            return member in {"buy_volume", "sell_volume", "delta"}
         if receiver_type.startswith("array<"):
             return member in {
                 "get",

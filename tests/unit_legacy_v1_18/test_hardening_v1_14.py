@@ -21,6 +21,26 @@ plot(close, linewidth=2, color=color.new(color.blue, 0))
 """) == []
 
 
+def test_v5_strategy_and_reassigned_flags_compile_in_compat_mode():
+    assert _error_codes("""//@version=5
+strategy("T")
+g = "Signals"
+show = input.bool(true, group=g)
+sig = false
+sig := close > open
+plot(show and sig ? close : na)
+""") == []
+
+
+def test_footprint_and_alert_namespaces_are_registered():
+    assert _error_codes("""//@version=6
+indicator("T")
+fp = request.footprint(10, 70, 300)
+plot(not na(fp) ? fp.delta() : close, style=plot.style_linebr)
+alert("x", alert.freq_once_per_bar_close)
+""") == []
+
+
 def test_unary_not_requires_bool_operand():
     codes = _error_codes("""//@version=6
 indicator("T")

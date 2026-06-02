@@ -86,6 +86,13 @@ class BaseParser:
                 )
                 if not self.strict_v6:
                     version = 6
+            elif version == 5:
+                self._diag(
+                    Severity.WARNING,
+                    codes.UNSUPPORTED_VERSION,
+                    "Pine version 5 is parsed in v6 compatibility mode.",
+                    span,
+                )
             else:
                 self._diag(
                     Severity.ERROR if self.strict_v6 else Severity.WARNING,

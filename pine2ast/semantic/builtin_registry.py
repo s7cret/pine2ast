@@ -52,6 +52,7 @@ _ALLOWED_TYPE_ATOMS = {
     "earnings.field",
     "extend",
     "float",
+    "footprint",
     "hline",
     "int",
     "label",
