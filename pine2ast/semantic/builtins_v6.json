@@ -410,6 +410,101 @@
       "returns": "array<any>",
       "scope": "any"
     },
+    "array.new_bool": {
+      "kind": "builtin",
+      "name": "array.new_bool",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<bool>",
+      "scope": "any"
+    },
+    "array.new_float": {
+      "kind": "builtin",
+      "name": "array.new_float",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "array.new_color": {
+      "kind": "builtin",
+      "name": "array.new_color",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<color>",
+      "scope": "any"
+    },
+    "array.new_int": {
+      "kind": "builtin",
+      "name": "array.new_int",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.new_string": {
+      "kind": "builtin",
+      "name": "array.new_string",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<string>",
+      "scope": "any"
+    },
     "array.new<bool>": {
       "docs_url": null,
       "kind": "builtin",
@@ -7774,6 +7869,14 @@
     "strategy.long": {
       "qualifier": "const",
       "type": "strategy.direction"
+    },
+    "strategy.grossprofit": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.grossloss": {
+      "qualifier": "series",
+      "type": "float"
     },
     "strategy.losstrades": {
       "qualifier": "series",

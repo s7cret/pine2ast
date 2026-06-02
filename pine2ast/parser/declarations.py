@@ -157,5 +157,10 @@ class DeclarationsMixin(BaseParser):
                 if self._at(TokenKind.GT):
                     break
             end = self._expect(TokenKind.GT)
-            return TypeRef(name, args, join_span(start.span, end.span))
-        return TypeRef(name, args, start.span)
+            type_ref = TypeRef(name, args, join_span(start.span, end.span))
+        else:
+            type_ref = TypeRef(name, args, start.span)
+        if self._match(TokenKind.LBRACKET):
+            end = self._expect(TokenKind.RBRACKET)
+            return TypeRef("array", [type_ref], join_span(type_ref.span, end.span))
+        return type_ref

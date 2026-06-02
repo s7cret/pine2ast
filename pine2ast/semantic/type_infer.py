@@ -278,6 +278,11 @@ def infer_type(expr, symbols: Mapping[str, object] | None = None) -> str:
             and sym_type not in {"function", "method", "unknown"}
         ):
             return sym_type
+        if name in {"math.min", "math.max"}:
+            arg_types = [infer_type(arg.value, symbols) for arg in expr.arguments]
+            merged = _merge_types(arg_types)
+            if merged in {"int", "float"}:
+                return merged
         entry = load_builtin_registry().get("functions", {}).get(name)
         if entry:
             ret = entry.get("returns", "unknown")
