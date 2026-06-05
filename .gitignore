@@ -22,5 +22,9 @@ dist/
 RELEASE_*.log
 *.log
 
+# Bulky external browser evidence; keep in private release archives, not git
+TV_ORACLE_EVIDENCE*/
+TV_ORACLE_EVIDENCE_*/
+
 # Node modules
 node_modules/
