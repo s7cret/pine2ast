@@ -137,6 +137,15 @@ Important guardrails:
 
 MIT. See `LICENSE`.
 
+## Installation, Docker, and Publication
+
+```bash
+./scripts/install.sh --dev
+docker compose run --rm pine2ast
+```
+
+For a public GitHub release checklist, see `docs/GITHUB_PUBLICATION.md`.
+
 ## Acknowledgements
 
 This project was developed with AI-assisted engineering workflows. The license and release obligations are defined only by `LICENSE` and the repository documentation above.

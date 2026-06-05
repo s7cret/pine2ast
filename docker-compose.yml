@@ -1,0 +1,5 @@
+services:
+  pine2ast:
+    build:
+      context: .
+    command: python -m pytest
