@@ -8,18 +8,6 @@ Pipeline:
 SourceNormalizer -> Lexer -> LayoutProcessor -> Parser -> AST -> SemanticAnalyzer
 ```
 
-Current package version: `0.3.9` / Pine2AST release `v3.9`.
-
-## Stack release scope
-
-This repository is one component of the April 2026 stack train:
-
-- stack release: `pain-stack-pine-v6-2026.04-r1`
-- Pine language baseline: `pine_language_version=6`
-- documentation baseline: `pine_docs_baseline=2026-04`
-- runtime contract: `runtime_contract=1.4`
-- manifest: `RELEASE_STACK_MANIFEST_2026_04_R1.json`
-
 Pine2AST owns parsing, normalized AST JSON, semantic diagnostics, compile-oracle evidence, and frontend-to-runtime compatibility metadata.
 
 It does **not** execute Pine code, run backtests, fetch market data, optimize parameters, emulate TradingView orders, or claim full Pine v6 / TradingView parity. The current claim is a verified Pine v6 subset/oracle snapshot backed by fixture-specific evidence.
@@ -31,8 +19,6 @@ Current compile-oracle snapshot:
 - pending: `0`
 - invalid: `0`
 - platform-blocked: `0`
-
-Future Backtest Engine and Optimizer packages are independent future layers and are not part of the current Pine2AST release claim.
 
 ## Install
 
@@ -116,22 +102,11 @@ The fallback runner is a low-dependency smoke/regression aid. It does not replac
 
 ## Limitations
 
-See `docs/current_limitations_v3_9.md` for the current limitation map.
-
-Important guardrails:
-
 - Pine2AST is not a TradingView runtime.
 - Oracle evidence covers the committed fixture corpus, not the entire Pine language.
 - `pine2ast/semantic/builtins_v6.json` is a supported-subset/confidence matrix, not a complete official builtin map.
 - Imports are parsed/diagnosed locally; there is no online import resolver.
 - Unsupported areas should surface as diagnostics rather than silent approximations.
-
-## Documentation map
-
-- `docs/current_limitations_v3_9.md` — current limitations.
-- `docs/runtime_contract_v1_4_frontend_mapping.md` — runtime-contract bridge notes.
-- `docs/parser_architecture.md` — parser implementation notes.
-- `RELEASE_STACK_MANIFEST_2026_04_R1.json` — stack metadata and release guardrails.
 
 ## License
 
@@ -143,8 +118,6 @@ MIT. See `LICENSE`.
 ./scripts/install.sh --dev
 docker compose run --rm pine2ast
 ```
-
-For a public GitHub release checklist, see `docs/GITHUB_PUBLICATION.md`.
 
 ## Acknowledgements
 
