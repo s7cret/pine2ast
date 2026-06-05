@@ -114,7 +114,7 @@ def is_assignable_type(expected: str | None, actual: str | None) -> bool:
             return True
         if len(exp_args) != len(act_args):
             return False
-        return all(is_assignable_type(e, a) for e, a in zip(exp_args, act_args))
+        return all(is_assignable_type(e, a) for e, a in zip(exp_args, act_args, strict=True))
     if expected.endswith("_direction") and actual.startswith("strategy."):
         return True
     return False
