@@ -152,9 +152,10 @@ This project was developed with AI-assisted engineering workflows. The license a
 
 ## Support / Donations
 
-If this project saves you time or helps your trading/research infrastructure, tips are appreciated:
+OpenPine development is independent and MIT-licensed. Donations are optional and help keep the public tooling maintained.
 
+- Telegram: https://t.me/OpenPine
 - TON: `UQAyIr2sQ4-_Q5L-4VINcU18khDas5GPbAlYEkQN6S_qzui2`
 - SOL: `EbxMUK2W4RGeQZCTRFrdgpEJvnqtyczPZvBrQa1cYJnQ`
 
-Donations are optional and do not affect the MIT license terms.
+Support does not affect license terms, feature access, or project guarantees.
