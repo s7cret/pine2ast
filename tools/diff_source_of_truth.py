@@ -29,8 +29,12 @@ SIGNATURE_RE = re.compile(
     r"\s*(?:(?:→|->|=>|returns?\s+)\s*(?P<returns>[^`\n;<]+))?",
     re.IGNORECASE,
 )
-PAREN_MENTION_RE = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?\s*\([^)]*($|\n)")
-HEADING_NAMESPACE_RE = re.compile(r"^\s{0,3}#{1,6}\s+(?:namespace\s+)?`?(?P<ns>[A-Za-z_][A-Za-z0-9_]*)`?\s*$", re.I)
+PAREN_MENTION_RE = re.compile(
+    r"\b[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?\s*\([^)]*($|\n)"
+)
+HEADING_NAMESPACE_RE = re.compile(
+    r"^\s{0,3}#{1,6}\s+(?:namespace\s+)?`?(?P<ns>[A-Za-z_][A-Za-z0-9_]*)`?\s*$", re.I
+)
 CODE_TAG_RE = re.compile(r"<code[^>]*>(.*?)</code>", re.I | re.S)
 TAG_RE = re.compile(r"<[^>]+>")
 
@@ -147,7 +151,9 @@ def parse_parameter(text: str, index: int) -> Parameter:
         return Parameter(clean_name(tokens[0], index), None, default, default is None)
     # Prefer a valid identifier on the left, but handle "series float source" too.
     if is_identifier(tokens[0]):
-        return Parameter(clean_name(tokens[0], index), " ".join(tokens[1:]), default, default is None)
+        return Parameter(
+            clean_name(tokens[0], index), " ".join(tokens[1:]), default, default is None
+        )
     return Parameter(clean_name(tokens[-1], index), " ".join(tokens[:-1]), default, default is None)
 
 
@@ -169,7 +175,9 @@ def parse_params(text: str) -> list[Parameter]:
 
 
 def html_to_lines(text: str) -> list[str]:
-    code_fragments = [html.unescape(TAG_RE.sub("", match.group(1))) for match in CODE_TAG_RE.finditer(text)]
+    code_fragments = [
+        html.unescape(TAG_RE.sub("", match.group(1))) for match in CODE_TAG_RE.finditer(text)
+    ]
     stripped = html.unescape(TAG_RE.sub("\n", text))
     return code_fragments + stripped.splitlines()
 
@@ -195,7 +203,9 @@ def parse_json_snapshot(path: Path, root: Path, catalog: dict[str, str]) -> Snap
         return snap
     for idx, record in enumerate(records, start=1):
         if not isinstance(record, dict) or not record.get("name"):
-            snap.ambiguous.append(ambiguous_record(root, path, idx, "json_item_unparseable", repr(record)[:160]))
+            snap.ambiguous.append(
+                ambiguous_record(root, path, idx, "json_item_unparseable", repr(record)[:160])
+            )
             continue
         params = []
         for i, param in enumerate(record.get("parameters") or record.get("params") or []):
@@ -238,7 +248,9 @@ def parse_snapshot(root: Path, catalog: dict[str, str] | None = None) -> Snapsho
             snap.ambiguous.extend(json_snap.ambiguous)
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
-        lines = html_to_lines(text) if path.suffix.lower() in {".html", ".htm"} else text.splitlines()
+        lines = (
+            html_to_lines(text) if path.suffix.lower() in {".html", ".htm"} else text.splitlines()
+        )
         current_namespace: str | None = None
         for line_no, line in enumerate(lines, start=1):
             stripped = line.strip()
@@ -255,7 +267,11 @@ def parse_snapshot(root: Path, catalog: dict[str, str] | None = None) -> Snapsho
                 returns = normalize_return(match.group("returns"))
                 if name in {"if", "for", "while", "switch"}:
                     continue
-                if "." not in name and current_namespace and name not in {"strategy", "indicator", "library"}:
+                if (
+                    "." not in name
+                    and current_namespace
+                    and name not in {"strategy", "indicator", "library"}
+                ):
                     name = f"{current_namespace}.{name}"
                 item = SignatureItem(
                     name=name,
@@ -269,9 +285,13 @@ def parse_snapshot(root: Path, catalog: dict[str, str] | None = None) -> Snapsho
                 )
                 add_item(snap, item)
             if "(" in stripped and ")" in stripped and not SIGNATURE_RE.search(stripped):
-                snap.ambiguous.append(ambiguous_record(root, path, line_no, "unparseable_signature", stripped))
+                snap.ambiguous.append(
+                    ambiguous_record(root, path, line_no, "unparseable_signature", stripped)
+                )
             elif PAREN_MENTION_RE.search(stripped):
-                snap.ambiguous.append(ambiguous_record(root, path, line_no, "incomplete_signature", stripped))
+                snap.ambiguous.append(
+                    ambiguous_record(root, path, line_no, "incomplete_signature", stripped)
+                )
     return snap
 
 
@@ -299,7 +319,12 @@ def add_item(snapshot: Snapshot, item: SignatureItem) -> None:
 
 
 def ambiguous_record(root: Path, path: Path, line: int, reason: str, raw: str) -> dict[str, Any]:
-    return {"source": str(path.relative_to(root)), "line": line, "reason": reason, "raw": raw.strip()}
+    return {
+        "source": str(path.relative_to(root)),
+        "line": line,
+        "reason": reason,
+        "raw": raw.strip(),
+    }
 
 
 def load_catalog_ids(path: Path | None) -> dict[str, str]:
@@ -307,7 +332,11 @@ def load_catalog_ids(path: Path | None) -> dict[str, str]:
         return {}
     data = json.loads(path.read_text(encoding="utf-8"))
     functions = data.get("functions", {}) if isinstance(data, dict) else {}
-    return {str(key): str(value.get("name", key)) for key, value in functions.items() if isinstance(value, dict)}
+    return {
+        str(key): str(value.get("name", key))
+        for key, value in functions.items()
+        if isinstance(value, dict)
+    }
 
 
 def catalog_id(name: str, catalog: dict[str, str]) -> str | None:
@@ -357,10 +386,14 @@ def compare_snapshots(baseline: Snapshot, current: Snapshot) -> dict[str, Any]:
 
     for name in new_names:
         if current.items[name].kind == "method":
-            method_changes.append({"change": "method_added", "current": current.items[name].as_dict()})
+            method_changes.append(
+                {"change": "method_added", "current": current.items[name].as_dict()}
+            )
     for name in removed_names:
         if baseline.items[name].kind == "method":
-            method_changes.append({"change": "method_removed", "baseline": baseline.items[name].as_dict()})
+            method_changes.append(
+                {"change": "method_removed", "baseline": baseline.items[name].as_dict()}
+            )
 
     return {
         "summary": {
@@ -377,8 +410,16 @@ def compare_snapshots(baseline: Snapshot, current: Snapshot) -> dict[str, Any]:
         },
         "new_namespaces": sorted(current.namespaces - baseline.namespaces),
         "removed_namespaces": sorted(baseline.namespaces - current.namespaces),
-        "new_functions": [current.items[name].as_dict() for name in new_names if current.items[name].kind != "method"],
-        "removed_functions": [baseline.items[name].as_dict() for name in removed_names if baseline.items[name].kind != "method"],
+        "new_functions": [
+            current.items[name].as_dict()
+            for name in new_names
+            if current.items[name].kind != "method"
+        ],
+        "removed_functions": [
+            baseline.items[name].as_dict()
+            for name in removed_names
+            if baseline.items[name].kind != "method"
+        ],
         "changed_signatures": changed_signatures,
         "new_removed_named_args": named_arg_changes,
         "changed_return_types": changed_returns,
@@ -468,7 +509,11 @@ def render_markdown(report: dict[str, Any], baseline: Path, current: Path) -> st
 def format_change(value: dict[str, Any]) -> str:
     if "current" in value and "baseline" in value:
         name = value.get("name") or value["current"].get("name") or value["baseline"].get("name")
-        catalog = value.get("catalog_id") or value["current"].get("catalog_id") or value["baseline"].get("catalog_id")
+        catalog = (
+            value.get("catalog_id")
+            or value["current"].get("catalog_id")
+            or value["baseline"].get("catalog_id")
+        )
         suffix = f" (catalog `{catalog}`)" if catalog else ""
         if "added" in value or "removed" in value:
             added = ", ".join(f"`{arg}`" for arg in value.get("added", [])) or "none"
@@ -489,17 +534,25 @@ def format_change(value: dict[str, Any]) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True)
 
 
-def write_outputs(report: dict[str, Any], markdown_path: Path, json_path: Path, baseline: Path, current: Path) -> None:
+def write_outputs(
+    report: dict[str, Any], markdown_path: Path, json_path: Path, baseline: Path, current: Path
+) -> None:
     markdown_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.parent.mkdir(parents=True, exist_ok=True)
     markdown_path.write_text(render_markdown(report, baseline, current), encoding="utf-8")
-    json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--baseline", type=Path, required=True, help="baseline local snapshot directory")
-    parser.add_argument("--current", type=Path, required=True, help="current local snapshot directory")
+    parser.add_argument(
+        "--baseline", type=Path, required=True, help="baseline local snapshot directory"
+    )
+    parser.add_argument(
+        "--current", type=Path, required=True, help="current local snapshot directory"
+    )
     parser.add_argument(
         "--catalog",
         type=Path,

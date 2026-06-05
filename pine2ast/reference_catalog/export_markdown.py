@@ -29,9 +29,7 @@ def catalog_markdown() -> str:
     for priority in sorted(by_priority):
         group = sorted(by_priority[priority], key=lambda item: item.id)
         lines.extend([f"## {priority}", ""])
-        lines.append(
-            "| ID | Kind | Owner | Parser | Semantic | Codegen | Runtime | Golden |"
-        )
+        lines.append("| ID | Kind | Owner | Parser | Semantic | Codegen | Runtime | Golden |")
         lines.append("|---|---|---|---|---|---|---|---|")
         for entry in group:
             lines.append(

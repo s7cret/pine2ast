@@ -3,7 +3,9 @@ from pine2ast.ast.serialize import ast_to_dict
 
 
 def test_runtime_contract_v1_4_parse_serializes_producer_metadata():
-    result = parse_code(b'//@version=6\nindicator("x")\na = close\n', runtime_contract_v1_4_options())
+    result = parse_code(
+        b'//@version=6\nindicator("x")\na = close\n', runtime_contract_v1_4_options()
+    )
     assert result.ast is not None
     payload = ast_to_dict(result.ast)
     metadata = payload["producer_metadata"]

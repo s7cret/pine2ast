@@ -43,7 +43,9 @@ def validate_catalog_payload(payload: dict[str, Any]) -> None:
         missing = REQUIRED_ENTRY_FIELDS - set(entry)
         if missing:
             errors.append(f"{path} missing fields: {sorted(missing)}")
-        extra_statuses = [field for field in STATUS_FIELDS if entry.get(field) not in VALID_STATUSES]
+        extra_statuses = [
+            field for field in STATUS_FIELDS if entry.get(field) not in VALID_STATUSES
+        ]
         if extra_statuses:
             errors.append(f"{path} invalid status fields: {extra_statuses}")
         if entry.get("kind") not in VALID_KINDS:
@@ -83,7 +85,9 @@ def validate_matrix_payload(matrix: dict[str, Any], catalog: dict[str, Any]) -> 
         return
 
     catalog_entries = catalog.get("entries", [])
-    catalog_by_id = {entry["id"]: entry for entry in catalog_entries if isinstance(entry, dict) and "id" in entry}
+    catalog_by_id = {
+        entry["id"]: entry for entry in catalog_entries if isinstance(entry, dict) and "id" in entry
+    }
     matrix_ids: list[str] = []
     for idx, item in enumerate(items):
         path = f"items[{idx}]"
@@ -102,7 +106,9 @@ def validate_matrix_payload(matrix: dict[str, Any], catalog: dict[str, Any]) -> 
     missing = sorted(set(catalog_by_id) - set(matrix_ids))
     extra_duplicates = sorted(item for item, count in Counter(matrix_ids).items() if count > 1)
     if missing:
-        errors.append(f"matrix missing catalog ids: {missing[:20]}{'...' if len(missing) > 20 else ''}")
+        errors.append(
+            f"matrix missing catalog ids: {missing[:20]}{'...' if len(missing) > 20 else ''}"
+        )
     if extra_duplicates:
         errors.append(f"matrix duplicate ids: {extra_duplicates}")
     _fail(errors)

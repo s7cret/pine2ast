@@ -28,7 +28,7 @@ jobs:
       - name: Mypy
         run: python -m mypy pine2ast
       - name: Compile oracle report
-        run: python tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json COMPILE_ORACLE_CI.json --allow-pending
+        run: python tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json COMPILE_ORACLE_CI.json
       - name: Release quality wrapper
         run: python tools/run_quality_gate.py --strict-dev-tools --json QUALITY_GATE_LOCAL_CI.json --quality-json QUALITY_GATE_CI.json --builtin-json BUILTIN_COVERAGE_CI.json --test-log TEST_RUN_CI.log --coverage-md COVERAGE_CI.md
       - name: Upload reports

@@ -172,11 +172,13 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
             "schema_version": ast.schema_version,
             "pine_language_version": ast.language_version,
             "runtime_contract_profile": profile,
-            "runtime_contract": "runtime_contract_v1_4"
-            if profile in {"v1.4", "runtime_contract_v1_4"}
-            else profile,
+            "runtime_contract": (
+                "runtime_contract_v1_4" if profile in {"v1.4", "runtime_contract_v1_4"} else profile
+            ),
             "parser_gate": "pass" if gate_ok else "fail",
-            "semantic_gate": "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail"),
+            "semantic_gate": (
+                "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail")
+            ),
         }
     return ParseResult(
         ast, diagnostics, layout.tokens if options.collect_tokens else None, semantic_model

@@ -19,6 +19,7 @@ class GoldenGenerationResult(TypedDict):
 class InvalidDiagnosticContract(TypedDict, total=False):
     fixture: str
     expected_codes: list[str]
+    expected_min_severity: str
     notes: str
 
 
@@ -144,11 +145,21 @@ def validate_invalid_diagnostic_contract(
     result = parse_file(str(src), ParseOptions(source_name=str(src), run_semantic=run_semantic))
     actual_codes = [diag.code for diag in result.diagnostics]
     missing = [code for code in expected_codes if code not in actual_codes]
-    if result.ok:
+    expected_min_severity = contract.get("expected_min_severity", "ERROR")
+    require_error = expected_min_severity in {Severity.ERROR.value, Severity.FATAL.value}
+    if require_error and result.ok:
         return False, "Invalid fixture parsed without ERROR/FATAL diagnostics"
     if missing:
         return False, "Missing expected diagnostic codes: " + ", ".join(missing)
     severities = {diag.severity for diag in result.diagnostics if diag.code in expected_codes}
-    if not any(sev in {Severity.ERROR, Severity.FATAL} for sev in severities):
+    accepted_severities = {
+        "FATAL": {Severity.FATAL},
+        "ERROR": {Severity.FATAL, Severity.ERROR},
+        "WARNING": {Severity.FATAL, Severity.ERROR, Severity.WARNING},
+        "INFO": {Severity.FATAL, Severity.ERROR, Severity.WARNING, Severity.INFO},
+    }.get(expected_min_severity)
+    if accepted_severities is None:
+        return False, f"Unsupported expected_min_severity: {expected_min_severity}"
+    if not any(sev in accepted_severities for sev in severities):
         return False, "Expected diagnostics were emitted below ERROR severity"
     return True, "OK"

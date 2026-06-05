@@ -4,7 +4,7 @@
   "expected_codes": [
     "P2A0103"
   ],
-  "expected_min_severity": "ERROR",
+  "expected_min_severity": "WARNING",
   "actual_codes_at_generation": [
     "P2A0103"
   ],

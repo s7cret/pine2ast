@@ -46,7 +46,8 @@
     "import_aliases": [],
     "namespaces": [
       "array",
-      "map"
+      "map",
+      "plot"
     ],
     "builtin_calls": [
       "array.new<float>",

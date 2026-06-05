@@ -48,7 +48,9 @@
     "import_aliases": [
       "ext"
     ],
-    "namespaces": [],
+    "namespaces": [
+      "plot"
+    ],
     "builtin_calls": [
       "indicator",
       "plot"

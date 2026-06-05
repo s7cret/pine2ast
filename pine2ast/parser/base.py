@@ -224,7 +224,10 @@ class BaseParser:
                     j += 1
                     break
                 return None
-        if self.tokens[j].kind is TokenKind.LBRACKET and self.tokens[j + 1].kind is TokenKind.RBRACKET:
+        if (
+            self.tokens[j].kind is TokenKind.LBRACKET
+            and self.tokens[j + 1].kind is TokenKind.RBRACKET
+        ):
             j += 2
         return j
 

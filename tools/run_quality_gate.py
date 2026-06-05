@@ -106,8 +106,12 @@ def artifact_path(value: str) -> Path:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_LOCAL_v2_16_0.json")
-    parser.add_argument("--quality-json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_v2_16_0.json")
-    parser.add_argument("--builtin-json", default=f"{DEFAULT_ARTIFACT_DIR}/BUILTIN_COVERAGE_v2_16_0.json")
+    parser.add_argument(
+        "--quality-json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_v2_16_0.json"
+    )
+    parser.add_argument(
+        "--builtin-json", default=f"{DEFAULT_ARTIFACT_DIR}/BUILTIN_COVERAGE_v2_16_0.json"
+    )
     parser.add_argument("--test-log", default=f"{DEFAULT_ARTIFACT_DIR}/TEST_RUN_v2_16_0.log")
     parser.add_argument("--coverage-md", default=f"{DEFAULT_ARTIFACT_DIR}/COVERAGE_v2_16_0.md")
     parser.add_argument(
@@ -177,9 +181,7 @@ def main(argv: list[str] | None = None) -> int:
         if has_module(module):
             steps.append(run_cmd(command, required=dev_tools_required))
         else:
-            steps.append(
-                skipped(module, f"{module} is not installed", required=dev_tools_required)
-            )
+            steps.append(skipped(module, f"{module} is not installed", required=dev_tools_required))
 
     from pine2ast.quality import quality_gate_json
     from pine2ast.semantic.builtin_registry import builtin_registry_coverage_report

@@ -105,7 +105,9 @@ class CatalogEntry:
                 else str(data["function_equivalent"])
             ),
             runtime_owner=(
-                data["runtime_owner"] if data["runtime_owner"] is None else str(data["runtime_owner"])
+                data["runtime_owner"]
+                if data["runtime_owner"] is None
+                else str(data["runtime_owner"])
             ),
             parser_status=str(data["parser_status"]),
             semantic_status=str(data["semantic_status"]),

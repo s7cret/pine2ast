@@ -7229,6 +7229,11 @@
     "barstate": {},
     "box": {},
     "chart": {},
+    "chart.point": {
+      "kind": "namespace",
+      "name": "chart.point",
+      "pine_version": "6"
+    },
     "color": {},
     "currency": {},
     "display": {},
