@@ -12,6 +12,11 @@ license = {text = "MIT"}
 authors = [{name = "Interpipe Solutions"}]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/s7cret/pine2ast"
+Repository = "https://github.com/s7cret/pine2ast"
+Issues = "https://github.com/s7cret/pine2ast/issues"
+
 [project.optional-dependencies]
 dev = [
   "pytest>=8",
