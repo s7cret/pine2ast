@@ -1311,6 +1311,17 @@
       "returns": "bool",
       "scope": "any"
     },
+    "box": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "box.copy": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -1324,7 +1335,9 @@
       ],
       "pine_version": "6",
       "returns": "box",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -1339,7 +1352,77 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_bottom": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_bottom",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_left": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_left",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_right": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_right",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_top": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_top",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.new": {
       "allow_extra_positional": true,
@@ -1443,7 +1526,9 @@
       ],
       "pine_version": "6",
       "returns": "box",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_bgcolor": {
       "docs_url": null,
@@ -1464,7 +1549,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_color": {
       "docs_url": null,
@@ -1485,7 +1572,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_style": {
       "docs_url": null,
@@ -1506,7 +1595,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_width": {
       "docs_url": null,
@@ -1527,7 +1618,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_bottom": {
       "allow_extra_positional": true,
@@ -1547,7 +1640,31 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_bottom_right_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_bottom_right_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_extend": {
       "docs_url": null,
@@ -1568,7 +1685,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_left": {
       "allow_extra_positional": true,
@@ -1588,7 +1707,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_lefttop": {
       "docs_url": null,
@@ -1614,7 +1735,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_right": {
       "allow_extra_positional": true,
@@ -1634,7 +1757,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_rightbottom": {
       "docs_url": null,
@@ -1660,7 +1785,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text": {
       "docs_url": null,
@@ -1681,7 +1808,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_color": {
       "docs_url": null,
@@ -1702,7 +1831,78 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_font_family",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "font_family",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_formatting",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "formatting",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_halign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_halign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "halign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_size": {
       "docs_url": null,
@@ -1723,7 +1923,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_valign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_valign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "valign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_wrap": {
       "docs_url": null,
@@ -1744,7 +1969,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_top": {
       "allow_extra_positional": true,
@@ -1764,7 +1991,71 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_top_left_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_top_left_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "chart.point.copy": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "chart.point.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "chart.point",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.from_index": {
       "kind": "builtin",
@@ -1788,7 +2079,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.from_time": {
       "kind": "builtin",
@@ -1812,7 +2105,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.new": {
       "kind": "builtin",
@@ -1841,7 +2136,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.now": {
       "kind": "builtin",
@@ -1860,7 +2157,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color": {
       "docs_url": null,
@@ -1869,7 +2168,26 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.b": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.b",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.from_gradient": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -1879,7 +2197,7 @@
         {
           "name": "value",
           "required": true,
-          "type": "series<any>"
+          "type": "float"
         },
         {
           "name": "bottom_value",
@@ -1904,7 +2222,26 @@
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.g": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.g",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.new": {
       "kind": "builtin",
@@ -1918,27 +2255,81 @@
         {
           "name": "transp",
           "required": true,
-          "type": "int"
+          "type": "float"
         }
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.r": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.r",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.rgb": {
+      "allow_extra_positional": true,
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
       "name": "color.rgb",
       "parameters": [
         {
-          "name": "source",
+          "name": "red",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "green",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "blue",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "transp",
           "required": false,
-          "type": "series<any>"
+          "type": "float"
         }
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.t": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.t",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "dayofmonth": {
       "docs_url": null,
@@ -2898,6 +3289,17 @@
       "returns": "int",
       "scope": "any"
     },
+    "label": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "label.copy": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -2911,7 +3313,9 @@
       ],
       "pine_version": "6",
       "returns": "label",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -2926,7 +3330,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_text": {
       "kind": "builtin",
@@ -2940,7 +3346,9 @@
       ],
       "pine_version": "6",
       "returns": "string",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_x": {
       "kind": "builtin",
@@ -2954,7 +3362,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_y": {
       "kind": "builtin",
@@ -2968,7 +3378,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.new": {
       "allow_extra_positional": true,
@@ -3045,7 +3457,9 @@
       ],
       "pine_version": "6",
       "returns": "label",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_color": {
       "docs_url": null,
@@ -3066,7 +3480,31 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_size": {
       "docs_url": null,
@@ -3087,7 +3525,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_style": {
       "docs_url": null,
@@ -3108,7 +3548,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_text": {
       "allow_extra_positional": true,
@@ -3129,7 +3571,78 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_text_font_family",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "font_family",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_text_formatting",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "formatting",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_textalign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_textalign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "textalign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_textcolor": {
       "docs_url": null,
@@ -3150,7 +3663,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_tooltip": {
       "docs_url": null,
@@ -3171,7 +3686,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_x": {
       "allow_extra_positional": true,
@@ -3191,7 +3708,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_xy": {
       "docs_url": null,
@@ -3217,7 +3759,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_y": {
       "allow_extra_positional": true,
@@ -3237,7 +3781,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_yloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_yloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "yloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "library": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -3255,6 +3824,34 @@
       "returns": "void",
       "scope": "global_only"
     },
+    "line": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.copy": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "line.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -3268,7 +3865,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_price": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -3288,7 +3887,9 @@
       ],
       "pine_version": "6",
       "returns": "series<float>",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_x1": {
       "kind": "builtin",
@@ -3302,7 +3903,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_x2": {
       "kind": "builtin",
@@ -3316,7 +3919,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_y1": {
       "kind": "builtin",
@@ -3330,7 +3935,9 @@
       ],
       "pine_version": "6",
       "returns": "float",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_y2": {
       "kind": "builtin",
@@ -3344,7 +3951,9 @@
       ],
       "pine_version": "6",
       "returns": "float",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.new": {
       "allow_extra_positional": true,
@@ -3410,7 +4019,9 @@
       ],
       "pine_version": "6",
       "returns": "line",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_color": {
       "docs_url": null,
@@ -3419,7 +4030,9 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_extend": {
       "docs_url": null,
@@ -3440,7 +4053,53 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_first_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_first_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_second_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_second_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_style": {
       "docs_url": null,
@@ -3461,7 +4120,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_width": {
       "docs_url": null,
@@ -3482,7 +4143,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_x1": {
       "docs_url": null,
@@ -3503,7 +4166,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_x2": {
       "docs_url": null,
@@ -3524,7 +4189,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_xy1": {
       "allow_extra_positional": true,
@@ -3550,7 +4240,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_xy2": {
       "allow_extra_positional": true,
@@ -3576,7 +4268,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_y1": {
       "docs_url": null,
@@ -3597,7 +4291,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_y2": {
       "docs_url": null,
@@ -3618,7 +4314,120 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.delete": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.delete",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.get_line1": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.get_line1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.get_line2": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.get_line2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.new",
+      "parameters": [
+        {
+          "name": "line1",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "line2",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "linefill",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.set_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.set_color",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        },
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "log.error": {
       "allow_extra_positional": true,
@@ -6362,6 +7171,22 @@
       "returns": "series<any>",
       "scope": "any"
     },
+    "runtime.error": {
+      "kind": "builtin",
+      "name": "runtime.error",
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "second": {
       "docs_url": null,
       "kind": "builtin",
@@ -6449,6 +7274,21 @@
       "returns": "int",
       "scope": "any"
     },
+    "str.lower": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.lower",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
     "str.match": {
       "kind": "builtin",
       "name": "str.match",
@@ -6487,36 +7327,6 @@
       "returns": "series<int>",
       "scope": "any"
     },
-    "str.lower": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "kind": "builtin",
-      "name": "str.lower",
-      "parameters": [
-        {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "string",
-      "scope": "any"
-    },
-    "str.replace": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "kind": "builtin",
-      "name": "str.replace",
-      "parameters": [
-        {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "string",
-      "scope": "any"
-    },
     "str.repeat": {
       "kind": "builtin",
       "name": "str.repeat",
@@ -6539,6 +7349,21 @@
       ],
       "pine_version": "6",
       "returns": "series<string>",
+      "scope": "any"
+    },
+    "str.replace": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "str.replace",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
       "scope": "any"
     },
     "str.replace_all": {
@@ -7886,22 +8711,6 @@
       "unsupported": true,
       "unsupported_diagnostic_code": "P2A1507"
     },
-    "runtime.error": {
-      "kind": "builtin",
-      "name": "runtime.error",
-      "parameters": [
-        {
-          "name": "message",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
-    },
     "string": {
       "docs_url": null,
       "kind": "builtin",
@@ -8522,37 +9331,6 @@
       "returns": "series<float>",
       "scope": "any"
     },
-    "ta.rising": {
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "kind": "builtin",
-      "name": "ta.rising",
-      "parameters": [
-        {
-          "name": "source",
-          "required": false,
-          "type": "series<any>"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "series<bool>",
-      "scope": "any"
-    },
-    "ta.rma": {
-      "kind": "builtin",
-      "name": "ta.rma",
-      "parameters": [],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "ta.roc": {
-      "kind": "builtin",
-      "name": "ta.roc",
-      "parameters": [],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
     "ta.range": {
       "kind": "builtin",
       "name": "ta.range",
@@ -8590,6 +9368,37 @@
       ],
       "pine_version": "6",
       "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.rising": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "kind": "builtin",
+      "name": "ta.rising",
+      "parameters": [
+        {
+          "name": "source",
+          "required": false,
+          "type": "series<any>"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<bool>",
+      "scope": "any"
+    },
+    "ta.rma": {
+      "kind": "builtin",
+      "name": "ta.rma",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "ta.roc": {
+      "kind": "builtin",
+      "name": "ta.roc",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
       "scope": "any"
     },
     "ta.rsi": {
@@ -9334,6 +10143,7 @@
     "barstate": {},
     "box": {},
     "chart": {},
+    "chart.point": {},
     "color": {},
     "currency": {},
     "dayofweek": {},
@@ -9662,7 +10472,7 @@
       "type": "float"
     },
     "box.all": {
-      "qualifier": "const",
+      "qualifier": "series",
       "type": "array<box>"
     },
     "chart.bg_color": {
@@ -10198,7 +11008,7 @@
       "type": "int"
     },
     "label.all": {
-      "qualifier": "const",
+      "qualifier": "series",
       "type": "array<label>"
     },
     "label.style_arrowdown": {
@@ -10219,7 +11029,7 @@
     },
     "label.style_diamond": {
       "qualifier": "const",
-      "type": "string"
+      "type": "label.style"
     },
     "label.style_flag": {
       "qualifier": "const",
@@ -10227,7 +11037,7 @@
     },
     "label.style_label_center": {
       "qualifier": "const",
-      "type": "string"
+      "type": "label.style"
     },
     "label.style_label_down": {
       "qualifier": "const",
@@ -10267,11 +11077,11 @@
     },
     "label.style_square": {
       "qualifier": "const",
-      "type": "string"
+      "type": "label.style"
     },
     "label.style_text_outline": {
       "qualifier": "const",
-      "type": "string"
+      "type": "label.style"
     },
     "label.style_triangledown": {
       "qualifier": "const",
@@ -10294,7 +11104,7 @@
       "type": "int"
     },
     "line.all": {
-      "qualifier": "const",
+      "qualifier": "series",
       "type": "array<line>"
     },
     "line.style_arrow_both": {
@@ -10322,7 +11132,7 @@
       "type": "line.style"
     },
     "linefill.all": {
-      "qualifier": "const",
+      "qualifier": "series",
       "type": "array<linefill>"
     },
     "location.abovebar": {

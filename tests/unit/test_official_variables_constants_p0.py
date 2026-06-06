@@ -53,6 +53,10 @@ P0_CONSTANTS = {
     "yloc.abovebar",
 }
 
+P0_FAIL_CLOSED_CONSTANTS = {
+    "color.fuchsia",
+}
+
 
 def _error_codes(source: str) -> list[str]:
     result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
@@ -96,10 +100,13 @@ def test_official_p0_constants_are_known_but_not_runtime_verified() -> None:
     }
 
     for name in P0_CONSTANTS:
+        expected_status = (
+            "UNSUPPORTED_DIAGNOSTIC" if name in P0_FAIL_CLOSED_CONSTANTS else "NOT_STARTED"
+        )
         assert registry["variables"][name]["qualifier"] == "const"
         assert catalog[name]["kind"] == "constant"
-        assert catalog[name]["codegen_status"] == "NOT_STARTED"
-        assert catalog[name]["runtime_status"] == "NOT_STARTED"
+        assert catalog[name]["codegen_status"] == expected_status
+        assert catalog[name]["runtime_status"] == expected_status
         assert matrix[("constants", name)]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
 
 
