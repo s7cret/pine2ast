@@ -1050,7 +1050,12 @@ class SemanticAnalyzer:
                         arg.span,
                     )
                 seen_named.add(arg.name)
-                if name.startswith("strategy.") and arg.name == "when":
+                if (
+                    name.startswith("strategy.")
+                    and arg.name == "when"
+                    and entry is None
+                    and self.pine_version >= 6
+                ):
                     self._diag(
                         Severity.ERROR,
                         codes.STRATEGY_WHEN_REMOVED,
@@ -1314,6 +1319,7 @@ class SemanticAnalyzer:
             "strategy.risk.max_intraday_loss",
             "strategy.risk.max_cons_loss_days",
             "strategy.risk.max_intraday_filled_orders",
+            "strategy.risk.max_position_size",
         }
         if name in strategy_order_calls and self._script_type not in {None, "strategy"}:
             self._diag(
@@ -1896,9 +1902,13 @@ class SemanticAnalyzer:
         params = entry.get("parameters") or []
         if not params:
             return
-        active_params = [p for p in params if not p.get("removed_in")]
+        active_params = [p for p in params if not self._param_removed_in_current_version(p)]
         known = {p.get("name") for p in active_params if p.get("name")}
-        removed = {p.get("name"): p for p in params if p.get("name") and p.get("removed_in")}
+        removed = {
+            p.get("name"): p
+            for p in params
+            if p.get("name") and self._param_removed_in_current_version(p)
+        }
         required = [p for p in active_params if p.get("required")]
         positional = [a for a in expr.arguments if a.name is None]
         positional_count = len(positional)
@@ -1933,6 +1943,13 @@ class SemanticAnalyzer:
                 param = next((p for p in active_params if p.get("name") == arg.name), None)
             elif arg_index < len(active_params):
                 param = active_params[arg_index]
+            if param and param.get("unsupported"):
+                self._diag(
+                    Severity.ERROR,
+                    param.get("unsupported_diagnostic_code") or codes.UNSUPPORTED_FEATURE,
+                    f"Parameter {param.get('name')} for builtin {name} is intentionally unsupported by this parser/semantic layer.",
+                    arg.span,
+                )
             self._validate_argument_qualifier(name, arg, param)
             self._validate_argument_type(name, arg, param)
         positional_param_names = [
@@ -1955,6 +1972,10 @@ class SemanticAnalyzer:
                 f"Missing required parameter(s) for {name}: {', '.join(missing_required)}.",
                 expr.span,
             )
+
+    def _param_removed_in_current_version(self, param: dict) -> bool:
+        removed_in = param.get("removed_in")
+        return bool(removed_in and self.pine_version >= int(removed_in))
 
     def _validate_argument_qualifier(self, callee: str, arg, param: dict | None) -> None:
         if not param:

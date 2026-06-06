@@ -5427,16 +5427,40 @@
           "type": "int"
         },
         {
-          "name": "initial_capital",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "float"
-        },
-        {
-          "name": "currency",
+          "name": "scale",
           "qualifier_max": "const",
           "required": false,
           "type": "string"
+        },
+        {
+          "name": "pyramiding",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "calc_on_order_fills",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_on_every_tick",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "max_bars_back",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "backtest_fill_limits_assumption",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
         },
         {
           "name": "default_qty_type",
@@ -5451,7 +5475,19 @@
           "type": "float"
         },
         {
-          "name": "pyramiding",
+          "name": "initial_capital",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "slippage",
           "qualifier_max": "const",
           "required": false,
           "type": "int"
@@ -5469,40 +5505,16 @@
           "type": "float"
         },
         {
-          "name": "slippage",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "process_orders_on_close",
           "qualifier_max": "const",
           "required": false,
           "type": "bool"
         },
         {
-          "name": "calc_on_order_fills",
+          "name": "close_entries_rule",
           "qualifier_max": "const",
           "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "calc_on_every_tick",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "use_bar_magnifier",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "backtest_fill_limits_assumption",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "int"
+          "type": "string"
         },
         {
           "name": "margin_long",
@@ -5517,10 +5529,12 @@
           "type": "float"
         },
         {
-          "name": "max_bars_back",
+          "name": "explicit_plot_zorder",
           "qualifier_max": "const",
           "required": false,
-          "type": "int"
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
         },
         {
           "name": "max_lines_count",
@@ -5541,10 +5555,56 @@
           "type": "int"
         },
         {
+          "name": "calc_bars_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "risk_free_rate",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "use_bar_magnifier",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "fill_orders_on_standard_ohlc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
           "name": "max_polylines_count",
           "qualifier_max": "const",
           "required": false,
           "type": "int"
+        },
+        {
+          "name": "dynamic_requests",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "behind_chart",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
         }
       ],
       "pine_version": "6",
@@ -5554,7 +5614,22 @@
     "strategy.cancel": {
       "kind": "builtin",
       "name": "strategy.cancel",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -5562,7 +5637,17 @@
     "strategy.cancel_all": {
       "kind": "builtin",
       "name": "strategy.cancel_all",
-      "parameters": [],
+      "parameters": [
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -5577,6 +5662,11 @@
           "type": "string"
         },
         {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "qty",
           "required": false,
           "type": "float"
@@ -5587,7 +5677,7 @@
           "type": "float"
         },
         {
-          "name": "comment",
+          "name": "alert_message",
           "required": false,
           "type": "string"
         },
@@ -5597,12 +5687,16 @@
           "type": "bool"
         },
         {
-          "name": "alert_message",
+          "name": "disable_alert",
           "required": false,
-          "type": "string"
+          "type": "bool"
         },
         {
-          "name": "disable_alert",
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
           "required": false,
           "type": "bool"
         }
@@ -5621,7 +5715,26 @@
           "type": "string"
         },
         {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "immediately",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
           "required": false,
           "type": "bool"
         }
@@ -5826,10 +5939,42 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.closedtrades.max_drawdown_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_drawdown_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
     "strategy.closedtrades.max_runup": {
       "docs_url": null,
       "kind": "builtin",
       "name": "strategy.closedtrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.max_runup_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_runup_percent",
       "parameters": [
         {
           "name": "trade_num",
@@ -5903,7 +6048,7 @@
         {
           "name": "direction",
           "required": true,
-          "type": "strategy_direction"
+          "type": "strategy.direction"
         },
         {
           "name": "qty",
@@ -5951,7 +6096,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -6078,7 +6225,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -6203,10 +6352,42 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.opentrades.max_drawdown_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_drawdown_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
     "strategy.opentrades.max_runup": {
       "docs_url": null,
       "kind": "builtin",
       "name": "strategy.opentrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.max_runup_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_runup_percent",
       "parameters": [
         {
           "name": "trade_num",
@@ -6280,7 +6461,7 @@
         {
           "name": "direction",
           "required": true,
-          "type": "strategy_direction"
+          "type": "strategy.direction"
         },
         {
           "name": "qty",
@@ -6328,7 +6509,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -6444,6 +6627,24 @@
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
+    },
+    "strategy.risk.max_position_size": {
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_position_size",
+      "parameters": [
+        {
+          "name": "contracts",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "string": {
       "docs_url": null,
@@ -8719,6 +8920,16 @@
       "name": "strategy.opentrades",
       "pine_version": "6"
     },
+    "strategy.oca": {
+      "kind": "namespace",
+      "name": "strategy.oca",
+      "pine_version": "6"
+    },
+    "strategy.risk": {
+      "kind": "namespace",
+      "name": "strategy.risk",
+      "pine_version": "6"
+    },
     "syminfo": {},
     "ta": {},
     "table": {},
@@ -9283,6 +9494,10 @@
       "qualifier": "series",
       "type": "int"
     },
+    "strategy.closedtrades.first_index": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "strategy.commission.cash_per_contract": {
       "qualifier": "const",
       "type": "string"
@@ -9346,6 +9561,10 @@
     "strategy.opentrades": {
       "qualifier": "series",
       "type": "int"
+    },
+    "strategy.opentrades.capital_held": {
+      "qualifier": "series",
+      "type": "float"
     },
     "strategy.percent_of_equity": {
       "qualifier": "const",

@@ -39,6 +39,8 @@ _ALLOWED_PARAM_KEYS = {
     "replacement",
     "diagnostic_code",
     "allow_extra_positional",
+    "unsupported",
+    "unsupported_diagnostic_code",
 }
 _ALLOWED_OVERLOAD_KEYS = {"parameters", "returns", "metadata_version", "docs_url"}
 _ALLOWED_TYPE_ATOMS = {
@@ -192,6 +194,12 @@ def _validate_parameters(params: Any, path: str) -> None:
             _require_string(p["replacement"], f"{p_path}.replacement")
         if "diagnostic_code" in p:
             _require_string(p["diagnostic_code"], f"{p_path}.diagnostic_code")
+        if "unsupported" in p and not isinstance(p["unsupported"], bool):
+            raise _schema_error(f"{p_path}.unsupported", "expected boolean")
+        if "unsupported_diagnostic_code" in p:
+            _require_string(
+                p["unsupported_diagnostic_code"], f"{p_path}.unsupported_diagnostic_code"
+            )
 
 
 def validate_builtin_registry(registry: dict[str, Any]) -> None:
@@ -473,20 +481,28 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
         "exit_id",
         "exit_price",
         "exit_time",
+        "first_index",
         "max_drawdown",
+        "max_drawdown_percent",
         "max_runup",
+        "max_runup_percent",
         "profit",
+        "profit_percent",
         "size",
     },
     "strategy.opentrades": {
+        "capital_held",
         "entry_bar_index",
         "entry_comment",
         "entry_id",
         "entry_price",
         "entry_time",
         "max_drawdown",
+        "max_drawdown_percent",
         "max_runup",
+        "max_runup_percent",
         "profit",
+        "profit_percent",
         "size",
     },
 }
@@ -502,6 +518,7 @@ KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     "request": {"economic"},
     "runtime": {"error"},
+    "strategy": {"risk.max_position_size"},
 }
 
 # Backwards-compatible public alias used by older tests/imports.
