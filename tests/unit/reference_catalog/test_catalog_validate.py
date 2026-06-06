@@ -111,6 +111,33 @@ def test_matrix_identity_includes_official_category() -> None:
     validate_matrix_payload(matrix, {"entries": [catalog_entry]}, official_index)
 
 
+def test_matrix_rejects_duplicate_official_ids() -> None:
+    official_index = {
+        "schema_version": "pain.official_pine_reference_index.v1",
+        "pine_version": 6,
+        "categories": {"functions": ["plot"]},
+    }
+    row = {
+        "id": "plot",
+        "official_category": "functions",
+        "priority": "P0",
+        "runtime_owner": "pinelib.visual",
+        "parser_status": "DONE_VERIFIED",
+        "semantic_status": "IMPLEMENTED_UNVERIFIED",
+        "codegen_status": "IMPLEMENTED_UNVERIFIED",
+        "runtime_status": "IMPLEMENTED_UNVERIFIED",
+        "golden_status": "IMPLEMENTED_UNVERIFIED",
+    }
+    matrix = {
+        "schema_version": "pain.parity_matrix.v1",
+        "pine_version": 6,
+        "items": [row, dict(row)],
+    }
+
+    with pytest.raises(ReferenceCatalogError, match="matrix duplicate official ids"):
+        validate_matrix_payload(matrix, {"entries": []}, official_index)
+
+
 def test_official_matrix_coverage_reports_missing_ids_by_category() -> None:
     official_index = {
         "schema_version": "pain.official_pine_reference_index.v1",
@@ -139,6 +166,15 @@ def test_official_matrix_coverage_reports_missing_ids_by_category() -> None:
     assert payload["missing_by_category"]["functions"] == ["ta.ema"]
     assert payload["missing_by_category"]["methods"] == ["array.avg"]
     assert payload["missing_by_category"]["variables"] == ["close"]
+
+
+def test_bundled_matrix_tracks_p0_official_function_namespace_slice() -> None:
+    payload = official_matrix_coverage_payload(load_parity_matrix())
+    missing_functions = payload["missing_by_category"]["functions"]
+
+    for namespace in ("array.", "map.", "matrix.", "request.", "strategy."):
+        assert [item for item in missing_functions if item.startswith(namespace)] == []
+    assert [item for item in missing_functions if item.startswith("plot")] == []
 
 
 def test_bundled_matrix_reports_untracked_official_snapshot_ids() -> None:
