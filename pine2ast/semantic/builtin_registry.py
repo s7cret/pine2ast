@@ -516,6 +516,7 @@ OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 # missing internal coverage and should not be used to claim official completeness.
 KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
+    "log": {"error", "info", "warning"},
     "request": {"economic"},
     "runtime": {"error"},
     "strategy": {"risk.max_position_size"},

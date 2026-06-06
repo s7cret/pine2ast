@@ -3277,6 +3277,102 @@
       "stateful": false
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "log.error",
+      "kind": "function",
+      "known_edge_cases": [
+        "side effect intentionally not lowered; semantic diagnostic emitted"
+      ],
+      "method_receiver": null,
+      "name": "error",
+      "namespace": "log",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.runtime",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": true,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.error(message) -> void"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.error(formatString, arg0, arg1, ...) -> void"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "log.info",
+      "kind": "function",
+      "known_edge_cases": [
+        "side effect intentionally not lowered; semantic diagnostic emitted"
+      ],
+      "method_receiver": null,
+      "name": "info",
+      "namespace": "log",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.runtime",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": true,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.info(message) -> void"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.info(formatString, arg0, arg1, ...) -> void"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "log.warning",
+      "kind": "function",
+      "known_edge_cases": [
+        "side effect intentionally not lowered; semantic diagnostic emitted"
+      ],
+      "method_receiver": null,
+      "name": "warning",
+      "namespace": "log",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.runtime",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": true,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.warning(message) -> void"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "log.warning(formatString, arg0, arg1, ...) -> void"
+        }
+      ],
+      "stateful": false
+    },
+    {
       "codegen_status": "DONE_VERIFIED",
       "function_equivalent": null,
       "golden_status": "IMPLEMENTED_UNVERIFIED",
@@ -3505,6 +3601,36 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED",
       "side_effect": false,
       "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "math.round_to_mintick",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "round_to_mintick",
+      "namespace": "math",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.math",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "math.round_to_mintick(number) -> simple float"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "math.round_to_mintick(number) -> series float"
+        }
+      ],
       "stateful": false
     },
     {
@@ -3784,6 +3910,34 @@
       "side_effect": false,
       "signatures": [],
       "stateful": true
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "runtime.error",
+      "kind": "function",
+      "known_edge_cases": [
+        "side effect intentionally not lowered; semantic diagnostic emitted"
+      ],
+      "method_receiver": null,
+      "name": "error",
+      "namespace": "runtime",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.runtime",
+      "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": true,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "runtime.error(message) -> void"
+        }
+      ],
+      "stateful": false
     },
     {
       "codegen_status": "NOT_STARTED",
@@ -4119,6 +4273,172 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED",
       "side_effect": false,
       "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "str.format_time",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "format_time",
+      "namespace": "str",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.str",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.format_time(time, format, timezone) -> series string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "str.match",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "match",
+      "namespace": "str",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.str",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.match(source, regex) -> simple string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.match(source, regex) -> series string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "str.pos",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "pos",
+      "namespace": "str",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.str",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.pos(source, str) -> const int"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.pos(source, str) -> simple int"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.pos(source, str) -> series int"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "str.repeat",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "repeat",
+      "namespace": "str",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.str",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.repeat(source, repeat, separator) -> const string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.repeat(source, repeat, separator) -> input string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.repeat(source, repeat, separator) -> simple string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.repeat(source, repeat, separator) -> series string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "str.trim",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "trim",
+      "namespace": "str",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.str",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.trim(source) -> const string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.trim(source) -> input string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.trim(source) -> simple string"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "str.trim(source) -> series string"
+        }
+      ],
       "stateful": false
     },
     {
@@ -5182,6 +5502,36 @@
       "stateful": true
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.cog",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "cog",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.cog(source, length) -> series float"
+        }
+      ],
+      "stateful": true
+    },
+    {
       "codegen_status": "IMPLEMENTED_UNVERIFIED",
       "function_equivalent": null,
       "golden_status": "IMPLEMENTED_UNVERIFIED",
@@ -5385,6 +5735,126 @@
       "stateful": true
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.max",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "max",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.max(source) -> series float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.median",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "median",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.median(source, length) -> series float"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.median(source, length) -> series int"
+        }
+      ],
+      "stateful": true
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.min",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "min",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.min(source) -> series float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.mode",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "mode",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.mode(source, length) -> series float"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.mode(source, length) -> series int"
+        }
+      ],
+      "stateful": true
+    },
+    {
       "codegen_status": "DONE_VERIFIED",
       "function_equivalent": null,
       "golden_status": "NOT_STARTED",
@@ -5427,6 +5897,96 @@
       "stateful": false
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.percentile_linear_interpolation",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "percentile_linear_interpolation",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.percentile_linear_interpolation(source, length, percentage) -> series float"
+        }
+      ],
+      "stateful": true
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.percentile_nearest_rank",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "percentile_nearest_rank",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.percentile_nearest_rank(source, length, percentage) -> series float"
+        }
+      ],
+      "stateful": true
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.pivot_point_levels",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "pivot_point_levels",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.pivot_point_levels(type, anchor, developing) -> array<float>"
+        }
+      ],
+      "stateful": true
+    },
+    {
       "codegen_status": "DONE_VERIFIED",
       "function_equivalent": null,
       "golden_status": "NOT_STARTED",
@@ -5467,6 +6027,70 @@
       "side_effect": false,
       "signatures": [],
       "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.range",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "range",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.range(source, length) -> series float"
+        },
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.range(source, length) -> series int"
+        }
+      ],
+      "stateful": true
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ta.rci",
+      "kind": "function",
+      "known_edge_cases": [
+        "first bar",
+        "insufficient history",
+        "na input"
+      ],
+      "method_receiver": null,
+      "name": "rci",
+      "namespace": "ta",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": true,
+      "runtime_owner": "pinelib.ta",
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "source": "official_pine_v6_reference_index.bundle",
+          "syntax": "ta.rci(source, length) -> series float"
+        }
+      ],
+      "stateful": true
     },
     {
       "codegen_status": "IMPLEMENTED_UNVERIFIED",

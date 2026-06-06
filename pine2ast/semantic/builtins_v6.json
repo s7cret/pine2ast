@@ -3620,6 +3620,138 @@
       "returns": "void",
       "scope": "any"
     },
+    "log.error": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.error",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "log.info": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.info",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "log.warning": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.warning",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "lowest": {
       "docs_url": null,
       "kind": "builtin",
@@ -4063,6 +4195,20 @@
       ],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "math.round_to_mintick": {
+      "kind": "builtin",
+      "name": "math.round_to_mintick",
+      "parameters": [
+        {
+          "name": "number",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
       "scope": "any"
     },
     "math.sign": {
@@ -6264,6 +6410,30 @@
       "returns": "string",
       "scope": "any"
     },
+    "str.format_time": {
+      "kind": "builtin",
+      "name": "str.format_time",
+      "parameters": [
+        {
+          "name": "time",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
+      "scope": "any"
+    },
     "str.length": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -6277,6 +6447,44 @@
       ],
       "pine_version": "6",
       "returns": "int",
+      "scope": "any"
+    },
+    "str.match": {
+      "kind": "builtin",
+      "name": "str.match",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "regex",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
+      "scope": "any"
+    },
+    "str.pos": {
+      "kind": "builtin",
+      "name": "str.pos",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "str",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<int>",
       "scope": "any"
     },
     "str.lower": {
@@ -6307,6 +6515,30 @@
       ],
       "pine_version": "6",
       "returns": "string",
+      "scope": "any"
+    },
+    "str.repeat": {
+      "kind": "builtin",
+      "name": "str.repeat",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "repeat",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "separator",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
       "scope": "any"
     },
     "str.replace_all": {
@@ -6368,6 +6600,20 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "string",
+      "scope": "any"
+    },
+    "str.trim": {
+      "kind": "builtin",
+      "name": "str.trim",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
       "scope": "any"
     },
     "str.upper": {
@@ -7640,6 +7886,22 @@
       "unsupported": true,
       "unsupported_diagnostic_code": "P2A1507"
     },
+    "runtime.error": {
+      "kind": "builtin",
+      "name": "runtime.error",
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "string": {
       "docs_url": null,
       "kind": "builtin",
@@ -7777,6 +8039,25 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "ta.cog": {
+      "kind": "builtin",
+      "name": "ta.cog",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
       "scope": "any"
     },
     "ta.correlation": {
@@ -8039,6 +8320,39 @@
       "returns": "tuple<float,float,float>",
       "scope": "any"
     },
+    "ta.max": {
+      "kind": "builtin",
+      "name": "ta.max",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.median": {
+      "kind": "builtin",
+      "name": "ta.median",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.mfi": {
       "kind": "builtin",
       "name": "ta.mfi",
@@ -8058,6 +8372,39 @@
       "returns": "float",
       "scope": "any"
     },
+    "ta.min": {
+      "kind": "builtin",
+      "name": "ta.min",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.mode": {
+      "kind": "builtin",
+      "name": "ta.mode",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.mom": {
       "kind": "builtin",
       "name": "ta.mom",
@@ -8074,12 +8421,87 @@
       "returns": "float",
       "scope": "any"
     },
+    "ta.percentile_linear_interpolation": {
+      "kind": "builtin",
+      "name": "ta.percentile_linear_interpolation",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "percentage",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.percentile_nearest_rank": {
+      "kind": "builtin",
+      "name": "ta.percentile_nearest_rank",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "percentage",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.percentrank": {
       "kind": "builtin",
       "name": "ta.percentrank",
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "ta.pivot_point_levels": {
+      "kind": "builtin",
+      "name": "ta.pivot_point_levels",
+      "parameters": [
+        {
+          "name": "type",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "anchor",
+          "required": true,
+          "type": "bool"
+        },
+        {
+          "name": "developing",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
       "scope": "any"
     },
     "ta.pivothigh": {
@@ -8129,6 +8551,45 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "ta.range": {
+      "kind": "builtin",
+      "name": "ta.range",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.rci": {
+      "kind": "builtin",
+      "name": "ta.rci",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
       "scope": "any"
     },
     "ta.rsi": {
@@ -8887,6 +9348,9 @@
     "line": {},
     "linefill": {},
     "location": {},
+    "log": {
+      "name": "log"
+    },
     "map": {},
     "math": {},
     "matrix": {},
