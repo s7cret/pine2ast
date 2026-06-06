@@ -2458,9 +2458,57 @@
       "returns": "float",
       "scope": "any"
     },
+    "footprint.get_row_by_price": {
+      "kind": "builtin",
+      "name": "footprint.get_row_by_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "volume_row",
+      "scope": "any"
+    },
+    "footprint.poc": {
+      "kind": "builtin",
+      "name": "footprint.poc",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.rows": {
+      "kind": "builtin",
+      "name": "footprint.rows",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<volume_row>",
+      "scope": "any"
+    },
     "footprint.sell_volume": {
       "kind": "builtin",
       "name": "footprint.sell_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.total_volume": {
+      "kind": "builtin",
+      "name": "footprint.total_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.vah": {
+      "kind": "builtin",
+      "name": "footprint.vah",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.val": {
+      "kind": "builtin",
+      "name": "footprint.val",
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
@@ -10598,6 +10646,70 @@
       "returns": "series<any>",
       "scope": "any"
     },
+    "volume_row.buy_volume": {
+      "kind": "builtin",
+      "name": "volume_row.buy_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.delta": {
+      "kind": "builtin",
+      "name": "volume_row.delta",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.down_price": {
+      "kind": "builtin",
+      "name": "volume_row.down_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.has_buy_imbalance": {
+      "kind": "builtin",
+      "name": "volume_row.has_buy_imbalance",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "volume_row.has_sell_imbalance": {
+      "kind": "builtin",
+      "name": "volume_row.has_sell_imbalance",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "volume_row.sell_volume": {
+      "kind": "builtin",
+      "name": "volume_row.sell_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.total_volume": {
+      "kind": "builtin",
+      "name": "volume_row.total_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.up_price": {
+      "kind": "builtin",
+      "name": "volume_row.up_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
     "weekofyear": {
       "kind": "builtin",
       "name": "weekofyear",
@@ -10860,6 +10972,9 @@
       "kind": "type",
       "name": "text.align",
       "pine_version": "6"
+    },
+    "volume_row": {
+      "name": "volume_row"
     },
     "xloc": {
       "kind": "type",

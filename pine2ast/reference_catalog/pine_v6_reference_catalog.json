@@ -3783,6 +3783,156 @@
       "codegen_status": "NOT_STARTED",
       "function_equivalent": null,
       "golden_status": "NOT_STARTED",
+      "id": "footprint.get_row_by_price",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "get_row_by_price",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "volume_row"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.poc",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "poc",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.rows",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "rows",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "array<volume_row>"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.total_volume",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "total_volume",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.vah",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "vah",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.val",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "val",
+      "namespace": "footprint",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
       "id": "format.inherit",
       "kind": "constant",
       "known_edge_cases": [],
@@ -9550,6 +9700,227 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED",
       "side_effect": false,
       "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row",
+      "kind": "type",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "volume_row",
+      "namespace": null,
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.buy_volume",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "buy_volume",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.delta",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "delta",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.down_price",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "down_price",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.has_buy_imbalance",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "has_buy_imbalance",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "bool"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.has_sell_imbalance",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "has_sell_imbalance",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "bool"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.sell_volume",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "sell_volume",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.total_volume",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "total_volume",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.up_price",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "up_price",
+      "namespace": "volume_row",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "float"
+        }
+      ],
       "stateful": false
     },
     {

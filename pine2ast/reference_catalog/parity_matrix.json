@@ -2729,6 +2729,72 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED"
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.get_row_by_price",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.poc",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.rows",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.total_volume",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.vah",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "footprint.val",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
       "codegen_status": "IMPLEMENTED_UNVERIFIED",
       "golden_status": "IMPLEMENTED_UNVERIFIED",
       "id": "hline",
@@ -5503,6 +5569,94 @@
     {
       "codegen_status": "NOT_STARTED",
       "golden_status": "NOT_STARTED",
+      "id": "volume_row.buy_volume",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.delta",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.down_price",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.has_buy_imbalance",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.has_sell_imbalance",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.sell_volume",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.total_volume",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row.up_price",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
       "id": "weekofyear",
       "official_category": "functions",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -6488,6 +6642,17 @@
       "priority": "P0",
       "runtime_owner": "pinelib.visual_objects.linefill",
       "runtime_status": "UNSUPPORTED_DIAGNOSTIC",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "volume_row",
+      "official_category": "types",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
       "semantic_status": "IMPLEMENTED_UNVERIFIED"
     },
     {

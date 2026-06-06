@@ -1,29 +1,13 @@
 {
-  "max_missing_official_count": 38,
-  "min_coverage_ratio": 0.9420731707317073,
+  "max_missing_official_count": 23,
+  "min_coverage_ratio": 0.9649390243902439,
   "missing_by_category": {
     "functions": [
-      "footprint.get_row_by_price",
-      "footprint.poc",
-      "footprint.rows",
-      "footprint.total_volume",
-      "footprint.vah",
-      "footprint.val",
       "strategy.convert_to_account",
       "strategy.convert_to_symbol",
-      "strategy.default_entry_qty",
-      "volume_row.buy_volume",
-      "volume_row.delta",
-      "volume_row.down_price",
-      "volume_row.has_buy_imbalance",
-      "volume_row.has_sell_imbalance",
-      "volume_row.sell_volume",
-      "volume_row.total_volume",
-      "volume_row.up_price"
+      "strategy.default_entry_qty"
     ],
-    "types": [
-      "volume_row"
-    ],
+    "types": [],
     "variables": [
       "strategy.account_currency",
       "strategy.avg_losing_trade",

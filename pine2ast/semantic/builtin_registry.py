@@ -77,6 +77,7 @@ _ALLOWED_TYPE_ATOMS = {
     "table",
     "table.position",
     "unknown",
+    "volume_row",
     "void",
 }
 
