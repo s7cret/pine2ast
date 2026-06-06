@@ -9949,6 +9949,101 @@
       "returns": "void",
       "scope": "any"
     },
+    "table.cell_set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_font_family",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_font_family",
+          "required": true,
+          "type": "string",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_formatting",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_formatting",
+          "required": true,
+          "type": "string",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_halign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_halign",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_halign",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "table.cell_set_text_size": {
       "docs_url": null,
       "kind": "builtin",
@@ -9972,6 +10067,68 @@
         },
         {
           "name": "text_size",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_valign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_valign",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_valign",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_tooltip": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_tooltip",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "tooltip",
           "required": true,
           "type": "string"
         }
@@ -10125,6 +10282,113 @@
       ],
       "pine_version": "6",
       "returns": "table",
+      "scope": "any"
+    },
+    "table.set_bgcolor": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_bgcolor",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "bgcolor",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_border_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_border_color",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "border_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_border_width": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_border_width",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "border_width",
+          "required": true,
+          "type": "int",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_frame_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_frame_color",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "frame_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_frame_width": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_frame_width",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "frame_width",
+          "required": true,
+          "type": "int",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "table.set_position": {

@@ -1,6 +1,6 @@
 {
-  "max_missing_official_count": 48,
-  "min_coverage_ratio": 0.926829268292683,
+  "max_missing_official_count": 38,
+  "min_coverage_ratio": 0.9420731707317073,
   "missing_by_category": {
     "functions": [
       "footprint.get_row_by_price",
@@ -12,16 +12,6 @@
       "strategy.convert_to_account",
       "strategy.convert_to_symbol",
       "strategy.default_entry_qty",
-      "table.cell_set_text_font_family",
-      "table.cell_set_text_formatting",
-      "table.cell_set_text_halign",
-      "table.cell_set_text_valign",
-      "table.cell_set_tooltip",
-      "table.set_bgcolor",
-      "table.set_border_color",
-      "table.set_border_width",
-      "table.set_frame_color",
-      "table.set_frame_width",
       "volume_row.buy_volume",
       "volume_row.delta",
       "volume_row.down_price",

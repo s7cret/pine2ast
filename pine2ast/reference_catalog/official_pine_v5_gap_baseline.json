@@ -1,20 +1,11 @@
 {
-  "max_missing_official_count": 32,
-  "min_coverage_ratio": 0.9486356340288925,
+  "max_missing_official_count": 23,
+  "min_coverage_ratio": 0.9630818619582665,
   "missing_by_category": {
     "functions": [
       "strategy.convert_to_account",
       "strategy.convert_to_symbol",
-      "strategy.default_entry_qty",
-      "table.cell_set_text_font_family",
-      "table.cell_set_text_halign",
-      "table.cell_set_text_valign",
-      "table.cell_set_tooltip",
-      "table.set_bgcolor",
-      "table.set_border_color",
-      "table.set_border_width",
-      "table.set_frame_color",
-      "table.set_frame_width"
+      "strategy.default_entry_qty"
     ],
     "types": [],
     "variables": [

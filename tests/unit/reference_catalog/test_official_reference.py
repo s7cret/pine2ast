@@ -156,6 +156,19 @@ OFFICIAL_CALLABLE_TAIL = {
     "weekofyear",
 }
 
+OFFICIAL_TABLE_TAIL = {
+    "table.cell_set_text_font_family",
+    "table.cell_set_text_formatting",
+    "table.cell_set_text_halign",
+    "table.cell_set_text_valign",
+    "table.cell_set_tooltip",
+    "table.set_bgcolor",
+    "table.set_border_color",
+    "table.set_border_width",
+    "table.set_frame_color",
+    "table.set_frame_width",
+}
+
 
 def test_official_tail_callables_are_registered_and_tracked_conservatively() -> None:
     registry = load_builtin_registry()
@@ -216,3 +229,66 @@ plot(w + secs)
     assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
     assert codes.UNDECLARED_VARIABLE not in errors
     assert codes.UNKNOWN_PARAMETER not in errors
+
+
+def test_official_table_tail_is_registered_and_tracked_conservatively() -> None:
+    registry = load_builtin_registry()
+    catalog = {entry["id"]: entry for entry in load_catalog()["entries"]}
+    matrix = {
+        (item["official_category"], item["id"]): item for item in load_parity_matrix()["items"]
+    }
+
+    assert OFFICIAL_TABLE_TAIL <= set(registry["functions"])
+    for name in OFFICIAL_TABLE_TAIL:
+        entry = registry["functions"][name]
+        assert entry["scope"] == "any"
+        assert entry["returns"] == "void"
+        assert catalog[name]["kind"] == "function"
+        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["runtime_status"] == "NOT_STARTED"
+        assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
+        assert matrix[("methods", name)]["runtime_status"] == "NOT_STARTED"
+
+    for baseline_name in (
+        "official_pine_v5_gap_baseline.json",
+        "official_pine_v6_gap_baseline.json",
+    ):
+        baseline = json.loads(
+            files("pine2ast.reference_catalog").joinpath(baseline_name).read_text(encoding="utf-8")
+        )
+        missing_functions = set(baseline["missing_by_category"]["functions"])
+        expected_modeled = set(OFFICIAL_TABLE_TAIL)
+        if baseline["pine_version"] == 5:
+            expected_modeled.remove("table.cell_set_text_formatting")
+        assert not (expected_modeled & missing_functions)
+
+
+def test_official_table_tail_do_not_trip_strict_builtin_checks() -> None:
+    source = """//@version=6
+indicator("official table tail")
+t = table.new(position.top_right, 2, 2, bgcolor = color.black, frame_color = color.gray, frame_width = 1, border_color = color.silver, border_width = 1)
+table.cell(t, 0, 0, text = "a", text_halign = text.align_center, text_valign = text.align_top, text_size = size.small)
+table.cell_set_text_font_family(t, 0, 0, text_font_family = font.family_monospace)
+table.cell_set_text_formatting(t, 0, 0, text_formatting = text.format_bold)
+table.cell_set_text_halign(t, 0, 0, text_halign = text.align_right)
+table.cell_set_text_valign(t, 0, 0, text_valign = text.align_bottom)
+table.cell_set_tooltip(t, 0, 0, tooltip = "tip")
+table.set_bgcolor(t, bgcolor = color.new(color.blue, 80))
+table.set_border_color(t, border_color = color.red)
+table.set_border_width(t, border_width = 2)
+table.set_frame_color(t, frame_color = color.green)
+table.set_frame_width(t, frame_width = 3)
+plot(close)
+"""
+
+    result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
+    errors = [
+        diagnostic.code
+        for diagnostic in result.diagnostics
+        if diagnostic.severity in {Severity.ERROR, Severity.FATAL}
+    ]
+
+    assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
+    assert codes.UNDECLARED_VARIABLE not in errors
+    assert codes.UNKNOWN_PARAMETER not in errors
+    assert codes.ARGUMENT_TYPE not in errors
