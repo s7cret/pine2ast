@@ -5871,6 +5871,31 @@
       "codegen_status": "NOT_STARTED",
       "function_equivalent": null,
       "golden_status": "NOT_STARTED",
+      "id": "max_bars_back",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "max_bars_back",
+      "namespace": null,
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "void"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
       "id": "minute",
       "kind": "variable",
       "known_edge_cases": [],
@@ -7104,6 +7129,27 @@
       "known_edge_cases": [],
       "method_receiver": null,
       "name": "pointvalue",
+      "namespace": "syminfo",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": "pinelib.syminfo",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "syminfo.prefix",
+      "kind": "variable",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "prefix",
       "namespace": "syminfo",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
       "pine_version": 6,
@@ -8455,6 +8501,31 @@
       "codegen_status": "NOT_STARTED",
       "function_equivalent": null,
       "golden_status": "NOT_STARTED",
+      "id": "table",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "table",
+      "namespace": null,
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "table"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
       "id": "table.all",
       "kind": "variable",
       "known_edge_cases": [],
@@ -8683,6 +8754,231 @@
       "stateful": false
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.heikinashi",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "heikinashi",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.inherit",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "inherit",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.kagi",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "kagi",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.linebreak",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "linebreak",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.modify",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "modify",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.new",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "new",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.pointfigure",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "pointfigure",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.renko",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "renko",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.standard",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "standard",
+      "namespace": "ticker",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
       "codegen_status": "DONE_VERIFIED",
       "function_equivalent": null,
       "golden_status": "IMPLEMENTED_UNVERIFIED",
@@ -8743,6 +9039,56 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED",
       "side_effect": false,
       "signatures": [],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "timeframe.from_seconds",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "from_seconds",
+      "namespace": "timeframe",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "string"
+        }
+      ],
+      "stateful": false
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "function_equivalent": null,
+      "golden_status": "NOT_STARTED",
+      "id": "timeframe.in_seconds",
+      "kind": "function",
+      "known_edge_cases": [],
+      "method_receiver": null,
+      "name": "in_seconds",
+      "namespace": "timeframe",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "pine_version": 6,
+      "priority": "P0",
+      "requires_history": false,
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED",
+      "side_effect": false,
+      "signatures": [
+        {
+          "returns": "int"
+        }
+      ],
       "stateful": false
     },
     {

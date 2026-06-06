@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 from importlib.resources import files
 
+from pine2ast import ParseOptions, parse_code
+from pine2ast.diagnostics import Severity, codes
+from pine2ast.reference_catalog import load_catalog, load_parity_matrix
 from pine2ast.reference_catalog.official_reference import (
     OfficialReferenceIndex,
     _extract_reference_categories,
@@ -131,3 +134,85 @@ def test_official_collection_functions_are_registered_with_valid_schema() -> Non
     assert registry["functions"]["array.new_linefill"]["returns"] == "array<linefill>"
     assert registry["functions"]["map.new<type,type>"]["returns"] == "map<any,any>"
     assert registry["functions"]["matrix.eigenvalues"]["returns"] == "array<float>"
+
+
+OFFICIAL_CALLABLE_TAIL = {
+    "input",
+    "max_bars_back",
+    "syminfo.prefix",
+    "syminfo.ticker",
+    "table",
+    "ticker.heikinashi",
+    "ticker.inherit",
+    "ticker.kagi",
+    "ticker.linebreak",
+    "ticker.modify",
+    "ticker.new",
+    "ticker.pointfigure",
+    "ticker.renko",
+    "ticker.standard",
+    "timeframe.from_seconds",
+    "timeframe.in_seconds",
+    "weekofyear",
+}
+
+
+def test_official_tail_callables_are_registered_and_tracked_conservatively() -> None:
+    registry = load_builtin_registry()
+    catalog = {entry["id"]: entry for entry in load_catalog()["entries"]}
+    matrix = {
+        (item["official_category"], item["id"]): item for item in load_parity_matrix()["items"]
+    }
+
+    assert OFFICIAL_CALLABLE_TAIL <= set(registry["functions"])
+    for name in OFFICIAL_CALLABLE_TAIL:
+        assert ("functions", name) in matrix
+        assert registry["functions"][name]["scope"] == "any"
+
+    for name in OFFICIAL_CALLABLE_TAIL - {
+        "input",
+        "syminfo.prefix",
+        "syminfo.ticker",
+        "weekofyear",
+    }:
+        assert catalog[name]["kind"] == "function"
+        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["runtime_status"] == "NOT_STARTED"
+
+    assert matrix[("variables", "syminfo.prefix")]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+    for name in OFFICIAL_CALLABLE_TAIL - {"input"}:
+        assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
+
+
+def test_official_tail_callables_do_not_trip_strict_builtin_checks() -> None:
+    source = """//@version=6
+indicator("official tail callables")
+base = input(close, "Base")
+max_bars_back(close, 500)
+prefix = syminfo.prefix()
+symbol = syminfo.ticker()
+tb = table(position.top_right, 1, 1)
+ha = ticker.heikinashi(syminfo.tickerid)
+renko = ticker.renko(symbol, "ATR", 14)
+kagi = ticker.kagi(prefix, 3)
+lb = ticker.linebreak(symbol, 3)
+pf = ticker.pointfigure(symbol, "hl", "ATR", 14, 3)
+std = ticker.standard(syminfo.tickerid)
+mod = ticker.modify(std, session = session.extended)
+inherit = ticker.inherit(mod, symbol)
+secs = timeframe.in_seconds()
+tf = timeframe.from_seconds(secs)
+w = weekofyear(time, syminfo.timezone)
+plot(w + secs)
+"""
+
+    result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
+    errors = [
+        diagnostic.code
+        for diagnostic in result.diagnostics
+        if diagnostic.severity in {Severity.ERROR, Severity.FATAL}
+    ]
+
+    assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
+    assert codes.UNDECLARED_VARIABLE not in errors
+    assert codes.UNKNOWN_PARAMETER not in errors

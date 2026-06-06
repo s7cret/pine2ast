@@ -1,6 +1,6 @@
 {
-  "max_missing_official_count": 65,
-  "min_coverage_ratio": 0.9009146341463414,
+  "max_missing_official_count": 48,
+  "min_coverage_ratio": 0.926829268292683,
   "missing_by_category": {
     "functions": [
       "footprint.get_row_by_price",
@@ -9,14 +9,9 @@
       "footprint.total_volume",
       "footprint.vah",
       "footprint.val",
-      "input",
-      "max_bars_back",
       "strategy.convert_to_account",
       "strategy.convert_to_symbol",
       "strategy.default_entry_qty",
-      "syminfo.prefix",
-      "syminfo.ticker",
-      "table",
       "table.cell_set_text_font_family",
       "table.cell_set_text_formatting",
       "table.cell_set_text_halign",
@@ -27,17 +22,6 @@
       "table.set_border_width",
       "table.set_frame_color",
       "table.set_frame_width",
-      "ticker.heikinashi",
-      "ticker.inherit",
-      "ticker.kagi",
-      "ticker.linebreak",
-      "ticker.modify",
-      "ticker.new",
-      "ticker.pointfigure",
-      "ticker.renko",
-      "ticker.standard",
-      "timeframe.from_seconds",
-      "timeframe.in_seconds",
       "volume_row.buy_volume",
       "volume_row.delta",
       "volume_row.down_price",
@@ -45,8 +29,7 @@
       "volume_row.has_sell_imbalance",
       "volume_row.sell_volume",
       "volume_row.total_volume",
-      "volume_row.up_price",
-      "weekofyear"
+      "volume_row.up_price"
     ],
     "types": [
       "volume_row"

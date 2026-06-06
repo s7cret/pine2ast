@@ -4192,6 +4192,17 @@
       "semantic_status": "IMPLEMENTED_UNVERIFIED"
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "max_bars_back",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
       "codegen_status": "IMPLEMENTED_UNVERIFIED",
       "golden_status": "IMPLEMENTED_UNVERIFIED",
       "id": "plot",
@@ -4973,6 +4984,28 @@
       "semantic_status": "NOT_STARTED"
     },
     {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "syminfo.prefix",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "syminfo.ticker",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
       "codegen_status": "IMPLEMENTED_UNVERIFIED",
       "golden_status": "IMPLEMENTED_UNVERIFIED",
       "id": "ta.atr",
@@ -5223,6 +5256,149 @@
       "priority": "P0",
       "runtime_owner": "pinelib.ta",
       "runtime_status": "DONE_VERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "table",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.heikinashi",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.inherit",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.kagi",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.linebreak",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.modify",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.new",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.pointfigure",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.renko",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "ticker.standard",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "timeframe.from_seconds",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "timeframe.in_seconds",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "NOT_STARTED",
+      "golden_status": "NOT_STARTED",
+      "id": "weekofyear",
+      "official_category": "functions",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": null,
+      "runtime_status": "NOT_STARTED",
       "semantic_status": "IMPLEMENTED_UNVERIFIED"
     },
     {
@@ -6824,6 +7000,17 @@
       "codegen_status": "IMPLEMENTED_UNVERIFIED",
       "golden_status": "NOT_STARTED",
       "id": "syminfo.pointvalue",
+      "official_category": "variables",
+      "parser_status": "IMPLEMENTED_UNVERIFIED",
+      "priority": "P0",
+      "runtime_owner": "pinelib.syminfo",
+      "runtime_status": "IMPLEMENTED_UNVERIFIED",
+      "semantic_status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "codegen_status": "IMPLEMENTED_UNVERIFIED",
+      "golden_status": "NOT_STARTED",
+      "id": "syminfo.prefix",
       "official_category": "variables",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
       "priority": "P0",

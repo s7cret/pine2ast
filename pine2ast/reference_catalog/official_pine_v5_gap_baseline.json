@@ -1,16 +1,11 @@
 {
-  "max_missing_official_count": 49,
-  "min_coverage_ratio": 0.9213483146067416,
+  "max_missing_official_count": 32,
+  "min_coverage_ratio": 0.9486356340288925,
   "missing_by_category": {
     "functions": [
-      "input",
-      "max_bars_back",
       "strategy.convert_to_account",
       "strategy.convert_to_symbol",
       "strategy.default_entry_qty",
-      "syminfo.prefix",
-      "syminfo.ticker",
-      "table",
       "table.cell_set_text_font_family",
       "table.cell_set_text_halign",
       "table.cell_set_text_valign",
@@ -19,19 +14,7 @@
       "table.set_border_color",
       "table.set_border_width",
       "table.set_frame_color",
-      "table.set_frame_width",
-      "ticker.heikinashi",
-      "ticker.inherit",
-      "ticker.kagi",
-      "ticker.linebreak",
-      "ticker.modify",
-      "ticker.new",
-      "ticker.pointfigure",
-      "ticker.renko",
-      "ticker.standard",
-      "timeframe.from_seconds",
-      "timeframe.in_seconds",
-      "weekofyear"
+      "table.set_frame_width"
     ],
     "types": [],
     "variables": [

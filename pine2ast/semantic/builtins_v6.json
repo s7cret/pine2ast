@@ -2610,6 +2610,63 @@
       "returns": "void",
       "scope": "global_only"
     },
+    "input": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
+    },
     "input.bool": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -6025,6 +6082,26 @@
       "returns": "matrix<any>",
       "scope": "any"
     },
+    "max_bars_back": {
+      "kind": "builtin",
+      "name": "max_bars_back",
+      "parameters": [
+        {
+          "name": "var",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "num",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "minute": {
       "docs_url": null,
       "kind": "builtin",
@@ -8720,6 +8797,22 @@
       "returns": "string",
       "scope": "any"
     },
+    "syminfo.prefix": {
+      "kind": "builtin",
+      "name": "syminfo.prefix",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "syminfo.ticker": {
+      "kind": "builtin",
+      "name": "syminfo.ticker",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
     "ta.alma": {
       "kind": "builtin",
       "name": "ta.alma",
@@ -9657,6 +9750,15 @@
       "returns": "float",
       "scope": "any"
     },
+    "table": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "table",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "table",
+      "scope": "any"
+    },
     "table.cell": {
       "docs_url": null,
       "kind": "builtin",
@@ -10047,6 +10149,87 @@
       "returns": "void",
       "scope": "any"
     },
+    "ticker.heikinashi": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.heikinashi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.inherit": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.inherit",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.kagi": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.kagi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.linebreak": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.linebreak",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.modify": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.modify",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.new",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.pointfigure": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.pointfigure",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.renko": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.renko",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.standard": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.standard",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
     "time": {
       "docs_url": null,
       "kind": "builtin",
@@ -10105,6 +10288,34 @@
       "returns": "bool",
       "scope": "any"
     },
+    "timeframe.from_seconds": {
+      "kind": "builtin",
+      "name": "timeframe.from_seconds",
+      "parameters": [
+        {
+          "name": "seconds",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "timeframe.in_seconds": {
+      "kind": "builtin",
+      "name": "timeframe.in_seconds",
+      "parameters": [
+        {
+          "name": "timeframe",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "timestamp": {
       "docs_url": null,
       "kind": "builtin",
@@ -10121,6 +10332,25 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "series<any>",
+      "scope": "any"
+    },
+    "weekofyear": {
+      "kind": "builtin",
+      "name": "weekofyear",
+      "parameters": [
+        {
+          "name": "time",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
       "scope": "any"
     },
     "year": {
