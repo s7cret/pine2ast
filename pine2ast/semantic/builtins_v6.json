@@ -76,6 +76,44 @@
       "returns": "int",
       "scope": "any"
     },
+    "array.binary_search_leftmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_leftmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.binary_search_rightmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_rightmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "array.clear": {
       "kind": "builtin",
       "name": "array.clear",
@@ -121,6 +159,68 @@
       ],
       "pine_version": "6",
       "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.covariance": {
+      "kind": "builtin",
+      "name": "array.covariance",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "y",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.every": {
+      "kind": "builtin",
+      "name": "array.every",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "array.fill": {
+      "kind": "builtin",
+      "name": "array.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "index_from",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "index_to",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "array.first": {
@@ -333,6 +433,25 @@
       "returns": "any",
       "scope": "any"
     },
+    "array.lastindexof": {
+      "kind": "builtin",
+      "name": "array.lastindexof",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "array.max": {
       "docs_url": null,
       "kind": "builtin",
@@ -408,101 +527,6 @@
       ],
       "pine_version": "6",
       "returns": "array<any>",
-      "scope": "any"
-    },
-    "array.new_bool": {
-      "kind": "builtin",
-      "name": "array.new_bool",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "bool"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<bool>",
-      "scope": "any"
-    },
-    "array.new_float": {
-      "kind": "builtin",
-      "name": "array.new_float",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "float"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<float>",
-      "scope": "any"
-    },
-    "array.new_color": {
-      "kind": "builtin",
-      "name": "array.new_color",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "color"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<color>",
-      "scope": "any"
-    },
-    "array.new_int": {
-      "kind": "builtin",
-      "name": "array.new_int",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<int>",
-      "scope": "any"
-    },
-    "array.new_string": {
-      "kind": "builtin",
-      "name": "array.new_string",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "string"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<string>",
       "scope": "any"
     },
     "array.new<bool>": {
@@ -604,6 +628,215 @@
       "returns": "unknown",
       "scope": "any"
     },
+    "array.new<type>": {
+      "kind": "builtin",
+      "name": "array.new<type>",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.new_bool": {
+      "kind": "builtin",
+      "name": "array.new_bool",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<bool>",
+      "scope": "any"
+    },
+    "array.new_box": {
+      "kind": "builtin",
+      "name": "array.new_box",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<box>",
+      "scope": "any"
+    },
+    "array.new_color": {
+      "kind": "builtin",
+      "name": "array.new_color",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<color>",
+      "scope": "any"
+    },
+    "array.new_float": {
+      "kind": "builtin",
+      "name": "array.new_float",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "array.new_int": {
+      "kind": "builtin",
+      "name": "array.new_int",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.new_label": {
+      "kind": "builtin",
+      "name": "array.new_label",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<label>",
+      "scope": "any"
+    },
+    "array.new_line": {
+      "kind": "builtin",
+      "name": "array.new_line",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<line>",
+      "scope": "any"
+    },
+    "array.new_linefill": {
+      "kind": "builtin",
+      "name": "array.new_linefill",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<linefill>",
+      "scope": "any"
+    },
+    "array.new_string": {
+      "kind": "builtin",
+      "name": "array.new_string",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<string>",
+      "scope": "any"
+    },
+    "array.new_table": {
+      "kind": "builtin",
+      "name": "array.new_table",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "table"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<table>",
+      "scope": "any"
+    },
     "array.percentile": {
       "kind": "builtin",
       "name": "array.percentile",
@@ -615,6 +848,44 @@
         },
         {
           "name": "percentile",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.percentile_linear_interpolation": {
+      "kind": "builtin",
+      "name": "array.percentile_linear_interpolation",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.percentile_nearest_rank": {
+      "kind": "builtin",
+      "name": "array.percentile_nearest_rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
           "required": true,
           "type": "float"
         }
@@ -784,6 +1055,20 @@
       "returns": "array<any>",
       "scope": "any"
     },
+    "array.some": {
+      "kind": "builtin",
+      "name": "array.some",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
     "array.sort": {
       "docs_url": null,
       "kind": "builtin",
@@ -831,6 +1116,20 @@
       ],
       "pine_version": "6",
       "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.standardize": {
+      "kind": "builtin",
+      "name": "array.standardize",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
       "scope": "any"
     },
     "array.stdev": {
@@ -897,8 +1196,10 @@
       "scope": "any"
     },
     "barcolor": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "barcolor",
       "parameters": [
         {
@@ -908,41 +1209,39 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "barssince": {
@@ -955,8 +1254,10 @@
       "scope": "any"
     },
     "bgcolor": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "bgcolor",
       "parameters": [
         {
@@ -966,41 +1267,39 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "bool": {
@@ -1666,8 +1965,10 @@
       "scope": "any"
     },
     "fill": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "fill",
       "parameters": [
         {
@@ -1687,21 +1988,21 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "fillgaps",
@@ -1710,17 +2011,15 @@
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "fixnan": {
@@ -1786,59 +2085,59 @@
       "scope": "any"
     },
     "hline": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "hline",
       "parameters": [
         {
           "name": "price",
+          "qualifier_max": "input",
           "required": true,
-          "type": "float",
-          "qualifier_max": "input"
+          "type": "float"
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "color",
+          "qualifier_max": "input",
           "required": false,
-          "type": "color",
-          "qualifier_max": "input"
+          "type": "color"
         },
         {
           "name": "linestyle",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "linewidth",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         }
       ],
       "pine_version": "6",
       "returns": "hline",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "hour": {
@@ -3434,6 +3733,14 @@
       "returns": "map<string,string>",
       "scope": "any"
     },
+    "map.new<type,type>": {
+      "kind": "builtin",
+      "name": "map.new<type,type>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<any,any>",
+      "scope": "any"
+    },
     "map.put": {
       "kind": "builtin",
       "name": "map.put",
@@ -3452,6 +3759,25 @@
           "name": "value",
           "required": true,
           "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "map.put_all": {
+      "kind": "builtin",
+      "name": "map.put_all",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "map"
+        },
+        {
+          "name": "from",
+          "required": true,
+          "type": "map"
         }
       ],
       "pine_version": "6",
@@ -3825,6 +4151,54 @@
       "returns": "float",
       "scope": "any"
     },
+    "matrix.add_col": {
+      "kind": "builtin",
+      "name": "matrix.add_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.add_row": {
+      "kind": "builtin",
+      "name": "matrix.add_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "matrix.avg": {
       "kind": "builtin",
       "name": "matrix.avg",
@@ -3837,6 +4211,25 @@
       ],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "matrix.col": {
+      "kind": "builtin",
+      "name": "matrix.col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
       "scope": "any"
     },
     "matrix.columns": {
@@ -3853,6 +4246,25 @@
       "returns": "int",
       "scope": "any"
     },
+    "matrix.concat": {
+      "kind": "builtin",
+      "name": "matrix.concat",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
     "matrix.copy": {
       "kind": "builtin",
       "name": "matrix.copy",
@@ -3865,6 +4277,120 @@
       ],
       "pine_version": "6",
       "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.det": {
+      "kind": "builtin",
+      "name": "matrix.det",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.diff": {
+      "kind": "builtin",
+      "name": "matrix.diff",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvalues": {
+      "kind": "builtin",
+      "name": "matrix.eigenvalues",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvectors": {
+      "kind": "builtin",
+      "name": "matrix.eigenvectors",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.elements_count": {
+      "kind": "builtin",
+      "name": "matrix.elements_count",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.fill": {
+      "kind": "builtin",
+      "name": "matrix.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "from_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "matrix.get": {
@@ -3891,9 +4417,196 @@
       "returns": "any",
       "scope": "any"
     },
+    "matrix.inv": {
+      "kind": "builtin",
+      "name": "matrix.inv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.is_antidiagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_antidiagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_antisymmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_antisymmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_binary": {
+      "kind": "builtin",
+      "name": "matrix.is_binary",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_diagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_diagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_identity": {
+      "kind": "builtin",
+      "name": "matrix.is_identity",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_square": {
+      "kind": "builtin",
+      "name": "matrix.is_square",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_stochastic": {
+      "kind": "builtin",
+      "name": "matrix.is_stochastic",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_symmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_symmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_triangular": {
+      "kind": "builtin",
+      "name": "matrix.is_triangular",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_zero": {
+      "kind": "builtin",
+      "name": "matrix.is_zero",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.kron": {
+      "kind": "builtin",
+      "name": "matrix.kron",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
     "matrix.max": {
       "kind": "builtin",
       "name": "matrix.max",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.median": {
+      "kind": "builtin",
+      "name": "matrix.median",
       "parameters": [
         {
           "name": "id",
@@ -3917,6 +4630,39 @@
       ],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mode": {
+      "kind": "builtin",
+      "name": "matrix.mode",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mult": {
+      "kind": "builtin",
+      "name": "matrix.mult",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
       "scope": "any"
     },
     "matrix.new<float>": {
@@ -3967,6 +4713,115 @@
       "returns": "matrix<int>",
       "scope": "any"
     },
+    "matrix.new<type>": {
+      "kind": "builtin",
+      "name": "matrix.new<type>",
+      "parameters": [
+        {
+          "name": "rows",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "columns",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.pinv": {
+      "kind": "builtin",
+      "name": "matrix.pinv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.pow": {
+      "kind": "builtin",
+      "name": "matrix.pow",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "power",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.rank": {
+      "kind": "builtin",
+      "name": "matrix.rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.remove_col": {
+      "kind": "builtin",
+      "name": "matrix.remove_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.remove_row": {
+      "kind": "builtin",
+      "name": "matrix.remove_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
     "matrix.reshape": {
       "kind": "builtin",
       "name": "matrix.reshape",
@@ -4003,6 +4858,25 @@
       ],
       "pine_version": "6",
       "returns": "void",
+      "scope": "any"
+    },
+    "matrix.row": {
+      "kind": "builtin",
+      "name": "matrix.row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
       "scope": "any"
     },
     "matrix.rows": {
@@ -4048,9 +4922,129 @@
       "returns": "void",
       "scope": "any"
     },
+    "matrix.sort": {
+      "kind": "builtin",
+      "name": "matrix.sort",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "order",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.submatrix": {
+      "kind": "builtin",
+      "name": "matrix.submatrix",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "from_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
     "matrix.sum": {
       "kind": "builtin",
       "name": "matrix.sum",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.swap_columns": {
+      "kind": "builtin",
+      "name": "matrix.swap_columns",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "column2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.swap_rows": {
+      "kind": "builtin",
+      "name": "matrix.swap_rows",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.trace": {
+      "kind": "builtin",
+      "name": "matrix.trace",
       "parameters": [
         {
           "name": "id",
@@ -4124,8 +5118,10 @@
       "scope": "any"
     },
     "plot": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plot",
       "parameters": [
         {
@@ -4135,9 +5131,9 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "color",
@@ -4151,15 +5147,15 @@
         },
         {
           "name": "style",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "trackprice",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "histbase",
@@ -4168,77 +5164,77 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "join",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         },
         {
           "name": "linestyle",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
+          "diagnostic_code": "P2A1403",
           "name": "transp",
-          "required": false,
-          "type": "int",
           "removed_in": "6",
-          "diagnostic_code": "P2A1403"
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
       "returns": "plot",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "plotarrow": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotarrow",
       "parameters": [
         {
@@ -4248,9 +5244,9 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "colorup",
@@ -4264,70 +5260,70 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "minheight",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "maxheight",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "plotbar": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotbar",
       "parameters": [
         {
@@ -4352,9 +5348,9 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "color",
@@ -4363,52 +5359,52 @@
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "plotcandle": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotcandle",
       "parameters": [
         {
@@ -4433,9 +5429,9 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "color",
@@ -4449,15 +5445,15 @@
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "bordercolor",
@@ -4466,40 +5462,40 @@
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "plotchar": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotchar",
       "parameters": [
         {
@@ -4509,21 +5505,21 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "char",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "location",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "color",
@@ -4532,15 +5528,15 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "text",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "textcolor",
@@ -4549,65 +5545,65 @@
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "size",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         },
         {
+          "diagnostic_code": "P2A1403",
           "name": "transp",
-          "required": false,
-          "type": "int",
           "removed_in": "6",
-          "diagnostic_code": "P2A1403"
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "plotshape": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotshape",
       "parameters": [
         {
@@ -4617,21 +5613,21 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "style",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "location",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "color",
@@ -4640,15 +5636,15 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "int",
-          "qualifier_max": "simple"
+          "type": "int"
         },
         {
           "name": "text",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "textcolor",
@@ -4657,60 +5653,58 @@
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "input"
+          "type": "bool"
         },
         {
           "name": "size",
+          "qualifier_max": "const",
           "required": false,
-          "type": "string",
-          "qualifier_max": "const"
+          "type": "string"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
           "required": false,
-          "type": "display",
-          "qualifier_max": "input"
+          "type": "display"
         },
         {
           "name": "format",
+          "qualifier_max": "input",
           "required": false,
-          "type": "string",
-          "qualifier_max": "input"
+          "type": "string"
         },
         {
           "name": "precision",
+          "qualifier_max": "input",
           "required": false,
-          "type": "int",
-          "qualifier_max": "input"
+          "type": "int"
         },
         {
           "name": "force_overlay",
+          "qualifier_max": "const",
           "required": false,
-          "type": "bool",
-          "qualifier_max": "const"
+          "type": "bool"
         },
         {
+          "diagnostic_code": "P2A1403",
           "name": "transp",
-          "required": false,
-          "type": "int",
           "removed_in": "6",
-          "diagnostic_code": "P2A1403"
+          "required": false,
+          "type": "int"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global",
-      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
-      "metadata_version": 2,
       "runtime_contract_unsupported": true,
+      "scope": "global",
       "unsupported_diagnostic_code": "P2A1507"
     },
     "polyline.delete": {
@@ -4865,41 +5859,6 @@
       "returns": "series<any>",
       "scope": "any"
     },
-    "request.economic": {
-      "allow_extra_positional": true,
-      "kind": "builtin",
-      "metadata_version": 2,
-      "name": "request.economic",
-      "parameters": [
-        {
-          "name": "country_code",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "field",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "gaps",
-          "qualifier_max": "simple",
-          "required": false,
-          "type": "barmerge.gaps"
-        },
-        {
-          "name": "ignore_invalid_symbol",
-          "qualifier_max": "series",
-          "required": false,
-          "type": "bool"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "series<float>",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
-    },
     "request.earnings": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -4945,6 +5904,41 @@
       "pine_version": "6",
       "returns": "series<any>",
       "scope": "any"
+    },
+    "request.economic": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.economic",
+      "parameters": [
+        {
+          "name": "country_code",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "series",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "request.financial": {
       "allow_extra_positional": true,
@@ -7867,1022 +8861,36 @@
       "pine_version": "6",
       "returns": "int",
       "scope": "any"
-    },
-    "array.binary_search_leftmost": {
-      "kind": "builtin",
-      "name": "array.binary_search_leftmost",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "value",
-          "required": true,
-          "type": "any"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "int",
-      "scope": "any"
-    },
-    "array.binary_search_rightmost": {
-      "kind": "builtin",
-      "name": "array.binary_search_rightmost",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "value",
-          "required": true,
-          "type": "any"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "int",
-      "scope": "any"
-    },
-    "array.covariance": {
-      "kind": "builtin",
-      "name": "array.covariance",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "y",
-          "required": true,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "array.every": {
-      "kind": "builtin",
-      "name": "array.every",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "array.fill": {
-      "kind": "builtin",
-      "name": "array.fill",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "value",
-          "required": true,
-          "type": "any"
-        },
-        {
-          "name": "index_from",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "index_to",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "array.lastindexof": {
-      "kind": "builtin",
-      "name": "array.lastindexof",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "value",
-          "required": true,
-          "type": "any"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "int",
-      "scope": "any"
-    },
-    "array.new<type>": {
-      "kind": "builtin",
-      "name": "array.new<type>",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "any"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<any>",
-      "scope": "any"
-    },
-    "array.new_box": {
-      "kind": "builtin",
-      "name": "array.new_box",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "box"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<box>",
-      "scope": "any"
-    },
-    "array.new_label": {
-      "kind": "builtin",
-      "name": "array.new_label",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "label"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<label>",
-      "scope": "any"
-    },
-    "array.new_line": {
-      "kind": "builtin",
-      "name": "array.new_line",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "line"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<line>",
-      "scope": "any"
-    },
-    "array.new_linefill": {
-      "kind": "builtin",
-      "name": "array.new_linefill",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "linefill"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<linefill>",
-      "scope": "any"
-    },
-    "array.new_table": {
-      "kind": "builtin",
-      "name": "array.new_table",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "table"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<table>",
-      "scope": "any"
-    },
-    "array.percentile_linear_interpolation": {
-      "kind": "builtin",
-      "name": "array.percentile_linear_interpolation",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "percentage",
-          "required": true,
-          "type": "float"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "array.percentile_nearest_rank": {
-      "kind": "builtin",
-      "name": "array.percentile_nearest_rank",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        },
-        {
-          "name": "percentage",
-          "required": true,
-          "type": "float"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "array.some": {
-      "kind": "builtin",
-      "name": "array.some",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "array.standardize": {
-      "kind": "builtin",
-      "name": "array.standardize",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<float>",
-      "scope": "any"
-    },
-    "map.new<type,type>": {
-      "kind": "builtin",
-      "name": "map.new<type,type>",
-      "parameters": [],
-      "pine_version": "6",
-      "returns": "map<any,any>",
-      "scope": "any"
-    },
-    "map.put_all": {
-      "kind": "builtin",
-      "name": "map.put_all",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "map"
-        },
-        {
-          "name": "from",
-          "required": true,
-          "type": "map"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.add_col": {
-      "kind": "builtin",
-      "name": "matrix.add_col",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "column",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "array_id",
-          "required": false,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.add_row": {
-      "kind": "builtin",
-      "name": "matrix.add_row",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "row",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "array_id",
-          "required": false,
-          "type": "array"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.col": {
-      "kind": "builtin",
-      "name": "matrix.col",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "column",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<any>",
-      "scope": "any"
-    },
-    "matrix.concat": {
-      "kind": "builtin",
-      "name": "matrix.concat",
-      "parameters": [
-        {
-          "name": "id1",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "id2",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<any>",
-      "scope": "any"
-    },
-    "matrix.det": {
-      "kind": "builtin",
-      "name": "matrix.det",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "matrix.diff": {
-      "kind": "builtin",
-      "name": "matrix.diff",
-      "parameters": [
-        {
-          "name": "id1",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "id2",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.eigenvalues": {
-      "kind": "builtin",
-      "name": "matrix.eigenvalues",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<float>",
-      "scope": "any"
-    },
-    "matrix.eigenvectors": {
-      "kind": "builtin",
-      "name": "matrix.eigenvectors",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.elements_count": {
-      "kind": "builtin",
-      "name": "matrix.elements_count",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "int",
-      "scope": "any"
-    },
-    "matrix.fill": {
-      "kind": "builtin",
-      "name": "matrix.fill",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "value",
-          "required": true,
-          "type": "any"
-        },
-        {
-          "name": "from_row",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "from_column",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "to_row",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "to_column",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.inv": {
-      "kind": "builtin",
-      "name": "matrix.inv",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.is_antidiagonal": {
-      "kind": "builtin",
-      "name": "matrix.is_antidiagonal",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_antisymmetric": {
-      "kind": "builtin",
-      "name": "matrix.is_antisymmetric",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_binary": {
-      "kind": "builtin",
-      "name": "matrix.is_binary",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_diagonal": {
-      "kind": "builtin",
-      "name": "matrix.is_diagonal",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_identity": {
-      "kind": "builtin",
-      "name": "matrix.is_identity",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_square": {
-      "kind": "builtin",
-      "name": "matrix.is_square",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_stochastic": {
-      "kind": "builtin",
-      "name": "matrix.is_stochastic",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_symmetric": {
-      "kind": "builtin",
-      "name": "matrix.is_symmetric",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_triangular": {
-      "kind": "builtin",
-      "name": "matrix.is_triangular",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.is_zero": {
-      "kind": "builtin",
-      "name": "matrix.is_zero",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "bool",
-      "scope": "any"
-    },
-    "matrix.kron": {
-      "kind": "builtin",
-      "name": "matrix.kron",
-      "parameters": [
-        {
-          "name": "id1",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "id2",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.median": {
-      "kind": "builtin",
-      "name": "matrix.median",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "matrix.mode": {
-      "kind": "builtin",
-      "name": "matrix.mode",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
-    },
-    "matrix.mult": {
-      "kind": "builtin",
-      "name": "matrix.mult",
-      "parameters": [
-        {
-          "name": "id1",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "id2",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.new<type>": {
-      "kind": "builtin",
-      "name": "matrix.new<type>",
-      "parameters": [
-        {
-          "name": "rows",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "columns",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "any"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<any>",
-      "scope": "any"
-    },
-    "matrix.pinv": {
-      "kind": "builtin",
-      "name": "matrix.pinv",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.pow": {
-      "kind": "builtin",
-      "name": "matrix.pow",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "power",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<float>",
-      "scope": "any"
-    },
-    "matrix.rank": {
-      "kind": "builtin",
-      "name": "matrix.rank",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "int",
-      "scope": "any"
-    },
-    "matrix.remove_col": {
-      "kind": "builtin",
-      "name": "matrix.remove_col",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "column",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<any>",
-      "scope": "any"
-    },
-    "matrix.remove_row": {
-      "kind": "builtin",
-      "name": "matrix.remove_row",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "row",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<any>",
-      "scope": "any"
-    },
-    "matrix.row": {
-      "kind": "builtin",
-      "name": "matrix.row",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "row",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<any>",
-      "scope": "any"
-    },
-    "matrix.sort": {
-      "kind": "builtin",
-      "name": "matrix.sort",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "column",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "order",
-          "required": false,
-          "type": "string"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.submatrix": {
-      "kind": "builtin",
-      "name": "matrix.submatrix",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "from_row",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "to_row",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "from_column",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "to_column",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "matrix<any>",
-      "scope": "any"
-    },
-    "matrix.swap_columns": {
-      "kind": "builtin",
-      "name": "matrix.swap_columns",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "column1",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "column2",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.swap_rows": {
-      "kind": "builtin",
-      "name": "matrix.swap_rows",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        },
-        {
-          "name": "row1",
-          "required": true,
-          "type": "int"
-        },
-        {
-          "name": "row2",
-          "required": true,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "void",
-      "scope": "any"
-    },
-    "matrix.trace": {
-      "kind": "builtin",
-      "name": "matrix.trace",
-      "parameters": [
-        {
-          "name": "id",
-          "required": true,
-          "type": "matrix"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "float",
-      "scope": "any"
     }
   },
   "generated_at": null,
   "namespaces": {
+    "adjustment": {},
     "alert": {},
     "array": {},
+    "backadjustment": {},
     "barmerge": {},
     "barstate": {},
     "box": {},
     "chart": {},
     "color": {},
     "currency": {},
+    "dayofweek": {},
     "display": {},
+    "dividends": {},
+    "earnings": {},
     "extend": {},
+    "font": {},
     "format": {},
     "input": {},
     "label": {},
     "line": {},
+    "linefill": {},
     "location": {},
     "map": {},
     "math": {},
     "matrix": {},
+    "order": {},
     "plot": {},
     "polyline": {
       "kind": "namespace",
@@ -8894,7 +8902,9 @@
     "runtime": {
       "name": "runtime"
     },
+    "scale": {},
     "session": {},
+    "settlement_as_close": {},
     "shape": {},
     "size": {},
     "splits": {
@@ -8915,14 +8925,14 @@
       "name": "strategy.commission",
       "pine_version": "6"
     },
-    "strategy.opentrades": {
-      "kind": "namespace",
-      "name": "strategy.opentrades",
-      "pine_version": "6"
-    },
     "strategy.oca": {
       "kind": "namespace",
       "name": "strategy.oca",
+      "pine_version": "6"
+    },
+    "strategy.opentrades": {
+      "kind": "namespace",
+      "name": "strategy.opentrades",
       "pine_version": "6"
     },
     "strategy.risk": {
@@ -8933,6 +8943,7 @@
     "syminfo": {},
     "ta": {},
     "table": {},
+    "text": {},
     "ticker": {},
     "time": {},
     "timeframe": {},
@@ -9094,6 +9105,18 @@
     }
   },
   "variables": {
+    "adjustment.dividends": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "adjustment.none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "adjustment.splits": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "alert.freq_all": {
       "qualifier": "const",
       "type": "string"
@@ -9103,6 +9126,22 @@
       "type": "string"
     },
     "alert.freq_once_per_bar_close": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "ask": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "backadjustment.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "backadjustment.off": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "backadjustment.on": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9154,6 +9193,58 @@
       "qualifier": "series",
       "type": "bool"
     },
+    "bid": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "box.all": {
+      "qualifier": "const",
+      "type": "array<box>"
+    },
+    "chart.bg_color": {
+      "qualifier": "input",
+      "type": "color"
+    },
+    "chart.fg_color": {
+      "qualifier": "input",
+      "type": "color"
+    },
+    "chart.is_heikinashi": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_kagi": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_linebreak": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_pnf": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_range": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_renko": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_standard": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.left_visible_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "chart.right_visible_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "close": {
       "qualifier": "series",
       "type": "float"
@@ -9170,6 +9261,10 @@
       "qualifier": "const",
       "type": "color"
     },
+    "color.fuchsia": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.gray": {
       "qualifier": "const",
       "type": "color"
@@ -9182,11 +9277,35 @@
       "qualifier": "const",
       "type": "color"
     },
+    "color.maroon": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.navy": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.olive": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.orange": {
       "qualifier": "const",
       "type": "color"
     },
+    "color.purple": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.red": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.silver": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.teal": {
       "qualifier": "const",
       "type": "color"
     },
@@ -9198,7 +9317,139 @@
       "qualifier": "const",
       "type": "color"
     },
+    "currency.AED": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ARS": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.AUD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BDT": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BHD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BRL": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BTC": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CAD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CHF": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CLP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CNY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.COP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CZK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.DKK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.EGP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ETH": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "currency.EUR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.GBP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.HKD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.HUF": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.IDR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ILS": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.INR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ISK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.JPY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KES": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KRW": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KWD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.LKR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MAD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MXN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MYR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.NGN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.NOK": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9206,7 +9457,123 @@
       "qualifier": "const",
       "type": "string"
     },
+    "currency.NZD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PEN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PHP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PKR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PLN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.QAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RON": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RSD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RUB": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SEK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SGD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.THB": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TND": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TRY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TWD": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "currency.USD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.USDT": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.VES": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.VND": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ZAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofmonth": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dayofweek": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dayofweek.friday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.monday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.saturday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.sunday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.thursday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.tuesday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.wednesday": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9226,6 +9593,10 @@
       "qualifier": "const",
       "type": "display"
     },
+    "display.pine_screener": {
+      "qualifier": "const",
+      "type": "display"
+    },
     "display.price_scale": {
       "qualifier": "const",
       "type": "display"
@@ -9233,6 +9604,18 @@
     "display.status_line": {
       "qualifier": "const",
       "type": "display"
+    },
+    "dividends.future_amount": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "dividends.future_ex_date": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dividends.future_pay_date": {
+      "qualifier": "series",
+      "type": "int"
     },
     "dividends.gross": {
       "qualifier": "const",
@@ -9250,9 +9633,33 @@
       "qualifier": "const",
       "type": "earnings.field"
     },
+    "earnings.future_eps": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "earnings.future_period_end_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "earnings.future_revenue": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "earnings.future_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "earnings.standardized": {
       "qualifier": "const",
       "type": "earnings.field"
+    },
+    "extend.both": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "extend.left": {
+      "qualifier": "const",
+      "type": "string"
     },
     "extend.none": {
       "qualifier": "const",
@@ -9262,7 +9669,27 @@
       "qualifier": "const",
       "type": "extend"
     },
+    "false": {
+      "qualifier": "const",
+      "type": "bool"
+    },
+    "font.family_default": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "font.family_monospace": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "format.mintick": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.percent": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9286,6 +9713,30 @@
       "qualifier": "series",
       "type": "float"
     },
+    "hlcc4": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "hline.style_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hour": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "label.all": {
+      "qualifier": "const",
+      "type": "array<label>"
+    },
     "label.style_arrowdown": {
       "qualifier": "const",
       "type": "label.style"
@@ -9302,9 +9753,17 @@
       "qualifier": "const",
       "type": "label.style"
     },
+    "label.style_diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "label.style_flag": {
       "qualifier": "const",
       "type": "label.style"
+    },
+    "label.style_label_center": {
+      "qualifier": "const",
+      "type": "string"
     },
     "label.style_label_down": {
       "qualifier": "const",
@@ -9342,6 +9801,14 @@
       "qualifier": "const",
       "type": "label.style"
     },
+    "label.style_square": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "label.style_text_outline": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "label.style_triangledown": {
       "qualifier": "const",
       "type": "label.style"
@@ -9357,6 +9824,14 @@
     "last_bar_index": {
       "qualifier": "series",
       "type": "int"
+    },
+    "last_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "line.all": {
+      "qualifier": "const",
+      "type": "array<line>"
     },
     "line.style_arrow_both": {
       "qualifier": "const",
@@ -9382,7 +9857,15 @@
       "qualifier": "const",
       "type": "line.style"
     },
+    "linefill.all": {
+      "qualifier": "const",
+      "type": "array<linefill>"
+    },
     "location.abovebar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.absolute": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9390,9 +9873,45 @@
       "qualifier": "const",
       "type": "string"
     },
+    "location.bottom": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.top": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "low": {
       "qualifier": "series",
       "type": "float"
+    },
+    "math.e": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.phi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.pi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.rphi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "minute": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "month": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "na": {
+      "qualifier": "const",
+      "type": "unknown"
     },
     "ohlc4": {
       "qualifier": "series",
@@ -9402,7 +9921,31 @@
       "qualifier": "series",
       "type": "float"
     },
+    "order.ascending": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "order.descending": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "plot.style_area": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_areabr": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9430,6 +9973,26 @@
       "qualifier": "const",
       "type": "string"
     },
+    "plot.style_stepline": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_stepline_diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_steplinebr": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "polyline.all": {
+      "qualifier": "const",
+      "type": "array<polyline>"
+    },
+    "position.bottom_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "position.bottom_left": {
       "qualifier": "const",
       "type": "table.position"
@@ -9450,6 +10013,10 @@
       "qualifier": "const",
       "type": "table.position"
     },
+    "position.top_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "position.top_left": {
       "qualifier": "const",
       "type": "table.position"
@@ -9458,11 +10025,127 @@
       "qualifier": "const",
       "type": "table.position"
     },
+    "scale.left": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "scale.none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "scale.right": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "second": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "session.extended": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "session.isfirstbar": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.isfirstbar_regular": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.islastbar": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.islastbar_regular": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ismarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ispostmarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ispremarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.regular": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.off": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.on": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowdown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.circle": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.cross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.flag": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labeldown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labelup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.square": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "shape.triangledown": {
       "qualifier": "const",
       "type": "string"
     },
     "shape.triangleup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.xcross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.auto": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.huge": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.large": {
       "qualifier": "const",
       "type": "string"
     },
@@ -9518,6 +10201,14 @@
       "qualifier": "series",
       "type": "int"
     },
+    "strategy.grossloss": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.grossprofit": {
+      "qualifier": "series",
+      "type": "float"
+    },
     "strategy.initial_capital": {
       "qualifier": "simple",
       "type": "float"
@@ -9525,14 +10216,6 @@
     "strategy.long": {
       "qualifier": "const",
       "type": "strategy.direction"
-    },
-    "strategy.grossprofit": {
-      "qualifier": "series",
-      "type": "float"
-    },
-    "strategy.grossloss": {
-      "qualifier": "series",
-      "type": "float"
     },
     "strategy.losstrades": {
       "qualifier": "series",
@@ -9586,7 +10269,59 @@
       "qualifier": "series",
       "type": "int"
     },
+    "syminfo.basecurrency": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.country": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.currency": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.current_contract": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.description": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.employees": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.expiration_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.industry": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.isin": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.main_tickerid": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.mincontract": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.minmove": {
+      "qualifier": "simple",
+      "type": "int"
+    },
     "syminfo.mintick": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.pointvalue": {
       "qualifier": "simple",
       "type": "float"
     },
@@ -9594,9 +10329,85 @@
       "qualifier": "simple",
       "type": "string"
     },
+    "syminfo.pricescale": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_buy": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_buy_strong": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_hold": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_sell": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_sell_strong": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_total": {
+      "qualifier": "simple",
+      "type": "int"
+    },
     "syminfo.root": {
       "qualifier": "simple",
       "type": "string"
+    },
+    "syminfo.sector": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.session": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.shareholders": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.shares_outstanding_float": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.shares_outstanding_total": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_average": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.target_price_estimates": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.target_price_high": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_low": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_median": {
+      "qualifier": "simple",
+      "type": "float"
     },
     "syminfo.ticker": {
       "qualifier": "simple",
@@ -9606,31 +10417,119 @@
       "qualifier": "simple",
       "type": "string"
     },
+    "syminfo.timezone": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.type": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.volumetype": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "ta.accdist": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.iii": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.nvi": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.obv": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.pvi": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.pvt": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.tr": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.vwap": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.wad": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.wvad": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "table.all": {
+      "qualifier": "const",
+      "type": "array<table>"
+    },
+    "text.align_bottom": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_left": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_right": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_top": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_bold": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_italic": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.wrap_auto": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.wrap_none": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "time": {
       "qualifier": "series",
       "type": "int"
     },
-    "timeframe.period": {
-      "qualifier": "simple",
-      "type": "string"
+    "time_close": {
+      "qualifier": "series",
+      "type": "int"
     },
-    "timeframe.isseconds": {
-      "qualifier": "simple",
-      "type": "bool"
-    },
-    "timeframe.isminutes": {
-      "qualifier": "simple",
-      "type": "bool"
+    "time_tradingday": {
+      "qualifier": "series",
+      "type": "int"
     },
     "timeframe.isdaily": {
       "qualifier": "simple",
       "type": "bool"
     },
-    "timeframe.isweekly": {
-      "qualifier": "simple",
-      "type": "bool"
-    },
-    "timeframe.ismonthly": {
+    "timeframe.isdwm": {
       "qualifier": "simple",
       "type": "bool"
     },
@@ -9638,131 +10537,75 @@
       "qualifier": "simple",
       "type": "bool"
     },
+    "timeframe.isminutes": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.ismonthly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isseconds": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isticks": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isweekly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.main_period": {
+      "qualifier": "simple",
+      "type": "string"
+    },
     "timeframe.multiplier": {
       "qualifier": "simple",
       "type": "int"
+    },
+    "timeframe.period": {
+      "qualifier": "simple",
+      "type": "string"
     },
     "timenow": {
       "qualifier": "series",
       "type": "int"
     },
+    "true": {
+      "qualifier": "const",
+      "type": "bool"
+    },
     "volume": {
       "qualifier": "series",
       "type": "float"
+    },
+    "weekofyear": {
+      "qualifier": "series",
+      "type": "int"
     },
     "xloc.bar_index": {
       "qualifier": "const",
       "type": "string"
     },
+    "xloc.bar_time": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "year": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "yloc.abovebar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "yloc.belowbar": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "yloc.price": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "display.pine_screener": {
-      "qualifier": "const",
-      "type": "display"
-    },
-    "hline.style_dashed": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "hline.style_dotted": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "hline.style_solid": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "location.absolute": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "location.bottom": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "location.top": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.linestyle_dashed": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.linestyle_dotted": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.linestyle_solid": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.style_areabr": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.style_stepline": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.style_stepline_diamond": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "plot.style_steplinebr": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.arrowdown": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.arrowup": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.circle": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.cross": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.diamond": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.flag": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.labeldown": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.labelup": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.square": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "shape.xcross": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "size.auto": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "size.huge": {
-      "qualifier": "const",
-      "type": "string"
-    },
-    "size.large": {
       "qualifier": "const",
       "type": "string"
     }

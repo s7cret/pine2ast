@@ -18,8 +18,9 @@ CatalogStatus = Literal[
 VALID_STATUSES: set[str] = set(get_args(CatalogStatus))
 
 VALID_PRIORITIES = {"P0", "P1", "P2", "P3"}
-VALID_KINDS = {"declaration", "function", "method", "type", "variable", "visual"}
+VALID_KINDS = {"constant", "declaration", "function", "method", "type", "variable", "visual"}
 CATALOG_KIND_OFFICIAL_CATEGORY = {
+    "constant": "constants",
     "declaration": "functions",
     "function": "functions",
     "method": "methods",
