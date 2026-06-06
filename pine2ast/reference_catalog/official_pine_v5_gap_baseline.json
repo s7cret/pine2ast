@@ -6,8 +6,8 @@
     "bundle_url": "https://static.tradingview.com/static/bundles/8467.cba5dbaf496130e32000.js",
     "basis": "TradingView pine-script-reference webpack reference payload"
   },
-  "max_missing_official_count": 194,
-  "min_coverage_ratio": 0.6886035313001605,
+  "max_missing_official_count": 193,
+  "min_coverage_ratio": 0.6902086677367576,
   "missing_by_category": {
     "functions": [
       "box",
@@ -48,7 +48,6 @@
       "log.warning",
       "math.round_to_mintick",
       "max_bars_back",
-      "request.economic",
       "runtime.error",
       "str.format_time",
       "str.match",
