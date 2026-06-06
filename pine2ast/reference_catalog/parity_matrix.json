@@ -4,6 +4,7 @@
   "scope": "amended_6pkg_p0",
   "items": [
     {
+      "official_category": "functions",
       "id": "array.avg",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -14,6 +15,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.clear",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -24,6 +26,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.copy",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -34,6 +37,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.get",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -44,6 +48,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.includes",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -54,6 +59,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.indexof",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -64,6 +70,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.max",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -74,6 +81,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.min",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -84,6 +92,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.new_bool",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -94,6 +103,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.new_float",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -104,6 +114,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.new_int",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -114,6 +125,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.new_string",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -124,6 +136,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.pop",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -134,6 +147,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.push",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -144,6 +158,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.set",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -154,6 +169,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.shift",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -164,6 +180,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.size",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -174,6 +191,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.sum",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -184,6 +202,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "functions",
       "id": "array.unshift",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -194,6 +213,7 @@
       "runtime_owner": "pinelib.collections"
     },
     {
+      "official_category": "variables",
       "id": "bar_index",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -204,6 +224,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "barcolor",
       "priority": "P0",
       "parser_status": "DONE_VERIFIED",
@@ -214,6 +235,7 @@
       "runtime_owner": "pinelib.visual"
     },
     {
+      "official_category": "variables",
       "id": "barstate.isconfirmed",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -224,6 +246,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "variables",
       "id": "barstate.isfirst",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -234,6 +257,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "variables",
       "id": "barstate.ishistory",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -244,6 +268,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "variables",
       "id": "barstate.islast",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -254,6 +279,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "variables",
       "id": "barstate.isnew",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -264,6 +290,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "variables",
       "id": "barstate.isrealtime",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -274,6 +301,7 @@
       "runtime_owner": "pinelib.barstate"
     },
     {
+      "official_category": "functions",
       "id": "bgcolor",
       "priority": "P0",
       "parser_status": "DONE_VERIFIED",
@@ -284,6 +312,7 @@
       "runtime_owner": "pinelib.visual"
     },
     {
+      "official_category": "variables",
       "id": "close",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -294,6 +323,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "fill",
       "priority": "P0",
       "parser_status": "DONE_VERIFIED",
@@ -304,6 +334,7 @@
       "runtime_owner": "pinelib.visual"
     },
     {
+      "official_category": "variables",
       "id": "high",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -314,6 +345,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "hline",
       "priority": "P0",
       "parser_status": "DONE_VERIFIED",
@@ -324,6 +356,7 @@
       "runtime_owner": "pinelib.visual"
     },
     {
+      "official_category": "functions",
       "id": "indicator",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -334,6 +367,7 @@
       "runtime_owner": "pine2ast.declarations"
     },
     {
+      "official_category": "functions",
       "id": "input",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -344,6 +378,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.bool",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -354,6 +389,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.float",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -364,6 +400,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.int",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -374,6 +411,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.session",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -384,6 +422,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.source",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -394,6 +433,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.string",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -404,6 +444,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "functions",
       "id": "input.timeframe",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -414,6 +455,7 @@
       "runtime_owner": "pinelib.inputs"
     },
     {
+      "official_category": "variables",
       "id": "last_bar_index",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -424,6 +466,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "library",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -434,6 +477,7 @@
       "runtime_owner": "pine2ast.declarations"
     },
     {
+      "official_category": "variables",
       "id": "low",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -444,6 +488,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "math.abs",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -454,6 +499,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.ceil",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -464,6 +510,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.floor",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -474,6 +521,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.max",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -484,6 +532,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.min",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -494,6 +543,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.pow",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -504,6 +554,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.round",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -514,6 +565,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "functions",
       "id": "math.sqrt",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -524,6 +576,7 @@
       "runtime_owner": "pinelib.math"
     },
     {
+      "official_category": "variables",
       "id": "open",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -534,6 +587,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "functions",
       "id": "plot",
       "priority": "P0",
       "parser_status": "DONE_VERIFIED",
@@ -544,6 +598,7 @@
       "runtime_owner": "pinelib.visual"
     },
     {
+      "official_category": "functions",
       "id": "request.security",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -554,6 +609,7 @@
       "runtime_owner": "pinelib.request"
     },
     {
+      "official_category": "functions",
       "id": "strategy",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -564,6 +620,7 @@
       "runtime_owner": "pine2ast.declarations"
     },
     {
+      "official_category": "functions",
       "id": "strategy.cancel",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -574,6 +631,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.cancel_all",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -584,6 +642,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.close",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -594,6 +653,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.close_all",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -604,6 +664,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.entry",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -614,6 +675,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.exit",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -624,6 +686,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "functions",
       "id": "strategy.order",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -634,6 +697,7 @@
       "runtime_owner": "backtest_engine.strategy_context"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.basecurrency",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -644,6 +708,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.currency",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -654,6 +719,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.mintick",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -664,6 +730,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.pointvalue",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -674,6 +741,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.ticker",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -684,6 +752,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "variables",
       "id": "syminfo.tickerid",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -694,6 +763,7 @@
       "runtime_owner": "pinelib.syminfo"
     },
     {
+      "official_category": "functions",
       "id": "ta.atr",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -704,6 +774,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.change",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -714,6 +785,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.cross",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -724,6 +796,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.crossover",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -734,6 +807,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.crossunder",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -744,6 +818,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.ema",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -754,6 +829,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.highest",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -764,6 +840,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.lowest",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -774,6 +851,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.macd",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -784,6 +862,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.rma",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -794,6 +873,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.rsi",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -804,6 +884,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.sma",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -814,6 +895,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "functions",
       "id": "ta.tr",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -824,6 +906,7 @@
       "runtime_owner": "pinelib.ta"
     },
     {
+      "official_category": "variables",
       "id": "time",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -834,6 +917,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "variables",
       "id": "time_close",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -844,6 +928,7 @@
       "runtime_owner": "pinelib.runtime"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.isdaily",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -854,6 +939,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.isminutes",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -864,6 +950,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.ismonthly",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -874,6 +961,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.isweekly",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -884,6 +972,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.multiplier",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -894,6 +983,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "timeframe.period",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",
@@ -904,6 +994,7 @@
       "runtime_owner": "pinelib.timeframe"
     },
     {
+      "official_category": "variables",
       "id": "volume",
       "priority": "P0",
       "parser_status": "IMPLEMENTED_UNVERIFIED",

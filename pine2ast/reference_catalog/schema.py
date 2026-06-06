@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any, Literal, get_args
 
 CatalogStatus = Literal[
     "NOT_STARTED",
@@ -15,20 +15,18 @@ CatalogStatus = Literal[
     "DEPRECATED_NOT_SUPPORTED",
 ]
 
-VALID_STATUSES: set[str] = {
-    "NOT_STARTED",
-    "PARTIAL",
-    "IMPLEMENTED_UNVERIFIED",
-    "DONE_VERIFIED",
-    "UNSUPPORTED_DIAGNOSTIC",
-    "UNSUPPORTED_SILENT_RISK",
-    "BLOCKED_BY_TV_EXPORT",
-    "BLOCKED_BY_DOC_AMBIGUITY",
-    "DEPRECATED_NOT_SUPPORTED",
-}
+VALID_STATUSES: set[str] = set(get_args(CatalogStatus))
 
 VALID_PRIORITIES = {"P0", "P1", "P2", "P3"}
 VALID_KINDS = {"declaration", "function", "method", "type", "variable", "visual"}
+CATALOG_KIND_OFFICIAL_CATEGORY = {
+    "declaration": "functions",
+    "function": "functions",
+    "method": "methods",
+    "type": "types",
+    "variable": "variables",
+    "visual": "functions",
+}
 REQUIRED_ENTRY_FIELDS = {
     "id",
     "kind",
@@ -57,6 +55,14 @@ STATUS_FIELDS = (
     "runtime_status",
     "golden_status",
 )
+MATRIX_OWNER_FIELD = "runtime_owner"
+MATRIX_REQUIRED_ITEM_FIELDS = {
+    "id",
+    "official_category",
+    "priority",
+    MATRIX_OWNER_FIELD,
+    *STATUS_FIELDS,
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,7 +111,9 @@ class CatalogEntry:
                 else str(data["function_equivalent"])
             ),
             runtime_owner=(
-                data["runtime_owner"] if data["runtime_owner"] is None else str(data["runtime_owner"])
+                data["runtime_owner"]
+                if data["runtime_owner"] is None
+                else str(data["runtime_owner"])
             ),
             parser_status=str(data["parser_status"]),
             semantic_status=str(data["semantic_status"]),

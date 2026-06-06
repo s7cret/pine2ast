@@ -4,6 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from pine2ast.reference_catalog.loader import load_entries
+from pine2ast.reference_catalog.schema import CATALOG_KIND_OFFICIAL_CATEGORY
 
 
 def catalog_markdown() -> str:
@@ -30,15 +31,16 @@ def catalog_markdown() -> str:
         group = sorted(by_priority[priority], key=lambda item: item.id)
         lines.extend([f"## {priority}", ""])
         lines.append(
-            "| ID | Kind | Owner | Parser | Semantic | Codegen | Runtime | Golden |"
+            "| ID | Official | Kind | Owner | Parser | Semantic | Codegen | Runtime | Golden |"
         )
-        lines.append("|---|---|---|---|---|---|---|---|")
+        lines.append("|---|---|---|---|---|---|---|---|---|")
         for entry in group:
             lines.append(
                 "| "
                 + " | ".join(
                     [
                         f"`{entry.id}`",
+                        CATALOG_KIND_OFFICIAL_CATEGORY[entry.kind],
                         entry.kind,
                         f"`{entry.runtime_owner}`" if entry.runtime_owner else "",
                         entry.parser_status,
