@@ -35,8 +35,7 @@ def test_footprint_volume_row_v6_ids_are_tracked_conservatively() -> None:
     registry = load_builtin_registry()
     catalog = {entry["id"]: entry for entry in load_catalog()["entries"]}
     matrix = {
-        (item["official_category"], item["id"]): item
-        for item in load_parity_matrix()["items"]
+        (item["official_category"], item["id"]): item for item in load_parity_matrix()["items"]
     }
 
     assert FOOTPRINT_FUNCTIONS | VOLUME_ROW_FUNCTIONS <= set(registry["functions"])

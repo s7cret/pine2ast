@@ -8225,6 +8225,48 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.convert_to_account": {
+      "kind": "builtin",
+      "name": "strategy.convert_to_account",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "strategy.convert_to_symbol": {
+      "kind": "builtin",
+      "name": "strategy.convert_to_symbol",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "strategy.default_entry_qty": {
+      "kind": "builtin",
+      "name": "strategy.default_entry_qty",
+      "parameters": [
+        {
+          "name": "fill_price",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
     "strategy.entry": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -12052,6 +12094,34 @@
       "qualifier": "const",
       "type": "splits.field"
     },
+    "strategy.account_currency": {
+      "type": "string",
+      "qualifier": "simple"
+    },
+    "strategy.avg_losing_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_losing_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_winning_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_winning_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.cash": {
       "qualifier": "const",
       "type": "string"
@@ -12088,9 +12158,17 @@
       "qualifier": "series",
       "type": "float"
     },
+    "strategy.grossloss_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.grossprofit": {
       "qualifier": "series",
       "type": "float"
+    },
+    "strategy.grossprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
     },
     "strategy.initial_capital": {
       "qualifier": "simple",
@@ -12104,9 +12182,45 @@
       "qualifier": "series",
       "type": "int"
     },
+    "strategy.margin_liquidation_price": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_all": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_long": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_short": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_drawdown": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_drawdown_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_runup": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_runup_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.netprofit": {
       "qualifier": "series",
       "type": "float"
+    },
+    "strategy.netprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
     },
     "strategy.oca.cancel": {
       "qualifier": "const",
@@ -12124,6 +12238,10 @@
       "qualifier": "series",
       "type": "float"
     },
+    "strategy.openprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.opentrades": {
       "qualifier": "series",
       "type": "int"
@@ -12139,6 +12257,10 @@
     "strategy.position_avg_price": {
       "qualifier": "series",
       "type": "float"
+    },
+    "strategy.position_entry_name": {
+      "type": "string",
+      "qualifier": "series"
     },
     "strategy.position_size": {
       "qualifier": "series",

@@ -169,6 +169,35 @@ OFFICIAL_TABLE_TAIL = {
     "table.set_frame_width",
 }
 
+OFFICIAL_STRATEGY_TAIL_FUNCTIONS = {
+    "strategy.convert_to_account",
+    "strategy.convert_to_symbol",
+    "strategy.default_entry_qty",
+}
+
+OFFICIAL_STRATEGY_TAIL_VARIABLES = {
+    "strategy.account_currency": ("string", "simple"),
+    "strategy.avg_losing_trade": ("float", "series"),
+    "strategy.avg_losing_trade_percent": ("float", "series"),
+    "strategy.avg_trade": ("float", "series"),
+    "strategy.avg_trade_percent": ("float", "series"),
+    "strategy.avg_winning_trade": ("float", "series"),
+    "strategy.avg_winning_trade_percent": ("float", "series"),
+    "strategy.grossloss_percent": ("float", "series"),
+    "strategy.grossprofit_percent": ("float", "series"),
+    "strategy.margin_liquidation_price": ("float", "series"),
+    "strategy.max_contracts_held_all": ("float", "series"),
+    "strategy.max_contracts_held_long": ("float", "series"),
+    "strategy.max_contracts_held_short": ("float", "series"),
+    "strategy.max_drawdown": ("float", "series"),
+    "strategy.max_drawdown_percent": ("float", "series"),
+    "strategy.max_runup": ("float", "series"),
+    "strategy.max_runup_percent": ("float", "series"),
+    "strategy.netprofit_percent": ("float", "series"),
+    "strategy.openprofit_percent": ("float", "series"),
+    "strategy.position_entry_name": ("string", "series"),
+}
+
 
 def test_official_tail_callables_are_registered_and_tracked_conservatively() -> None:
     registry = load_builtin_registry()
@@ -256,11 +285,47 @@ def test_official_table_tail_is_registered_and_tracked_conservatively() -> None:
         baseline = json.loads(
             files("pine2ast.reference_catalog").joinpath(baseline_name).read_text(encoding="utf-8")
         )
-        missing_functions = set(baseline["missing_by_category"]["functions"])
-        expected_modeled = set(OFFICIAL_TABLE_TAIL)
-        if baseline["pine_version"] == 5:
-            expected_modeled.remove("table.cell_set_text_formatting")
-        assert not (expected_modeled & missing_functions)
+        assert not (OFFICIAL_TABLE_TAIL & set(baseline["missing_by_category"]["functions"]))
+
+
+def test_official_strategy_tail_is_registered_and_tracked_conservatively() -> None:
+    registry = load_builtin_registry()
+    catalog = {entry["id"]: entry for entry in load_catalog()["entries"]}
+    matrix = {
+        (item["official_category"], item["id"]): item for item in load_parity_matrix()["items"]
+    }
+
+    assert OFFICIAL_STRATEGY_TAIL_FUNCTIONS <= set(registry["functions"])
+    for name in OFFICIAL_STRATEGY_TAIL_FUNCTIONS:
+        entry = registry["functions"][name]
+        assert entry["scope"] == "any"
+        assert entry["returns"] == "float"
+        assert catalog[name]["kind"] == "function"
+        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["runtime_status"] == "NOT_STARTED"
+        assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
+
+    for name, (typ, qualifier) in OFFICIAL_STRATEGY_TAIL_VARIABLES.items():
+        assert registry["variables"][name] == {"type": typ, "qualifier": qualifier}
+        assert catalog[name]["kind"] == "variable"
+        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["runtime_status"] == "NOT_STARTED"
+        assert matrix[("variables", name)]["runtime_status"] == "NOT_STARTED"
+
+    for baseline_name in (
+        "official_pine_v5_gap_baseline.json",
+        "official_pine_v6_gap_baseline.json",
+    ):
+        baseline = json.loads(
+            files("pine2ast.reference_catalog").joinpath(baseline_name).read_text(encoding="utf-8")
+        )
+        assert not (
+            OFFICIAL_STRATEGY_TAIL_FUNCTIONS & set(baseline["missing_by_category"]["functions"])
+        )
+        assert not (
+            set(OFFICIAL_STRATEGY_TAIL_VARIABLES)
+            & set(baseline["missing_by_category"]["variables"])
+        )
 
 
 def test_official_table_tail_do_not_trip_strict_builtin_checks() -> None:
@@ -292,3 +357,31 @@ plot(close)
     assert codes.UNDECLARED_VARIABLE not in errors
     assert codes.UNKNOWN_PARAMETER not in errors
     assert codes.ARGUMENT_TYPE not in errors
+
+
+def test_official_strategy_tail_do_not_trip_strict_builtin_checks() -> None:
+    source = """//@version=6
+strategy("official strategy tail")
+accountValue = strategy.convert_to_account(close)
+symbolValue = strategy.convert_to_symbol(accountValue)
+qty = strategy.default_entry_qty(close)
+string account = strategy.account_currency
+string entryName = strategy.position_entry_name
+float totals = strategy.avg_losing_trade + strategy.avg_trade + strategy.avg_winning_trade
+float pct = strategy.avg_losing_trade_percent + strategy.avg_trade_percent + strategy.avg_winning_trade_percent
+float profitPct = strategy.grossloss_percent + strategy.grossprofit_percent + strategy.netprofit_percent + strategy.openprofit_percent
+float risk = strategy.margin_liquidation_price + strategy.max_drawdown + strategy.max_drawdown_percent + strategy.max_runup + strategy.max_runup_percent
+float held = strategy.max_contracts_held_all + strategy.max_contracts_held_long + strategy.max_contracts_held_short
+plot(symbolValue + qty + totals + pct + profitPct + risk + held)
+"""
+
+    result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
+    errors = [
+        diagnostic.code
+        for diagnostic in result.diagnostics
+        if diagnostic.severity in {Severity.ERROR, Severity.FATAL}
+    ]
+
+    assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
+    assert codes.UNDECLARED_VARIABLE not in errors
+    assert codes.UNKNOWN_PARAMETER not in errors

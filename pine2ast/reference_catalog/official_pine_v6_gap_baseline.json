@@ -1,35 +1,10 @@
 {
-  "max_missing_official_count": 23,
-  "min_coverage_ratio": 0.9649390243902439,
+  "max_missing_official_count": 0,
+  "min_coverage_ratio": 1.0,
   "missing_by_category": {
-    "functions": [
-      "strategy.convert_to_account",
-      "strategy.convert_to_symbol",
-      "strategy.default_entry_qty"
-    ],
+    "functions": [],
     "types": [],
-    "variables": [
-      "strategy.account_currency",
-      "strategy.avg_losing_trade",
-      "strategy.avg_losing_trade_percent",
-      "strategy.avg_trade",
-      "strategy.avg_trade_percent",
-      "strategy.avg_winning_trade",
-      "strategy.avg_winning_trade_percent",
-      "strategy.grossloss_percent",
-      "strategy.grossprofit_percent",
-      "strategy.margin_liquidation_price",
-      "strategy.max_contracts_held_all",
-      "strategy.max_contracts_held_long",
-      "strategy.max_contracts_held_short",
-      "strategy.max_drawdown",
-      "strategy.max_drawdown_percent",
-      "strategy.max_runup",
-      "strategy.max_runup_percent",
-      "strategy.netprofit_percent",
-      "strategy.openprofit_percent",
-      "strategy.position_entry_name"
-    ]
+    "variables": []
   },
   "pine_version": 6,
   "schema_version": "pain.official_pine_reference_gap_baseline.v1",
