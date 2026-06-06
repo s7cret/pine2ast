@@ -131,10 +131,15 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
     diagnostics.extend(parsed.diagnostics)
     semantic_model = None
     ast = parsed.program
+    if ast is not None and ast.version == 5 and options.strict_v6:
+        for diag in diagnostics:
+            if diag.code == codes.UNSUPPORTED_VERSION:
+                diag.severity = Severity.ERROR
     if ast is not None and options.run_semantic:
         semantic_model = SemanticAnalyzer(
             max_diagnostics=options.max_diagnostics,
             strict_builtin_namespaces=options.strict_builtin_namespaces,
+            pine_version=options.version,
         ).analyze(ast)
         diagnostics.extend(semantic_model.diagnostics)
     if ast is not None and options.runtime_contract_profile in {"v1.4", "runtime_contract_v1_4"}:
@@ -172,11 +177,13 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
             "schema_version": ast.schema_version,
             "pine_language_version": ast.language_version,
             "runtime_contract_profile": profile,
-            "runtime_contract": "runtime_contract_v1_4"
-            if profile in {"v1.4", "runtime_contract_v1_4"}
-            else profile,
+            "runtime_contract": (
+                "runtime_contract_v1_4" if profile in {"v1.4", "runtime_contract_v1_4"} else profile
+            ),
             "parser_gate": "pass" if gate_ok else "fail",
-            "semantic_gate": "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail"),
+            "semantic_gate": (
+                "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail")
+            ),
         }
     return ParseResult(
         ast, diagnostics, layout.tokens if options.collect_tokens else None, semantic_model
