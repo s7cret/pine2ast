@@ -900,10 +900,50 @@
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
       "name": "barcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        },
+        {
+          "name": "offset",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "simple"
+        },
+        {
+          "name": "editable",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "show_last",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "title",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "display",
+          "required": false,
+          "type": "display",
+          "qualifier_max": "input"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "barssince": {
       "docs_url": null,
@@ -918,10 +958,50 @@
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
       "name": "bgcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        },
+        {
+          "name": "offset",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "simple"
+        },
+        {
+          "name": "editable",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "show_last",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "title",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "bool": {
       "docs_url": null,
@@ -1589,10 +1669,59 @@
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
       "name": "fill",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "plot1",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "plot2",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "title",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "editable",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "show_last",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "fillgaps",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "display",
+          "required": false,
+          "type": "display",
+          "qualifier_max": "input"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "fixnan": {
       "docs_url": null,
@@ -1660,10 +1789,57 @@
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
       "name": "hline",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "price",
+          "required": true,
+          "type": "float",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "title",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "linestyle",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "linewidth",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "editable",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "display",
+          "required": false,
+          "type": "display",
+          "qualifier_max": "input"
+        }
+      ],
       "pine_version": "6",
       "returns": "hline",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "hour": {
       "docs_url": null,
@@ -3960,7 +4136,8 @@
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "color",
@@ -3975,37 +4152,89 @@
         {
           "name": "style",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "input"
         },
         {
           "name": "trackprice",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
         },
         {
-          "name": "transp",
+          "name": "histbase",
           "required": false,
-          "type": "int"
+          "type": "float"
+        },
+        {
+          "name": "offset",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "simple"
+        },
+        {
+          "name": "join",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
         },
         {
           "name": "editable",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
         },
         {
           "name": "show_last",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "linestyle",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "transp",
+          "required": false,
+          "type": "int",
+          "removed_in": "6",
+          "diagnostic_code": "P2A1403"
         }
       ],
       "pine_version": "6",
       "returns": "plot",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotarrow": {
       "forbidden_in_local_blocks": true,
@@ -4015,12 +4244,13 @@
         {
           "name": "series",
           "required": true,
-          "type": "bool"
+          "type": "float"
         },
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "colorup",
@@ -4035,37 +4265,65 @@
         {
           "name": "offset",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "simple"
         },
         {
           "name": "minheight",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "maxheight",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "editable",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
         },
         {
           "name": "show_last",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotbar": {
       "forbidden_in_local_blocks": true,
@@ -4095,7 +4353,8 @@
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "color",
@@ -4105,22 +4364,47 @@
         {
           "name": "editable",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
         },
         {
           "name": "show_last",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotcandle": {
       "forbidden_in_local_blocks": true,
@@ -4150,7 +4434,8 @@
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "color",
@@ -4163,29 +4448,54 @@
           "type": "color"
         },
         {
+          "name": "editable",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "show_last",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
           "name": "bordercolor",
           "required": false,
           "type": "color"
         },
         {
-          "name": "editable",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "show_last",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotchar": {
       "forbidden_in_local_blocks": true,
@@ -4195,22 +4505,25 @@
         {
           "name": "series",
           "required": true,
-          "type": "bool"
+          "type": "any"
         },
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "char",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "input"
         },
         {
           "name": "location",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "input"
         },
         {
           "name": "color",
@@ -4218,14 +4531,16 @@
           "type": "color"
         },
         {
-          "name": "size",
+          "name": "offset",
           "required": false,
-          "type": "string"
+          "type": "int",
+          "qualifier_max": "simple"
         },
         {
           "name": "text",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "textcolor",
@@ -4233,29 +4548,62 @@
           "type": "color"
         },
         {
-          "name": "transp",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "editable",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "size",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "show_last",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "transp",
+          "required": false,
+          "type": "int",
+          "removed_in": "6",
+          "diagnostic_code": "P2A1403"
         }
       ],
       "pine_version": "6",
-      "returns": "plot",
-      "scope": "global"
+      "returns": "void",
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotshape": {
       "forbidden_in_local_blocks": true,
@@ -4265,22 +4613,25 @@
         {
           "name": "series",
           "required": true,
-          "type": "bool"
+          "type": "any"
         },
         {
           "name": "title",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "style",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "input"
         },
         {
           "name": "location",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "input"
         },
         {
           "name": "color",
@@ -4288,14 +4639,16 @@
           "type": "color"
         },
         {
-          "name": "size",
+          "name": "offset",
           "required": false,
-          "type": "string"
+          "type": "int",
+          "qualifier_max": "simple"
         },
         {
           "name": "text",
           "required": false,
-          "type": "string"
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "textcolor",
@@ -4303,29 +4656,62 @@
           "type": "color"
         },
         {
-          "name": "transp",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "editable",
           "required": false,
-          "type": "bool"
+          "type": "bool",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "size",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "const"
         },
         {
           "name": "show_last",
           "required": false,
-          "type": "int"
+          "type": "int",
+          "qualifier_max": "input"
         },
         {
           "name": "display",
           "required": false,
-          "type": "int"
+          "type": "display",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "precision",
+          "required": false,
+          "type": "int",
+          "qualifier_max": "input"
+        },
+        {
+          "name": "force_overlay",
+          "required": false,
+          "type": "bool",
+          "qualifier_max": "const"
+        },
+        {
+          "name": "transp",
+          "required": false,
+          "type": "int",
+          "removed_in": "6",
+          "diagnostic_code": "P2A1403"
         }
       ],
       "pine_version": "6",
-      "returns": "plot",
-      "scope": "global"
+      "returns": "void",
+      "scope": "global",
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "metadata_version": 2,
+      "runtime_contract_unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "polyline.delete": {
       "kind": "builtin",
@@ -9050,6 +9436,114 @@
       "type": "string"
     },
     "yloc.price": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "display.pine_screener": {
+      "qualifier": "const",
+      "type": "display"
+    },
+    "hline.style_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.absolute": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.bottom": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.top": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_areabr": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_stepline": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_stepline_diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_steplinebr": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowdown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.circle": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.cross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.flag": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labeldown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labelup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.square": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.xcross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.auto": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.huge": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.large": {
       "qualifier": "const",
       "type": "string"
     }

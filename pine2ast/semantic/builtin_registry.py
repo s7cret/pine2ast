@@ -23,6 +23,7 @@ _ALLOWED_FUNCTION_KEYS = {
     "parameters",
     "pine_version",
     "returns",
+    "runtime_contract_unsupported",
     "scope",
     "unsupported",
     "unsupported_diagnostic_code",
@@ -261,6 +262,12 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
             raise _schema_error(f"$.functions.{name}.scope", f"unsupported scope {scope!r}")
         if "unsupported" in entry and not isinstance(entry["unsupported"], bool):
             raise _schema_error(f"$.functions.{name}.unsupported", "expected boolean")
+        if "runtime_contract_unsupported" in entry and not isinstance(
+            entry["runtime_contract_unsupported"], bool
+        ):
+            raise _schema_error(
+                f"$.functions.{name}.runtime_contract_unsupported", "expected boolean"
+            )
         if "unsupported_diagnostic_code" in entry:
             _require_string(
                 entry["unsupported_diagnostic_code"],
