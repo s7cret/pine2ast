@@ -1686,6 +1686,12 @@
           "type": "string"
         },
         {
+          "name": "shorttitle",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "overlay",
           "qualifier_max": "const",
           "required": false,
@@ -4972,6 +4978,12 @@
           "type": "string"
         },
         {
+          "name": "shorttitle",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "overlay",
           "qualifier_max": "const",
           "required": false,
@@ -5156,6 +5168,16 @@
         },
         {
           "name": "immediately",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "disable_alert",
           "required": false,
           "type": "bool"
         }
@@ -7953,6 +7975,34 @@
     "timeframe.period": {
       "qualifier": "simple",
       "type": "string"
+    },
+    "timeframe.isseconds": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isminutes": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isdaily": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isweekly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.ismonthly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isintraday": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.multiplier": {
+      "qualifier": "simple",
+      "type": "int"
     },
     "timenow": {
       "qualifier": "series",

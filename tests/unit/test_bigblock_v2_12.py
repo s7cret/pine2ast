@@ -91,10 +91,15 @@ plot(close)
 
 def test_v212_strategy_and_request_optional_metadata_are_accepted():
     src = """//@version=6
-strategy("strategy params")
-remote = request.security(syminfo.tickerid, "D", close, gaps = barmerge.gaps_off, lookahead = barmerge.lookahead_off, calc_bars_count = 100)
-strategy.entry("L", strategy.long, qty = 1.0, comment = "go", alert_message = "msg", disable_alert = false)
-strategy.exit("XL", from_entry = "L", limit = remote, stop = remote - 1, comment_profit = "tp", alert_loss = "sl")
+strategy("strategy params", shorttitle = "SP")
+is_minutes = timeframe.isminutes
+remote = request.security(syminfo.tickerid, "D", close, gaps = barmerge.gaps_off,
+    lookahead = barmerge.lookahead_off, calc_bars_count = 100)
+strategy.entry("L", strategy.long, qty = 1.0, comment = "go",
+    alert_message = "msg", disable_alert = false)
+strategy.exit("XL", from_entry = "L", limit = remote, stop = remote - 1,
+    comment_profit = "tp", alert_loss = "sl")
+strategy.close("L", alert_message = "flat", disable_alert = false)
 strategy.order("S", strategy.short, qty = 1.0, oca_name = "grp", comment = "ord")
 plot(remote)
 """
