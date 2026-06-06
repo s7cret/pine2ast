@@ -237,7 +237,9 @@ class SemanticAnalyzer:
             handler(self, node)
             return
         # Slightly slower path: structural check for mixed-type groups.
-        if isinstance(node, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)):
+        if isinstance(
+            node, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
             self._visit_structure(node)
             return
         if isinstance(node, (BreakStatement, ContinueStatement)):
@@ -344,9 +346,7 @@ class SemanticAnalyzer:
             owner_type = self._member_owner_type(node.target)
             if root_sym is None:
                 target_name = self._assignable_name(node.target) or "<expr>"
-                code = (
-                    codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
-                )
+                code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
                 self._diag(
                     Severity.ERROR,
                     code,
@@ -919,7 +919,9 @@ class SemanticAnalyzer:
             handler(self, expr)
             return
         # Structural group: control-flow expressions
-        if isinstance(expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)):
+        if isinstance(
+            expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
             self._visit_structure(expr)
 
     # -------------------------------------------------------------------------
@@ -1219,6 +1221,14 @@ class SemanticAnalyzer:
     def _validate_known_deferred_or_unsupported_builtin(
         self, name: str, entry: dict | None, expr: CallExpr
     ) -> None:
+        if entry is not None and entry.get("unsupported"):
+            self._diag(
+                Severity.ERROR,
+                entry.get("unsupported_diagnostic_code") or codes.UNSUPPORTED_FEATURE,
+                f"Builtin {name} is intentionally unsupported by this parser/semantic layer.",
+                expr.span,
+            )
+            return
         if entry is not None or "." not in name:
             return
         namespace, member = name.split(".", 1)
@@ -1417,7 +1427,7 @@ class SemanticAnalyzer:
             return
         # Allow series<any> arguments where series<T> is expected (e.g. input.source -> ta.sma)
         if actual.startswith("series<") and actual.endswith(">"):
-            inner = actual[len("series<"):-1]
+            inner = actual[len("series<") : -1]
             if inner == "any":
                 return
         if not self._is_assignable_type(expected, actual):
@@ -2120,6 +2130,7 @@ class SemanticAnalyzer:
     def _diag(self, severity: Severity, code: str, message: str, span: SourceSpan) -> None:
         if len(self.model.diagnostics) < self.max_diagnostics:
             self.model.diagnostics.append(Diagnostic(severity, code, message, span))
+
 
 # ------------------------------------------------------------------
 # Dispatch table for _visit_statement.  Populated by class body at

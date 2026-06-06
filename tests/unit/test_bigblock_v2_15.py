@@ -58,12 +58,11 @@ def test_v215_builtin_registry_schema_rejects_bad_variable_qualifier():
     assert_corrupt_registry_is_rejected(registry, "$.variables.bar_index.qualifier")
 
 
-def test_v215_builtin_coverage_taxonomy_separates_internal_official_and_deferred():
+def test_v215_builtin_coverage_taxonomy_separates_internal_official_and_unsupported():
     report = builtin_registry_coverage_report()
     assert report["coverage_basis"] == "internal_expected_snapshot_not_official_complete"
     assert report["missing_internal_expected_count"] == 0
     assert report["official_unmapped_count"] == 0
-    assert report["known_deferred_count"] > 0
     assert report["known_unsupported_count"] > 0
     assert "official_unmapped" in report["taxonomy"]
     line = report["namespaces"]["line"]

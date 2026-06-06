@@ -4412,19 +4412,19 @@
       "parameters": [
         {
           "name": "from",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "to",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "ignore_invalid_currency",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": false,
           "type": "bool"
         }
@@ -4478,6 +4478,41 @@
       "pine_version": "6",
       "returns": "series<any>",
       "scope": "any"
+    },
+    "request.economic": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.economic",
+      "parameters": [
+        {
+          "name": "country_code",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "series",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "request.earnings": {
       "allow_extra_positional": true,
@@ -4538,13 +4573,13 @@
         },
         {
           "name": "financial_id",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "period",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
@@ -4573,21 +4608,25 @@
     },
     "request.footprint": {
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "request.footprint",
       "parameters": [
         {
           "name": "ticks_per_row",
+          "qualifier_max": "simple",
           "required": true,
           "type": "int"
         },
         {
-          "name": "value_area",
-          "required": true,
+          "name": "va_percent",
+          "qualifier_max": "simple",
+          "required": false,
           "type": "float"
         },
         {
-          "name": "imbalance",
-          "required": true,
+          "name": "imbalance_percent",
+          "qualifier_max": "simple",
+          "required": false,
           "type": "float"
         }
       ],

@@ -24,6 +24,8 @@ _ALLOWED_FUNCTION_KEYS = {
     "pine_version",
     "returns",
     "scope",
+    "unsupported",
+    "unsupported_diagnostic_code",
 }
 _ALLOWED_PARAM_KEYS = {
     "name",
@@ -257,6 +259,13 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
         scope = _require_string(entry["scope"], f"$.functions.{name}.scope")
         if scope not in _ALLOWED_FUNCTION_SCOPES:
             raise _schema_error(f"$.functions.{name}.scope", f"unsupported scope {scope!r}")
+        if "unsupported" in entry and not isinstance(entry["unsupported"], bool):
+            raise _schema_error(f"$.functions.{name}.unsupported", "expected boolean")
+        if "unsupported_diagnostic_code" in entry:
+            _require_string(
+                entry["unsupported_diagnostic_code"],
+                f"$.functions.{name}.unsupported_diagnostic_code",
+            )
         _validate_type_ref(entry["returns"], f"$.functions.{name}.returns")
         _validate_parameters(entry["parameters"], f"$.functions.{name}.parameters")
         if "overloads" in entry:
@@ -340,8 +349,10 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     "request": {
         "currency_rate",
         "dividends",
+        "economic",
         "earnings",
         "financial",
+        "footprint",
         "quandl",
         "security",
         "security_lower_tf",
@@ -480,10 +491,9 @@ OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 
 # Known but deliberately deferred/unsupported surfaces. These are not counted as
 # missing internal coverage and should not be used to claim official completeness.
-KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
-    "request": {"economic"},
-}
+KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
+    "request": {"economic"},
     "runtime": {"error"},
 }
 
