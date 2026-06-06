@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import json
+from importlib.resources import files
+
 from pine2ast.reference_catalog.official_reference import (
     OfficialReferenceIndex,
     _extract_reference_categories,
     official_reference_gate_payload,
     official_reference_diff_payload,
 )
+from pine2ast.semantic.builtin_registry import load_builtin_registry
 
 
 def test_extract_reference_categories_uses_top_level_doc_names_only() -> None:
@@ -107,3 +111,23 @@ def test_official_reference_gate_fails_on_new_missing(monkeypatch, tmp_path) -> 
 
     assert payload["status"] == "fail"
     assert payload["new_missing_by_category"]["functions"] == ["request.security"]
+
+
+def test_official_collection_functions_are_registered_with_valid_schema() -> None:
+    index_path = files("pine2ast.reference_catalog").joinpath(
+        "official_pine_v6_reference_index.json"
+    )
+    official_index = json.loads(index_path.read_text(encoding="utf-8"))
+    official_collection_functions = {
+        name
+        for name in official_index["categories"]["functions"]
+        if name.startswith(("array.", "map.", "matrix."))
+    }
+
+    registry = load_builtin_registry()
+    missing = sorted(official_collection_functions - set(registry["functions"]))
+
+    assert missing == []
+    assert registry["functions"]["array.new_linefill"]["returns"] == "array<linefill>"
+    assert registry["functions"]["map.new<type,type>"]["returns"] == "map<any,any>"
+    assert registry["functions"]["matrix.eigenvalues"]["returns"] == "array<float>"

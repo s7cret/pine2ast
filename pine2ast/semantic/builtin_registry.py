@@ -58,6 +58,7 @@ _ALLOWED_TYPE_ATOMS = {
     "label",
     "label.style",
     "line",
+    "linefill",
     "line.style",
     "map",
     "matrix",

@@ -7241,6 +7241,1000 @@
       "pine_version": "6",
       "returns": "int",
       "scope": "any"
+    },
+    "array.binary_search_leftmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_leftmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.binary_search_rightmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_rightmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.covariance": {
+      "kind": "builtin",
+      "name": "array.covariance",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "y",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.every": {
+      "kind": "builtin",
+      "name": "array.every",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "array.fill": {
+      "kind": "builtin",
+      "name": "array.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "index_from",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "index_to",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "array.lastindexof": {
+      "kind": "builtin",
+      "name": "array.lastindexof",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.new<type>": {
+      "kind": "builtin",
+      "name": "array.new<type>",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.new_box": {
+      "kind": "builtin",
+      "name": "array.new_box",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<box>",
+      "scope": "any"
+    },
+    "array.new_label": {
+      "kind": "builtin",
+      "name": "array.new_label",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<label>",
+      "scope": "any"
+    },
+    "array.new_line": {
+      "kind": "builtin",
+      "name": "array.new_line",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<line>",
+      "scope": "any"
+    },
+    "array.new_linefill": {
+      "kind": "builtin",
+      "name": "array.new_linefill",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<linefill>",
+      "scope": "any"
+    },
+    "array.new_table": {
+      "kind": "builtin",
+      "name": "array.new_table",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "table"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<table>",
+      "scope": "any"
+    },
+    "array.percentile_linear_interpolation": {
+      "kind": "builtin",
+      "name": "array.percentile_linear_interpolation",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.percentile_nearest_rank": {
+      "kind": "builtin",
+      "name": "array.percentile_nearest_rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.some": {
+      "kind": "builtin",
+      "name": "array.some",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "array.standardize": {
+      "kind": "builtin",
+      "name": "array.standardize",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "map.new<type,type>": {
+      "kind": "builtin",
+      "name": "map.new<type,type>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<any,any>",
+      "scope": "any"
+    },
+    "map.put_all": {
+      "kind": "builtin",
+      "name": "map.put_all",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "map"
+        },
+        {
+          "name": "from",
+          "required": true,
+          "type": "map"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.add_col": {
+      "kind": "builtin",
+      "name": "matrix.add_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.add_row": {
+      "kind": "builtin",
+      "name": "matrix.add_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.col": {
+      "kind": "builtin",
+      "name": "matrix.col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.concat": {
+      "kind": "builtin",
+      "name": "matrix.concat",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.det": {
+      "kind": "builtin",
+      "name": "matrix.det",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.diff": {
+      "kind": "builtin",
+      "name": "matrix.diff",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvalues": {
+      "kind": "builtin",
+      "name": "matrix.eigenvalues",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvectors": {
+      "kind": "builtin",
+      "name": "matrix.eigenvectors",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.elements_count": {
+      "kind": "builtin",
+      "name": "matrix.elements_count",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.fill": {
+      "kind": "builtin",
+      "name": "matrix.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "from_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.inv": {
+      "kind": "builtin",
+      "name": "matrix.inv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.is_antidiagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_antidiagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_antisymmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_antisymmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_binary": {
+      "kind": "builtin",
+      "name": "matrix.is_binary",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_diagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_diagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_identity": {
+      "kind": "builtin",
+      "name": "matrix.is_identity",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_square": {
+      "kind": "builtin",
+      "name": "matrix.is_square",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_stochastic": {
+      "kind": "builtin",
+      "name": "matrix.is_stochastic",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_symmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_symmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_triangular": {
+      "kind": "builtin",
+      "name": "matrix.is_triangular",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_zero": {
+      "kind": "builtin",
+      "name": "matrix.is_zero",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.kron": {
+      "kind": "builtin",
+      "name": "matrix.kron",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.median": {
+      "kind": "builtin",
+      "name": "matrix.median",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mode": {
+      "kind": "builtin",
+      "name": "matrix.mode",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mult": {
+      "kind": "builtin",
+      "name": "matrix.mult",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.new<type>": {
+      "kind": "builtin",
+      "name": "matrix.new<type>",
+      "parameters": [
+        {
+          "name": "rows",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "columns",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.pinv": {
+      "kind": "builtin",
+      "name": "matrix.pinv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.pow": {
+      "kind": "builtin",
+      "name": "matrix.pow",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "power",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.rank": {
+      "kind": "builtin",
+      "name": "matrix.rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.remove_col": {
+      "kind": "builtin",
+      "name": "matrix.remove_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.remove_row": {
+      "kind": "builtin",
+      "name": "matrix.remove_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.row": {
+      "kind": "builtin",
+      "name": "matrix.row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.sort": {
+      "kind": "builtin",
+      "name": "matrix.sort",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "order",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.submatrix": {
+      "kind": "builtin",
+      "name": "matrix.submatrix",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "from_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.swap_columns": {
+      "kind": "builtin",
+      "name": "matrix.swap_columns",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "column2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.swap_rows": {
+      "kind": "builtin",
+      "name": "matrix.swap_rows",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.trace": {
+      "kind": "builtin",
+      "name": "matrix.trace",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
     }
   },
   "generated_at": null,
