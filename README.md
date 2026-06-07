@@ -10,7 +10,30 @@ SourceNormalizer -> Lexer -> LayoutProcessor -> Parser -> AST -> SemanticAnalyze
 
 Pine2AST owns parsing, normalized AST JSON, semantic diagnostics, compile-oracle evidence, and frontend-to-runtime compatibility metadata.
 
-It does **not** execute Pine code, run backtests, fetch market data, optimize parameters, emulate TradingView orders, or claim full Pine v6 / TradingView parity. The current claim is a verified Pine v6 subset/oracle snapshot backed by fixture-specific evidence.
+It does **not** execute Pine code, run backtests, fetch market data, optimize parameters, emulate TradingView orders, or claim full Pine v6 / TradingView parity. The current claim is a **verified Pine v6 subset** backed by fixture-specific evidence.
+
+## Scope & Status
+
+| Claim | Status |
+|---|---|
+| Pine v6 parsing (subset) | supported — see `tests/fixtures/real_world` and `tests/fixtures/compile_oracle` |
+| AST JSON contract `pain.ast_contract.v1` | stable |
+| Semantic diagnostics (subset) | supported — scopes, types, qualifiers, history refs, method receivers |
+| Builtin registry | versioned subset (475 functions / 161 variables / 213 methods / 239 constants) |
+| **Full TradingView Pine v6 parity** | **not claimed** |
+| Pine execution (bar-by-bar, var/varip, barstate.*) | out of scope — lives in `pinelib` runtime |
+| Backtest / broker emulator | out of scope |
+| `request.*` data fetching | local diagnostics only — runtime is data-layer concern |
+| Realtime tick / rollback semantics | not implemented |
+
+## Release compatibility
+
+| pine2ast | AST contract | Runtime contract | ast2python | pinelib |
+|---|---|---|---|---|
+| 2.17.x | `pain.ast_contract.v1` | `1.4` | 2.17.x | 2.17.x |
+| 2.18.x | `pain.ast_contract.v1` | `1.4` | 2.18.x | 2.18.x |
+
+A runtime contract mismatch is a deterministic `P2A_CONTRACT_VERSION_MISMATCH` error — never a silent fallback.
 
 Current compile-oracle snapshot:
 
