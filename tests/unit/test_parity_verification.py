@@ -18,7 +18,6 @@ Groups:
 
 from pathlib import Path
 
-import pytest
 
 from pine2ast import parse_code
 
