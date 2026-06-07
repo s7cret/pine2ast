@@ -227,7 +227,9 @@ class SemanticAnalyzer:
         for qualified_name, meta in self.registry.get("methods", {}).items():
             receiver_type = meta.get("receiver_type")
             # Extract just the method name (after last dot)
-            short_name = qualified_name.rsplit(".", 1)[-1] if "." in qualified_name else qualified_name
+            short_name = (
+                qualified_name.rsplit(".", 1)[-1] if "." in qualified_name else qualified_name
+            )
             if receiver_type:
                 if short_name in self._method_receivers:
                     existing = self._method_receivers[short_name]
@@ -239,13 +241,17 @@ class SemanticAnalyzer:
                     self._method_receivers[short_name] = receiver_type
             params = []
             for p in meta.get("parameters", []):
-                type_ref = TypeRef(span=zero, name=p.get("type", "unknown")) if p.get("type") else None
-                params.append(Parameter(
-                    span=zero,
-                    name=p.get("name", ""),
-                    type_ref=type_ref,
-                    explicit_qualifier=p.get("qualifier_max"),
-                ))
+                type_ref = (
+                    TypeRef(span=zero, name=p.get("type", "unknown")) if p.get("type") else None
+                )
+                params.append(
+                    Parameter(
+                        span=zero,
+                        name=p.get("name", ""),
+                        type_ref=type_ref,
+                        explicit_qualifier=p.get("qualifier_max"),
+                    )
+                )
             # Store in _builtin_method_params keyed by (method, receiver_type)
             if short_name not in self._builtin_method_params:
                 self._builtin_method_params[short_name] = {}
@@ -1884,7 +1890,10 @@ class SemanticAnalyzer:
             )
         # Look up params specific to the actual receiver type
         params = []
-        if method_name in self._builtin_method_params and actual in self._builtin_method_params[method_name]:
+        if (
+            method_name in self._builtin_method_params
+            and actual in self._builtin_method_params[method_name]
+        ):
             params = self._builtin_method_params[method_name][actual]
         elif method_name in self._function_params:
             params = self._function_params.get(method_name, [])

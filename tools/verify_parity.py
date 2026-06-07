@@ -180,9 +180,7 @@ def make_script(eid: str, builtins: dict) -> str | None:
     if "<" in eid:
         base = eid.split("<")[0]
         if "array" in base:
-            return (
-                '//@version=6\nindicator("V")\narr = array.new<float>()\nplot(array.size(arr))\n'
-            )
+            return '//@version=6\nindicator("V")\narr = array.new<float>()\nplot(array.size(arr))\n'
         if "map" in base:
             return '//@version=6\nindicator("V")\nm = map.new<string,float>()\nplot(0)\n'
         if "matrix" in base:
@@ -201,7 +199,6 @@ def main():
 
     items = matrix_data["items"]
     cat_lookup = {e["id"]: e for e in catalog_data["entries"]}
-
 
     verified = 0
     failed = 0

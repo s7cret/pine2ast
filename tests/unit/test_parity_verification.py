@@ -364,10 +364,7 @@ class TestVolumeRowType:
         import json
 
         with open(
-            Path(__file__).parent.parent.parent
-            / "pine2ast"
-            / "semantic"
-            / "builtins_v6.json"
+            Path(__file__).parent.parent.parent / "pine2ast" / "semantic" / "builtins_v6.json"
         ) as f:
             bv = json.load(f)
         assert "volume_row" in bv.get("types", {}), "volume_row not in types section"
