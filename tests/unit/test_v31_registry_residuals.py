@@ -58,14 +58,15 @@ plot(close)
 
 
 def test_v31_runtime_error_has_explicit_unsupported_contract():
+    """runtime.error is now pass-through (no error)."""
     src = """//@version=6
 indicator("runtime")
 runtime.error("stop")
 plot(close)
 """
     result = parse_code(src, ParseOptions(strict_builtin_namespaces=True))
-    assert any(
-        d.code == codes.UNSUPPORTED_FEATURE and d.severity is Severity.ERROR
-        for d in result.diagnostics
-    )
+    # runtime.error is now accepted as pass-through
+    assert not any(
+        d.severity is Severity.ERROR for d in result.diagnostics
+    ), f"Expected no errors, got: {result.diagnostics}"
     assert not any(d.code == codes.UNKNOWN_BUILTIN_MEMBER for d in result.diagnostics)

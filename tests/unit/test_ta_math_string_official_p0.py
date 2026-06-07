@@ -40,8 +40,9 @@ def test_ta_math_string_log_runtime_official_p0_ids_are_registered() -> None:
     assert registry["functions"]["ta.pivot_point_levels"]["returns"] == "array<float>"
     assert registry["functions"]["math.round_to_mintick"]["returns"] == "series<float>"
     assert registry["functions"]["str.format_time"]["returns"] == "series<string>"
-    assert registry["functions"]["runtime.error"]["unsupported"] is True
-    assert registry["functions"]["log.info"]["unsupported"] is True
+    # runtime.error and log.* are now pass-through (unsupported flag removed)
+    assert "unsupported" not in registry["functions"]["runtime.error"]
+    assert "unsupported" not in registry["functions"]["log.info"]
 
 
 def test_official_p0_ids_are_tracked_in_catalog_matrix_and_removed_from_gaps() -> None:
@@ -74,9 +75,12 @@ def test_official_p0_ids_are_tracked_in_catalog_matrix_and_removed_from_gaps() -
 
 
 def test_side_effect_functions_emit_explicit_unsupported_diagnostics() -> None:
+    """log.info/warning/error and runtime.error are now pass-through (no errors)."""
     source = """//@version=6
-indicator("unsupported side effects")
+indicator("side effects")
 log.info("value {0}", close)
+log.warning("warn")
+log.error("err")
 runtime.error("stop")
 plot(close)
 """
@@ -84,5 +88,6 @@ plot(close)
     result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
     errors = [d for d in result.diagnostics if d.severity is Severity.ERROR]
 
-    assert sum(d.code == codes.UNSUPPORTED_FEATURE for d in errors) >= 2
+    # log.* and runtime.error are now accepted as pass-through, no errors
+    assert not errors, f"Expected no errors, got: {errors}"
     assert not any(d.code == codes.UNKNOWN_BUILTIN_MEMBER for d in errors)

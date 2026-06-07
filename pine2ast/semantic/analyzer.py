@@ -4,6 +4,7 @@ from collections.abc import Callable
 from typing import Any, TypeAlias
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
+from pine2ast.ast.types import TypeRef
 from pine2ast.ast.nodes import (
     BinaryExpr,
     Block,
@@ -96,7 +97,8 @@ class SemanticAnalyzer:
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
         self._function_params: dict[str, list[Parameter]] = {}
-        self._method_receivers: dict[str, str] = {}
+        self._method_receivers: dict[str, str | set[str]] = {}
+        self._builtin_method_params: dict[str, dict[str, list[Parameter]]] = {}
         self._external_aliases: set[str] = set()
         self._udt_fields: dict[str, list[FieldDeclaration]] = {}
         self._enum_members: dict[str, set[str]] = {}
@@ -220,6 +222,36 @@ class SemanticAnalyzer:
         for name in self.registry.get("functions", {}):
             root = name.split(".", 1)[0]
             self._define(root, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
+        # Register builtin methods from the methods section
+        # Keys are "type.method" but _method_receivers uses just "method"
+        for qualified_name, meta in self.registry.get("methods", {}).items():
+            receiver_type = meta.get("receiver_type")
+            # Extract just the method name (after last dot)
+            short_name = qualified_name.rsplit(".", 1)[-1] if "." in qualified_name else qualified_name
+            if receiver_type:
+                if short_name in self._method_receivers:
+                    existing = self._method_receivers[short_name]
+                    if isinstance(existing, set):
+                        existing.add(receiver_type)
+                    else:
+                        self._method_receivers[short_name] = {existing, receiver_type}
+                else:
+                    self._method_receivers[short_name] = receiver_type
+            params = []
+            for p in meta.get("parameters", []):
+                type_ref = TypeRef(span=zero, name=p.get("type", "unknown")) if p.get("type") else None
+                params.append(Parameter(
+                    span=zero,
+                    name=p.get("name", ""),
+                    type_ref=type_ref,
+                    explicit_qualifier=p.get("qualifier_max"),
+                ))
+            # Store in _builtin_method_params keyed by (method, receiver_type)
+            if short_name not in self._builtin_method_params:
+                self._builtin_method_params[short_name] = {}
+            self._builtin_method_params[short_name][receiver_type] = params
+            # Also store in _function_params for backward compatibility (last wins)
+            self._function_params[short_name] = params
 
     def _analyze_declaration_statement(self, node: DeclarationStatement) -> None:
         self._script_type = node.script_type
@@ -505,7 +537,15 @@ class SemanticAnalyzer:
             self._define(node.name, SymbolKind.METHOD, node.span, "method", None)
             self._function_params[node.name] = node.parameters
             if node.receiver_type is not None:
-                self._method_receivers[node.name] = node.receiver_type.name
+                rt = node.receiver_type.name
+                if node.name in self._method_receivers:
+                    existing = self._method_receivers[node.name]
+                    if isinstance(existing, set):
+                        existing.add(rt)
+                    else:
+                        self._method_receivers[node.name] = {existing, rt}
+                else:
+                    self._method_receivers[node.name] = rt
         self._push_scope(ScopeKind.METHOD)
         if node.receiver_name:
             self._define(
@@ -1834,14 +1874,20 @@ class SemanticAnalyzer:
         if receiver_type is None:
             return
         actual = infer_type(expr.callee.object, self.model.symbols)
-        if actual not in {receiver_type, "unknown"}:
+        valid_receivers = receiver_type if isinstance(receiver_type, set) else {receiver_type}
+        if actual not in valid_receivers and actual != "unknown":
             self._diag(
                 Severity.ERROR,
                 codes.ARGUMENT_TYPE,
                 f"Method {method_name} expects receiver {receiver_type}, got {actual}.",
                 expr.callee.span,
             )
-        params = self._function_params.get(method_name, [])
+        # Look up params specific to the actual receiver type
+        params = []
+        if method_name in self._builtin_method_params and actual in self._builtin_method_params[method_name]:
+            params = self._builtin_method_params[method_name][actual]
+        elif method_name in self._function_params:
+            params = self._function_params.get(method_name, [])
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
     def _validate_user_function_call(self, name: str, expr: CallExpr) -> None:

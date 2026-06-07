@@ -4574,9 +4574,7 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
+      "scope": "any"
     },
     "log.info": {
       "allow_extra_positional": true,
@@ -4618,9 +4616,7 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
+      "scope": "any"
     },
     "log.warning": {
       "allow_extra_positional": true,
@@ -4662,9 +4658,7 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
+      "scope": "any"
     },
     "lowest": {
       "docs_url": null,
@@ -7308,9 +7302,7 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
+      "scope": "any"
     },
     "second": {
       "docs_url": null,
@@ -11579,11 +11571,11 @@
     },
     "extend.both": {
       "qualifier": "const",
-      "type": "string"
+      "type": "extend"
     },
     "extend.left": {
       "qualifier": "const",
-      "type": "string"
+      "type": "extend"
     },
     "extend.none": {
       "qualifier": "const",
@@ -12612,6 +12604,473 @@
     "yloc.price": {
       "qualifier": "const",
       "type": "string"
+    },
+    "strategy.risk.percent_of_equity": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.risk.cash": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.risk.fixed": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    }
+  },
+  "methods": {
+    "box.set_border_color": {
+      "receiver_type": "box",
+      "name": "set_border_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_border_style": {
+      "receiver_type": "box",
+      "name": "set_border_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "line.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_border_width": {
+      "receiver_type": "box",
+      "name": "set_border_width",
+      "parameters": [
+        {
+          "name": "width",
+          "type": "int",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text": {
+      "receiver_type": "box",
+      "name": "set_text",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_color": {
+      "receiver_type": "box",
+      "name": "set_text_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_halign": {
+      "receiver_type": "box",
+      "name": "set_text_halign",
+      "parameters": [
+        {
+          "name": "halign",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_valign": {
+      "receiver_type": "box",
+      "name": "set_text_valign",
+      "parameters": [
+        {
+          "name": "valign",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_size": {
+      "receiver_type": "box",
+      "name": "set_text_size",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.delete": {
+      "receiver_type": "box",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_extend": {
+      "receiver_type": "box",
+      "name": "set_extend",
+      "parameters": [
+        {
+          "name": "extend",
+          "type": "extend",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_top_left_point": {
+      "receiver_type": "box",
+      "name": "set_top_left_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_bottom_right_point": {
+      "receiver_type": "box",
+      "name": "set_bottom_right_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_text": {
+      "receiver_type": "label",
+      "name": "set_text",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_textcolor": {
+      "receiver_type": "label",
+      "name": "set_textcolor",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_tooltip": {
+      "receiver_type": "label",
+      "name": "set_tooltip",
+      "parameters": [
+        {
+          "name": "tooltip",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_size": {
+      "receiver_type": "label",
+      "name": "set_size",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_textalign": {
+      "receiver_type": "label",
+      "name": "set_textalign",
+      "parameters": [
+        {
+          "name": "align",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.delete": {
+      "receiver_type": "label",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_point": {
+      "receiver_type": "label",
+      "name": "set_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_style": {
+      "receiver_type": "label",
+      "name": "set_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "label.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_color": {
+      "receiver_type": "line",
+      "name": "set_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_width": {
+      "receiver_type": "line",
+      "name": "set_width",
+      "parameters": [
+        {
+          "name": "width",
+          "type": "int",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.delete": {
+      "receiver_type": "line",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_extend": {
+      "receiver_type": "line",
+      "name": "set_extend",
+      "parameters": [
+        {
+          "name": "extend",
+          "type": "extend",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_first_point": {
+      "receiver_type": "line",
+      "name": "set_first_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_second_point": {
+      "receiver_type": "line",
+      "name": "set_second_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_style": {
+      "receiver_type": "line",
+      "name": "set_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "line.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.delete": {
+      "receiver_type": "linefill",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.get_line1": {
+      "receiver_type": "linefill",
+      "name": "get_line1",
+      "parameters": [],
+      "returns": "line",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.get_line2": {
+      "receiver_type": "linefill",
+      "name": "get_line2",
+      "parameters": [],
+      "returns": "line",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.set_color": {
+      "receiver_type": "linefill",
+      "name": "set_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "chart.point.copy": {
+      "receiver_type": "chart.point",
+      "name": "copy",
+      "parameters": [],
+      "returns": "chart.point",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_bgcolor": {
+      "receiver_type": "box",
+      "name": "set_bgcolor",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
     }
   }
 }
