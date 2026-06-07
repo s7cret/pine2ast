@@ -33,7 +33,7 @@ def test_too_many_positional_args_for_strict_signature():
 indicator("T")
 plot(close, "C", color.red, 1, plot.style_line, display.all, 1, false, 0.0, false, true, 10, 123)
 """)
-    assert "P2A1404" in codes
+    assert "P2A1406" in codes
 
 
 def test_export_is_library_only():
@@ -43,7 +43,7 @@ export f(float x) =>
     x + 1
 plot(close)
 """)
-    assert "P2A1604" in codes
+    assert "P2A1901" in codes
 
 
 def test_export_allowed_in_library():

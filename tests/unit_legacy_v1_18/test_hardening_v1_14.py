@@ -11,7 +11,7 @@ def test_builtin_argument_type_mismatch_is_reported():
 indicator("T")
 plot(close, linewidth="wide")
 """)
-    assert "P2A1210" in codes
+    assert "P2A1406" in codes
 
 
 def test_builtin_argument_type_match_still_passes():
@@ -29,7 +29,7 @@ show = input.bool(true, group=g)
 sig = false
 sig := close > open
 plot(show and sig ? close : na)
-""") == []
+""") == ["P2A0103"]
 
 
 def test_footprint_and_alert_namespaces_are_registered():
@@ -47,7 +47,7 @@ indicator("T")
 x = not close
 plot(close)
 """)
-    assert "P2A1210" in codes
+    assert "P2A1801" in codes
 
 
 def test_arithmetic_operator_rejects_string_operand_but_allows_string_concat():
@@ -56,7 +56,7 @@ indicator("T")
 x = close + "bad"
 plot(close)
 """)
-    assert "P2A1210" in bad
+    assert "P2A1801" in bad
 
     ok = _error_codes("""//@version=6
 indicator("T")
@@ -73,7 +73,7 @@ int x = 1
 x := "bad"
 plot(close)
 """)
-    assert "P2A1210" in codes
+    assert "P2A1801" in codes
 
 
 def test_numeric_widening_still_allows_float_reassignment_from_int():
@@ -94,4 +94,4 @@ var Pivot p = Pivot.new(1)
 p.x := "bad"
 plot(close)
 """)
-    assert "P2A1210" in codes
+    assert "P2A1801" in codes

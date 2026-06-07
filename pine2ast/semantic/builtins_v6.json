@@ -76,6 +76,44 @@
       "returns": "int",
       "scope": "any"
     },
+    "array.binary_search_leftmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_leftmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "array.binary_search_rightmost": {
+      "kind": "builtin",
+      "name": "array.binary_search_rightmost",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "array.clear": {
       "kind": "builtin",
       "name": "array.clear",
@@ -121,6 +159,68 @@
       ],
       "pine_version": "6",
       "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.covariance": {
+      "kind": "builtin",
+      "name": "array.covariance",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "y",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.every": {
+      "kind": "builtin",
+      "name": "array.every",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "array.fill": {
+      "kind": "builtin",
+      "name": "array.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "index_from",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "index_to",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "array.first": {
@@ -333,6 +433,25 @@
       "returns": "any",
       "scope": "any"
     },
+    "array.lastindexof": {
+      "kind": "builtin",
+      "name": "array.lastindexof",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "array.max": {
       "docs_url": null,
       "kind": "builtin",
@@ -408,101 +527,6 @@
       ],
       "pine_version": "6",
       "returns": "array<any>",
-      "scope": "any"
-    },
-    "array.new_bool": {
-      "kind": "builtin",
-      "name": "array.new_bool",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "bool"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<bool>",
-      "scope": "any"
-    },
-    "array.new_float": {
-      "kind": "builtin",
-      "name": "array.new_float",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "float"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<float>",
-      "scope": "any"
-    },
-    "array.new_color": {
-      "kind": "builtin",
-      "name": "array.new_color",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "color"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<color>",
-      "scope": "any"
-    },
-    "array.new_int": {
-      "kind": "builtin",
-      "name": "array.new_int",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<int>",
-      "scope": "any"
-    },
-    "array.new_string": {
-      "kind": "builtin",
-      "name": "array.new_string",
-      "parameters": [
-        {
-          "name": "size",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "initial_value",
-          "required": false,
-          "type": "string"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "array<string>",
       "scope": "any"
     },
     "array.new<bool>": {
@@ -604,6 +628,215 @@
       "returns": "unknown",
       "scope": "any"
     },
+    "array.new<type>": {
+      "kind": "builtin",
+      "name": "array.new<type>",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "array.new_bool": {
+      "kind": "builtin",
+      "name": "array.new_bool",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<bool>",
+      "scope": "any"
+    },
+    "array.new_box": {
+      "kind": "builtin",
+      "name": "array.new_box",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<box>",
+      "scope": "any"
+    },
+    "array.new_color": {
+      "kind": "builtin",
+      "name": "array.new_color",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<color>",
+      "scope": "any"
+    },
+    "array.new_float": {
+      "kind": "builtin",
+      "name": "array.new_float",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "array.new_int": {
+      "kind": "builtin",
+      "name": "array.new_int",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.new_label": {
+      "kind": "builtin",
+      "name": "array.new_label",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "label"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<label>",
+      "scope": "any"
+    },
+    "array.new_line": {
+      "kind": "builtin",
+      "name": "array.new_line",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<line>",
+      "scope": "any"
+    },
+    "array.new_linefill": {
+      "kind": "builtin",
+      "name": "array.new_linefill",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<linefill>",
+      "scope": "any"
+    },
+    "array.new_string": {
+      "kind": "builtin",
+      "name": "array.new_string",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<string>",
+      "scope": "any"
+    },
+    "array.new_table": {
+      "kind": "builtin",
+      "name": "array.new_table",
+      "parameters": [
+        {
+          "name": "size",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "table"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<table>",
+      "scope": "any"
+    },
     "array.percentile": {
       "kind": "builtin",
       "name": "array.percentile",
@@ -615,6 +848,44 @@
         },
         {
           "name": "percentile",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.percentile_linear_interpolation": {
+      "kind": "builtin",
+      "name": "array.percentile_linear_interpolation",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "array.percentile_nearest_rank": {
+      "kind": "builtin",
+      "name": "array.percentile_nearest_rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "percentage",
           "required": true,
           "type": "float"
         }
@@ -784,6 +1055,20 @@
       "returns": "array<any>",
       "scope": "any"
     },
+    "array.some": {
+      "kind": "builtin",
+      "name": "array.some",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
     "array.sort": {
       "docs_url": null,
       "kind": "builtin",
@@ -831,6 +1116,20 @@
       ],
       "pine_version": "6",
       "returns": "array<int>",
+      "scope": "any"
+    },
+    "array.standardize": {
+      "kind": "builtin",
+      "name": "array.standardize",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
       "scope": "any"
     },
     "array.stdev": {
@@ -897,13 +1196,53 @@
       "scope": "any"
     },
     "barcolor": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "barcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        },
+        {
+          "name": "offset",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "editable",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "show_last",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "barssince": {
       "docs_url": null,
@@ -915,13 +1254,53 @@
       "scope": "any"
     },
     "bgcolor": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "bgcolor",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        },
+        {
+          "name": "offset",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "editable",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "show_last",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "bool": {
       "docs_url": null,
@@ -931,6 +1310,17 @@
       "pine_version": "6",
       "returns": "bool",
       "scope": "any"
+    },
+    "box": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.copy": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -945,7 +1335,9 @@
       ],
       "pine_version": "6",
       "returns": "box",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -960,7 +1352,77 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_bottom": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_bottom",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_left": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_left",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_right": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_right",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.get_top": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.get_top",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.new": {
       "allow_extra_positional": true,
@@ -1064,7 +1526,9 @@
       ],
       "pine_version": "6",
       "returns": "box",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_bgcolor": {
       "docs_url": null,
@@ -1085,7 +1549,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_color": {
       "docs_url": null,
@@ -1106,7 +1572,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_style": {
       "docs_url": null,
@@ -1127,7 +1595,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_border_width": {
       "docs_url": null,
@@ -1148,7 +1618,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_bottom": {
       "allow_extra_positional": true,
@@ -1168,7 +1640,31 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_bottom_right_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_bottom_right_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_extend": {
       "docs_url": null,
@@ -1189,7 +1685,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_left": {
       "allow_extra_positional": true,
@@ -1209,7 +1707,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_lefttop": {
       "docs_url": null,
@@ -1235,7 +1735,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_right": {
       "allow_extra_positional": true,
@@ -1255,7 +1757,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_rightbottom": {
       "docs_url": null,
@@ -1281,7 +1785,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text": {
       "docs_url": null,
@@ -1302,7 +1808,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_color": {
       "docs_url": null,
@@ -1323,7 +1831,78 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_font_family",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "font_family",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_formatting",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "formatting",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_halign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_halign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "halign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_size": {
       "docs_url": null,
@@ -1344,7 +1923,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_text_valign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_text_valign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "valign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_text_wrap": {
       "docs_url": null,
@@ -1365,7 +1969,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "box.set_top": {
       "allow_extra_positional": true,
@@ -1385,7 +1991,71 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_top_left_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_top_left_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "box.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "box.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "box"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "chart.point.copy": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "chart.point.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "chart.point",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.from_index": {
       "kind": "builtin",
@@ -1409,7 +2079,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.from_time": {
       "kind": "builtin",
@@ -1433,7 +2105,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.new": {
       "kind": "builtin",
@@ -1462,7 +2136,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "chart.point.now": {
       "kind": "builtin",
@@ -1481,7 +2157,9 @@
       ],
       "pine_version": "6",
       "returns": "chart.point",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color": {
       "docs_url": null,
@@ -1490,7 +2168,26 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.b": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.b",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.from_gradient": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -1500,7 +2197,7 @@
         {
           "name": "value",
           "required": true,
-          "type": "series<any>"
+          "type": "float"
         },
         {
           "name": "bottom_value",
@@ -1525,7 +2222,26 @@
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.g": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.g",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.new": {
       "kind": "builtin",
@@ -1539,27 +2255,81 @@
         {
           "name": "transp",
           "required": true,
-          "type": "int"
+          "type": "float"
         }
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.r": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.r",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "color.rgb": {
+      "allow_extra_positional": true,
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
       "name": "color.rgb",
       "parameters": [
         {
-          "name": "source",
+          "name": "red",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "green",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "blue",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "transp",
           "required": false,
-          "type": "series<any>"
+          "type": "float"
         }
       ],
       "pine_version": "6",
       "returns": "color",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "color.t": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "color.t",
+      "parameters": [
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "dayofmonth": {
       "docs_url": null,
@@ -1586,13 +2356,62 @@
       "scope": "any"
     },
     "fill": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "fill",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "plot1",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "plot2",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "editable",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "show_last",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "fillgaps",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "fixnan": {
       "docs_url": null,
@@ -1639,9 +2458,57 @@
       "returns": "float",
       "scope": "any"
     },
+    "footprint.get_row_by_price": {
+      "kind": "builtin",
+      "name": "footprint.get_row_by_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "volume_row",
+      "scope": "any"
+    },
+    "footprint.poc": {
+      "kind": "builtin",
+      "name": "footprint.poc",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.rows": {
+      "kind": "builtin",
+      "name": "footprint.rows",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "array<volume_row>",
+      "scope": "any"
+    },
     "footprint.sell_volume": {
       "kind": "builtin",
       "name": "footprint.sell_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.total_volume": {
+      "kind": "builtin",
+      "name": "footprint.total_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.vah": {
+      "kind": "builtin",
+      "name": "footprint.vah",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "footprint.val": {
+      "kind": "builtin",
+      "name": "footprint.val",
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
@@ -1657,13 +2524,60 @@
       "scope": "any"
     },
     "hline": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "hline",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "price",
+          "qualifier_max": "input",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "color",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "linestyle",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "linewidth",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "editable",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        }
+      ],
       "pine_version": "6",
       "returns": "hline",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "hour": {
       "docs_url": null,
@@ -1683,6 +2597,12 @@
           "name": "title",
           "qualifier_max": "const",
           "required": true,
+          "type": "string"
+        },
+        {
+          "name": "shorttitle",
+          "qualifier_max": "const",
+          "required": false,
           "type": "string"
         },
         {
@@ -1737,6 +2657,63 @@
       "pine_version": "6",
       "returns": "void",
       "scope": "global_only"
+    },
+    "input": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "input",
+      "parameters": [
+        {
+          "name": "defval",
+          "required": false,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "tooltip",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "active",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "any",
+      "scope": "any"
     },
     "input.bool": {
       "allow_extra_positional": true,
@@ -2417,6 +3394,17 @@
       "returns": "int",
       "scope": "any"
     },
+    "label": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "label.copy": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -2430,7 +3418,9 @@
       ],
       "pine_version": "6",
       "returns": "label",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -2445,7 +3435,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_text": {
       "kind": "builtin",
@@ -2459,7 +3451,9 @@
       ],
       "pine_version": "6",
       "returns": "string",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_x": {
       "kind": "builtin",
@@ -2473,7 +3467,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.get_y": {
       "kind": "builtin",
@@ -2487,7 +3483,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.new": {
       "allow_extra_positional": true,
@@ -2564,7 +3562,9 @@
       ],
       "pine_version": "6",
       "returns": "label",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_color": {
       "docs_url": null,
@@ -2585,7 +3585,31 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_size": {
       "docs_url": null,
@@ -2606,7 +3630,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_style": {
       "docs_url": null,
@@ -2627,7 +3653,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_text": {
       "allow_extra_positional": true,
@@ -2648,7 +3676,78 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_text_font_family",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "font_family",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_text_formatting",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "formatting",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_textalign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_textalign",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "textalign",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_textcolor": {
       "docs_url": null,
@@ -2669,7 +3768,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_tooltip": {
       "docs_url": null,
@@ -2690,7 +3791,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_x": {
       "allow_extra_positional": true,
@@ -2710,7 +3813,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_xy": {
       "docs_url": null,
@@ -2736,7 +3864,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "label.set_y": {
       "allow_extra_positional": true,
@@ -2756,7 +3886,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "label.set_yloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "label.set_yloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "label"
+        },
+        {
+          "name": "yloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "library": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -2774,6 +3929,34 @@
       "returns": "void",
       "scope": "global_only"
     },
+    "line": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.copy": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.copy",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "line.delete": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -2787,7 +3970,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_price": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -2807,7 +3992,9 @@
       ],
       "pine_version": "6",
       "returns": "series<float>",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_x1": {
       "kind": "builtin",
@@ -2821,7 +4008,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_x2": {
       "kind": "builtin",
@@ -2835,7 +4024,9 @@
       ],
       "pine_version": "6",
       "returns": "int",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_y1": {
       "kind": "builtin",
@@ -2849,7 +4040,9 @@
       ],
       "pine_version": "6",
       "returns": "float",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.get_y2": {
       "kind": "builtin",
@@ -2863,7 +4056,9 @@
       ],
       "pine_version": "6",
       "returns": "float",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.new": {
       "allow_extra_positional": true,
@@ -2929,7 +4124,9 @@
       ],
       "pine_version": "6",
       "returns": "line",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_color": {
       "docs_url": null,
@@ -2938,7 +4135,9 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_extend": {
       "docs_url": null,
@@ -2959,7 +4158,53 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_first_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_first_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_second_point": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_second_point",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "point",
+          "required": true,
+          "type": "chart.point"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_style": {
       "docs_url": null,
@@ -2980,7 +4225,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_width": {
       "docs_url": null,
@@ -3001,7 +4248,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_x1": {
       "docs_url": null,
@@ -3022,7 +4271,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_x2": {
       "docs_url": null,
@@ -3043,7 +4294,32 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "line.set_xloc": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "line.set_xloc",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "xloc",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_xy1": {
       "allow_extra_positional": true,
@@ -3069,7 +4345,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_xy2": {
       "allow_extra_positional": true,
@@ -3095,7 +4373,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_y1": {
       "docs_url": null,
@@ -3116,7 +4396,9 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any"
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "line.set_y2": {
       "docs_url": null,
@@ -3133,6 +4415,245 @@
           "name": "y",
           "required": true,
           "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "unknown",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.delete": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.delete",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.get_line1": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.get_line1",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.get_line2": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.get_line2",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "line",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.new",
+      "parameters": [
+        {
+          "name": "line1",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "line2",
+          "required": true,
+          "type": "line"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "linefill",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "linefill.set_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "linefill.set_color",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "linefill"
+        },
+        {
+          "name": "color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "any",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "log.error": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.error",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "log.info": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.info",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "log.warning": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "log.warning",
+      "overloads": [
+        {
+          "parameters": [
+            {
+              "name": "message",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "parameters": [
+            {
+              "name": "formatString",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "arg0",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "returns": "void"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
         }
       ],
       "pine_version": "6",
@@ -3252,6 +4773,14 @@
       "returns": "map<string,string>",
       "scope": "any"
     },
+    "map.new<type,type>": {
+      "kind": "builtin",
+      "name": "map.new<type,type>",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "map<any,any>",
+      "scope": "any"
+    },
     "map.put": {
       "kind": "builtin",
       "name": "map.put",
@@ -3270,6 +4799,25 @@
           "name": "value",
           "required": true,
           "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "map.put_all": {
+      "kind": "builtin",
+      "name": "map.put_all",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "map"
+        },
+        {
+          "name": "from",
+          "required": true,
+          "type": "map"
         }
       ],
       "pine_version": "6",
@@ -3557,6 +5105,20 @@
       "returns": "float",
       "scope": "any"
     },
+    "math.round_to_mintick": {
+      "kind": "builtin",
+      "name": "math.round_to_mintick",
+      "parameters": [
+        {
+          "name": "number",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "math.sign": {
       "kind": "builtin",
       "name": "math.sign",
@@ -3643,6 +5205,54 @@
       "returns": "float",
       "scope": "any"
     },
+    "matrix.add_col": {
+      "kind": "builtin",
+      "name": "matrix.add_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.add_row": {
+      "kind": "builtin",
+      "name": "matrix.add_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "array_id",
+          "required": false,
+          "type": "array"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "matrix.avg": {
       "kind": "builtin",
       "name": "matrix.avg",
@@ -3655,6 +5265,25 @@
       ],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "matrix.col": {
+      "kind": "builtin",
+      "name": "matrix.col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
       "scope": "any"
     },
     "matrix.columns": {
@@ -3671,6 +5300,25 @@
       "returns": "int",
       "scope": "any"
     },
+    "matrix.concat": {
+      "kind": "builtin",
+      "name": "matrix.concat",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
     "matrix.copy": {
       "kind": "builtin",
       "name": "matrix.copy",
@@ -3683,6 +5331,120 @@
       ],
       "pine_version": "6",
       "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.det": {
+      "kind": "builtin",
+      "name": "matrix.det",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.diff": {
+      "kind": "builtin",
+      "name": "matrix.diff",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvalues": {
+      "kind": "builtin",
+      "name": "matrix.eigenvalues",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
+      "scope": "any"
+    },
+    "matrix.eigenvectors": {
+      "kind": "builtin",
+      "name": "matrix.eigenvectors",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.elements_count": {
+      "kind": "builtin",
+      "name": "matrix.elements_count",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.fill": {
+      "kind": "builtin",
+      "name": "matrix.fill",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "from_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "matrix.get": {
@@ -3709,9 +5471,196 @@
       "returns": "any",
       "scope": "any"
     },
+    "matrix.inv": {
+      "kind": "builtin",
+      "name": "matrix.inv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.is_antidiagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_antidiagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_antisymmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_antisymmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_binary": {
+      "kind": "builtin",
+      "name": "matrix.is_binary",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_diagonal": {
+      "kind": "builtin",
+      "name": "matrix.is_diagonal",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_identity": {
+      "kind": "builtin",
+      "name": "matrix.is_identity",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_square": {
+      "kind": "builtin",
+      "name": "matrix.is_square",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_stochastic": {
+      "kind": "builtin",
+      "name": "matrix.is_stochastic",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_symmetric": {
+      "kind": "builtin",
+      "name": "matrix.is_symmetric",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_triangular": {
+      "kind": "builtin",
+      "name": "matrix.is_triangular",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.is_zero": {
+      "kind": "builtin",
+      "name": "matrix.is_zero",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "matrix.kron": {
+      "kind": "builtin",
+      "name": "matrix.kron",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
     "matrix.max": {
       "kind": "builtin",
       "name": "matrix.max",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.median": {
+      "kind": "builtin",
+      "name": "matrix.median",
       "parameters": [
         {
           "name": "id",
@@ -3735,6 +5684,39 @@
       ],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mode": {
+      "kind": "builtin",
+      "name": "matrix.mode",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.mult": {
+      "kind": "builtin",
+      "name": "matrix.mult",
+      "parameters": [
+        {
+          "name": "id1",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "id2",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
       "scope": "any"
     },
     "matrix.new<float>": {
@@ -3785,6 +5767,115 @@
       "returns": "matrix<int>",
       "scope": "any"
     },
+    "matrix.new<type>": {
+      "kind": "builtin",
+      "name": "matrix.new<type>",
+      "parameters": [
+        {
+          "name": "rows",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "columns",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "initial_value",
+          "required": false,
+          "type": "any"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "matrix.pinv": {
+      "kind": "builtin",
+      "name": "matrix.pinv",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.pow": {
+      "kind": "builtin",
+      "name": "matrix.pow",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "power",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<float>",
+      "scope": "any"
+    },
+    "matrix.rank": {
+      "kind": "builtin",
+      "name": "matrix.rank",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
+    "matrix.remove_col": {
+      "kind": "builtin",
+      "name": "matrix.remove_col",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
+    "matrix.remove_row": {
+      "kind": "builtin",
+      "name": "matrix.remove_row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
+      "scope": "any"
+    },
     "matrix.reshape": {
       "kind": "builtin",
       "name": "matrix.reshape",
@@ -3821,6 +5912,25 @@
       ],
       "pine_version": "6",
       "returns": "void",
+      "scope": "any"
+    },
+    "matrix.row": {
+      "kind": "builtin",
+      "name": "matrix.row",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<any>",
       "scope": "any"
     },
     "matrix.rows": {
@@ -3866,9 +5976,129 @@
       "returns": "void",
       "scope": "any"
     },
+    "matrix.sort": {
+      "kind": "builtin",
+      "name": "matrix.sort",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "order",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.submatrix": {
+      "kind": "builtin",
+      "name": "matrix.submatrix",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "from_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "to_row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "from_column",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "to_column",
+          "required": false,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "matrix<any>",
+      "scope": "any"
+    },
     "matrix.sum": {
       "kind": "builtin",
       "name": "matrix.sum",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "matrix.swap_columns": {
+      "kind": "builtin",
+      "name": "matrix.swap_columns",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "column1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "column2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.swap_rows": {
+      "kind": "builtin",
+      "name": "matrix.swap_rows",
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "matrix"
+        },
+        {
+          "name": "row1",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row2",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "matrix.trace": {
+      "kind": "builtin",
+      "name": "matrix.trace",
       "parameters": [
         {
           "name": "id",
@@ -3892,6 +6122,26 @@
       ],
       "pine_version": "6",
       "returns": "matrix<any>",
+      "scope": "any"
+    },
+    "max_bars_back": {
+      "kind": "builtin",
+      "name": "max_bars_back",
+      "parameters": [
+        {
+          "name": "var",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "num",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
       "scope": "any"
     },
     "minute": {
@@ -3942,8 +6192,10 @@
       "scope": "any"
     },
     "plot": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plot",
       "parameters": [
         {
@@ -3953,6 +6205,7 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
@@ -3968,51 +6221,104 @@
         },
         {
           "name": "style",
+          "qualifier_max": "input",
           "required": false,
           "type": "string"
         },
         {
           "name": "trackprice",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
-          "name": "transp",
+          "name": "histbase",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
           "type": "int"
         },
         {
+          "name": "join",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "linestyle",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "diagnostic_code": "P2A1403",
+          "name": "transp",
+          "removed_in": "6",
           "required": false,
           "type": "int"
         }
       ],
       "pine_version": "6",
       "returns": "plot",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotarrow": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotarrow",
       "parameters": [
         {
           "name": "series",
           "required": true,
-          "type": "bool"
+          "type": "float"
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
@@ -4028,42 +6334,70 @@
         },
         {
           "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
           "type": "int"
         },
         {
           "name": "minheight",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "maxheight",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotbar": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotbar",
       "parameters": [
         {
@@ -4088,6 +6422,7 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
@@ -4098,27 +6433,52 @@
         },
         {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotcandle": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotcandle",
       "parameters": [
         {
@@ -4143,6 +6503,7 @@
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
@@ -4157,122 +6518,188 @@
           "type": "color"
         },
         {
-          "name": "bordercolor",
-          "required": false,
-          "type": "color"
-        },
-        {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
           "name": "show_last",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "bordercolor",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
+    },
+    "plotchar": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+      "forbidden_in_local_blocks": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "plotchar",
+      "parameters": [
+        {
+          "name": "series",
+          "required": true,
+          "type": "any"
+        },
+        {
+          "name": "title",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "char",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "color",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "offset",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "text",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "textcolor",
+          "required": false,
+          "type": "color"
+        },
+        {
+          "name": "editable",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "size",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "diagnostic_code": "P2A1403",
+          "name": "transp",
+          "removed_in": "6",
           "required": false,
           "type": "int"
         }
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "global"
-    },
-    "plotchar": {
-      "forbidden_in_local_blocks": true,
-      "kind": "builtin",
-      "name": "plotchar",
-      "parameters": [
-        {
-          "name": "series",
-          "required": true,
-          "type": "bool"
-        },
-        {
-          "name": "title",
-          "required": false,
-          "type": "string"
-        },
-        {
-          "name": "char",
-          "required": false,
-          "type": "string"
-        },
-        {
-          "name": "location",
-          "required": false,
-          "type": "string"
-        },
-        {
-          "name": "color",
-          "required": false,
-          "type": "color"
-        },
-        {
-          "name": "size",
-          "required": false,
-          "type": "string"
-        },
-        {
-          "name": "text",
-          "required": false,
-          "type": "string"
-        },
-        {
-          "name": "textcolor",
-          "required": false,
-          "type": "color"
-        },
-        {
-          "name": "transp",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "editable",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "show_last",
-          "required": false,
-          "type": "int"
-        },
-        {
-          "name": "display",
-          "required": false,
-          "type": "int"
-        }
-      ],
-      "pine_version": "6",
-      "returns": "plot",
-      "scope": "global"
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "plotshape": {
+      "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "forbidden_in_local_blocks": true,
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "plotshape",
       "parameters": [
         {
           "name": "series",
           "required": true,
-          "type": "bool"
+          "type": "any"
         },
         {
           "name": "title",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
         {
           "name": "style",
+          "qualifier_max": "input",
           "required": false,
           "type": "string"
         },
         {
           "name": "location",
+          "qualifier_max": "input",
           "required": false,
           "type": "string"
         },
@@ -4282,12 +6709,14 @@
           "type": "color"
         },
         {
-          "name": "size",
+          "name": "offset",
+          "qualifier_max": "simple",
           "required": false,
-          "type": "string"
+          "type": "int"
         },
         {
           "name": "text",
+          "qualifier_max": "const",
           "required": false,
           "type": "string"
         },
@@ -4297,29 +6726,60 @@
           "type": "color"
         },
         {
-          "name": "transp",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "editable",
+          "qualifier_max": "input",
           "required": false,
           "type": "bool"
         },
         {
+          "name": "size",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "show_last",
+          "qualifier_max": "input",
           "required": false,
           "type": "int"
         },
         {
           "name": "display",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "display"
+        },
+        {
+          "name": "format",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "precision",
+          "qualifier_max": "input",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "force_overlay",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "diagnostic_code": "P2A1403",
+          "name": "transp",
+          "removed_in": "6",
           "required": false,
           "type": "int"
         }
       ],
       "pine_version": "6",
-      "returns": "plot",
-      "scope": "global"
+      "returns": "void",
+      "runtime_contract_unsupported": true,
+      "scope": "global",
+      "unsupported_diagnostic_code": "P2A1507"
     },
     "polyline.delete": {
       "kind": "builtin",
@@ -4406,19 +6866,19 @@
       "parameters": [
         {
           "name": "from",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "to",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "ignore_invalid_currency",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": false,
           "type": "bool"
         }
@@ -4519,6 +6979,41 @@
       "returns": "series<any>",
       "scope": "any"
     },
+    "request.economic": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "request.economic",
+      "parameters": [
+        {
+          "name": "country_code",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "field",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "gaps",
+          "qualifier_max": "simple",
+          "required": false,
+          "type": "barmerge.gaps"
+        },
+        {
+          "name": "ignore_invalid_symbol",
+          "qualifier_max": "series",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any",
+      "unsupported": true,
+      "unsupported_diagnostic_code": "P2A1507"
+    },
     "request.financial": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -4532,13 +7027,13 @@
         },
         {
           "name": "financial_id",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
         {
           "name": "period",
-          "qualifier_max": "const",
+          "qualifier_max": "series",
           "required": true,
           "type": "string"
         },
@@ -4567,21 +7062,25 @@
     },
     "request.footprint": {
       "kind": "builtin",
+      "metadata_version": 2,
       "name": "request.footprint",
       "parameters": [
         {
           "name": "ticks_per_row",
+          "qualifier_max": "simple",
           "required": true,
           "type": "int"
         },
         {
-          "name": "value_area",
-          "required": true,
+          "name": "va_percent",
+          "qualifier_max": "simple",
+          "required": false,
           "type": "float"
         },
         {
-          "name": "imbalance",
-          "required": true,
+          "name": "imbalance_percent",
+          "qualifier_max": "simple",
+          "required": false,
           "type": "float"
         }
       ],
@@ -4791,6 +7290,20 @@
       "returns": "series<any>",
       "scope": "any"
     },
+    "runtime.error": {
+      "kind": "builtin",
+      "name": "runtime.error",
+      "parameters": [
+        {
+          "name": "message",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "second": {
       "docs_url": null,
       "kind": "builtin",
@@ -4839,6 +7352,30 @@
       "returns": "string",
       "scope": "any"
     },
+    "str.format_time": {
+      "kind": "builtin",
+      "name": "str.format_time",
+      "parameters": [
+        {
+          "name": "time",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "format",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
+      "scope": "any"
+    },
     "str.length": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -4867,6 +7404,68 @@
       ],
       "pine_version": "6",
       "returns": "string",
+      "scope": "any"
+    },
+    "str.match": {
+      "kind": "builtin",
+      "name": "str.match",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "regex",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
+      "scope": "any"
+    },
+    "str.pos": {
+      "kind": "builtin",
+      "name": "str.pos",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "str",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<int>",
+      "scope": "any"
+    },
+    "str.repeat": {
+      "kind": "builtin",
+      "name": "str.repeat",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "repeat",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "separator",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
       "scope": "any"
     },
     "str.replace": {
@@ -4945,6 +7544,20 @@
       "returns": "string",
       "scope": "any"
     },
+    "str.trim": {
+      "kind": "builtin",
+      "name": "str.trim",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<string>",
+      "scope": "any"
+    },
     "str.upper": {
       "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
       "kind": "builtin",
@@ -4972,6 +7585,12 @@
           "type": "string"
         },
         {
+          "name": "shorttitle",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "overlay",
           "qualifier_max": "const",
           "required": false,
@@ -4990,16 +7609,40 @@
           "type": "int"
         },
         {
-          "name": "initial_capital",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "float"
-        },
-        {
-          "name": "currency",
+          "name": "scale",
           "qualifier_max": "const",
           "required": false,
           "type": "string"
+        },
+        {
+          "name": "pyramiding",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "calc_on_order_fills",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "calc_on_every_tick",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "max_bars_back",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "backtest_fill_limits_assumption",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int"
         },
         {
           "name": "default_qty_type",
@@ -5014,7 +7657,19 @@
           "type": "float"
         },
         {
-          "name": "pyramiding",
+          "name": "initial_capital",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float"
+        },
+        {
+          "name": "currency",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "slippage",
           "qualifier_max": "const",
           "required": false,
           "type": "int"
@@ -5032,40 +7687,16 @@
           "type": "float"
         },
         {
-          "name": "slippage",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "int"
-        },
-        {
           "name": "process_orders_on_close",
           "qualifier_max": "const",
           "required": false,
           "type": "bool"
         },
         {
-          "name": "calc_on_order_fills",
+          "name": "close_entries_rule",
           "qualifier_max": "const",
           "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "calc_on_every_tick",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "use_bar_magnifier",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "bool"
-        },
-        {
-          "name": "backtest_fill_limits_assumption",
-          "qualifier_max": "const",
-          "required": false,
-          "type": "int"
+          "type": "string"
         },
         {
           "name": "margin_long",
@@ -5080,10 +7711,12 @@
           "type": "float"
         },
         {
-          "name": "max_bars_back",
+          "name": "explicit_plot_zorder",
           "qualifier_max": "const",
           "required": false,
-          "type": "int"
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
         },
         {
           "name": "max_lines_count",
@@ -5104,10 +7737,56 @@
           "type": "int"
         },
         {
+          "name": "calc_bars_count",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "int",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "risk_free_rate",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "float",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "use_bar_magnifier",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
+          "name": "fill_orders_on_standard_ohlc",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
+        },
+        {
           "name": "max_polylines_count",
           "qualifier_max": "const",
           "required": false,
           "type": "int"
+        },
+        {
+          "name": "dynamic_requests",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "behind_chart",
+          "qualifier_max": "const",
+          "required": false,
+          "type": "bool",
+          "unsupported": true,
+          "unsupported_diagnostic_code": "P2A1507"
         }
       ],
       "pine_version": "6",
@@ -5117,7 +7796,22 @@
     "strategy.cancel": {
       "kind": "builtin",
       "name": "strategy.cancel",
-      "parameters": [],
+      "parameters": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -5125,7 +7819,17 @@
     "strategy.cancel_all": {
       "kind": "builtin",
       "name": "strategy.cancel_all",
-      "parameters": [],
+      "parameters": [
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
+        }
+      ],
       "pine_version": "6",
       "returns": "void",
       "scope": "any"
@@ -5140,6 +7844,11 @@
           "type": "string"
         },
         {
+          "name": "comment",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "qty",
           "required": false,
           "type": "float"
@@ -5150,12 +7859,26 @@
           "type": "float"
         },
         {
-          "name": "comment",
+          "name": "alert_message",
           "required": false,
           "type": "string"
         },
         {
           "name": "immediately",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
           "required": false,
           "type": "bool"
         }
@@ -5174,7 +7897,26 @@
           "type": "string"
         },
         {
+          "name": "alert_message",
+          "required": false,
+          "type": "string"
+        },
+        {
           "name": "immediately",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "name": "disable_alert",
+          "required": false,
+          "type": "bool"
+        },
+        {
+          "deprecated_in": null,
+          "diagnostic_code": "P2A1501",
+          "name": "when",
+          "removed_in": "6",
+          "replacement": "Use explicit if block around strategy call where applicable",
           "required": false,
           "type": "bool"
         }
@@ -5379,10 +8121,42 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.closedtrades.max_drawdown_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_drawdown_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
     "strategy.closedtrades.max_runup": {
       "docs_url": null,
       "kind": "builtin",
       "name": "strategy.closedtrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.closedtrades.max_runup_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.closedtrades.max_runup_percent",
       "parameters": [
         {
           "name": "trade_num",
@@ -5443,6 +8217,48 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.convert_to_account": {
+      "kind": "builtin",
+      "name": "strategy.convert_to_account",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "strategy.convert_to_symbol": {
+      "kind": "builtin",
+      "name": "strategy.convert_to_symbol",
+      "parameters": [
+        {
+          "name": "value",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "strategy.default_entry_qty": {
+      "kind": "builtin",
+      "name": "strategy.default_entry_qty",
+      "parameters": [
+        {
+          "name": "fill_price",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
     "strategy.entry": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -5456,7 +8272,7 @@
         {
           "name": "direction",
           "required": true,
-          "type": "strategy_direction"
+          "type": "strategy.direction"
         },
         {
           "name": "qty",
@@ -5504,7 +8320,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -5631,7 +8449,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -5756,10 +8576,42 @@
       "returns": "float",
       "scope": "strategy_readonly"
     },
+    "strategy.opentrades.max_drawdown_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_drawdown_percent",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
     "strategy.opentrades.max_runup": {
       "docs_url": null,
       "kind": "builtin",
       "name": "strategy.opentrades.max_runup",
+      "parameters": [
+        {
+          "name": "trade_num",
+          "qualifier_max": "series",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "strategy_readonly"
+    },
+    "strategy.opentrades.max_runup_percent": {
+      "docs_url": null,
+      "kind": "builtin",
+      "name": "strategy.opentrades.max_runup_percent",
       "parameters": [
         {
           "name": "trade_num",
@@ -5833,7 +8685,7 @@
         {
           "name": "direction",
           "required": true,
-          "type": "strategy_direction"
+          "type": "strategy.direction"
         },
         {
           "name": "qty",
@@ -5881,7 +8733,9 @@
           "diagnostic_code": "P2A1501",
           "name": "when",
           "removed_in": "6",
-          "replacement": "Use explicit if block around strategy call where applicable"
+          "replacement": "Use explicit if block around strategy call where applicable",
+          "required": false,
+          "type": "bool"
         }
       ],
       "pine_version": "6",
@@ -5998,10 +8852,43 @@
       "returns": "void",
       "scope": "any"
     },
+    "strategy.risk.max_position_size": {
+      "docs_url": null,
+      "kind": "builtin",
+      "metadata_version": 2,
+      "name": "strategy.risk.max_position_size",
+      "parameters": [
+        {
+          "name": "contracts",
+          "qualifier_max": "const",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "string": {
       "docs_url": null,
       "kind": "builtin",
       "name": "string",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "syminfo.prefix": {
+      "kind": "builtin",
+      "name": "syminfo.prefix",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "syminfo.ticker": {
+      "kind": "builtin",
+      "name": "syminfo.ticker",
       "parameters": [],
       "pine_version": "6",
       "returns": "string",
@@ -6135,6 +9022,25 @@
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "ta.cog": {
+      "kind": "builtin",
+      "name": "ta.cog",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
       "scope": "any"
     },
     "ta.correlation": {
@@ -6397,6 +9303,39 @@
       "returns": "tuple<float,float,float>",
       "scope": "any"
     },
+    "ta.max": {
+      "kind": "builtin",
+      "name": "ta.max",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.median": {
+      "kind": "builtin",
+      "name": "ta.median",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.mfi": {
       "kind": "builtin",
       "name": "ta.mfi",
@@ -6416,6 +9355,39 @@
       "returns": "float",
       "scope": "any"
     },
+    "ta.min": {
+      "kind": "builtin",
+      "name": "ta.min",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.mode": {
+      "kind": "builtin",
+      "name": "ta.mode",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.mom": {
       "kind": "builtin",
       "name": "ta.mom",
@@ -6432,12 +9404,87 @@
       "returns": "float",
       "scope": "any"
     },
+    "ta.percentile_linear_interpolation": {
+      "kind": "builtin",
+      "name": "ta.percentile_linear_interpolation",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "percentage",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.percentile_nearest_rank": {
+      "kind": "builtin",
+      "name": "ta.percentile_nearest_rank",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "percentage",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "float"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
     "ta.percentrank": {
       "kind": "builtin",
       "name": "ta.percentrank",
       "parameters": [],
       "pine_version": "6",
       "returns": "float",
+      "scope": "any"
+    },
+    "ta.pivot_point_levels": {
+      "kind": "builtin",
+      "name": "ta.pivot_point_levels",
+      "parameters": [
+        {
+          "name": "type",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "anchor",
+          "required": true,
+          "type": "bool"
+        },
+        {
+          "name": "developing",
+          "required": false,
+          "type": "bool"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "array<float>",
       "scope": "any"
     },
     "ta.pivothigh": {
@@ -6454,6 +9501,45 @@
       "kind": "builtin",
       "name": "ta.pivotlow",
       "parameters": [],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.range": {
+      "kind": "builtin",
+      "name": "ta.range",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<float>",
+      "scope": "any"
+    },
+    "ta.rci": {
+      "kind": "builtin",
+      "name": "ta.rci",
+      "parameters": [
+        {
+          "name": "source",
+          "required": true,
+          "type": "float"
+        },
+        {
+          "name": "length",
+          "qualifier_max": "simple",
+          "required": true,
+          "type": "int"
+        }
+      ],
       "pine_version": "6",
       "returns": "series<float>",
       "scope": "any"
@@ -6745,6 +9831,15 @@
       "returns": "float",
       "scope": "any"
     },
+    "table": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "table",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "table",
+      "scope": "any"
+    },
     "table.cell": {
       "docs_url": null,
       "kind": "builtin",
@@ -6935,6 +10030,101 @@
       "returns": "void",
       "scope": "any"
     },
+    "table.cell_set_text_font_family": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_font_family",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_font_family",
+          "required": true,
+          "type": "string",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_formatting": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_formatting",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_formatting",
+          "required": true,
+          "type": "string",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_halign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_halign",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_halign",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "table.cell_set_text_size": {
       "docs_url": null,
       "kind": "builtin",
@@ -6958,6 +10148,68 @@
         },
         {
           "name": "text_size",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_text_valign": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_text_valign",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "text_valign",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.cell_set_tooltip": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.cell_set_tooltip",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "column",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "row",
+          "required": true,
+          "type": "int"
+        },
+        {
+          "name": "tooltip",
           "required": true,
           "type": "string"
         }
@@ -7113,6 +10365,113 @@
       "returns": "table",
       "scope": "any"
     },
+    "table.set_bgcolor": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_bgcolor",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "bgcolor",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_border_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_border_color",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "border_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_border_width": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_border_width",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "border_width",
+          "required": true,
+          "type": "int",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_frame_color": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_frame_color",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "frame_color",
+          "required": true,
+          "type": "color"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
+    "table.set_frame_width": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "metadata_version": 4,
+      "name": "table.set_frame_width",
+      "parameters": [
+        {
+          "name": "table_id",
+          "required": true,
+          "type": "table"
+        },
+        {
+          "name": "frame_width",
+          "required": true,
+          "type": "int",
+          "qualifier_max": "const"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "void",
+      "scope": "any"
+    },
     "table.set_position": {
       "allow_extra_positional": true,
       "kind": "builtin",
@@ -7133,6 +10492,87 @@
       ],
       "pine_version": "6",
       "returns": "void",
+      "scope": "any"
+    },
+    "ticker.heikinashi": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.heikinashi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.inherit": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.inherit",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.kagi": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.kagi",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.linebreak": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.linebreak",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.modify": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.modify",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.new": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.new",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.pointfigure": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.pointfigure",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.renko": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.renko",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "ticker.standard": {
+      "allow_extra_positional": true,
+      "kind": "builtin",
+      "name": "ticker.standard",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "string",
       "scope": "any"
     },
     "time": {
@@ -7193,6 +10633,34 @@
       "returns": "bool",
       "scope": "any"
     },
+    "timeframe.from_seconds": {
+      "kind": "builtin",
+      "name": "timeframe.from_seconds",
+      "parameters": [
+        {
+          "name": "seconds",
+          "required": true,
+          "type": "int"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "string",
+      "scope": "any"
+    },
+    "timeframe.in_seconds": {
+      "kind": "builtin",
+      "name": "timeframe.in_seconds",
+      "parameters": [
+        {
+          "name": "timeframe",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "timestamp": {
       "docs_url": null,
       "kind": "builtin",
@@ -7211,6 +10679,89 @@
       "returns": "series<any>",
       "scope": "any"
     },
+    "volume_row.buy_volume": {
+      "kind": "builtin",
+      "name": "volume_row.buy_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.delta": {
+      "kind": "builtin",
+      "name": "volume_row.delta",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.down_price": {
+      "kind": "builtin",
+      "name": "volume_row.down_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.has_buy_imbalance": {
+      "kind": "builtin",
+      "name": "volume_row.has_buy_imbalance",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "volume_row.has_sell_imbalance": {
+      "kind": "builtin",
+      "name": "volume_row.has_sell_imbalance",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "bool",
+      "scope": "any"
+    },
+    "volume_row.sell_volume": {
+      "kind": "builtin",
+      "name": "volume_row.sell_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.total_volume": {
+      "kind": "builtin",
+      "name": "volume_row.total_volume",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "volume_row.up_price": {
+      "kind": "builtin",
+      "name": "volume_row.up_price",
+      "parameters": [],
+      "pine_version": "6",
+      "returns": "float",
+      "scope": "any"
+    },
+    "weekofyear": {
+      "kind": "builtin",
+      "name": "weekofyear",
+      "parameters": [
+        {
+          "name": "time",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "name": "timezone",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "int",
+      "scope": "any"
+    },
     "year": {
       "docs_url": null,
       "kind": "builtin",
@@ -7223,29 +10774,36 @@
   },
   "generated_at": null,
   "namespaces": {
+    "adjustment": {},
     "alert": {},
     "array": {},
+    "backadjustment": {},
     "barmerge": {},
     "barstate": {},
     "box": {},
     "chart": {},
-    "chart.point": {
-      "kind": "namespace",
-      "name": "chart.point",
-      "pine_version": "6"
-    },
+    "chart.point": {},
     "color": {},
     "currency": {},
+    "dayofweek": {},
     "display": {},
+    "dividends": {},
+    "earnings": {},
     "extend": {},
+    "font": {},
     "format": {},
     "input": {},
     "label": {},
     "line": {},
+    "linefill": {},
     "location": {},
+    "log": {
+      "name": "log"
+    },
     "map": {},
     "math": {},
     "matrix": {},
+    "order": {},
     "plot": {},
     "polyline": {
       "kind": "namespace",
@@ -7257,7 +10815,9 @@
     "runtime": {
       "name": "runtime"
     },
+    "scale": {},
     "session": {},
+    "settlement_as_close": {},
     "shape": {},
     "size": {},
     "splits": {
@@ -7278,14 +10838,25 @@
       "name": "strategy.commission",
       "pine_version": "6"
     },
+    "strategy.oca": {
+      "kind": "namespace",
+      "name": "strategy.oca",
+      "pine_version": "6"
+    },
     "strategy.opentrades": {
       "kind": "namespace",
       "name": "strategy.opentrades",
       "pine_version": "6"
     },
+    "strategy.risk": {
+      "kind": "namespace",
+      "name": "strategy.risk",
+      "pine_version": "6"
+    },
     "syminfo": {},
     "ta": {},
     "table": {},
+    "text": {},
     "ticker": {},
     "time": {},
     "timeframe": {},
@@ -7435,6 +11006,9 @@
       "name": "text.align",
       "pine_version": "6"
     },
+    "volume_row": {
+      "name": "volume_row"
+    },
     "xloc": {
       "kind": "type",
       "name": "xloc",
@@ -7447,6 +11021,18 @@
     }
   },
   "variables": {
+    "adjustment.dividends": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "adjustment.none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "adjustment.splits": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "alert.freq_all": {
       "qualifier": "const",
       "type": "string"
@@ -7456,6 +11042,22 @@
       "type": "string"
     },
     "alert.freq_once_per_bar_close": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "ask": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "backadjustment.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "backadjustment.off": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "backadjustment.on": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7507,6 +11109,58 @@
       "qualifier": "series",
       "type": "bool"
     },
+    "bid": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "box.all": {
+      "qualifier": "series",
+      "type": "array<box>"
+    },
+    "chart.bg_color": {
+      "qualifier": "input",
+      "type": "color"
+    },
+    "chart.fg_color": {
+      "qualifier": "input",
+      "type": "color"
+    },
+    "chart.is_heikinashi": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_kagi": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_linebreak": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_pnf": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_range": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_renko": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.is_standard": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "chart.left_visible_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "chart.right_visible_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "close": {
       "qualifier": "series",
       "type": "float"
@@ -7523,6 +11177,10 @@
       "qualifier": "const",
       "type": "color"
     },
+    "color.fuchsia": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.gray": {
       "qualifier": "const",
       "type": "color"
@@ -7535,11 +11193,35 @@
       "qualifier": "const",
       "type": "color"
     },
+    "color.maroon": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.navy": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.olive": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.orange": {
       "qualifier": "const",
       "type": "color"
     },
+    "color.purple": {
+      "qualifier": "const",
+      "type": "color"
+    },
     "color.red": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.silver": {
+      "qualifier": "const",
+      "type": "color"
+    },
+    "color.teal": {
       "qualifier": "const",
       "type": "color"
     },
@@ -7551,7 +11233,139 @@
       "qualifier": "const",
       "type": "color"
     },
+    "currency.AED": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ARS": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.AUD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BDT": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BHD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BRL": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.BTC": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CAD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CHF": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CLP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CNY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.COP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.CZK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.DKK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.EGP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ETH": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "currency.EUR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.GBP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.HKD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.HUF": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.IDR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ILS": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.INR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ISK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.JPY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KES": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KRW": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.KWD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.LKR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MAD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MXN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.MYR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.NGN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.NOK": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7559,7 +11373,123 @@
       "qualifier": "const",
       "type": "string"
     },
+    "currency.NZD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PEN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PHP": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PKR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.PLN": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.QAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RON": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RSD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.RUB": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SEK": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.SGD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.THB": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TND": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TRY": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.TWD": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "currency.USD": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.USDT": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.VES": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.VND": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "currency.ZAR": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofmonth": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dayofweek": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dayofweek.friday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.monday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.saturday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.sunday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.thursday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.tuesday": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "dayofweek.wednesday": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7579,6 +11509,10 @@
       "qualifier": "const",
       "type": "display"
     },
+    "display.pine_screener": {
+      "qualifier": "const",
+      "type": "display"
+    },
     "display.price_scale": {
       "qualifier": "const",
       "type": "display"
@@ -7586,6 +11520,18 @@
     "display.status_line": {
       "qualifier": "const",
       "type": "display"
+    },
+    "dividends.future_amount": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "dividends.future_ex_date": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "dividends.future_pay_date": {
+      "qualifier": "series",
+      "type": "int"
     },
     "dividends.gross": {
       "qualifier": "const",
@@ -7603,9 +11549,33 @@
       "qualifier": "const",
       "type": "earnings.field"
     },
+    "earnings.future_eps": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "earnings.future_period_end_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "earnings.future_revenue": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "earnings.future_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "earnings.standardized": {
       "qualifier": "const",
       "type": "earnings.field"
+    },
+    "extend.both": {
+      "qualifier": "const",
+      "type": "extend"
+    },
+    "extend.left": {
+      "qualifier": "const",
+      "type": "extend"
     },
     "extend.none": {
       "qualifier": "const",
@@ -7615,7 +11585,27 @@
       "qualifier": "const",
       "type": "extend"
     },
+    "false": {
+      "qualifier": "const",
+      "type": "bool"
+    },
+    "font.family_default": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "font.family_monospace": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "format.mintick": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "format.percent": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7639,6 +11629,30 @@
       "qualifier": "series",
       "type": "float"
     },
+    "hlcc4": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "hline.style_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hline.style_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "hour": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "label.all": {
+      "qualifier": "series",
+      "type": "array<label>"
+    },
     "label.style_arrowdown": {
       "qualifier": "const",
       "type": "label.style"
@@ -7655,7 +11669,15 @@
       "qualifier": "const",
       "type": "label.style"
     },
+    "label.style_diamond": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
     "label.style_flag": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_label_center": {
       "qualifier": "const",
       "type": "label.style"
     },
@@ -7695,6 +11717,14 @@
       "qualifier": "const",
       "type": "label.style"
     },
+    "label.style_square": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
+    "label.style_text_outline": {
+      "qualifier": "const",
+      "type": "label.style"
+    },
     "label.style_triangledown": {
       "qualifier": "const",
       "type": "label.style"
@@ -7710,6 +11740,14 @@
     "last_bar_index": {
       "qualifier": "series",
       "type": "int"
+    },
+    "last_bar_time": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "line.all": {
+      "qualifier": "series",
+      "type": "array<line>"
     },
     "line.style_arrow_both": {
       "qualifier": "const",
@@ -7735,7 +11773,15 @@
       "qualifier": "const",
       "type": "line.style"
     },
+    "linefill.all": {
+      "qualifier": "series",
+      "type": "array<linefill>"
+    },
     "location.abovebar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.absolute": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7743,9 +11789,45 @@
       "qualifier": "const",
       "type": "string"
     },
+    "location.bottom": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "location.top": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "low": {
       "qualifier": "series",
       "type": "float"
+    },
+    "math.e": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.phi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.pi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "math.rphi": {
+      "qualifier": "const",
+      "type": "float"
+    },
+    "minute": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "month": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "na": {
+      "qualifier": "const",
+      "type": "unknown"
     },
     "ohlc4": {
       "qualifier": "series",
@@ -7755,7 +11837,31 @@
       "qualifier": "series",
       "type": "float"
     },
+    "order.ascending": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "order.descending": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dashed": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_dotted": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.linestyle_solid": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "plot.style_area": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_areabr": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7783,6 +11889,26 @@
       "qualifier": "const",
       "type": "string"
     },
+    "plot.style_stepline": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_stepline_diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "plot.style_steplinebr": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "polyline.all": {
+      "qualifier": "const",
+      "type": "array<polyline>"
+    },
+    "position.bottom_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "position.bottom_left": {
       "qualifier": "const",
       "type": "table.position"
@@ -7803,6 +11929,10 @@
       "qualifier": "const",
       "type": "table.position"
     },
+    "position.top_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "position.top_left": {
       "qualifier": "const",
       "type": "table.position"
@@ -7811,11 +11941,127 @@
       "qualifier": "const",
       "type": "table.position"
     },
+    "scale.left": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "scale.none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "scale.right": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "second": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "session.extended": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "session.isfirstbar": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.isfirstbar_regular": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.islastbar": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.islastbar_regular": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ismarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ispostmarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.ispremarket": {
+      "qualifier": "series",
+      "type": "bool"
+    },
+    "session.regular": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.inherit": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.off": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "settlement_as_close.on": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowdown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.arrowup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.circle": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.cross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.diamond": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.flag": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labeldown": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.labelup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.square": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "shape.triangledown": {
       "qualifier": "const",
       "type": "string"
     },
     "shape.triangleup": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "shape.xcross": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.auto": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.huge": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "size.large": {
       "qualifier": "const",
       "type": "string"
     },
@@ -7839,11 +12085,43 @@
       "qualifier": "const",
       "type": "splits.field"
     },
+    "strategy.account_currency": {
+      "type": "string",
+      "qualifier": "simple"
+    },
+    "strategy.avg_losing_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_losing_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_winning_trade": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.avg_winning_trade_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.cash": {
       "qualifier": "const",
       "type": "string"
     },
     "strategy.closedtrades": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "strategy.closedtrades.first_index": {
       "qualifier": "series",
       "type": "int"
     },
@@ -7867,6 +12145,22 @@
       "qualifier": "series",
       "type": "int"
     },
+    "strategy.grossloss": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.grossloss_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.grossprofit": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "strategy.grossprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.initial_capital": {
       "qualifier": "simple",
       "type": "float"
@@ -7875,21 +12169,49 @@
       "qualifier": "const",
       "type": "strategy.direction"
     },
-    "strategy.grossprofit": {
-      "qualifier": "series",
-      "type": "float"
-    },
-    "strategy.grossloss": {
-      "qualifier": "series",
-      "type": "float"
-    },
     "strategy.losstrades": {
       "qualifier": "series",
       "type": "int"
     },
+    "strategy.margin_liquidation_price": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_all": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_long": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_contracts_held_short": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_drawdown": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_drawdown_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_runup": {
+      "type": "float",
+      "qualifier": "series"
+    },
+    "strategy.max_runup_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.netprofit": {
       "qualifier": "series",
       "type": "float"
+    },
+    "strategy.netprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
     },
     "strategy.oca.cancel": {
       "qualifier": "const",
@@ -7907,9 +12229,17 @@
       "qualifier": "series",
       "type": "float"
     },
+    "strategy.openprofit_percent": {
+      "type": "float",
+      "qualifier": "series"
+    },
     "strategy.opentrades": {
       "qualifier": "series",
       "type": "int"
+    },
+    "strategy.opentrades.capital_held": {
+      "qualifier": "series",
+      "type": "float"
     },
     "strategy.percent_of_equity": {
       "qualifier": "const",
@@ -7918,6 +12248,10 @@
     "strategy.position_avg_price": {
       "qualifier": "series",
       "type": "float"
+    },
+    "strategy.position_entry_name": {
+      "type": "string",
+      "qualifier": "series"
     },
     "strategy.position_size": {
       "qualifier": "series",
@@ -7931,7 +12265,59 @@
       "qualifier": "series",
       "type": "int"
     },
+    "syminfo.basecurrency": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.country": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.currency": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.current_contract": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.description": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.employees": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.expiration_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.industry": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.isin": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.main_tickerid": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.mincontract": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.minmove": {
+      "qualifier": "simple",
+      "type": "int"
+    },
     "syminfo.mintick": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.pointvalue": {
       "qualifier": "simple",
       "type": "float"
     },
@@ -7939,9 +12325,85 @@
       "qualifier": "simple",
       "type": "string"
     },
+    "syminfo.pricescale": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_buy": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_buy_strong": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_hold": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_sell": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_sell_strong": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.recommendations_total": {
+      "qualifier": "simple",
+      "type": "int"
+    },
     "syminfo.root": {
       "qualifier": "simple",
       "type": "string"
+    },
+    "syminfo.sector": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.session": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.shareholders": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.shares_outstanding_float": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.shares_outstanding_total": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_average": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_date": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.target_price_estimates": {
+      "qualifier": "simple",
+      "type": "int"
+    },
+    "syminfo.target_price_high": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_low": {
+      "qualifier": "simple",
+      "type": "float"
+    },
+    "syminfo.target_price_median": {
+      "qualifier": "simple",
+      "type": "float"
     },
     "syminfo.ticker": {
       "qualifier": "simple",
@@ -7951,8 +12413,152 @@
       "qualifier": "simple",
       "type": "string"
     },
+    "syminfo.timezone": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.type": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "syminfo.volumetype": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "ta.accdist": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.iii": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.nvi": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.obv": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.pvi": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.pvt": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.tr": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.vwap": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.wad": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "ta.wvad": {
+      "qualifier": "series",
+      "type": "float"
+    },
+    "table.all": {
+      "qualifier": "const",
+      "type": "array<table>"
+    },
+    "text.align_bottom": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_center": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_left": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_right": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.align_top": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_bold": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_italic": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.format_none": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.wrap_auto": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "text.wrap_none": {
+      "qualifier": "const",
+      "type": "string"
+    },
     "time": {
       "qualifier": "series",
+      "type": "int"
+    },
+    "time_close": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "time_tradingday": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "timeframe.isdaily": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isdwm": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isintraday": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isminutes": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.ismonthly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isseconds": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isticks": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.isweekly": {
+      "qualifier": "simple",
+      "type": "bool"
+    },
+    "timeframe.main_period": {
+      "qualifier": "simple",
+      "type": "string"
+    },
+    "timeframe.multiplier": {
+      "qualifier": "simple",
       "type": "int"
     },
     "timeframe.period": {
@@ -7963,17 +12569,508 @@
       "qualifier": "series",
       "type": "int"
     },
+    "true": {
+      "qualifier": "const",
+      "type": "bool"
+    },
     "volume": {
       "qualifier": "series",
       "type": "float"
     },
+    "weekofyear": {
+      "qualifier": "series",
+      "type": "int"
+    },
     "xloc.bar_index": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "xloc.bar_time": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "year": {
+      "qualifier": "series",
+      "type": "int"
+    },
+    "yloc.abovebar": {
+      "qualifier": "const",
+      "type": "string"
+    },
+    "yloc.belowbar": {
       "qualifier": "const",
       "type": "string"
     },
     "yloc.price": {
       "qualifier": "const",
       "type": "string"
+    },
+    "strategy.risk.percent_of_equity": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.risk.cash": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    },
+    "strategy.risk.fixed": {
+      "qualifier": "const",
+      "type": "strategy.risk.type"
+    }
+  },
+  "methods": {
+    "box.set_border_color": {
+      "receiver_type": "box",
+      "name": "set_border_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_border_style": {
+      "receiver_type": "box",
+      "name": "set_border_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "line.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_border_width": {
+      "receiver_type": "box",
+      "name": "set_border_width",
+      "parameters": [
+        {
+          "name": "width",
+          "type": "int",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text": {
+      "receiver_type": "box",
+      "name": "set_text",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_color": {
+      "receiver_type": "box",
+      "name": "set_text_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_halign": {
+      "receiver_type": "box",
+      "name": "set_text_halign",
+      "parameters": [
+        {
+          "name": "halign",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_valign": {
+      "receiver_type": "box",
+      "name": "set_text_valign",
+      "parameters": [
+        {
+          "name": "valign",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_text_size": {
+      "receiver_type": "box",
+      "name": "set_text_size",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.delete": {
+      "receiver_type": "box",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_extend": {
+      "receiver_type": "box",
+      "name": "set_extend",
+      "parameters": [
+        {
+          "name": "extend",
+          "type": "extend",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_top_left_point": {
+      "receiver_type": "box",
+      "name": "set_top_left_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_bottom_right_point": {
+      "receiver_type": "box",
+      "name": "set_bottom_right_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_text": {
+      "receiver_type": "label",
+      "name": "set_text",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_textcolor": {
+      "receiver_type": "label",
+      "name": "set_textcolor",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_tooltip": {
+      "receiver_type": "label",
+      "name": "set_tooltip",
+      "parameters": [
+        {
+          "name": "tooltip",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_size": {
+      "receiver_type": "label",
+      "name": "set_size",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_textalign": {
+      "receiver_type": "label",
+      "name": "set_textalign",
+      "parameters": [
+        {
+          "name": "align",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.delete": {
+      "receiver_type": "label",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_point": {
+      "receiver_type": "label",
+      "name": "set_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "label.set_style": {
+      "receiver_type": "label",
+      "name": "set_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "label.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_color": {
+      "receiver_type": "line",
+      "name": "set_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_width": {
+      "receiver_type": "line",
+      "name": "set_width",
+      "parameters": [
+        {
+          "name": "width",
+          "type": "int",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.delete": {
+      "receiver_type": "line",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_extend": {
+      "receiver_type": "line",
+      "name": "set_extend",
+      "parameters": [
+        {
+          "name": "extend",
+          "type": "extend",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_first_point": {
+      "receiver_type": "line",
+      "name": "set_first_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_second_point": {
+      "receiver_type": "line",
+      "name": "set_second_point",
+      "parameters": [
+        {
+          "name": "point",
+          "type": "chart.point",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "line.set_style": {
+      "receiver_type": "line",
+      "name": "set_style",
+      "parameters": [
+        {
+          "name": "style",
+          "type": "line.style",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.delete": {
+      "receiver_type": "linefill",
+      "name": "delete",
+      "parameters": [],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.get_line1": {
+      "receiver_type": "linefill",
+      "name": "get_line1",
+      "parameters": [],
+      "returns": "line",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.get_line2": {
+      "receiver_type": "linefill",
+      "name": "get_line2",
+      "parameters": [],
+      "returns": "line",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "linefill.set_color": {
+      "receiver_type": "linefill",
+      "name": "set_color",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "chart.point.copy": {
+      "receiver_type": "chart.point",
+      "name": "copy",
+      "parameters": [],
+      "returns": "chart.point",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
+    },
+    "box.set_bgcolor": {
+      "receiver_type": "box",
+      "name": "set_bgcolor",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "color",
+          "required": true
+        }
+      ],
+      "returns": "void",
+      "pine_version": "6",
+      "kind": "builtin",
+      "scope": "any"
     }
   }
 }

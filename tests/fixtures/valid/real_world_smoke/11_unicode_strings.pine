@@ -1,6 +1,6 @@
 //@version=6
 indicator("Unicode")
 msg = "Привет мир"
-text = """multi
+multiline = """multi
 строка"""
 plot(close)

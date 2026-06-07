@@ -1,0 +1,16 @@
+{
+  "max_missing_official_count": 0,
+  "min_coverage_ratio": 1.0,
+  "missing_by_category": {
+    "functions": [],
+    "types": [],
+    "variables": []
+  },
+  "pine_version": 5,
+  "schema_version": "pain.official_pine_reference_gap_baseline.v1",
+  "source": {
+    "basis": "TradingView pine-script-reference webpack reference payload",
+    "bundle_url": "https://static.tradingview.com/static/bundles/8467.cba5dbaf496130e32000.js",
+    "reference_url": "https://www.tradingview.com/pine-script-reference/v5/"
+  }
+}

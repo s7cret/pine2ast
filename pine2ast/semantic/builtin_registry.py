@@ -23,7 +23,10 @@ _ALLOWED_FUNCTION_KEYS = {
     "parameters",
     "pine_version",
     "returns",
+    "runtime_contract_unsupported",
     "scope",
+    "unsupported",
+    "unsupported_diagnostic_code",
 }
 _ALLOWED_PARAM_KEYS = {
     "name",
@@ -36,6 +39,8 @@ _ALLOWED_PARAM_KEYS = {
     "replacement",
     "diagnostic_code",
     "allow_extra_positional",
+    "unsupported",
+    "unsupported_diagnostic_code",
 }
 _ALLOWED_OVERLOAD_KEYS = {"parameters", "returns", "metadata_version", "docs_url"}
 _ALLOWED_TYPE_ATOMS = {
@@ -58,6 +63,7 @@ _ALLOWED_TYPE_ATOMS = {
     "label",
     "label.style",
     "line",
+    "linefill",
     "line.style",
     "map",
     "matrix",
@@ -71,6 +77,7 @@ _ALLOWED_TYPE_ATOMS = {
     "table",
     "table.position",
     "unknown",
+    "volume_row",
     "void",
 }
 
@@ -188,6 +195,12 @@ def _validate_parameters(params: Any, path: str) -> None:
             _require_string(p["replacement"], f"{p_path}.replacement")
         if "diagnostic_code" in p:
             _require_string(p["diagnostic_code"], f"{p_path}.diagnostic_code")
+        if "unsupported" in p and not isinstance(p["unsupported"], bool):
+            raise _schema_error(f"{p_path}.unsupported", "expected boolean")
+        if "unsupported_diagnostic_code" in p:
+            _require_string(
+                p["unsupported_diagnostic_code"], f"{p_path}.unsupported_diagnostic_code"
+            )
 
 
 def validate_builtin_registry(registry: dict[str, Any]) -> None:
@@ -256,6 +269,19 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
         scope = _require_string(entry["scope"], f"$.functions.{name}.scope")
         if scope not in _ALLOWED_FUNCTION_SCOPES:
             raise _schema_error(f"$.functions.{name}.scope", f"unsupported scope {scope!r}")
+        if "unsupported" in entry and not isinstance(entry["unsupported"], bool):
+            raise _schema_error(f"$.functions.{name}.unsupported", "expected boolean")
+        if "runtime_contract_unsupported" in entry and not isinstance(
+            entry["runtime_contract_unsupported"], bool
+        ):
+            raise _schema_error(
+                f"$.functions.{name}.runtime_contract_unsupported", "expected boolean"
+            )
+        if "unsupported_diagnostic_code" in entry:
+            _require_string(
+                entry["unsupported_diagnostic_code"],
+                f"$.functions.{name}.unsupported_diagnostic_code",
+            )
         _validate_type_ref(entry["returns"], f"$.functions.{name}.returns")
         _validate_parameters(entry["parameters"], f"$.functions.{name}.parameters")
         if "overloads" in entry:
@@ -339,8 +365,10 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     "request": {
         "currency_rate",
         "dividends",
+        "economic",
         "earnings",
         "financial",
+        "footprint",
         "quandl",
         "security",
         "security_lower_tf",
@@ -421,11 +449,21 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
         "cell_set_height",
         "cell_set_text",
         "cell_set_text_color",
+        "cell_set_text_font_family",
+        "cell_set_text_formatting",
+        "cell_set_text_halign",
         "cell_set_text_size",
+        "cell_set_text_valign",
+        "cell_set_tooltip",
         "cell_set_width",
         "clear",
         "delete",
         "merge_cells",
+        "set_bgcolor",
+        "set_border_color",
+        "set_border_width",
+        "set_frame_color",
+        "set_frame_width",
         "set_position",
     },
     "polyline": {"new", "delete"},
@@ -454,20 +492,28 @@ INTERNAL_EXPECTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
         "exit_id",
         "exit_price",
         "exit_time",
+        "first_index",
         "max_drawdown",
+        "max_drawdown_percent",
         "max_runup",
+        "max_runup_percent",
         "profit",
+        "profit_percent",
         "size",
     },
     "strategy.opentrades": {
+        "capital_held",
         "entry_bar_index",
         "entry_comment",
         "entry_id",
         "entry_price",
         "entry_time",
         "max_drawdown",
+        "max_drawdown_percent",
         "max_runup",
+        "max_runup_percent",
         "profit",
+        "profit_percent",
         "size",
     },
 }
@@ -479,11 +525,12 @@ OFFICIAL_UNMAPPED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 
 # Known but deliberately deferred/unsupported surfaces. These are not counted as
 # missing internal coverage and should not be used to claim official completeness.
-KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
-    "request": {"economic"},
-}
+KNOWN_DEFERRED_NAMESPACE_MEMBERS: dict[str, set[str]] = {}
 KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
+    "log": {"error", "info", "warning"},
+    "request": {"economic"},
     "runtime": {"error"},
+    "strategy": set(),
 }
 
 # Backwards-compatible public alias used by older tests/imports.

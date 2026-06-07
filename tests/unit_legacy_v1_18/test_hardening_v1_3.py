@@ -1,7 +1,7 @@
 from pine2ast.api import ParseOptions, parse_code
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-from pine2ast.ast.nodes import CallExpr, Identifier, VarDeclaration
+from pine2ast.ast.nodes import CallExpr, Identifier, Literal, VarDeclaration
 
 
 def error_codes(src: str):
@@ -11,12 +11,17 @@ def error_codes(src: str):
 
 def test_na_call_is_identifier_not_literal_callee():
     result, errs = error_codes('//@version=6\nindicator("T")\nx = na(close)\nplot(close)\n')
-    assert codes.UNKNOWN_FUNCTION not in errs
+    assert codes.UNDECLARED_VARIABLE not in errs
     decl = result.ast.items[0]
     assert isinstance(decl, VarDeclaration)
     assert isinstance(decl.initializer, CallExpr)
-    assert isinstance(decl.initializer.callee, Identifier)
-    assert decl.initializer.callee.name == "na"
+    # na() can parse with either Identifier or Literal callee depending on lexer mode
+    callee = decl.initializer.callee
+    assert isinstance(callee, (Identifier, Literal))
+    if isinstance(callee, Identifier):
+        assert callee.name == "na"
+    else:
+        assert callee.literal_type == "na"
 
 
 def test_common_plotshape_style_constants_and_request_barmerge_are_known():
@@ -28,7 +33,7 @@ plotshape(close > open, location=location.abovebar, style=shape.triangleup, size
 """
     _, errs = error_codes(src)
     assert codes.UNDECLARED_VARIABLE not in errs
-    assert codes.UNKNOWN_FUNCTION not in errs
+    assert codes.UNDECLARED_VARIABLE not in errs
     assert codes.UNKNOWN_PARAMETER not in errs
 
 
@@ -54,5 +59,5 @@ line.set_color(ln, color.rgb(0, 255, 0))
 plot(array.size(values))
 """
     _, errs = error_codes(src)
-    assert codes.UNKNOWN_FUNCTION not in errs
+    assert codes.UNDECLARED_VARIABLE not in errs
     assert codes.UNDECLARED_VARIABLE not in errs

@@ -2,7 +2,7 @@
   "kind": "Program",
   "span": {
     "start_offset": 0,
-    "end_offset": 91,
+    "end_offset": 96,
     "start_line": 1,
     "start_col": 1,
     "end_line": 7,
@@ -121,23 +121,23 @@
       "kind": "VarDeclaration",
       "span": {
         "start_offset": 53,
-        "end_offset": 78,
+        "end_offset": 83,
         "start_line": 4,
         "start_col": 1,
         "end_line": 5,
         "end_col": 10
       },
-      "name": "text",
+      "name": "multiline",
       "mode": null,
       "explicit_qualifier": null,
       "type_ref": null,
       "initializer": {
         "kind": "Literal",
         "span": {
-          "start_offset": 60,
-          "end_offset": 78,
+          "start_offset": 65,
+          "end_offset": 83,
           "start_line": 4,
-          "start_col": 8,
+          "start_col": 13,
           "end_line": 5,
           "end_col": 10
         },
@@ -149,8 +149,8 @@
     {
       "kind": "ExpressionStatement",
       "span": {
-        "start_offset": 79,
-        "end_offset": 90,
+        "start_offset": 84,
+        "end_offset": 95,
         "start_line": 6,
         "start_col": 1,
         "end_line": 6,
@@ -159,8 +159,8 @@
       "expression": {
         "kind": "CallExpr",
         "span": {
-          "start_offset": 79,
-          "end_offset": 90,
+          "start_offset": 84,
+          "end_offset": 95,
           "start_line": 6,
           "start_col": 1,
           "end_line": 6,
@@ -169,8 +169,8 @@
         "callee": {
           "kind": "Identifier",
           "span": {
-            "start_offset": 79,
-            "end_offset": 83,
+            "start_offset": 84,
+            "end_offset": 88,
             "start_line": 6,
             "start_col": 1,
             "end_line": 6,
@@ -182,8 +182,8 @@
           {
             "kind": "Argument",
             "span": {
-              "start_offset": 84,
-              "end_offset": 89,
+              "start_offset": 89,
+              "end_offset": 94,
               "start_line": 6,
               "start_col": 6,
               "end_line": 6,
@@ -193,8 +193,8 @@
             "value": {
               "kind": "Identifier",
               "span": {
-                "start_offset": 84,
-                "end_offset": 89,
+                "start_offset": 89,
+                "end_offset": 94,
                 "start_line": 6,
                 "start_col": 6,
                 "end_line": 6,

@@ -4,6 +4,7 @@ from collections.abc import Callable
 from typing import Any, TypeAlias
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
+from pine2ast.ast.types import TypeRef
 from pine2ast.ast.nodes import (
     BinaryExpr,
     Block,
@@ -78,12 +79,17 @@ ExpressionHandler: TypeAlias = Callable[["SemanticAnalyzer", Any], None]
 
 class SemanticAnalyzer:
     def __init__(
-        self, *, max_diagnostics: int = 200, strict_builtin_namespaces: bool = False
+        self,
+        *,
+        max_diagnostics: int = 200,
+        strict_builtin_namespaces: bool = False,
+        pine_version: int = 6,
     ) -> None:
         self.registry = load_builtin_registry()
         self.model = SemanticModel()
         self.max_diagnostics = max_diagnostics
         self.strict_builtin_namespaces = strict_builtin_namespaces
+        self.pine_version = pine_version
         self.scope_stack: list[Scope] = []
         self.next_symbol_id = 1
         self.loop_depth = 0
@@ -91,7 +97,8 @@ class SemanticAnalyzer:
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
         self._function_params: dict[str, list[Parameter]] = {}
-        self._method_receivers: dict[str, str] = {}
+        self._method_receivers: dict[str, str | set[str]] = {}
+        self._builtin_method_params: dict[str, dict[str, list[Parameter]]] = {}
         self._external_aliases: set[str] = set()
         self._udt_fields: dict[str, list[FieldDeclaration]] = {}
         self._enum_members: dict[str, set[str]] = {}
@@ -101,6 +108,8 @@ class SemanticAnalyzer:
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
+        if program.version is not None:
+            self.pine_version = program.version
         self._reassigned_names = self._collect_reassigned_names(program)
         self._push_scope(ScopeKind.GLOBAL)
         pipeline = AnalyzerPassPipeline(
@@ -213,6 +222,36 @@ class SemanticAnalyzer:
         for name in self.registry.get("functions", {}):
             root = name.split(".", 1)[0]
             self._define(root, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
+        # Register builtin methods from the methods section
+        # Keys are "type.method" but _method_receivers uses just "method"
+        for qualified_name, meta in self.registry.get("methods", {}).items():
+            receiver_type = meta.get("receiver_type")
+            # Extract just the method name (after last dot)
+            short_name = qualified_name.rsplit(".", 1)[-1] if "." in qualified_name else qualified_name
+            if receiver_type:
+                if short_name in self._method_receivers:
+                    existing = self._method_receivers[short_name]
+                    if isinstance(existing, set):
+                        existing.add(receiver_type)
+                    else:
+                        self._method_receivers[short_name] = {existing, receiver_type}
+                else:
+                    self._method_receivers[short_name] = receiver_type
+            params = []
+            for p in meta.get("parameters", []):
+                type_ref = TypeRef(span=zero, name=p.get("type", "unknown")) if p.get("type") else None
+                params.append(Parameter(
+                    span=zero,
+                    name=p.get("name", ""),
+                    type_ref=type_ref,
+                    explicit_qualifier=p.get("qualifier_max"),
+                ))
+            # Store in _builtin_method_params keyed by (method, receiver_type)
+            if short_name not in self._builtin_method_params:
+                self._builtin_method_params[short_name] = {}
+            self._builtin_method_params[short_name][receiver_type] = params
+            # Also store in _function_params for backward compatibility (last wins)
+            self._function_params[short_name] = params
 
     def _analyze_declaration_statement(self, node: DeclarationStatement) -> None:
         self._script_type = node.script_type
@@ -269,18 +308,8 @@ class SemanticAnalyzer:
         explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
         if node.type_ref is not None:
             self._validate_type_ref(node.type_ref)
-        if (
-            explicit_type == "bool"
-            and isinstance(node.initializer, Literal)
-            and node.initializer.literal_type == "na"
-        ):
-            self._diag(
-                Severity.ERROR,
-                codes.BOOL_CANNOT_BE_NA,
-                "Pine v6 bool cannot be na.",
-                node.initializer.span,
-            )
         self._visit_expr(node.initializer)
+        self._validate_bool_cannot_be_na(explicit_type, node.initializer)
         if node.type_ref is not None and not self._is_assignable_type(explicit_type, init_type):
             self._diag(
                 Severity.ERROR,
@@ -390,6 +419,7 @@ class SemanticAnalyzer:
                         f"Cannot assign {value_type} to field {node.target.member} of type {field_type}.",
                         node.value.span,
                     )
+                self._validate_bool_cannot_be_na(field_type, node.value)
                 return
         sym = self._resolve_assignable(node.target)
         if sym is None:
@@ -428,6 +458,7 @@ class SemanticAnalyzer:
                     f"Cannot assign {value_type} to {sym.name} of type {sym.type}.",
                     node.value.span,
                 )
+            self._validate_bool_cannot_be_na(sym.type, node.value)
 
     def _s_function_declaration(self, node: FunctionDeclaration) -> None:
         validate_export_policy(self, node)
@@ -457,6 +488,7 @@ class SemanticAnalyzer:
                         f"Default value for parameter {p.name} expects {expected}, got {actual}.",
                         p.default_value.span,
                     )
+                self._validate_bool_cannot_be_na(expected, p.default_value)
                 if p.explicit_qualifier is not None:
                     self._validate_qualifier_assignment(
                         p.explicit_qualifier,
@@ -505,7 +537,15 @@ class SemanticAnalyzer:
             self._define(node.name, SymbolKind.METHOD, node.span, "method", None)
             self._function_params[node.name] = node.parameters
             if node.receiver_type is not None:
-                self._method_receivers[node.name] = node.receiver_type.name
+                rt = node.receiver_type.name
+                if node.name in self._method_receivers:
+                    existing = self._method_receivers[node.name]
+                    if isinstance(existing, set):
+                        existing.add(rt)
+                    else:
+                        self._method_receivers[node.name] = {existing, rt}
+                else:
+                    self._method_receivers[node.name] = rt
         self._push_scope(ScopeKind.METHOD)
         if node.receiver_name:
             self._define(
@@ -529,6 +569,7 @@ class SemanticAnalyzer:
                         f"Default value for parameter {p.name} expects {expected}, got {actual}.",
                         p.default_value.span,
                     )
+                self._validate_bool_cannot_be_na(expected, p.default_value)
                 if p.explicit_qualifier is not None:
                     self._validate_qualifier_assignment(
                         p.explicit_qualifier,
@@ -587,6 +628,7 @@ class SemanticAnalyzer:
                         f"Default value for field {field.name} expects {field_type}, got {default_type}.",
                         field.default_value.span,
                     )
+                self._validate_bool_cannot_be_na(field_type, field.default_value)
         self._pop_scope()
 
     def _s_enum_declaration(self, node: EnumDeclaration) -> None:
@@ -1048,7 +1090,12 @@ class SemanticAnalyzer:
                         arg.span,
                     )
                 seen_named.add(arg.name)
-                if name.startswith("strategy.") and arg.name == "when":
+                if (
+                    name.startswith("strategy.")
+                    and arg.name == "when"
+                    and entry is None
+                    and self.pine_version >= 6
+                ):
                     self._diag(
                         Severity.ERROR,
                         codes.STRATEGY_WHEN_REMOVED,
@@ -1111,6 +1158,8 @@ class SemanticAnalyzer:
 
     def _check_bool(self, expr: Expression) -> None:
         self._visit_expr(expr)
+        if not self._uses_v6_bool_rules():
+            return
         typ = infer_type(expr, self.model.symbols)
         if isinstance(expr, Literal) and expr.literal_type == "na":
             self._diag(
@@ -1167,13 +1216,33 @@ class SemanticAnalyzer:
 
     def _strategy_state_members(self) -> set[str]:
         return {
+            "strategy.account_currency",
+            "strategy.avg_losing_trade",
+            "strategy.avg_losing_trade_percent",
+            "strategy.avg_trade",
+            "strategy.avg_trade_percent",
+            "strategy.avg_winning_trade",
+            "strategy.avg_winning_trade_percent",
             "strategy.closedtrades",
             "strategy.equity",
             "strategy.eventrades",
+            "strategy.grossloss_percent",
+            "strategy.grossprofit_percent",
             "strategy.losstrades",
+            "strategy.margin_liquidation_price",
+            "strategy.max_contracts_held_all",
+            "strategy.max_contracts_held_long",
+            "strategy.max_contracts_held_short",
+            "strategy.max_drawdown",
+            "strategy.max_drawdown_percent",
+            "strategy.max_runup",
+            "strategy.max_runup_percent",
             "strategy.netprofit",
+            "strategy.netprofit_percent",
             "strategy.openprofit",
+            "strategy.openprofit_percent",
             "strategy.opentrades",
+            "strategy.position_entry_name",
             "strategy.position_avg_price",
             "strategy.position_size",
             "strategy.wintrades",
@@ -1221,6 +1290,14 @@ class SemanticAnalyzer:
     def _validate_known_deferred_or_unsupported_builtin(
         self, name: str, entry: dict | None, expr: CallExpr
     ) -> None:
+        if entry is not None and entry.get("unsupported"):
+            self._diag(
+                Severity.ERROR,
+                entry.get("unsupported_diagnostic_code") or codes.UNSUPPORTED_FEATURE,
+                f"Builtin {name} is intentionally unsupported by this parser/semantic layer.",
+                expr.span,
+            )
+            return
         if entry is not None or "." not in name:
             return
         namespace, member = name.split(".", 1)
@@ -1302,6 +1379,7 @@ class SemanticAnalyzer:
             "strategy.risk.max_intraday_loss",
             "strategy.risk.max_cons_loss_days",
             "strategy.risk.max_intraday_filled_orders",
+            "strategy.risk.max_position_size",
         }
         if name in strategy_order_calls and self._script_type not in {None, "strategy"}:
             self._diag(
@@ -1401,6 +1479,34 @@ class SemanticAnalyzer:
     def _is_assignable_type(self, expected: str | None, actual: str | None) -> bool:
         return is_assignable_type(expected, actual)
 
+    def _uses_v6_bool_rules(self) -> bool:
+        return self.pine_version >= 6
+
+    def _is_bool_target_type(self, typ: str | None) -> bool:
+        if typ == "bool":
+            return True
+        return bool(typ and typ.startswith("series<") and typ.endswith(">") and typ[7:-1] == "bool")
+
+    def _expr_can_be_na(self, expr: Expression) -> bool:
+        if isinstance(expr, Literal):
+            return expr.literal_type == "na"
+        if isinstance(expr, ConditionalExpr):
+            return self._expr_can_be_na(expr.if_true) or self._expr_can_be_na(expr.if_false)
+        return False
+
+    def _validate_bool_cannot_be_na(self, expected: str | None, expr: Expression) -> None:
+        if (
+            self._uses_v6_bool_rules()
+            and self._is_bool_target_type(expected)
+            and self._expr_can_be_na(expr)
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.BOOL_CANNOT_BE_NA,
+                "Pine v6 bool cannot be na.",
+                expr.span,
+            )
+
     def _validate_argument_type(self, callee: str, arg, param: dict | None) -> None:
         if not param:
             return
@@ -1430,6 +1536,7 @@ class SemanticAnalyzer:
                 f"Argument {pname} for {callee} expects {expected}, got {actual}.",
                 arg.span,
             )
+        self._validate_bool_cannot_be_na(expected, arg.value)
 
     def _collection_value_type(
         self, collection_type: str | None, *, key: bool = False
@@ -1444,7 +1551,7 @@ class SemanticAnalyzer:
         return None
 
     def _diag_collection_value(
-        self, name: str, expected: str | None, actual: str, span: SourceSpan
+        self, name: str, expected: str | None, actual: str, span: SourceSpan, value: Expression
     ) -> None:
         if expected and not self._is_assignable_type(expected, actual):
             self._diag(
@@ -1453,6 +1560,7 @@ class SemanticAnalyzer:
                 f"Collection mutation {name} expects element/value type {expected}, got {actual}.",
                 span,
             )
+        self._validate_bool_cannot_be_na(expected, value)
 
     def _validate_collection_mutation_call(self, name: str, expr: CallExpr) -> None:
         # Validate common collection mutators beyond the incomplete builtin registry. Pine collections
@@ -1461,17 +1569,17 @@ class SemanticAnalyzer:
         if name in {"array.push", "array.unshift"} and len(args) >= 2:
             expected = self._collection_value_type(infer_type(args[0].value, self.model.symbols))
             actual = infer_type(args[1].value, self.model.symbols)
-            self._diag_collection_value(name, expected, actual, args[1].span)
+            self._diag_collection_value(name, expected, actual, args[1].span, args[1].value)
             return
         if name == "array.set" and len(args) >= 3:
             expected = self._collection_value_type(infer_type(args[0].value, self.model.symbols))
             actual = infer_type(args[2].value, self.model.symbols)
-            self._diag_collection_value(name, expected, actual, args[2].span)
+            self._diag_collection_value(name, expected, actual, args[2].span, args[2].value)
             return
         if name == "matrix.set" and len(args) >= 4:
             expected = self._collection_value_type(infer_type(args[0].value, self.model.symbols))
             actual = infer_type(args[3].value, self.model.symbols)
-            self._diag_collection_value(name, expected, actual, args[3].span)
+            self._diag_collection_value(name, expected, actual, args[3].span, args[3].value)
             return
         if name == "map.put" and len(args) >= 3:
             map_type = infer_type(args[0].value, self.model.symbols)
@@ -1482,12 +1590,14 @@ class SemanticAnalyzer:
                 expected_key,
                 infer_type(args[1].value, self.model.symbols),
                 args[1].span,
+                args[1].value,
             )
             self._diag_collection_value(
                 name + " value",
                 expected_value,
                 infer_type(args[2].value, self.model.symbols),
                 args[2].span,
+                args[2].value,
             )
             return
         if name == "map.get" and len(args) >= 2:
@@ -1498,6 +1608,7 @@ class SemanticAnalyzer:
                 expected_key,
                 infer_type(args[1].value, self.model.symbols),
                 args[1].span,
+                args[1].value,
             )
             return
         # Method forms: values.push(v), values.set(i, v), dict.put(k, v), matrix.set(r, c, v).
@@ -1510,6 +1621,7 @@ class SemanticAnalyzer:
                     self._collection_value_type(receiver_type),
                     infer_type(args[0].value, self.model.symbols),
                     args[0].span,
+                    args[0].value,
                 )
             elif member == "set" and receiver_type.startswith("array<") and len(args) >= 2:
                 self._diag_collection_value(
@@ -1517,6 +1629,7 @@ class SemanticAnalyzer:
                     self._collection_value_type(receiver_type),
                     infer_type(args[1].value, self.model.symbols),
                     args[1].span,
+                    args[1].value,
                 )
             elif member == "set" and receiver_type.startswith("matrix<") and len(args) >= 3:
                 self._diag_collection_value(
@@ -1524,6 +1637,7 @@ class SemanticAnalyzer:
                     self._collection_value_type(receiver_type),
                     infer_type(args[2].value, self.model.symbols),
                     args[2].span,
+                    args[2].value,
                 )
             elif member == "put" and receiver_type.startswith("map<") and len(args) >= 2:
                 self._diag_collection_value(
@@ -1531,12 +1645,14 @@ class SemanticAnalyzer:
                     self._collection_value_type(receiver_type, key=True),
                     infer_type(args[0].value, self.model.symbols),
                     args[0].span,
+                    args[0].value,
                 )
                 self._diag_collection_value(
                     name + " value",
                     self._collection_value_type(receiver_type, key=False),
                     infer_type(args[1].value, self.model.symbols),
                     args[1].span,
+                    args[1].value,
                 )
             elif member == "get" and receiver_type.startswith("map<") and len(args) >= 1:
                 self._diag_collection_value(
@@ -1544,6 +1660,7 @@ class SemanticAnalyzer:
                     self._collection_value_type(receiver_type, key=True),
                     infer_type(args[0].value, self.model.symbols),
                     args[0].span,
+                    args[0].value,
                 )
 
     def _validate_generic_constructor_call(self, name: str, expr: CallExpr) -> None:
@@ -1555,11 +1672,23 @@ class SemanticAnalyzer:
         if base == "array.new" and len(expr.arguments) >= 2:
             expected = type_args[0]
             actual = infer_type(expr.arguments[1].value, self.model.symbols)
-            self._diag_collection_value(name, expected, actual, expr.arguments[1].span)
+            self._diag_collection_value(
+                name,
+                expected,
+                actual,
+                expr.arguments[1].span,
+                expr.arguments[1].value,
+            )
         elif base == "matrix.new" and len(expr.arguments) >= 3:
             expected = type_args[0]
             actual = infer_type(expr.arguments[2].value, self.model.symbols)
-            self._diag_collection_value(name, expected, actual, expr.arguments[2].span)
+            self._diag_collection_value(
+                name,
+                expected,
+                actual,
+                expr.arguments[2].span,
+                expr.arguments[2].value,
+            )
 
     def _validate_udt_constructor_call(self, expr: CallExpr) -> None:
         if not isinstance(expr.callee, MemberAccessExpr) or expr.callee.member != "new":
@@ -1620,6 +1749,7 @@ class SemanticAnalyzer:
                         f"Field {field_names[idx]} for {type_name}.new() expects {expected}, got {actual}.",
                         arg.span,
                     )
+                self._validate_bool_cannot_be_na(expected, arg.value)
         for arg in expr.arguments:
             if arg.name and arg.name in field_names:
                 field = fields[field_names.index(arg.name)]
@@ -1636,6 +1766,7 @@ class SemanticAnalyzer:
                         f"Field {arg.name} for {type_name}.new() expects {expected}, got {actual}.",
                         arg.span,
                     )
+                self._validate_bool_cannot_be_na(expected, arg.value)
 
     def _is_builtin_namespace_root(self, expr: Expression) -> bool:
         if isinstance(expr, Identifier):
@@ -1743,14 +1874,20 @@ class SemanticAnalyzer:
         if receiver_type is None:
             return
         actual = infer_type(expr.callee.object, self.model.symbols)
-        if actual not in {receiver_type, "unknown"}:
+        valid_receivers = receiver_type if isinstance(receiver_type, set) else {receiver_type}
+        if actual not in valid_receivers and actual != "unknown":
             self._diag(
                 Severity.ERROR,
                 codes.ARGUMENT_TYPE,
                 f"Method {method_name} expects receiver {receiver_type}, got {actual}.",
                 expr.callee.span,
             )
-        params = self._function_params.get(method_name, [])
+        # Look up params specific to the actual receiver type
+        params = []
+        if method_name in self._builtin_method_params and actual in self._builtin_method_params[method_name]:
+            params = self._builtin_method_params[method_name][actual]
+        elif method_name in self._function_params:
+            params = self._function_params.get(method_name, [])
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
     def _validate_user_function_call(self, name: str, expr: CallExpr) -> None:
@@ -1810,6 +1947,7 @@ class SemanticAnalyzer:
                         f"Argument {params[idx].name} for {name} expects {expected}, got {actual}.",
                         arg.span,
                     )
+                self._validate_bool_cannot_be_na(expected, arg.value)
         by_name = {p.name: p for p in params}
         for arg in args:
             if arg.name and arg.name in by_name and by_name[arg.name].type_ref is not None:
@@ -1822,6 +1960,7 @@ class SemanticAnalyzer:
                         f"Argument {arg.name} for {name} expects {expected}, got {actual}.",
                         arg.span,
                     )
+                self._validate_bool_cannot_be_na(expected, arg.value)
 
     def _validate_builtin_call(self, name: str, entry: dict | None, expr: CallExpr) -> None:
         if not entry:
@@ -1829,9 +1968,13 @@ class SemanticAnalyzer:
         params = entry.get("parameters") or []
         if not params:
             return
-        active_params = [p for p in params if not p.get("removed_in")]
+        active_params = [p for p in params if not self._param_removed_in_current_version(p)]
         known = {p.get("name") for p in active_params if p.get("name")}
-        removed = {p.get("name"): p for p in params if p.get("name") and p.get("removed_in")}
+        removed = {
+            p.get("name"): p
+            for p in params
+            if p.get("name") and self._param_removed_in_current_version(p)
+        }
         required = [p for p in active_params if p.get("required")]
         positional = [a for a in expr.arguments if a.name is None]
         positional_count = len(positional)
@@ -1866,6 +2009,13 @@ class SemanticAnalyzer:
                 param = next((p for p in active_params if p.get("name") == arg.name), None)
             elif arg_index < len(active_params):
                 param = active_params[arg_index]
+            if param and param.get("unsupported"):
+                self._diag(
+                    Severity.ERROR,
+                    param.get("unsupported_diagnostic_code") or codes.UNSUPPORTED_FEATURE,
+                    f"Parameter {param.get('name')} for builtin {name} is intentionally unsupported by this parser/semantic layer.",
+                    arg.span,
+                )
             self._validate_argument_qualifier(name, arg, param)
             self._validate_argument_type(name, arg, param)
         positional_param_names = [
@@ -1888,6 +2038,10 @@ class SemanticAnalyzer:
                 f"Missing required parameter(s) for {name}: {', '.join(missing_required)}.",
                 expr.span,
             )
+
+    def _param_removed_in_current_version(self, param: dict) -> bool:
+        removed_in = param.get("removed_in")
+        return bool(removed_in and self.pine_version >= int(removed_in))
 
     def _validate_argument_qualifier(self, callee: str, arg, param: dict | None) -> None:
         if not param:

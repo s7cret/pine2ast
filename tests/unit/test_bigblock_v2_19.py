@@ -139,7 +139,8 @@ def test_v219_coverage_taxonomy_keeps_official_backlog_honest():
     report = builtin_registry_coverage_report()
     assert report["missing_internal_expected_count"] == 0
     assert report["official_unmapped_count"] == 0
-    assert report["known_deferred_count"] > 0
+    assert report["known_deferred_count"] == 0
+    assert report["known_unsupported_count"] > 0
     assert report["taxonomy"]["official_unmapped"]
     assert "box.set_text" not in report["namespaces"]["box"]["official_unmapped"]
     assert "table.cell_set_text" not in report["namespaces"]["table"]["official_unmapped"]

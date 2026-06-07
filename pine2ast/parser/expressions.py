@@ -122,7 +122,15 @@ class ExpressionsMixin(BaseParser):
             if self._match(TokenKind.LPAREN):
                 args: list[Argument] = []
                 while not self._at(TokenKind.RPAREN, TokenKind.EOF):
-                    if self._at(TokenKind.IDENTIFIER) and self._peek(1).kind is TokenKind.EQ:
+                    if (
+                        self._at(
+                            TokenKind.IDENTIFIER,
+                            TokenKind.SERIES,
+                            TokenKind.SIMPLE,
+                            TokenKind.CONST,
+                        )
+                        and self._peek(1).kind is TokenKind.EQ
+                    ):
                         name = self._advance().text
                         eq = self._advance()
                         value = self.parse_expression()

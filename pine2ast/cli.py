@@ -34,8 +34,13 @@ from pine2ast.diagnostics.sarif import diagnostics_to_sarif_json
 from pine2ast.semantic.reports import semantic_report
 from pine2ast.semantic.builtin_registry import builtin_registry_coverage_report
 from pine2ast.reference_catalog import (
+    OfficialReferenceError,
     ReferenceCatalogError,
     export_catalog_markdown,
+    fetch_official_reference_index,
+    load_official_reference_index,
+    official_reference_diff_payload,
+    official_reference_gate_payload,
     validate_catalog,
     validate_matrix,
 )
@@ -234,6 +239,14 @@ def main(argv: list[str] | None = None) -> int:
     p_matrix = sub.add_parser("matrix")
     p_matrix.add_argument("action", choices=["validate"])
 
+    p_official = sub.add_parser("official-reference")
+    p_official.add_argument("action", choices=["fetch", "diff", "gate"])
+    p_official.add_argument("--version", type=int, choices=[5, 6], default=6)
+    p_official.add_argument("--official-json")
+    p_official.add_argument("--baseline")
+    p_official.add_argument("--json", dest="json_path")
+    p_official.add_argument("--timeout", type=float, default=20.0)
+
     p_golden = sub.add_parser("golden")
     p_golden.add_argument("path")
     p_golden.add_argument("--ast")
@@ -266,6 +279,31 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print("OK parity matrix")
         return 0
+
+    if args.cmd == "official-reference":
+        try:
+            if args.official_json:
+                index = load_official_reference_index(args.official_json)
+            else:
+                index = fetch_official_reference_index(args.version, timeout=args.timeout)
+            if args.action == "fetch":
+                payload = index.to_dict()
+            elif args.action == "diff":
+                payload = official_reference_diff_payload(index)
+            else:
+                if not args.baseline:
+                    raise OfficialReferenceError("official-reference gate requires --baseline")
+                payload = official_reference_gate_payload(index, args.baseline)
+        except OfficialReferenceError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+        output = json.dumps(payload, ensure_ascii=False, indent=2)
+        if args.json_path:
+            Path(args.json_path).write_text(output, encoding="utf-8")
+            print(args.json_path)
+        else:
+            print(output)
+        return 1 if args.action == "gate" and payload.get("status") == "fail" else 0
 
     if args.cmd == "perf-baseline":
         output = perf_baseline_json(

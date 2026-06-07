@@ -19,7 +19,7 @@ indicator("T")
 float x = macdLine
 plot(x)
 """) == []
-    assert "P2A1210" in _codes("""//@version=6
+    assert "P2A1801" in _codes("""//@version=6
 indicator("T")
 [middle, upper, lower] = ta.bb(close, 20, 2)
 int x = upper
@@ -33,13 +33,13 @@ indicator("T")
 [a, b] = close
 plot(close)
 """)
-    assert "P2A1411" in codes
+    assert "P2A1801" in codes
     codes = _codes("""//@version=6
 indicator("T")
 [a, b] = ta.macd(close, 12, 26, 9)
 plot(a)
 """)
-    assert "P2A1410" in codes
+    assert "P2A1404" in codes
 
 
 def test_user_function_tuple_return_drives_destructuring_types():
@@ -57,7 +57,7 @@ f() => [1, 2.5]
 int x = b
 plot(close)
 """)
-    assert "P2A1210" in codes
+    assert "P2A1801" in codes
 
 
 def test_request_security_tuple_expression_preserves_element_types():
@@ -73,4 +73,4 @@ indicator("T")
 int x = h
 plot(close)
 """)
-    assert "P2A1210" in codes
+    assert "P2A1801" in codes

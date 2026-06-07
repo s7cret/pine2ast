@@ -32,6 +32,8 @@ rm -f .coverage
 run_log TEST_RUN_FINAL.log "$PYTHON" -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml:"$OUT_DIR/coverage.xml"
 run_log QUALITY_GATE_FINAL.log "$PYTHON" -m pine2ast quality-gate tests/fixtures/real_world --json "$OUT_DIR/QUALITY_GATE_FINAL.json"
 run_log BUILTIN_COVERAGE_FINAL.log "$PYTHON" -m pine2ast builtin-coverage --json "$OUT_DIR/BUILTIN_COVERAGE_FINAL.json"
+run_log OFFICIAL_REFERENCE_V5_GATE_FINAL.log "$PYTHON" -m pine2ast official-reference gate --official-json pine2ast/reference_catalog/official_pine_v5_reference_index.json --baseline pine2ast/reference_catalog/official_pine_v5_gap_baseline.json --json "$OUT_DIR/OFFICIAL_REFERENCE_V5_GATE_FINAL.json"
+run_log OFFICIAL_REFERENCE_V6_GATE_FINAL.log "$PYTHON" -m pine2ast official-reference gate --official-json pine2ast/reference_catalog/official_pine_v6_reference_index.json --baseline pine2ast/reference_catalog/official_pine_v6_gap_baseline.json --json "$OUT_DIR/OFFICIAL_REFERENCE_V6_GATE_FINAL.json"
 
 if [[ "$ALLOW_PENDING_ORACLE" -eq 1 ]]; then
   run_log COMPILE_ORACLE_FINAL.log "$PYTHON" tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json "$OUT_DIR/COMPILE_ORACLE_FINAL.json" --allow-pending --pending-release-suffix oracle_expansion_pending

@@ -103,6 +103,12 @@ class BaseParser:
         self._skip_newlines()
         declaration = None
         items = []
+        # Consume leading imports before looking for the declaration.
+        while self._at(TokenKind.IMPORT):
+            imported = self.parse_import()
+            if imported is not None:
+                items.append(imported)
+            self._skip_newlines()
         if self._looks_like_declaration_statement():
             expr = self.parse_expression()
             if isinstance(expr, CallExpr):

@@ -131,10 +131,15 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
     diagnostics.extend(parsed.diagnostics)
     semantic_model = None
     ast = parsed.program
+    if ast is not None and ast.version == 5 and options.strict_v6:
+        for diag in diagnostics:
+            if diag.code == codes.UNSUPPORTED_VERSION:
+                diag.severity = Severity.ERROR
     if ast is not None and options.run_semantic:
         semantic_model = SemanticAnalyzer(
             max_diagnostics=options.max_diagnostics,
             strict_builtin_namespaces=options.strict_builtin_namespaces,
+            pine_version=options.version,
         ).analyze(ast)
         diagnostics.extend(semantic_model.diagnostics)
     if ast is not None and options.runtime_contract_profile in {"v1.4", "runtime_contract_v1_4"}:
