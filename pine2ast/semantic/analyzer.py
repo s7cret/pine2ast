@@ -2188,13 +2188,24 @@ class SemanticAnalyzer:
     ) -> Symbol | None:
         scope = self.scope_stack[-1]
         if name in scope.symbols and not allow_existing:
-            self._diag(
-                Severity.ERROR,
-                codes.REDECLARATION,
-                f"Symbol {name} is already declared in this scope.",
-                span,
-            )
-            return None
+            # Allow user variables to shadow builtin namespaces/objects
+            # (e.g. `text` is both a namespace and a common variable name)
+            # but NOT import aliases (import ... as math should error)
+            existing = self.model.symbols.get(name)
+            if (
+                existing is not None
+                and existing.kind == SymbolKind.BUILTIN
+                and kind == SymbolKind.VARIABLE
+            ):
+                pass  # shadow allowed
+            else:
+                self._diag(
+                    Severity.ERROR,
+                    codes.REDECLARATION,
+                    f"Symbol {name} is already declared in this scope.",
+                    span,
+                )
+                return None
         previous = self.model.symbols.get(name)
         sym = Symbol(self.next_symbol_id, name, kind, span, typ, qualifier, scope.id)
         self.next_symbol_id += 1

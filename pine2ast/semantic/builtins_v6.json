@@ -10856,12 +10856,12 @@
     "syminfo": {},
     "ta": {},
     "table": {},
-    "text": {},
     "ticker": {},
     "time": {},
     "timeframe": {},
     "xloc": {},
-    "yloc": {}
+    "yloc": {},
+    "text": {}
   },
   "pine_version": "6",
   "schema_version": 1,
