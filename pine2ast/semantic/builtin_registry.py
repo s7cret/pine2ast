@@ -530,7 +530,7 @@ KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS: dict[str, set[str]] = {
     "log": {"error", "info", "warning"},
     "request": {"economic"},
     "runtime": {"error"},
-    "strategy": {"risk.max_position_size"},
+    "strategy": set(),
 }
 
 # Backwards-compatible public alias used by older tests/imports.

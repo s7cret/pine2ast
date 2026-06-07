@@ -8861,6 +8861,7 @@
       "scope": "any"
     },
     "strategy.risk.max_position_size": {
+      "docs_url": null,
       "kind": "builtin",
       "metadata_version": 2,
       "name": "strategy.risk.max_position_size",
@@ -8874,9 +8875,7 @@
       ],
       "pine_version": "6",
       "returns": "void",
-      "scope": "any",
-      "unsupported": true,
-      "unsupported_diagnostic_code": "P2A1507"
+      "scope": "any"
     },
     "string": {
       "docs_url": null,

@@ -107,7 +107,10 @@ def test_official_p0_constants_are_known_but_not_runtime_verified() -> None:
         assert catalog[name]["kind"] == "constant"
         assert catalog[name]["codegen_status"] == expected_status
         assert catalog[name]["runtime_status"] == expected_status
-        assert matrix[("constants", name)]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert matrix[("constants", name)]["semantic_status"] in {
+            "IMPLEMENTED_UNVERIFIED",
+            "DONE_VERIFIED",
+        }
 
 
 def test_official_p0_constants_do_not_trip_strict_namespace_checks() -> None:

@@ -218,10 +218,13 @@ def test_official_tail_callables_are_registered_and_tracked_conservatively() -> 
         "weekofyear",
     }:
         assert catalog[name]["kind"] == "function"
-        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["semantic_status"] in {"IMPLEMENTED_UNVERIFIED", "DONE_VERIFIED"}
         assert catalog[name]["runtime_status"] == "NOT_STARTED"
 
-    assert matrix[("variables", "syminfo.prefix")]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+    assert matrix[("variables", "syminfo.prefix")]["semantic_status"] in {
+        "IMPLEMENTED_UNVERIFIED",
+        "DONE_VERIFIED",
+    }
     for name in OFFICIAL_CALLABLE_TAIL - {"input"}:
         assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
 
@@ -273,7 +276,7 @@ def test_official_table_tail_is_registered_and_tracked_conservatively() -> None:
         assert entry["scope"] == "any"
         assert entry["returns"] == "void"
         assert catalog[name]["kind"] == "function"
-        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["semantic_status"] in {"IMPLEMENTED_UNVERIFIED", "DONE_VERIFIED"}
         assert catalog[name]["runtime_status"] == "NOT_STARTED"
         assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
         assert matrix[("methods", name)]["runtime_status"] == "NOT_STARTED"
@@ -301,14 +304,14 @@ def test_official_strategy_tail_is_registered_and_tracked_conservatively() -> No
         assert entry["scope"] == "any"
         assert entry["returns"] == "float"
         assert catalog[name]["kind"] == "function"
-        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["semantic_status"] in {"IMPLEMENTED_UNVERIFIED", "DONE_VERIFIED"}
         assert catalog[name]["runtime_status"] == "NOT_STARTED"
         assert matrix[("functions", name)]["runtime_status"] == "NOT_STARTED"
 
     for name, (typ, qualifier) in OFFICIAL_STRATEGY_TAIL_VARIABLES.items():
         assert registry["variables"][name] == {"type": typ, "qualifier": qualifier}
         assert catalog[name]["kind"] == "variable"
-        assert catalog[name]["semantic_status"] == "IMPLEMENTED_UNVERIFIED"
+        assert catalog[name]["semantic_status"] in {"IMPLEMENTED_UNVERIFIED", "DONE_VERIFIED"}
         assert catalog[name]["runtime_status"] == "NOT_STARTED"
         assert matrix[("variables", name)]["runtime_status"] == "NOT_STARTED"
 

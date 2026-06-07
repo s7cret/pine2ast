@@ -118,7 +118,10 @@ def test_strategy_p0_registry_signatures_are_known_and_schema_valid() -> None:
 
     assert registry["variables"]["strategy.closedtrades.first_index"]["type"] == "int"
     assert registry["variables"]["strategy.opentrades.capital_held"]["type"] == "float"
-    assert registry["functions"]["strategy.risk.max_position_size"]["unsupported"] is True
+    assert (
+        registry["functions"]["strategy.risk.max_position_size"]["parameters"][0]["name"]
+        == "contracts"
+    )
 
 
 def test_strategy_calls_accept_normalized_p0_named_parameters() -> None:
@@ -145,15 +148,13 @@ plot(strategy.closedtrades.first_index + strategy.opentrades.capital_held + clos
 
 
 def test_strategy_unsupported_api_and_parameter_emit_explicit_diagnostics() -> None:
-    unsupported_api = """//@version=6
-strategy("unsupported risk")
+    # strategy.risk.max_position_size is now a supported builtin; verify it parses cleanly.
+    supported_api = """//@version=6
+strategy("supported risk")
 strategy.risk.max_position_size(10)
 """
-    api_result = parse_code(unsupported_api, ParseOptions(strict_builtin_namespaces=True))
-    assert any(
-        diag.code == codes.UNSUPPORTED_FEATURE and diag.severity is Severity.ERROR
-        for diag in api_result.diagnostics
-    )
+    api_result = parse_code(supported_api, ParseOptions(strict_builtin_namespaces=True))
+    assert not any(diag.code == codes.UNSUPPORTED_FEATURE for diag in api_result.diagnostics)
     assert not any(diag.code == codes.UNKNOWN_BUILTIN_MEMBER for diag in api_result.diagnostics)
 
     unsupported_param = """//@version=6
