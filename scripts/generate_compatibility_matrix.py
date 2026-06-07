@@ -11,6 +11,7 @@ Output:
   - pine2ast/compatibility/compatibility_matrix.json (machine-readable)
   - pine2ast/compatibility/compatibility_matrix.md   (human-readable, summary + sample table)
 """
+
 from __future__ import annotations
 
 import json
@@ -93,7 +94,9 @@ def render_markdown(matrix: dict[str, Any]) -> str:
 
     # Per-axis summary
     lines.append("## Summary by axis\n")
-    lines.append("| Axis | DONE_VERIFIED | IMPLEMENTED_UNVERIFIED | UNSUPPORTED_DIAGNOSTIC | PARTIAL | NOT_STARTED |")
+    lines.append(
+        "| Axis | DONE_VERIFIED | IMPLEMENTED_UNVERIFIED | UNSUPPORTED_DIAGNOSTIC | PARTIAL | NOT_STARTED |"
+    )
     lines.append("|---|---:|---:|---:|---:|---:|")
     for ax in AXES:
         c = summary[ax]
@@ -109,7 +112,10 @@ def render_markdown(matrix: dict[str, Any]) -> str:
     ready_codegen = sum(1 for it in matrix["items"] if it["codegen"] == "DONE_VERIFIED")
     ready_runtime = sum(1 for it in matrix["items"] if it["runtime"] == "DONE_VERIFIED")
     ready_oracle = sum(1 for it in matrix["items"] if it["oracle"] == "DONE_VERIFIED")
-    pct = lambda n: f"{n/total*100:.1f}%" if total else "0%"
+
+    def pct(n: int) -> str:
+        return f"{n/total*100:.1f}%" if total else "0%"
+
     lines.append("## Overall readiness\n")
     lines.append(f"- parser DONE_VERIFIED: **{ready_parser}/{total}** ({pct(ready_parser)})")
     lines.append(f"- semantic DONE_VERIFIED: **{ready_semantic}/{total}** ({pct(ready_semantic)})")

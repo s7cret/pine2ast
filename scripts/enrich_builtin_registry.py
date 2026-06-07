@@ -11,6 +11,7 @@ For each function/variable/constant/method/type in the registry, derive:
 Output: writes support_statuses into the same JSON, alongside existing data,
 in a new top-level section. Does NOT mutate existing function/method/etc entries.
 """
+
 from __future__ import annotations
 
 import json
@@ -54,10 +55,8 @@ def status_for(builtin_id: str) -> dict[str, str | bool]:
     return {
         "official_known": True,
         "implemented": parity["parser"] in {"DONE_VERIFIED", "IMPLEMENTED_UNVERIFIED"},
-        "lowerable": parity["codegen"]
-        in {"DONE_VERIFIED", "IMPLEMENTED_UNVERIFIED"},
-        "runtime_supported": parity["runtime"]
-        in {"DONE_VERIFIED", "IMPLEMENTED_UNVERIFIED"},
+        "lowerable": parity["codegen"] in {"DONE_VERIFIED", "IMPLEMENTED_UNVERIFIED"},
+        "runtime_supported": parity["runtime"] in {"DONE_VERIFIED", "IMPLEMENTED_UNVERIFIED"},
         "oracle_verified": parity["oracle"] == "DONE_VERIFIED",
     }
 
@@ -101,9 +100,7 @@ def main() -> int:
                 "official_known": sum(1 for s in v.values() if s.get("official_known")),
                 "implemented": sum(1 for s in v.values() if s.get("implemented")),
                 "lowerable": sum(1 for s in v.values() if s.get("lowerable")),
-                "runtime_supported": sum(
-                    1 for s in v.values() if s.get("runtime_supported")
-                ),
+                "runtime_supported": sum(1 for s in v.values() if s.get("runtime_supported")),
                 "oracle_verified": sum(1 for s in v.values() if s.get("oracle_verified")),
             }
             for key, v in statuses.items()

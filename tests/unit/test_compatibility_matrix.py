@@ -1,4 +1,5 @@
 """Smoke test for compatibility matrix generator and JSON shape."""
+
 from __future__ import annotations
 
 import json

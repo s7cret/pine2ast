@@ -1,4 +1,5 @@
 """Validate enriched builtins_v6.json support_statuses structure."""
+
 from __future__ import annotations
 
 import json
