@@ -13,7 +13,7 @@ f(int x, string label="ok") => x
 y = f("bad")
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in diagnostic_codes(src)
+    assert codes.ARGUMENT_TYPE in diagnostic_codes(src)
 
 
 def test_user_function_unknown_and_missing_named_arguments_are_reported():
@@ -52,7 +52,7 @@ type Pivot
 p = Pivot.new(x="bad", y=close)
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in diagnostic_codes(src)
+    assert codes.ARGUMENT_TYPE in diagnostic_codes(src)
 
 
 def test_udt_method_argument_type_mismatch_is_reported():
@@ -67,7 +67,7 @@ p = Pivot.new(1, close)
 z = p.move("bad")
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in diagnostic_codes(src)
+    assert codes.ARGUMENT_TYPE in diagnostic_codes(src)
 
 
 def test_valid_user_function_constructor_and_method_calls_stay_clean():

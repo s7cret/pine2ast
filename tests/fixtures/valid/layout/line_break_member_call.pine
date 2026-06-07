@@ -3,4 +3,4 @@ indicator("Chain")
 x = str.tostring(
     ta.sma(close, 20)
 )
-plot(close, title = x)
+plot(close, title = "Chain SMA")

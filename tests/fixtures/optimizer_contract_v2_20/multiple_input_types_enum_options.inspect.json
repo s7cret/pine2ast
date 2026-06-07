@@ -122,6 +122,7 @@
     "import_aliases": [],
     "namespaces": [
       "input",
+      "plot",
       "ta"
     ],
     "builtin_calls": [

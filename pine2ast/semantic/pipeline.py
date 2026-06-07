@@ -5,7 +5,6 @@ from typing import Protocol
 
 from pine2ast.ast.nodes import Program
 
-
 PASS_PIPELINE = (
     "declaration_index",
     "scope_symbols",

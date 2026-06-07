@@ -103,6 +103,12 @@ class BaseParser:
         self._skip_newlines()
         declaration = None
         items = []
+        # Consume leading imports before looking for the declaration.
+        while self._at(TokenKind.IMPORT):
+            imported = self.parse_import()
+            if imported is not None:
+                items.append(imported)
+            self._skip_newlines()
         if self._looks_like_declaration_statement():
             expr = self.parse_expression()
             if isinstance(expr, CallExpr):
@@ -224,7 +230,10 @@ class BaseParser:
                     j += 1
                     break
                 return None
-        if self.tokens[j].kind is TokenKind.LBRACKET and self.tokens[j + 1].kind is TokenKind.RBRACKET:
+        if (
+            self.tokens[j].kind is TokenKind.LBRACKET
+            and self.tokens[j + 1].kind is TokenKind.RBRACKET
+        ):
             j += 2
         return j
 

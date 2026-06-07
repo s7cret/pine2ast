@@ -38,7 +38,10 @@ def test_compare_detects_expected_stage15_drift():
     assert any(change["name"] == "ta.sma" for change in report["changed_signatures"])
     assert any(change["name"] == "strategy.entry" for change in report["new_removed_named_args"])
     assert any(change["name"] == "strategy" for change in report["strategy_declaration_args"])
-    assert any(change.get("current", {}).get("name") == "line.get_price" for change in report["method_changes"])
+    assert any(
+        change.get("current", {}).get("name") == "line.get_price"
+        for change in report["method_changes"]
+    )
 
 
 def test_main_writes_markdown_and_json(tmp_path):

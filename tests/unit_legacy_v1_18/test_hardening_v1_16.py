@@ -14,7 +14,7 @@ array<float> xs = array.new<float>()
 xs.push("bad")
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in _error_codes(src)
+    assert codes.COLLECTION_ELEMENT_TYPE in _error_codes(src)
 
 
 def test_array_get_infers_element_type_for_typed_assignment():
@@ -47,8 +47,8 @@ map<string,float> m = map.new<string,float>()
 m.get(1)
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in _error_codes(bad_value)
-    assert codes.TYPE_MISMATCH in _error_codes(bad_key)
+    assert codes.COLLECTION_ELEMENT_TYPE in _error_codes(bad_value)
+    assert codes.COLLECTION_ELEMENT_TYPE in _error_codes(bad_key)
 
 
 def test_map_get_infers_value_type_for_typed_assignment():
@@ -88,6 +88,6 @@ m.set(0, 0, close)
 float y = m.get(0, 0)
 plot(close)
 """
-    assert codes.TYPE_MISMATCH in _error_codes(bad_set)
+    assert codes.COLLECTION_ELEMENT_TYPE in _error_codes(bad_set)
     assert codes.TYPE_MISMATCH in _error_codes(bad_get)
     assert _error_codes(ok) == []

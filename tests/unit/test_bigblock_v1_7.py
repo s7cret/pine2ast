@@ -43,7 +43,9 @@ plot(close)
 """)
     assert codes.ARGUMENT_TYPE in errors
     assert codes.ARGUMENT_COUNT in errors
-    messages = [d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
+    messages = [
+        d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}
+    ]
     assert any("Missing required parameter(s) for ta.linreg: offset" in msg for msg in messages)
 
 
@@ -53,7 +55,9 @@ indicator("Builtin namespace value checks")
 plot(ta.atr20)
 """)
     assert codes.UNKNOWN_BUILTIN_MEMBER in errors
-    messages = [d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}]
+    messages = [
+        d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}
+    ]
     assert any("Builtin namespace member ta.atr20" in msg for msg in messages)
 
 

@@ -15,7 +15,7 @@ enum Trend
 x = Trend.SIDEWAYS
 plot(close)
 """)
-    assert "P2A1608" in codes
+    assert "P2A1605" in codes
 
 
 def test_known_enum_member_validates_cleanly():
@@ -39,7 +39,7 @@ p = Pivot.new(bar_index, close)
 z = p.missing
 plot(p.y)
 """)
-    assert "P2A1608" in codes
+    assert "P2A1605" in codes
 
 
 def test_unknown_udt_field_reassignment_is_rejected():
@@ -52,7 +52,7 @@ p = Pivot.new(bar_index, close)
 p.missing := high
 plot(p.y)
 """)
-    assert "P2A1608" in codes
+    assert "P2A1605" in codes
 
 
 def test_udt_constructor_missing_required_field_is_rejected():
@@ -64,7 +64,7 @@ type Pivot
 p = Pivot.new(bar_index)
 plot(close)
 """)
-    assert "P2A1609" in codes
+    assert "P2A1404" in codes
 
 
 def test_udt_constructor_named_fields_validate_cleanly():

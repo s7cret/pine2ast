@@ -118,6 +118,7 @@
     "import_aliases": [],
     "namespaces": [
       "input",
+      "plot",
       "strategy",
       "ta"
     ],

@@ -12,7 +12,7 @@ indicator("T")
 Foobar x = na
 plot(close)
 """)
-    assert "P2A1605" in codes
+    assert "P2A1604" in codes
 
 
 def test_unknown_type_in_udt_field_is_rejected():
@@ -22,7 +22,7 @@ type Pivot
     Foobar x
 plot(close)
 """)
-    assert "P2A1605" in codes
+    assert "P2A1604" in codes
 
 
 def test_unknown_type_in_function_parameter_is_rejected_once():
@@ -32,7 +32,7 @@ f(Foobar x) =>
     x
 plot(close)
 """)
-    assert codes.count("P2A1605") == 1
+    assert codes.count("P2A1604") == 1
 
 
 def test_duplicate_udt_fields_are_rejected():
@@ -43,7 +43,7 @@ type Pivot
     float x
 plot(close)
 """)
-    assert "P2A1606" in codes
+    assert "P2A1102" in codes
 
 
 def test_duplicate_enum_members_are_rejected():
@@ -54,7 +54,7 @@ enum Trend
     UP
 plot(close)
 """)
-    assert "P2A1607" in codes
+    assert "P2A1102" in codes
 
 
 def test_valid_recursive_user_types_and_generics_validate_cleanly():

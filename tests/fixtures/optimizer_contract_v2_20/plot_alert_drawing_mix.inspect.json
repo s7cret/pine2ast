@@ -97,6 +97,7 @@
     "namespaces": [
       "label",
       "line",
+      "plot",
       "ta"
     ],
     "builtin_calls": [

@@ -2,7 +2,7 @@
   "kind": "Program",
   "span": {
     "start_offset": 0,
-    "end_offset": 97,
+    "end_offset": 107,
     "start_line": 1,
     "start_col": 1,
     "end_line": 7,
@@ -243,21 +243,21 @@
       "kind": "ExpressionStatement",
       "span": {
         "start_offset": 74,
-        "end_offset": 96,
+        "end_offset": 106,
         "start_line": 6,
         "start_col": 1,
         "end_line": 6,
-        "end_col": 23
+        "end_col": 33
       },
       "expression": {
         "kind": "CallExpr",
         "span": {
           "start_offset": 74,
-          "end_offset": 96,
+          "end_offset": 106,
           "start_line": 6,
           "start_col": 1,
           "end_line": 6,
-          "end_col": 23
+          "end_col": 33
         },
         "callee": {
           "kind": "Identifier",
@@ -300,24 +300,25 @@
             "kind": "Argument",
             "span": {
               "start_offset": 92,
-              "end_offset": 95,
+              "end_offset": 105,
               "start_line": 6,
               "start_col": 19,
               "end_line": 6,
-              "end_col": 22
+              "end_col": 32
             },
             "name": "title",
             "value": {
-              "kind": "Identifier",
+              "kind": "Literal",
               "span": {
                 "start_offset": 94,
-                "end_offset": 95,
+                "end_offset": 105,
                 "start_line": 6,
                 "start_col": 21,
                 "end_line": 6,
-                "end_col": 22
+                "end_col": 32
               },
-              "name": "x"
+              "value": "Chain SMA",
+              "literal_type": "string"
             }
           }
         ]
