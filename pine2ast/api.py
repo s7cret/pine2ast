@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from pine2ast import security
+from pine2ast import audit, security
 from pine2ast._version import __version__
 from pine2ast.ast.nodes import Program
 from pine2ast.ast.serialize import ast_to_dict as ast_to_dict, ast_to_json as ast_to_json
@@ -49,6 +49,12 @@ class ParseOptions:
     loop_max_iterations: int = security.DEFAULT_LOOP_MAX_ITERATIONS
     strict_builtin_namespaces: bool = False
     runtime_contract_profile: str | None = None
+    # P2.2: optional hook for shipping security-tier rejections
+    # (P2A1106-1113, P2A9001-9003, P2A9201) to a SIEM / audit log.
+    # The hook receives a SecurityAuditEvent per security diagnostic.
+    # See pine2ast.audit for the event shape and the
+    # is_security_audit_code whitelist.
+    security_audit_hook: Optional[audit.SecurityAuditHook] = None
 
     def clamp_to_ceiling(self) -> "ParseOptions":
         """Return a copy of self with all resource fields clamped to
@@ -73,6 +79,7 @@ class ParseOptions:
             ),
             strict_builtin_namespaces=self.strict_builtin_namespaces,
             runtime_contract_profile=self.runtime_contract_profile,
+            security_audit_hook=self.security_audit_hook,
         )
 
 
@@ -131,50 +138,47 @@ def _dedupe_diagnostics(diagnostics: list[Diagnostic]) -> list[Diagnostic]:
 
 def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseResult:
     options = (options or ParseOptions()).clamp_to_ceiling()
+    # P2.2: build the audit hook runner up front. The runner is
+    # itself stateless apart from the ``observed`` counter; we
+    # use it to short-circuit when no hook is wired so the rest
+    # of the function can call ``runner.emit(diag)`` without
+    # an ``if`` at every call site.
+    audit_runner = audit.AuditHookRunner(options.security_audit_hook)
     # P1.6: sanitize source_name once so every diagnostic below sees
     # the same redacted value. We also pre-validate length and chars so
     # the caller gets a security-tier diagnostic instead of seeing
     # their un-redacted path echoed back in every error message.
     safe_name = security.sanitize_source_name(options.source_name)
     if options.source_name and len(options.source_name) > security.ABSOLUTE_MAX_SOURCE_NAME_LEN:
-        return ParseResult(
-            None,
-            [
-                Diagnostic(
-                    Severity.FATAL,
-                    codes.SOURCE_NAME_TOO_LONG,
-                    f"source_name exceeds {security.ABSOLUTE_MAX_SOURCE_NAME_LEN} characters",
-                    SourceSpan.zero(),
-                )
-            ],
+        diag = Diagnostic(
+            Severity.FATAL,
+            codes.SOURCE_NAME_TOO_LONG,
+            f"source_name exceeds {security.ABSOLUTE_MAX_SOURCE_NAME_LEN} characters",
+            SourceSpan.zero(),
         )
+        audit_runner.emit(diag, source_name=safe_name)
+        return ParseResult(None, [diag])
     if options.source_name and any(ord(c) < 0x20 or ord(c) == 0x7F for c in options.source_name):
-        return ParseResult(
-            None,
-            [
-                Diagnostic(
-                    Severity.FATAL,
-                    codes.SOURCE_NAME_CONTROL_CHAR,
-                    "source_name contains control characters",
-                    SourceSpan.zero(),
-                )
-            ],
+        diag = Diagnostic(
+            Severity.FATAL,
+            codes.SOURCE_NAME_CONTROL_CHAR,
+            "source_name contains control characters",
+            SourceSpan.zero(),
         )
+        audit_runner.emit(diag, source_name=safe_name)
+        return ParseResult(None, [diag])
     # P1.6: reject unknown runtime-contract profile up front (before
     # any parsing work) so the caller gets a clear error instead of a
     # silent fallback to compatibility mode.
     if not security.is_safe_runtime_contract_profile(options.runtime_contract_profile):
-        return ParseResult(
-            None,
-            [
-                Diagnostic(
-                    Severity.FATAL,
-                    codes.RUNTIME_CONTRACT_PROFILE_UNKNOWN,
-                    f"Unknown runtime_contract_profile: {options.runtime_contract_profile!r}",
-                    SourceSpan.zero(),
-                )
-            ],
+        diag = Diagnostic(
+            Severity.FATAL,
+            codes.RUNTIME_CONTRACT_PROFILE_UNKNOWN,
+            f"Unknown runtime_contract_profile: {options.runtime_contract_profile!r}",
+            SourceSpan.zero(),
         )
+        audit_runner.emit(diag, source_name=safe_name)
+        return ParseResult(None, [diag])
     # P1.6: catch numeric literals that would overflow to ±inf in
     # Python's float(). Pine Script has no inf literal, so the only way
     # to get one is to write `1e500` or similar.
@@ -189,33 +193,32 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
             overflows = []
     if overflows:
         first_start, first_end, first_text = overflows[0]
-        return ParseResult(
-            None,
-            [
-                Diagnostic(
-                    Severity.FATAL,
-                    codes.FLOAT_OVERFLOW_LITERAL,
-                    f"Numeric literal overflows to infinity: {first_text!r}",
-                    SourceSpan(
-                        start_offset=first_start,
-                        end_offset=first_end,
-                        start_line=1,
-                        start_col=1,
-                        end_line=1,
-                        end_col=1,
-                    ),
-                )
-            ],
+        diag = Diagnostic(
+            Severity.FATAL,
+            codes.FLOAT_OVERFLOW_LITERAL,
+            f"Numeric literal overflows to infinity: {first_text!r}",
+            SourceSpan(
+                start_offset=first_start,
+                end_offset=first_end,
+                start_line=1,
+                start_col=1,
+                end_line=1,
+                end_col=1,
+            ),
         )
+        audit_runner.emit(diag, source_name=safe_name)
+        return ParseResult(None, [diag])
     if isinstance(code, bytes) and len(code) > options.max_file_size_bytes:
         diag = Diagnostic(
             Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero()
         )
+        audit_runner.emit(diag, source_name=safe_name)
         return ParseResult(None, [diag])
     if isinstance(code, str) and len(code.encode("utf-8")) > options.max_file_size_bytes:
         diag = Diagnostic(
             Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero()
         )
+        audit_runner.emit(diag, source_name=safe_name)
         return ParseResult(None, [diag])
 
     normalized = SourceNormalizer().normalize(code, source_name=safe_name)
@@ -313,17 +316,21 @@ def parse_file(path: str, options: ParseOptions | None = None) -> ParseResult:
     try:
         resolved = security.safe_resolve_path(p, must_exist=True)
     except (FileNotFoundError, ValueError) as exc:
-        return ParseResult(
-            None,
-            [
-                Diagnostic(
-                    Severity.FATAL,
-                    codes.UNSAFE_PATH,
-                    f"Refusing path: {exc}",
-                    SourceSpan.zero(),
-                )
-            ],
+        diag = Diagnostic(
+            Severity.FATAL,
+            codes.UNSAFE_PATH,
+            f"Refusing path: {exc}",
+            SourceSpan.zero(),
         )
+        # P2.2: emit audit event for path-safety rejections.
+        # The source_name here is the un-resolved path the caller
+        # asked for (Pine doesn't see the resolved target because
+        # we never read it). Sanitize it so a sensitive path isn't
+        # echoed in the audit log either.
+        audit.AuditHookRunner(options.security_audit_hook).emit(
+            diag, source_name=security.sanitize_source_name(str(p))
+        )
+        return ParseResult(None, [diag])
     return parse_code(resolved.read_bytes(), options)
 
 
