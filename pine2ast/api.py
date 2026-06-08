@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+from pine2ast import security
 from pine2ast._version import __version__
 from pine2ast.ast.nodes import Program
 from pine2ast.ast.serialize import ast_to_dict as ast_to_dict, ast_to_json as ast_to_json
@@ -32,13 +33,39 @@ class ParseOptions:
     collect_trivia: bool = True
     run_semantic: bool = True
     recover_errors: bool = True
-    max_diagnostics: int = 200
+    max_diagnostics: int = security.ABSOLUTE_MAX_DIAGNOSTICS
     source_name: str = "<memory>"
+    # Resource ceilings. These are HARD-CLAMPED in `_resolve_options` to
+    # `pine2ast.security.ABSOLUTE_MAX_*` so a caller cannot bypass the
+    # DoS guards by passing a huge value. Callers can lower them per
+    # request (e.g. "this server accepts 100 KiB scripts max").
     max_file_size_bytes: int = DEFAULT_MAX_FILE_SIZE_BYTES
     max_tokens: int = DEFAULT_MAX_TOKENS
     max_ast_nodes: int = DEFAULT_MAX_AST_NODES
     strict_builtin_namespaces: bool = False
     runtime_contract_profile: str | None = None
+
+    def clamp_to_ceiling(self) -> "ParseOptions":
+        """Return a copy of self with all resource fields clamped to
+        the absolute ceiling. The field defaults are already inside
+        the ceiling so this is a no-op for any normal caller."""
+        return ParseOptions(
+            version=self.version,
+            strict_v6=self.strict_v6,
+            collect_tokens=self.collect_tokens,
+            collect_trivia=self.collect_trivia,
+            run_semantic=self.run_semantic,
+            recover_errors=self.recover_errors,
+            max_diagnostics=min(self.max_diagnostics, security.ABSOLUTE_MAX_DIAGNOSTICS),
+            source_name=self.source_name,
+            max_file_size_bytes=min(
+                self.max_file_size_bytes, security.ABSOLUTE_MAX_FILE_SIZE_BYTES
+            ),
+            max_tokens=min(self.max_tokens, security.ABSOLUTE_MAX_TOKENS),
+            max_ast_nodes=min(self.max_ast_nodes, security.ABSOLUTE_MAX_AST_NODES),
+            strict_builtin_namespaces=self.strict_builtin_namespaces,
+            runtime_contract_profile=self.runtime_contract_profile,
+        )
 
 
 def runtime_contract_v1_4_options(**overrides: object) -> ParseOptions:
@@ -95,7 +122,83 @@ def _dedupe_diagnostics(diagnostics: list[Diagnostic]) -> list[Diagnostic]:
 
 
 def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseResult:
-    options = options or ParseOptions()
+    options = (options or ParseOptions()).clamp_to_ceiling()
+    # P1.6: sanitize source_name once so every diagnostic below sees
+    # the same redacted value. We also pre-validate length and chars so
+    # the caller gets a security-tier diagnostic instead of seeing
+    # their un-redacted path echoed back in every error message.
+    safe_name = security.sanitize_source_name(options.source_name)
+    if options.source_name and len(options.source_name) > security.ABSOLUTE_MAX_SOURCE_NAME_LEN:
+        return ParseResult(
+            None,
+            [
+                Diagnostic(
+                    Severity.FATAL,
+                    codes.SOURCE_NAME_TOO_LONG,
+                    f"source_name exceeds {security.ABSOLUTE_MAX_SOURCE_NAME_LEN} characters",
+                    SourceSpan.zero(),
+                )
+            ],
+        )
+    if options.source_name and any(ord(c) < 0x20 or ord(c) == 0x7F for c in options.source_name):
+        return ParseResult(
+            None,
+            [
+                Diagnostic(
+                    Severity.FATAL,
+                    codes.SOURCE_NAME_CONTROL_CHAR,
+                    "source_name contains control characters",
+                    SourceSpan.zero(),
+                )
+            ],
+        )
+    # P1.6: reject unknown runtime-contract profile up front (before
+    # any parsing work) so the caller gets a clear error instead of a
+    # silent fallback to compatibility mode.
+    if not security.is_safe_runtime_contract_profile(options.runtime_contract_profile):
+        return ParseResult(
+            None,
+            [
+                Diagnostic(
+                    Severity.FATAL,
+                    codes.RUNTIME_CONTRACT_PROFILE_UNKNOWN,
+                    f"Unknown runtime_contract_profile: {options.runtime_contract_profile!r}",
+                    SourceSpan.zero(),
+                )
+            ],
+        )
+    # P1.6: catch numeric literals that would overflow to ±inf in
+    # Python's float(). Pine Script has no inf literal, so the only way
+    # to get one is to write `1e500` or similar.
+    if isinstance(code, str):
+        overflows = security.find_overflowing_float_literals(code)
+    else:
+        try:
+            overflows = security.find_overflowing_float_literals(
+                code.decode("utf-8", errors="replace")
+            )
+        except Exception:  # noqa: BLE001 — bytes are best-effort decoded for the overflow check
+            overflows = []
+    if overflows:
+        first_start, first_end, first_text = overflows[0]
+        return ParseResult(
+            None,
+            [
+                Diagnostic(
+                    Severity.FATAL,
+                    codes.FLOAT_OVERFLOW_LITERAL,
+                    f"Numeric literal overflows to infinity: {first_text!r}",
+                    SourceSpan(
+                        start_offset=first_start,
+                        end_offset=first_end,
+                        start_line=1,
+                        start_col=1,
+                        end_line=1,
+                        end_col=1,
+                    ),
+                )
+            ],
+        )
     if isinstance(code, bytes) and len(code) > options.max_file_size_bytes:
         diag = Diagnostic(
             Severity.FATAL, codes.FILE_TOO_LARGE, "Input file is too large.", SourceSpan.zero()
@@ -107,7 +210,7 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
         )
         return ParseResult(None, [diag])
 
-    normalized = SourceNormalizer().normalize(code, source_name=options.source_name)
+    normalized = SourceNormalizer().normalize(code, source_name=safe_name)
     diagnostics = list(normalized.diagnostics)
     if any(d.severity is Severity.FATAL for d in diagnostics):
         return ParseResult(None, diagnostics)
@@ -195,7 +298,24 @@ def parse_file(path: str, options: ParseOptions | None = None) -> ParseResult:
     options = options or ParseOptions(source_name=str(p))
     if options.source_name == "<memory>":
         options.source_name = str(p)
-    return parse_code(p.read_bytes(), options)
+    # P1.6: refuse to read through a symlink or escape a parent. The
+    # caller can still pass any path; we just won't follow a chain of
+    # symlinks to a target the caller never named explicitly.
+    try:
+        resolved = security.safe_resolve_path(p, must_exist=True)
+    except (FileNotFoundError, ValueError) as exc:
+        return ParseResult(
+            None,
+            [
+                Diagnostic(
+                    Severity.FATAL,
+                    codes.UNSAFE_PATH,
+                    f"Refusing path: {exc}",
+                    SourceSpan.zero(),
+                )
+            ],
+        )
+    return parse_code(resolved.read_bytes(), options)
 
 
 def diagnostics_to_json(diagnostics: list[Diagnostic], *, indent: int = 2) -> str:

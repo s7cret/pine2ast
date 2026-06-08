@@ -16,6 +16,15 @@ REDECLARATION = "P2A1102"
 REASSIGN_UNDECLARED = "P2A1103"
 CONST_REASSIGNMENT = "P2A1104"
 COMPOUND_UNDECLARED = "P2A1105"
+# Security-tier codes (P1.6). These are emitted by pine2ast.security
+# and the API layer when an input violates a resource ceiling or a
+# hard policy. They share the 1xxx range with semantic diagnostics
+# because the trigger is "the input, not the script logic, is wrong".
+SOURCE_NAME_TOO_LONG = "P2A1106"
+SOURCE_NAME_CONTROL_CHAR = "P2A1107"
+RESOURCE_CEILING_EXCEEDED = "P2A1108"
+RUNTIME_CONTRACT_PROFILE_UNKNOWN = "P2A1109"
+FLOAT_OVERFLOW_LITERAL = "P2A1110"
 NON_BOOL_CONDITION = "P2A1201"
 NA_IN_BOOL_CONTEXT = "P2A1202"
 BOOL_CANNOT_BE_NA = "P2A1203"
@@ -56,3 +65,7 @@ UNSTABLE_NA_NARROWING = "P2A1903"
 FILE_TOO_LARGE = "P2A9001"
 TOO_MANY_TOKENS = "P2A9002"
 TOO_MANY_AST_NODES = "P2A9003"
+# P1.6: path-safety diagnostic. Lives in the 9xxx (resource) range
+# rather than the 1xxx (semantic) range because the trigger is
+# "this input is unsafe to even look at", not "the script logic is wrong".
+UNSAFE_PATH = "P2A9201"
