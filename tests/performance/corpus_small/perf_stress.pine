@@ -1,0 +1,302 @@
+// @version=6
+indicator("P1.5_perf_stress", overlay=true, max_lines_count=500, max_labels_count=500, max_boxes_count=500)
+
+len0 = input.int(5, "Length 0", minval=1, maxval=200, step=1, group="params")
+len1 = input.int(7, "Length 1", minval=1, maxval=200, step=1, group="params")
+len2 = input.int(9, "Length 2", minval=1, maxval=200, step=1, group="params")
+len3 = input.int(11, "Length 3", minval=1, maxval=200, step=1, group="params")
+len4 = input.int(13, "Length 4", minval=1, maxval=200, step=1, group="params")
+len5 = input.int(15, "Length 5", minval=1, maxval=200, step=1, group="params")
+len6 = input.int(17, "Length 6", minval=1, maxval=200, step=1, group="params")
+len7 = input.int(19, "Length 7", minval=1, maxval=200, step=1, group="params")
+len8 = input.int(21, "Length 8", minval=1, maxval=200, step=1, group="params")
+len9 = input.int(23, "Length 9", minval=1, maxval=200, step=1, group="params")
+len10 = input.int(25, "Length 10", minval=1, maxval=200, step=1, group="params")
+len11 = input.int(27, "Length 11", minval=1, maxval=200, step=1, group="params")
+len12 = input.int(29, "Length 12", minval=1, maxval=200, step=1, group="params")
+len13 = input.int(31, "Length 13", minval=1, maxval=200, step=1, group="params")
+len14 = input.int(33, "Length 14", minval=1, maxval=200, step=1, group="params")
+len15 = input.int(35, "Length 15", minval=1, maxval=200, step=1, group="params")
+len16 = input.int(37, "Length 16", minval=1, maxval=200, step=1, group="params")
+len17 = input.int(39, "Length 17", minval=1, maxval=200, step=1, group="params")
+len18 = input.int(41, "Length 18", minval=1, maxval=200, step=1, group="params")
+len19 = input.int(43, "Length 19", minval=1, maxval=200, step=1, group="params")
+len20 = input.int(45, "Length 20", minval=1, maxval=200, step=1, group="params")
+len21 = input.int(47, "Length 21", minval=1, maxval=200, step=1, group="params")
+len22 = input.int(49, "Length 22", minval=1, maxval=200, step=1, group="params")
+len23 = input.int(51, "Length 23", minval=1, maxval=200, step=1, group="params")
+len24 = input.int(53, "Length 24", minval=1, maxval=200, step=1, group="params")
+len25 = input.int(55, "Length 25", minval=1, maxval=200, step=1, group="params")
+len26 = input.int(57, "Length 26", minval=1, maxval=200, step=1, group="params")
+len27 = input.int(59, "Length 27", minval=1, maxval=200, step=1, group="params")
+len28 = input.int(61, "Length 28", minval=1, maxval=200, step=1, group="params")
+len29 = input.int(63, "Length 29", minval=1, maxval=200, step=1, group="params")
+src0 = ta.ema(close, len0)
+src1 = ta.ema(close, len1)
+src2 = ta.ema(close, len2)
+src3 = ta.ema(close, len3)
+src4 = ta.ema(close, len4)
+src5 = ta.ema(close, len5)
+src6 = ta.ema(close, len6)
+src7 = ta.ema(close, len7)
+src8 = ta.ema(close, len8)
+src9 = ta.ema(close, len9)
+src10 = ta.ema(close, len10)
+src11 = ta.ema(close, len11)
+src12 = ta.ema(close, len12)
+src13 = ta.ema(close, len13)
+src14 = ta.ema(close, len14)
+src15 = ta.ema(close, len15)
+src16 = ta.ema(close, len16)
+src17 = ta.ema(close, len17)
+src18 = ta.ema(close, len18)
+src19 = ta.ema(close, len19)
+src20 = ta.ema(close, len20)
+src21 = ta.ema(close, len21)
+src22 = ta.ema(close, len22)
+src23 = ta.ema(close, len23)
+src24 = ta.ema(close, len24)
+src25 = ta.ema(close, len25)
+src26 = ta.ema(close, len26)
+src27 = ta.ema(close, len27)
+src28 = ta.ema(close, len28)
+src29 = ta.ema(close, len29)
+cond0 = ta.crossover(src0, ta.sma(close, len1))
+plotshape(cond0, title="sig0", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond1 = ta.crossover(src1, ta.sma(close, len2))
+plotshape(cond1, title="sig1", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond2 = ta.crossover(src2, ta.sma(close, len3))
+plotshape(cond2, title="sig2", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond3 = ta.crossover(src3, ta.sma(close, len4))
+plotshape(cond3, title="sig3", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond4 = ta.crossover(src4, ta.sma(close, len5))
+plotshape(cond4, title="sig4", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond5 = ta.crossover(src5, ta.sma(close, len1))
+plotshape(cond5, title="sig5", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond6 = ta.crossover(src6, ta.sma(close, len2))
+plotshape(cond6, title="sig6", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond7 = ta.crossover(src7, ta.sma(close, len3))
+plotshape(cond7, title="sig7", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond8 = ta.crossover(src8, ta.sma(close, len4))
+plotshape(cond8, title="sig8", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond9 = ta.crossover(src9, ta.sma(close, len5))
+plotshape(cond9, title="sig9", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond10 = ta.crossover(src10, ta.sma(close, len1))
+plotshape(cond10, title="sig10", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond11 = ta.crossover(src11, ta.sma(close, len2))
+plotshape(cond11, title="sig11", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond12 = ta.crossover(src12, ta.sma(close, len3))
+plotshape(cond12, title="sig12", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond13 = ta.crossover(src13, ta.sma(close, len4))
+plotshape(cond13, title="sig13", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond14 = ta.crossover(src14, ta.sma(close, len5))
+plotshape(cond14, title="sig14", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond15 = ta.crossover(src15, ta.sma(close, len1))
+plotshape(cond15, title="sig15", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond16 = ta.crossover(src16, ta.sma(close, len2))
+plotshape(cond16, title="sig16", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond17 = ta.crossover(src17, ta.sma(close, len3))
+plotshape(cond17, title="sig17", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond18 = ta.crossover(src18, ta.sma(close, len4))
+plotshape(cond18, title="sig18", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond19 = ta.crossover(src19, ta.sma(close, len5))
+plotshape(cond19, title="sig19", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond20 = ta.crossover(src20, ta.sma(close, len1))
+plotshape(cond20, title="sig20", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond21 = ta.crossover(src21, ta.sma(close, len2))
+plotshape(cond21, title="sig21", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond22 = ta.crossover(src22, ta.sma(close, len3))
+plotshape(cond22, title="sig22", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond23 = ta.crossover(src23, ta.sma(close, len4))
+plotshape(cond23, title="sig23", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond24 = ta.crossover(src24, ta.sma(close, len5))
+plotshape(cond24, title="sig24", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond25 = ta.crossover(src25, ta.sma(close, len1))
+plotshape(cond25, title="sig25", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond26 = ta.crossover(src26, ta.sma(close, len2))
+plotshape(cond26, title="sig26", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond27 = ta.crossover(src27, ta.sma(close, len3))
+plotshape(cond27, title="sig27", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond28 = ta.crossover(src28, ta.sma(close, len4))
+plotshape(cond28, title="sig28", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+cond29 = ta.crossover(src29, ta.sma(close, len5))
+plotshape(cond29, title="sig29", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 50))
+v0 = cond0 ? src0 : ta.sma(src0, len1) * 2 - close / (high + low)
+v1 = cond1 ? src1 : ta.sma(src1, len2) * 2 - close / (high + low)
+v2 = cond2 ? src2 : ta.sma(src2, len3) * 2 - close / (high + low)
+v3 = cond3 ? src3 : ta.sma(src3, len4) * 2 - close / (high + low)
+v4 = cond4 ? src4 : ta.sma(src4, len5) * 2 - close / (high + low)
+v5 = cond5 ? src5 : ta.sma(src5, len6) * 2 - close / (high + low)
+v6 = cond6 ? src6 : ta.sma(src6, len7) * 2 - close / (high + low)
+v7 = cond7 ? src7 : ta.sma(src7, len8) * 2 - close / (high + low)
+v8 = cond8 ? src8 : ta.sma(src8, len9) * 2 - close / (high + low)
+v9 = cond9 ? src9 : ta.sma(src9, len10) * 2 - close / (high + low)
+v10 = cond10 ? src10 : ta.sma(src10, len1) * 2 - close / (high + low)
+v11 = cond11 ? src11 : ta.sma(src11, len2) * 2 - close / (high + low)
+v12 = cond12 ? src12 : ta.sma(src12, len3) * 2 - close / (high + low)
+v13 = cond13 ? src13 : ta.sma(src13, len4) * 2 - close / (high + low)
+v14 = cond14 ? src14 : ta.sma(src14, len5) * 2 - close / (high + low)
+v15 = cond15 ? src15 : ta.sma(src15, len6) * 2 - close / (high + low)
+v16 = cond16 ? src16 : ta.sma(src16, len7) * 2 - close / (high + low)
+v17 = cond17 ? src17 : ta.sma(src17, len8) * 2 - close / (high + low)
+v18 = cond18 ? src18 : ta.sma(src18, len9) * 2 - close / (high + low)
+v19 = cond19 ? src19 : ta.sma(src19, len10) * 2 - close / (high + low)
+v20 = cond20 ? src20 : ta.sma(src20, len1) * 2 - close / (high + low)
+v21 = cond21 ? src21 : ta.sma(src21, len2) * 2 - close / (high + low)
+v22 = cond22 ? src22 : ta.sma(src22, len3) * 2 - close / (high + low)
+v23 = cond23 ? src23 : ta.sma(src23, len4) * 2 - close / (high + low)
+v24 = cond24 ? src24 : ta.sma(src24, len5) * 2 - close / (high + low)
+v25 = cond25 ? src25 : ta.sma(src25, len6) * 2 - close / (high + low)
+v26 = cond26 ? src26 : ta.sma(src26, len7) * 2 - close / (high + low)
+v27 = cond27 ? src27 : ta.sma(src27, len8) * 2 - close / (high + low)
+v28 = cond28 ? src28 : ta.sma(src28, len9) * 2 - close / (high + low)
+v29 = cond29 ? src29 : ta.sma(src29, len10) * 2 - close / (high + low)
+for i_0 = 0 to 5
+    val_0 = src0[i_0] + close[i_0]
+    if val_0 > open
+        plot(val_0, title="loop_plot_0")
+for i_1 = 0 to 5
+    val_1 = src1[i_1] + close[i_1]
+    if val_1 > open
+        plot(val_1, title="loop_plot_1")
+for i_2 = 0 to 5
+    val_2 = src2[i_2] + close[i_2]
+    if val_2 > open
+        plot(val_2, title="loop_plot_2")
+for i_3 = 0 to 5
+    val_3 = src3[i_3] + close[i_3]
+    if val_3 > open
+        plot(val_3, title="loop_plot_3")
+for i_4 = 0 to 5
+    val_4 = src4[i_4] + close[i_4]
+    if val_4 > open
+        plot(val_4, title="loop_plot_4")
+for i_5 = 0 to 5
+    val_5 = src5[i_5] + close[i_5]
+    if val_5 > open
+        plot(val_5, title="loop_plot_5")
+for i_6 = 0 to 5
+    val_6 = src6[i_6] + close[i_6]
+    if val_6 > open
+        plot(val_6, title="loop_plot_6")
+for i_7 = 0 to 5
+    val_7 = src7[i_7] + close[i_7]
+    if val_7 > open
+        plot(val_7, title="loop_plot_7")
+for i_8 = 0 to 5
+    val_8 = src8[i_8] + close[i_8]
+    if val_8 > open
+        plot(val_8, title="loop_plot_8")
+for i_9 = 0 to 5
+    val_9 = src9[i_9] + close[i_9]
+    if val_9 > open
+        plot(val_9, title="loop_plot_9")
+for i_10 = 0 to 5
+    val_10 = src0[i_10] + close[i_10]
+    if val_10 > open
+        plot(val_10, title="loop_plot_10")
+for i_11 = 0 to 5
+    val_11 = src1[i_11] + close[i_11]
+    if val_11 > open
+        plot(val_11, title="loop_plot_11")
+for i_12 = 0 to 5
+    val_12 = src2[i_12] + close[i_12]
+    if val_12 > open
+        plot(val_12, title="loop_plot_12")
+for i_13 = 0 to 5
+    val_13 = src3[i_13] + close[i_13]
+    if val_13 > open
+        plot(val_13, title="loop_plot_13")
+for i_14 = 0 to 5
+    val_14 = src4[i_14] + close[i_14]
+    if val_14 > open
+        plot(val_14, title="loop_plot_14")
+for i_15 = 0 to 5
+    val_15 = src5[i_15] + close[i_15]
+    if val_15 > open
+        plot(val_15, title="loop_plot_15")
+for i_16 = 0 to 5
+    val_16 = src6[i_16] + close[i_16]
+    if val_16 > open
+        plot(val_16, title="loop_plot_16")
+for i_17 = 0 to 5
+    val_17 = src7[i_17] + close[i_17]
+    if val_17 > open
+        plot(val_17, title="loop_plot_17")
+for i_18 = 0 to 5
+    val_18 = src8[i_18] + close[i_18]
+    if val_18 > open
+        plot(val_18, title="loop_plot_18")
+for i_19 = 0 to 5
+    val_19 = src9[i_19] + close[i_19]
+    if val_19 > open
+        plot(val_19, title="loop_plot_19")
+for i_20 = 0 to 5
+    val_20 = src0[i_20] + close[i_20]
+    if val_20 > open
+        plot(val_20, title="loop_plot_20")
+for i_21 = 0 to 5
+    val_21 = src1[i_21] + close[i_21]
+    if val_21 > open
+        plot(val_21, title="loop_plot_21")
+for i_22 = 0 to 5
+    val_22 = src2[i_22] + close[i_22]
+    if val_22 > open
+        plot(val_22, title="loop_plot_22")
+for i_23 = 0 to 5
+    val_23 = src3[i_23] + close[i_23]
+    if val_23 > open
+        plot(val_23, title="loop_plot_23")
+for i_24 = 0 to 5
+    val_24 = src4[i_24] + close[i_24]
+    if val_24 > open
+        plot(val_24, title="loop_plot_24")
+for i_25 = 0 to 5
+    val_25 = src5[i_25] + close[i_25]
+    if val_25 > open
+        plot(val_25, title="loop_plot_25")
+for i_26 = 0 to 5
+    val_26 = src6[i_26] + close[i_26]
+    if val_26 > open
+        plot(val_26, title="loop_plot_26")
+for i_27 = 0 to 5
+    val_27 = src7[i_27] + close[i_27]
+    if val_27 > open
+        plot(val_27, title="loop_plot_27")
+for i_28 = 0 to 5
+    val_28 = src8[i_28] + close[i_28]
+    if val_28 > open
+        plot(val_28, title="loop_plot_28")
+for i_29 = 0 to 5
+    val_29 = src9[i_29] + close[i_29]
+    if val_29 > open
+        plot(val_29, title="loop_plot_29")
+
+type Bar
+    o = float
+    h = float
+    l = float
+    c = float
+
+makeBar(o, h, l, c) =>
+    Bar.new(o, h, l, c)
+
+b = makeBar(open, high, low, close)
+bb = b.c * 2
+r = request.security(syminfo.tickerid, "D", close, lookahead=barmerge.lookahead_on, gaps=barmerge.gaps_off)
+a = array.new<float>(20, 0.0)
+for i = 0 to 19
+    array.set(a, i, close[i] - open[i])
+m = matrix.new<float>(3, 3, 0.0)
+matrix.set(m, 0, 0, close)
+matrix.add_row(m, 0, array.from(1.0, 2.0, 3.0))
+det = matrix.det(m)
+if ta.crossunder(close, ta.sma(close, 20))
+    alert("crossunder", alert.freq_once_per_bar_close)
+x = switch
+    close > open => 1
+    close < open => 2
+    => 0
+plot(x, title="switch_x")
+plot(det, title="det")
+plot(bb, title="bb")
