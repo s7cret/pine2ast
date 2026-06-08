@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any, TypeAlias
+from typing import Any, Optional, TypeAlias
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
 from pine2ast.ast.types import TypeRef
@@ -71,6 +71,10 @@ from pine2ast.semantic.passes import (
 )
 from pine2ast.semantic.passes.export_policy import validate_export_policy
 from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
+from pine2ast.semantic.passes.loop_dos import (
+    _is_literal_true,
+    _static_int_bound,
+)
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
 
 StatementHandler: TypeAlias = Callable[["SemanticAnalyzer", Any], None]
@@ -84,15 +88,22 @@ class SemanticAnalyzer:
         max_diagnostics: int = 200,
         strict_builtin_namespaces: bool = False,
         pine_version: int = 6,
+        loop_max_iterations: int = 100_000,
     ) -> None:
         self.registry = load_builtin_registry()
         self.model = SemanticModel()
         self.max_diagnostics = max_diagnostics
         self.strict_builtin_namespaces = strict_builtin_namespaces
         self.pine_version = pine_version
+        self.loop_max_iterations = loop_max_iterations
         self.scope_stack: list[Scope] = []
         self.next_symbol_id = 1
         self.loop_depth = 0
+        # P2.1: parallel to loop_depth, this tracks the static
+        # iteration bound of each enclosing for-range so a nested
+        # for-range can cheaply check the product.
+        # None = bound is not a literal (input/series/etc.).
+        self._static_loop_bounds: list[Optional[int]] = []
         self.local_depth = 0
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
@@ -887,12 +898,6 @@ class SemanticAnalyzer:
                     non_na_symbols={path for path in else_paths if "." not in path},
                     non_na_paths=else_paths,
                 )
-        elif isinstance(node, WhileStructure):
-            self._check_bool(node.condition)
-            self._validate_narrowing_condition(node.condition)
-            self.loop_depth += 1
-            self._visit_block(node.body, kind=ScopeKind.LOOP)
-            self.loop_depth -= 1
         elif isinstance(node, ForRangeStructure):
             self._visit_expr(node.start)
             self._visit_expr(node.end)
@@ -908,14 +913,82 @@ class SemanticAnalyzer:
                             f"for range {label} expression must be int-like, got {typ}.",
                             expr.span,
                         )
+            # P2.1: static DoS guard. When both start and end are
+            # int literals (or negations of int literals), compute
+            # the absolute iteration count. If it exceeds the
+            # configured ceiling, fail with LOOP_ITERATION_OVERFLOW
+            # before the runtime has to deal with a 10^9 iteration
+            # loop. Negative step is allowed; the static check
+            # covers both directions.
+            static_bound = _static_int_bound(node.start, node.end, node.step)
+            if static_bound is not None and static_bound > self.loop_max_iterations:
+                self._diag(
+                    Severity.ERROR,
+                    codes.LOOP_ITERATION_OVERFLOW,
+                    (
+                        f"for-range has static iteration bound {static_bound} "
+                        f"> loop_max_iterations={self.loop_max_iterations}. "
+                        "Reduce the literal bound or raise ParseOptions.loop_max_iterations."
+                    ),
+                    node.span,
+                )
+            # P2.1: nested-loop explosion. If we're inside another
+            # for-range and THIS one is static-bounded, the product
+            # could explode. We warn (not error) because the runtime
+            # max_loops will cut it off anyway, but a flag in CI is
+            # cheaper than a 100MB stack trace.
+            if self.loop_depth >= 1 and static_bound is not None:
+                # Look at the nearest enclosing for-range with a
+                # known static bound. We only need one parent to
+                # detect a product > 10^8 — deeper chains are
+                # necessarily larger still.
+                parent_static: Optional[int] = None
+                for bound in reversed(self._static_loop_bounds):
+                    if bound is not None:
+                        parent_static = bound
+                        break
+                if parent_static is not None:
+                    product = parent_static * static_bound
+                    if product > 100_000_000:
+                        self._diag(
+                            Severity.WARNING,
+                            codes.NESTED_LOOP_EXPLOSION,
+                            (
+                                f"Nested static-bounded loops: "
+                                f"{parent_static} * {static_bound} = {product} "
+                                f"iterations. The runtime will cap at 100,000."
+                            ),
+                            node.span,
+                        )
             self.loop_depth += 1
             self.local_depth += 1
             self._push_scope(ScopeKind.LOOP)
             self._define(node.variable, SymbolKind.VARIABLE, node.span, "int", "series")
+            self._static_loop_bounds.append(static_bound)
             for st in node.body.statements:
                 self._visit_statement(st)
+            self._static_loop_bounds.pop()
             self._pop_scope()
             self.local_depth -= 1
+            self.loop_depth -= 1
+        elif isinstance(node, WhileStructure):
+            self._check_bool(node.condition)
+            self._validate_narrowing_condition(node.condition)
+            # P2.1: literal-true `while` loops are almost always a
+            # bug. We warn (not error) so an intentional
+            # `while bar_index < some_runtime_cap` style is still
+            # allowed, but a `while true do ... end` typo is flagged.
+            if _is_literal_true(node.condition):
+                self._diag(
+                    Severity.WARNING,
+                    codes.INFINITE_WHILE_LITERAL,
+                    "while loop condition is the literal `true`; "
+                    "this loop has no static exit. Ensure a runtime "
+                    "break condition is reachable.",
+                    node.condition.span,
+                )
+            self.loop_depth += 1
+            self._visit_block(node.body, kind=ScopeKind.LOOP)
             self.loop_depth -= 1
         elif isinstance(node, ForInStructure):
             self._validate_for_in_target(node)

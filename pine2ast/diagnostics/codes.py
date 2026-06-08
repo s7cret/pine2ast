@@ -25,6 +25,12 @@ SOURCE_NAME_CONTROL_CHAR = "P2A1107"
 RESOURCE_CEILING_EXCEEDED = "P2A1108"
 RUNTIME_CONTRACT_PROFILE_UNKNOWN = "P2A1109"
 FLOAT_OVERFLOW_LITERAL = "P2A1110"
+# P2.1: Pine-level DoS guards. The runtime has its own max_loops
+# (=100_000) but we catch the obvious static cases at parse time
+# so the gateway can reject the script before even trying to run it.
+LOOP_ITERATION_OVERFLOW = "P2A1111"
+INFINITE_WHILE_LITERAL = "P2A1112"
+NESTED_LOOP_EXPLOSION = "P2A1113"
 NON_BOOL_CONDITION = "P2A1201"
 NA_IN_BOOL_CONTEXT = "P2A1202"
 BOOL_CANNOT_BE_NA = "P2A1203"

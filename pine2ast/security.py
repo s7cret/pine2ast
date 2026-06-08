@@ -53,6 +53,18 @@ ABSOLUTE_MAX_TOKENS: Final = 2_000_000  # 2M tokens
 ABSOLUTE_MAX_AST_NODES: Final = 2_000_000  # 2M nodes
 ABSOLUTE_MAX_DIAGNOSTICS: Final = 5_000
 ABSOLUTE_MAX_SOURCE_NAME_LEN: Final = 512
+# P2.1: per-script loop iteration ceiling. Pine runtime caps at
+# 100_000; we allow the same by default but expose a hard ceiling
+# 100x higher so a caller doing offline backtest compilation can
+# raise it without bypassing the DoS guard completely.
+DEFAULT_LOOP_MAX_ITERATIONS: Final = 100_000
+ABSOLUTE_MAX_LOOP_ITERATIONS: Final = 10_000_000
+# Nested-loop explosion threshold. If a static-bounded inner loop
+# multiplies a static-bounded outer loop past this bound, we warn.
+# We use 100_000_000 (10^8) because the runtime will cut off at
+# 10^5 anyway; we just want to catch the obvious
+# `for i = 0 to 1000` × `for j = 0 to 1000` shape.
+ABSOLUTE_NESTED_LOOP_BOUND: Final = 100_000_000
 
 # Whitelisted runtime-contract profiles. Anything else is rejected with
 # a P2A1104 diagnostic. ``None`` (default) and ``"compatibility"`` are
