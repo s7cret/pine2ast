@@ -42,6 +42,11 @@ class ParseOptions:
     max_file_size_bytes: int = DEFAULT_MAX_FILE_SIZE_BYTES
     max_tokens: int = DEFAULT_MAX_TOKENS
     max_ast_nodes: int = DEFAULT_MAX_AST_NODES
+    # P2.1: per-script static loop bound. The runtime has its own
+    # max_loops (=100_000); we use the same default here so a script
+    # that compiles clean is also runtime-safe. Callers doing offline
+    # backtest compilation can raise this up to ABSOLUTE_MAX.
+    loop_max_iterations: int = security.DEFAULT_LOOP_MAX_ITERATIONS
     strict_builtin_namespaces: bool = False
     runtime_contract_profile: str | None = None
 
@@ -63,6 +68,9 @@ class ParseOptions:
             ),
             max_tokens=min(self.max_tokens, security.ABSOLUTE_MAX_TOKENS),
             max_ast_nodes=min(self.max_ast_nodes, security.ABSOLUTE_MAX_AST_NODES),
+            loop_max_iterations=min(
+                self.loop_max_iterations, security.ABSOLUTE_MAX_LOOP_ITERATIONS
+            ),
             strict_builtin_namespaces=self.strict_builtin_namespaces,
             runtime_contract_profile=self.runtime_contract_profile,
         )
@@ -243,6 +251,7 @@ def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseR
             max_diagnostics=options.max_diagnostics,
             strict_builtin_namespaces=options.strict_builtin_namespaces,
             pine_version=options.version,
+            loop_max_iterations=options.loop_max_iterations,
         ).analyze(ast)
         diagnostics.extend(semantic_model.diagnostics)
     if ast is not None and options.runtime_contract_profile in {"v1.4", "runtime_contract_v1_4"}:
