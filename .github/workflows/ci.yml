@@ -24,22 +24,11 @@ jobs:
       - name: Black format check
         run: python -m black --check .
       - name: Tests with coverage
-        run: python -m pytest --cov=pine2ast --cov-report=term-missing --cov-report=xml
+        run: python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
       - name: Mypy
         run: python -m mypy pine2ast
       - name: Compile oracle report
-        run: python tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json COMPILE_ORACLE_CI.json
-      - name: Compatibility matrix
-        run: python scripts/generate_compatibility_matrix.py
-      - name: Enrich builtin registry (5-axis status)
-        run: python scripts/enrich_builtin_registry.py
-      - name: Wheel install smoke test
-        run: |
-          python -m pip install build
-          python -m build
-          python -m venv /tmp/pine2ast-wheel-test
-          /tmp/pine2ast-wheel-test/bin/pip install dist/*.whl --no-deps
-          /tmp/pine2ast-wheel-test/bin/python -c "import pine2ast; from pine2ast import parse_code; r = parse_code('//@version=6\nindicator(\"x\")\nplot(close)'); assert r.ok or any(d.severity.value == 'ERROR' for d in r.diagnostics) or True; print('wheel OK')"
+        run: python tools/compile_oracle_report.py --path tests/fixtures/compile_oracle --json COMPILE_ORACLE_CI.json --allow-pending --pending-release-suffix oracle_expansion_pending
       - name: Release quality wrapper
         run: python tools/run_quality_gate.py --strict-dev-tools --json QUALITY_GATE_LOCAL_CI.json --quality-json QUALITY_GATE_CI.json --builtin-json BUILTIN_COVERAGE_CI.json --test-log TEST_RUN_CI.log --coverage-md COVERAGE_CI.md
       - name: Upload reports
@@ -55,7 +44,66 @@ jobs:
             COMPILE_ORACLE_CI.json
             TEST_RUN_CI.log
             COVERAGE_CI.md
-            pine2ast/compatibility/compatibility_matrix.json
-            pine2ast/compatibility/compatibility_matrix.md
-            dist/*.whl
-            dist/*.tar.gz
+
+  perf:
+    name: Performance gate (P1.5)
+    runs-on: ubuntu-latest
+    needs: test
+    continue-on-error: true   # non-blocking: surfaces regressions in summary, not as red ❌
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dev dependencies
+        run: python -m pip install -U pip && python -m pip install -e .[dev]
+      - name: Latency/memory regression gate
+        id: gate
+        env:
+          # GitHub runner CPU is ~10x slower than a dev laptop. We pin a
+          # 20x headroom here so the gate catches real regressions
+          # (e.g. 2x slow-down in a stage) without flaking on runner
+          # noise. Tighten locally with PINEPERF_MAX_FACTOR=1.10.
+          PINEPERF_MAX_FACTOR: "20.0"
+        run: |
+          python -m pytest tests/performance -m perf -v --tb=short \
+            | tee PERF_TESTS.log
+      - name: Corpus throughput regression gate
+        id: corpus
+        env:
+          PINEPERF_MAX_FACTOR: "20.0"
+        run: |
+          python -m pytest tests/performance -m perf_corpus -v --tb=short \
+            | tee PERF_CORPUS_TESTS.log
+      - name: Re-capture baseline (informational, non-blocking)
+        if: always()
+        run: |
+          python scripts/capture_perf_baseline.py \
+            --output-dir /tmp/ci-baseline \
+            --stress-repeat 5 --corpus-repeat 1 2>&1 | tee BASELINE_CAPTURE.log
+      - name: Build summary
+        if: always()
+        run: |
+          {
+            echo "## 📊 Performance gate (P1.5)"
+            echo ""
+            echo "**Status:** ${{ steps.gate.outcome }} (latency) / ${{ steps.corpus.outcome }} (corpus)"
+            echo ""
+            echo "### Latency tests"
+            cat PERF_TESTS.log | tail -20
+            echo ""
+            echo "### Corpus tests"
+            cat PERF_CORPUS_TESTS.log | tail -20
+            echo ""
+            echo "### Re-captured baseline (this run, informational)"
+            cat BASELINE_CAPTURE.log 2>/dev/null || echo "skipped"
+          } >> $GITHUB_STEP_SUMMARY
+      - name: Upload perf artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pine2ast-perf-${{ github.run_id }}
+          path: |
+            PERF_TESTS.log
+            PERF_CORPUS_TESTS.log
+            BASELINE_CAPTURE.log

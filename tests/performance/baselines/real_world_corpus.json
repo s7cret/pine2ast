@@ -1,0 +1,8 @@
+{
+  "file_count": 300,
+  "captured_repeat": 3,
+  "median_total_ms": 9.331675998510036,
+  "p95_total_ms": 12.173136999990675,
+  "max_total_ms": 15.523549001045467,
+  "captured_at": "2026-06-08T01:00:21Z"
+}
