@@ -7088,6 +7088,20 @@
       "returns": "footprint",
       "scope": "any"
     },
+    "request.news": {
+      "kind": "builtin",
+      "name": "request.news",
+      "parameters": [
+        {
+          "name": "symbol",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "pine_version": "6",
+      "returns": "series<int>",
+      "scope": "any"
+    },
     "request.quandl": {
       "docs_url": null,
       "kind": "builtin",
@@ -16695,6 +16709,13 @@
           "lowerable": false,
           "runtime_supported": false,
           "oracle_verified": false
+        },
+        "request.news": {
+          "official_known": true,
+          "implemented": false,
+          "lowerable": false,
+          "runtime_supported": false,
+          "oracle_verified": false
         }
       },
       "variables": {
@@ -20218,7 +20239,7 @@
     },
     "coverage": {
       "functions": {
-        "total": 499,
+        "total": 500,
         "official_known": 499,
         "implemented": 498,
         "lowerable": 74,
