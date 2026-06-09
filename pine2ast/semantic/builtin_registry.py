@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import json
 from functools import lru_cache
 from pathlib import Path
@@ -213,7 +214,7 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
     """
 
     root = _require_mapping(registry, "$")
-    if root.get("schema_version") != 1 or root.get("pine_version") != "6":
+    if root.get("schema_version") != 1 or root.get("pine_version") not in ("5", "6"):
         raise _schema_error("$", "unsupported schema_version/pine_version")
     for section in _REQUIRED_TOP_LEVEL_SECTIONS:
         if section not in root:
@@ -311,12 +312,33 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
                 seen_overloads.add(signature)
 
 
-@lru_cache(maxsize=1)
-def load_builtin_registry() -> dict[str, Any]:
-    data = Path(__file__).with_name("builtins_v6.json").read_text(encoding="utf-8")
+_REGISTRY_FILES = {5: "builtins_v5.json", 6: "builtins_v6.json"}
+
+
+def _registry_path(pine_version: int) -> Path:
+    fname = _REGISTRY_FILES.get(pine_version, _REGISTRY_FILES[6])
+    return Path(__file__).with_name(fname)
+
+
+@functools.lru_cache(maxsize=4)
+def load_builtin_registry(pine_version: int = 6) -> dict[str, Any]:
+    """Load the builtin registry for a specific Pine version.
+
+    Returns the v6 registry by default. Pass pine_version=5 to get the
+    v5 subset (v6-only entries are dropped: footprint.*, volume_row.*,
+    currency.* additions, etc.).
+    """
+    data = _registry_path(pine_version).read_text(encoding="utf-8")
     registry = json.loads(data)
     validate_builtin_registry(registry)
     return registry
+
+
+def clear_registry_cache() -> None:
+    """Drop the registry cache. Test-only — production code should never
+    need to call this since the registry is read-only at runtime.
+    """
+    load_builtin_registry.cache_clear()
 
 
 # Internal snapshot used by tests and strict-mode confidence. This is not an

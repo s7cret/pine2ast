@@ -140,7 +140,8 @@
           "title": "Sideways"
         }
       ],
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -251,7 +252,8 @@
           "member": "DOWN"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -425,7 +427,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

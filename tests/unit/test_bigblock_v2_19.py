@@ -33,7 +33,9 @@ def test_v219_builtin_registry_schema_rejects_missing_schema_version():
 
 def test_v219_builtin_registry_schema_rejects_bad_pine_version():
     registry = clean_registry_copy()
-    registry["pine_version"] = "5"
+    # pine_version "7" is not yet supported; the schema validator must reject it.
+    # (Pine v5 is now a valid value, see builtin_registry._REGISTRY_FILES.)
+    registry["pine_version"] = "7"
     assert_corrupt_registry_is_rejected(registry, "unsupported schema_version/pine_version")
 
 

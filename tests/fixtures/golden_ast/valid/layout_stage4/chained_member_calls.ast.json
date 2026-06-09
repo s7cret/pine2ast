@@ -139,7 +139,8 @@
             }
           },
           "explicit_qualifier": null,
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
       "body": {
@@ -154,7 +155,8 @@
         },
         "name": "l"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "MethodDeclaration",
@@ -207,7 +209,8 @@
             }
           },
           "explicit_qualifier": null,
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
       "body": {
@@ -222,7 +225,8 @@
         },
         "name": "l"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -484,7 +488,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     }
   ],
   "diagnostics": [],

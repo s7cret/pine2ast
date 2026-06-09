@@ -90,11 +90,16 @@ class SemanticAnalyzer:
         pine_version: int = 6,
         loop_max_iterations: int = 100_000,
     ) -> None:
-        self.registry = load_builtin_registry()
+        # pine_version is normalized at construction time so all
+        # downstream lookups (registry, method receivers, qualifier
+        # checks) see a stable value. v5 loads the v5 subset of the
+        # registry; v6 loads the full v6 set.
+        normalized_version = 5 if pine_version == 5 else 6
+        self.pine_version = normalized_version
+        self.registry = load_builtin_registry(pine_version=normalized_version)
         self.model = SemanticModel()
         self.max_diagnostics = max_diagnostics
         self.strict_builtin_namespaces = strict_builtin_namespaces
-        self.pine_version = pine_version
         self.loop_max_iterations = loop_max_iterations
         self.scope_stack: list[Scope] = []
         self.next_symbol_id = 1
@@ -108,6 +113,7 @@ class SemanticAnalyzer:
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
         self._function_params: dict[str, list[Parameter]] = {}
+        self._user_method_params: dict[str, list[Parameter]] = {}
         self._method_receivers: dict[str, str | set[str]] = {}
         self._builtin_method_params: dict[str, dict[str, list[Parameter]]] = {}
         self._external_aliases: set[str] = set()
@@ -119,8 +125,15 @@ class SemanticAnalyzer:
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
-        if program.version is not None:
-            self.pine_version = program.version
+        if program.version is not None and program.version != self.pine_version:
+            # The Pine version annotation in the source overrides the
+            # constructor default. Reload the registry to match — this
+            # is what allows v5 scripts to be parsed with the v5 subset
+            # of the builtin catalog, even if the caller passed
+            # pine_version=6 to ParseOptions.
+            normalized = 5 if program.version == 5 else 6
+            self.pine_version = normalized
+            self.registry = load_builtin_registry(pine_version=normalized)
         self._reassigned_names = self._collect_reassigned_names(program)
         self._push_scope(ScopeKind.GLOBAL)
         pipeline = AnalyzerPassPipeline(
@@ -184,6 +197,7 @@ class SemanticAnalyzer:
                 ):
                     self._predeclared_nodes.add(id(item))
                     self._function_params[item.name] = item.parameters
+                    self._user_method_params[item.name] = item.parameters
                     if item.receiver_type is not None:
                         self._method_receivers[item.name] = item.receiver_type.name
             elif isinstance(item, TypeDeclaration):
@@ -250,6 +264,14 @@ class SemanticAnalyzer:
                         self._method_receivers[short_name] = {existing, receiver_type}
                 else:
                     self._method_receivers[short_name] = receiver_type
+            # Entries with _signature_pending=True are registration-only:
+            # they tell the analyzer that the method exists for this receiver
+            # (used in _validate_method_call receiver check) but lack full
+            # parameters/returns. Do NOT register them in _builtin_method_params
+            # because that would override the per-receiver inference rules
+            # (e.g. array.get returns T, matrix.get returns T) with empty params.
+            if meta.get("_signature_pending"):
+                continue
             params = []
             for p in meta.get("parameters", []):
                 type_ref = (
@@ -268,7 +290,8 @@ class SemanticAnalyzer:
                 self._builtin_method_params[short_name] = {}
             self._builtin_method_params[short_name][receiver_type] = params
             # Also store in _function_params for backward compatibility (last wins)
-            self._function_params[short_name] = params
+            if short_name not in self._function_params:
+                self._function_params[short_name] = params
 
     def _analyze_declaration_statement(self, node: DeclarationStatement) -> None:
         self._script_type = node.script_type
@@ -1107,12 +1130,20 @@ class SemanticAnalyzer:
         if isinstance(expr.object, Identifier):
             root = expr.object.name
             if self._resolve(root) is None and root not in self._external_aliases:
-                self._diag(
-                    Severity.ERROR,
-                    codes.UNDECLARED_VARIABLE,
-                    f"Use of undeclared namespace/object {root}.",
-                    expr.object.span,
-                )
+                if self._is_v6_only_namespace_root(root):
+                    self._diag(
+                        Severity.WARNING,
+                        codes.V6_ONLY_BUILTIN,
+                        f"Namespace {root} is not available in Pine v5; it was added in v6.",
+                        expr.object.span,
+                    )
+                else:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.UNDECLARED_VARIABLE,
+                        f"Use of undeclared namespace/object {root}.",
+                        expr.object.span,
+                    )
         else:
             self._visit_expr(expr.object)
         self._validate_strategy_namespace_usage(callee_name(expr), expr.span, is_call=False)
@@ -1412,6 +1443,19 @@ class SemanticAnalyzer:
         # request validator below because that namespace affects data access semantics.
         if root == "request":
             return
+        # v5→v6 migration: if this name exists in the v6 registry but not
+        # the current (v5) one, emit a migration warning instead of an
+        # unknown-builtin error. The script can still be parsed; the
+        # v5→v6 migration would need to remove or replace the call.
+        if self.pine_version == 5 and self._exists_in_v6_registry(name, kind="function"):
+            self._diag(
+                Severity.WARNING,
+                codes.V6_ONLY_BUILTIN,
+                f"Builtin {name} is not available in Pine v5; it was added in v6. "
+                "This call will fail in v5 backends.",
+                expr.span,
+            )
+            return
         severity = Severity.ERROR if self.strict_builtin_namespaces else Severity.INFO
         self._diag(
             severity,
@@ -1437,12 +1481,53 @@ class SemanticAnalyzer:
             or name in self.registry.get("namespaces", {})
         ):
             return
+        # v5→v6 migration: same logic as for function calls — if the
+        # name is a v6-only constant/variable, emit a warning.
+        if self.pine_version == 5 and self._exists_in_v6_registry(name, kind="variable"):
+            self._diag(
+                Severity.WARNING,
+                codes.V6_ONLY_BUILTIN,
+                f"Builtin {name} is not available in Pine v5; it was added in v6.",
+                expr.span,
+            )
+            return
         self._diag(
             Severity.ERROR,
             codes.UNKNOWN_BUILTIN_MEMBER,
             f"Builtin namespace member {name} is not present in the current registry snapshot.",
             expr.span,
         )
+
+    def _exists_in_v6_registry(self, name: str, *, kind: str) -> bool:
+        """True if `name` exists as a function/variable in the v6 registry.
+
+        Used to drive v5→v6 migration diagnostics: when a v5 script
+        references a v6-only builtin, we want to emit V6_ONLY_BUILTIN
+        (warning) instead of UNKNOWN_BUILTIN_MEMBER (error).
+        """
+        v6 = load_builtin_registry(pine_version=6)
+        section = "functions" if kind == "function" else "variables"
+        return name in v6.get(section, {})
+
+    def _is_v6_only_namespace_root(self, root: str) -> bool:
+        """True if `root` is a v6-only namespace/variable/function prefix.
+
+        In v5 mode, when the analyzer encounters an undeclared root like
+        ``footprint`` (which has functions like ``footprint.buy_volume``
+        in v6 but not in v5), we want to emit V6_ONLY_BUILTIN warning
+        instead of UNDECLARED_VARIABLE error. This helper centralizes the
+        detection: we check the v6 registry for any function or variable
+        whose name starts with ``root + "."``.
+        """
+        if self.pine_version != 5:
+            return False
+        v6 = load_builtin_registry(pine_version=6)
+        prefix = root + "."
+        for section in ("functions", "variables"):
+            for name in v6.get(section, {}):
+                if name.startswith(prefix):
+                    return True
+        return False
 
     def _validate_strategy_call_script_type(self, name: str, expr: CallExpr) -> None:
         strategy_order_calls = {
@@ -1954,22 +2039,45 @@ class SemanticAnalyzer:
             return
         actual = infer_type(expr.callee.object, self.model.symbols)
         valid_receivers = receiver_type if isinstance(receiver_type, set) else {receiver_type}
-        if actual not in valid_receivers and actual != "unknown":
+
+        def _receiver_matches(candidate: str, valid_set: set[str]) -> bool:
+            # Exact match always wins.
+            if candidate in valid_set:
+                return True
+            # Generic container receiver (e.g. receiver_type='array') matches
+            # any typed variant ('array<float>', 'array<int>', ...).
+            for vr in valid_set:
+                if vr and not vr.endswith("<") and not vr.endswith("<>"):
+                    if candidate.startswith(vr + "<"):
+                        return True
+            return False
+
+        if not _receiver_matches(actual, valid_receivers) and actual != "unknown":
             self._diag(
                 Severity.ERROR,
                 codes.ARGUMENT_TYPE,
                 f"Method {method_name} expects receiver {receiver_type}, got {actual}.",
                 expr.callee.span,
             )
-        # Look up params specific to the actual receiver type
-        params = []
-        if (
-            method_name in self._builtin_method_params
-            and actual in self._builtin_method_params[method_name]
-        ):
-            params = self._builtin_method_params[method_name][actual]
-        elif method_name in self._function_params:
-            params = self._function_params.get(method_name, [])
+        # Look up params in this order:
+        #  1. User-defined methods (UDT method declarations).
+        #  2. Builtin methods with full signature in the registry.
+        # Builtin methods registered as _signature_pending are skipped
+        # here — codegen/runtime layers own their parameter validation.
+        params: list[Parameter] | None = None
+        if method_name in self._user_method_params:
+            params = self._user_method_params[method_name]
+        elif method_name in self._builtin_method_params:
+            if actual in self._builtin_method_params[method_name]:
+                params = self._builtin_method_params[method_name][actual]
+            else:
+                for key in self._builtin_method_params[method_name]:
+                    if not key.endswith("<") and not key.endswith("<>"):
+                        if actual.startswith(key + "<"):
+                            params = self._builtin_method_params[method_name][key]
+                            break
+        if params is None:
+            return
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
     def _validate_user_function_call(self, name: str, expr: CallExpr) -> None:
@@ -2206,12 +2314,20 @@ class SemanticAnalyzer:
             if isinstance(expr.object, Identifier):
                 root = expr.object.name
                 if self._resolve(root) is None and root not in self._external_aliases:
-                    self._diag(
-                        Severity.ERROR,
-                        codes.UNDECLARED_VARIABLE,
-                        f"Use of undeclared namespace/object {root}.",
-                        expr.object.span,
-                    )
+                    if self._is_v6_only_namespace_root(root):
+                        self._diag(
+                            Severity.WARNING,
+                            codes.V6_ONLY_BUILTIN,
+                            f"Namespace {root} is not available in Pine v5; it was added in v6.",
+                            expr.object.span,
+                        )
+                    else:
+                        self._diag(
+                            Severity.ERROR,
+                            codes.UNDECLARED_VARIABLE,
+                            f"Use of undeclared namespace/object {root}.",
+                            expr.object.span,
+                        )
             else:
                 self._visit_expr(expr.object)
 

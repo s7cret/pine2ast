@@ -190,7 +190,8 @@
         },
         "arguments": []
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -219,7 +220,8 @@
         "value": 0.0,
         "literal_type": "float"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ForInStructure",

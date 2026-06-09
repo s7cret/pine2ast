@@ -136,7 +136,8 @@
             },
             "value": 0,
             "literal_type": "int"
-          }
+          },
+          "documentation": []
         },
         {
           "kind": "FieldDeclaration",
@@ -174,10 +175,12 @@
             },
             "value": null,
             "literal_type": "na"
-          }
+          },
+          "documentation": []
         }
       ],
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -229,7 +232,8 @@
         },
         "arguments": []
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

@@ -115,7 +115,8 @@
         "value": "hello",
         "literal_type": "string"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -144,7 +145,8 @@
         "value": "world",
         "literal_type": "string"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

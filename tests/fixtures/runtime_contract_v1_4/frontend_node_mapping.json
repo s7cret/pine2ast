@@ -139,7 +139,8 @@
         "members"
       ],
       "optional_fields": [
-        "is_exported"
+        "is_exported",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -177,7 +178,8 @@
         "type_ref"
       ],
       "optional_fields": [
-        "default_value"
+        "default_value",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -232,7 +234,8 @@
         "body"
       ],
       "optional_fields": [
-        "is_exported"
+        "is_exported",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -339,7 +342,8 @@
       "optional_fields": [
         "receiver_type",
         "receiver_name",
-        "is_exported"
+        "is_exported",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -354,7 +358,8 @@
       "optional_fields": [
         "type_ref",
         "explicit_qualifier",
-        "default_value"
+        "default_value",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -472,7 +477,8 @@
         "fields"
       ],
       "optional_fields": [
-        "is_exported"
+        "is_exported",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,
@@ -514,7 +520,8 @@
         "mode",
         "explicit_qualifier",
         "type_ref",
-        "is_exported"
+        "is_exported",
+        "documentation"
       ],
       "ast2python_lowerable": true,
       "pinelib_runtime_support": true,

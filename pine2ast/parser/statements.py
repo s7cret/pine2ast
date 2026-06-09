@@ -84,7 +84,7 @@ class StatementsMixin(BaseParser):
         end = self._expect(TokenKind.DEDENT).span
         return Block(join_span(start, end), statements)
 
-    def parse_statement(self):
+    def parse_statement(self, *, pending_annotations: list | None = None):
         self._skip_newlines()
         if self._at(TokenKind.IF):
             return self.parse_if()
@@ -103,9 +103,9 @@ class StatementsMixin(BaseParser):
             self._consume_optional_newline()
             return ContinueStatement(tok.span)
         if self._at(TokenKind.METHOD):
-            return self.parse_method_decl(exported=False)
+            return self.parse_method_decl(exported=False, pending_annotations=pending_annotations)
         if self._looks_like_function_decl():
-            return self.parse_function_decl(exported=False)
+            return self.parse_function_decl(exported=False, pending_annotations=pending_annotations)
         if self._looks_like_declaration_statement():
             expr = self.parse_expression()
             self._consume_optional_newline()
@@ -114,7 +114,7 @@ class StatementsMixin(BaseParser):
         if self._at(TokenKind.LBRACKET) and self._looks_like_tuple_decl():
             return self.parse_tuple_decl()
         if self._looks_like_var_decl():
-            return self.parse_var_decl()
+            return self.parse_var_decl(pending_annotations=pending_annotations)
         expr = self.parse_expression()
         if self._peek().kind in _ASSIGN_KINDS:
             op_tok = self._advance()
@@ -133,7 +133,9 @@ class StatementsMixin(BaseParser):
             self._consume_optional_newline()
         return ExpressionStatement(expr.span, expr)
 
-    def parse_var_decl(self, *, is_exported: bool = False) -> VarDeclaration:
+    def parse_var_decl(
+        self, *, is_exported: bool = False, pending_annotations: list | None = None
+    ) -> VarDeclaration:
         start_tok = self._peek()
         mode = None
         qualifier = None
@@ -158,6 +160,7 @@ class StatementsMixin(BaseParser):
             type_ref,
             initializer,
             is_exported,
+            documentation=list(pending_annotations or []),
         )
 
     def parse_tuple_decl(self) -> TupleDeclaration:

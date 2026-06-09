@@ -125,7 +125,8 @@
             }
           },
           "explicit_qualifier": null,
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         },
         {
           "kind": "Parameter",
@@ -164,7 +165,8 @@
             },
             "value": 14,
             "literal_type": "int"
-          }
+          },
+          "documentation": []
         }
       ],
       "body": {
@@ -277,7 +279,8 @@
                 }
               ]
             },
-            "is_exported": false
+            "is_exported": false,
+            "documentation": []
           },
           {
             "kind": "ExpressionStatement",
@@ -304,7 +307,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -369,7 +373,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

@@ -115,7 +115,8 @@
         "value": "hello\nworld",
         "literal_type": "string"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

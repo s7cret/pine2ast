@@ -113,7 +113,8 @@
           "name": "x",
           "type_ref": null,
           "explicit_qualifier": null,
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
       "body": {
@@ -153,7 +154,8 @@
           "literal_type": "int"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -218,7 +220,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

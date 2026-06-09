@@ -127,7 +127,8 @@
           "title": null
         }
       ],
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -167,7 +168,8 @@
         },
         "member": "UP"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

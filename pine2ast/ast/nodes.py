@@ -53,6 +53,7 @@ class FieldDeclaration(ASTNode):
     name: str
     type_ref: TypeRef
     default_value: Expression | None = None
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -61,6 +62,7 @@ class TypeDeclaration(Declaration):
     name: str
     fields: list[FieldDeclaration]
     is_exported: bool = False
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -76,6 +78,7 @@ class EnumDeclaration(Declaration):
     name: str
     members: list[EnumMember]
     is_exported: bool = False
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -85,6 +88,7 @@ class Parameter(ASTNode):
     type_ref: TypeRef | None = None
     explicit_qualifier: str | None = None
     default_value: Expression | None = None
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -94,6 +98,7 @@ class FunctionDeclaration(Declaration):
     parameters: list[Parameter]
     body: Block | Expression
     is_exported: bool = False
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -105,6 +110,7 @@ class MethodDeclaration(Declaration):
     parameters: list[Parameter]
     body: Block | Expression
     is_exported: bool = False
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -116,6 +122,7 @@ class VarDeclaration(Statement):
     type_ref: TypeRef | None
     initializer: Expression
     is_exported: bool = False
+    documentation: list[Annotation] = field(default_factory=list)
 
 
 @dataclass(slots=True)

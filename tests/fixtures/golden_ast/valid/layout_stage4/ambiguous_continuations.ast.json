@@ -162,7 +162,8 @@
           "name": "low"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -214,7 +215,8 @@
           "name": "open"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -301,7 +303,8 @@
           "name": "open"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     }
   ],
   "diagnostics": [],

@@ -125,7 +125,8 @@
             }
           },
           "explicit_qualifier": null,
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
       "body": {
@@ -165,7 +166,8 @@
           "literal_type": "int"
         }
       },
-      "is_exported": true
+      "is_exported": true,
+      "documentation": []
     }
   ],
   "diagnostics": [],

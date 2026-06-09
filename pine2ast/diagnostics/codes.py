@@ -59,6 +59,13 @@ UNKNOWN_TYPE = "P2A1604"
 UNKNOWN_FIELD = "P2A1605"
 BREAK_CONTINUE_OUTSIDE_LOOP = "P2A1701"
 
+# v5→v6 migration diagnostics. Emitted when a v5 script uses a builtin
+# that does not exist in v5 (introduced in v6) — typically a feature like
+# footprint.*, volume_row.*, request.footprint, or new currency constants.
+# Severity is WARNING by default: the script will still parse, but the
+# v5→v6 migration would need to address it.
+V6_ONLY_BUILTIN = "P2A1702"
+
 TYPE_MISMATCH = "P2A1801"
 LOOP_RANGE_TYPE = "P2A1802"
 SWITCH_CASE_TYPE = "P2A1803"

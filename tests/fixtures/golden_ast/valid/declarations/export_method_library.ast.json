@@ -124,10 +124,12 @@
               "end_col": 10
             }
           },
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "MethodDeclaration",
@@ -203,7 +205,8 @@
           }
         ]
       },
-      "is_exported": true
+      "is_exported": true,
+      "documentation": []
     }
   ],
   "diagnostics": [],

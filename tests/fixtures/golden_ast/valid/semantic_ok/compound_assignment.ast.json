@@ -115,7 +115,8 @@
         "value": 0,
         "literal_type": "int"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ForRangeStructure",

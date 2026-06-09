@@ -164,7 +164,8 @@
         },
         "name": "close"
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     }
   ],
   "diagnostics": [],

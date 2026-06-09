@@ -124,7 +124,8 @@
               "end_col": 8
             }
           },
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         },
         {
           "kind": "FieldDeclaration",
@@ -150,10 +151,12 @@
               "end_col": 10
             }
           },
-          "default_value": null
+          "default_value": null,
+          "documentation": []
         }
       ],
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "VarDeclaration",
@@ -254,7 +257,8 @@
           }
         ]
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",

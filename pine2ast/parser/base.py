@@ -60,7 +60,7 @@ class BaseParser:
         def parse_enum_decl(self, *, exported: bool = False) -> Any: ...
         def parse_method_decl(self, *, exported: bool = False) -> Any: ...
         def parse_function_decl(self, *, exported: bool = False) -> Any: ...
-        def parse_var_decl(self, *, is_exported: bool = False) -> Any: ...
+        def parse_var_decl(self, *, is_exported: bool = False, pending_annotations: list | None = None) -> Any: ...
         def parse_statement(self) -> Any: ...
 
     def __init__(
@@ -73,7 +73,11 @@ class BaseParser:
         self.diagnostics: list[Diagnostic] = []
 
     def parse(self) -> ParserResult:
-        annotations = self._consume_annotations()
+        # Consume ONLY the version annotation. Other annotations stay
+        # in the token stream so the main loop can attach them to
+        # their corresponding top-level declarations.
+        leading = self._consume_version_annotation()
+        annotations = [leading] if leading is not None else []
         version = self._extract_version(annotations)
         if version != 6:
             span = annotations[0].span if annotations else self._peek().span
@@ -117,10 +121,10 @@ class BaseParser:
             self._consume_optional_newline()
         while not self._at(TokenKind.EOF):
             self._skip_newlines()
-            self._consume_annotations()
+            pending_annotations = self._consume_annotations()
             if self._at(TokenKind.EOF):
                 break
-            item = self.parse_top_level_item()
+            item = self.parse_top_level_item(pending_annotations=pending_annotations)
             if item is not None:
                 items.append(item)
             else:
@@ -134,26 +138,27 @@ class BaseParser:
         )
         return ParserResult(program, self.diagnostics)
 
-    def parse_top_level_item(self):
+    def parse_top_level_item(self, *, pending_annotations: list | None = None):
+        pending = pending_annotations or []
         exported = self._match(TokenKind.EXPORT)
         if self._at(TokenKind.IMPORT):
             return self.parse_import(exported=exported)
         if self._at(TokenKind.TYPE):
-            return self.parse_type_decl(exported=exported)
+            return self.parse_type_decl(exported=exported, pending_annotations=pending)
         if self._at(TokenKind.ENUM):
-            return self.parse_enum_decl(exported=exported)
+            return self.parse_enum_decl(exported=exported, pending_annotations=pending)
         if self._at(TokenKind.METHOD):
-            return self.parse_method_decl(exported=exported)
+            return self.parse_method_decl(exported=exported, pending_annotations=pending)
         if self._looks_like_declaration_statement():
             expr = self.parse_expression()
             self._consume_optional_newline()
             if isinstance(expr, CallExpr):
                 return DeclarationStatement(expr.span, self._callee_name(expr.callee), expr)  # type: ignore[arg-type]
         if self._looks_like_function_decl():
-            return self.parse_function_decl(exported=exported)
+            return self.parse_function_decl(exported=exported, pending_annotations=pending)
         if exported:
-            return self.parse_var_decl(is_exported=True)
-        return self.parse_statement()
+            return self.parse_var_decl(is_exported=True, pending_annotations=pending)
+        return self.parse_statement(pending_annotations=pending)
 
     def _looks_like_declaration_statement(self) -> bool:
         if not self._at(TokenKind.IDENTIFIER) or self._peek(1).kind is not TokenKind.LPAREN:
@@ -290,6 +295,21 @@ class BaseParser:
             if isinstance(tok.value, Annotation):
                 annotations.append(tok.value)
         return annotations
+
+    def _consume_version_annotation(self) -> Annotation | None:
+        """Consume at most one VERSION annotation, leaving any following
+        annotations untouched so they can be attached to their target
+        declaration by the main loop.
+        """
+        # Allow leading newlines before the version
+        while self._at(TokenKind.NEWLINE):
+            self._advance()
+        if not self._at(TokenKind.VERSION_ANNOTATION):
+            return None
+        tok = self._advance()
+        if isinstance(tok.value, Annotation):
+            return tok.value
+        return None
 
     def _skip_newlines(self) -> None:
         while self._at(TokenKind.NEWLINE):

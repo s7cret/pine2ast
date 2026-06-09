@@ -138,7 +138,8 @@
           "literal_type": "int"
         }
       },
-      "is_exported": false
+      "is_exported": false,
+      "documentation": []
     },
     {
       "kind": "ExpressionStatement",
