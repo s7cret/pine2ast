@@ -1,157 +1,170 @@
-# Pine2AST
+# Pine2AST 4.0.0
 
-Pine2AST is a Python parser/frontend for a verified Pine Script v6 subset. It normalizes Pine source into structured AST JSON, semantic diagnostics, and frontend metadata for downstream tooling such as AST2Python.
+> Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and OpenPine metadata contracts.
 
-Pipeline:
+![Version](https://img.shields.io/badge/version-4.0.0-blue)
+![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+**GitHub description:** Pine2AST parses Pine Script v5/v6 into stable AST and metadata contracts for OpenPine, with static diagnostics, semantic snapshots, compatibility gates, and CI-friendly quality reports.
+
+**Suggested topics:** `pine-script`, `tradingview`, `parser`, `ast`, `static-analysis`, `compiler-frontend`, `algorithmic-trading`, `python`.
+
+## What Pine2AST is
+
+Pine2AST is the frontend of the OpenPine toolchain. It reads Pine Script source, tokenizes it, parses it, runs static semantic passes, and emits machine-readable contracts consumed by downstream tooling.
 
 ```text
-SourceNormalizer -> Lexer -> LayoutProcessor -> Parser -> AST -> SemanticAnalyzer
+Pine source -> Pine2AST -> AST JSON / diagnostics / OpenPine frontend metadata
+                              │
+                              └─> AST2Python -> PineLib runtime modules
 ```
 
-Pine2AST owns parsing, normalized AST JSON, semantic diagnostics, compile-oracle evidence, and frontend-to-runtime compatibility metadata.
+The package is intentionally focused on parsing and static contracts. It does not execute Pine code and does not emulate TradingView runtime behavior.
 
-It does **not** execute Pine code, run backtests, fetch market data, optimize parameters, emulate TradingView orders, or claim full Pine v6 / TradingView parity. The current claim is a **verified Pine v6 subset** backed by fixture-specific evidence.
+## 4.0 contract status
 
-## Scope & Status
-
-| Claim | Status |
+| Area | Status |
 |---|---|
-| Pine v6 parsing (subset) | supported — see `tests/fixtures/real_world` and `tests/fixtures/compile_oracle` |
-| AST JSON contract `pain.ast_contract.v1` | stable |
-| Semantic diagnostics (subset) | supported — scopes, types, qualifiers, history refs, method receivers |
-| Builtin registry | versioned subset (475 functions / 161 variables / 213 methods / 239 constants) |
-| **Full TradingView Pine v6 parity** | **not claimed** |
-| Pine execution (bar-by-bar, var/varip, barstate.*) | out of scope — lives in `pinelib` runtime |
-| Backtest / broker emulator | out of scope |
-| `request.*` data fetching | local diagnostics only — runtime is data-layer concern |
-| Realtime tick / rollback semantics | not implemented |
+| Pine profiles | v5 and v6 static profiles. |
+| AST JSON | Stable `pine.ast_contract.v1`. |
+| OpenPine metadata | Stable `openpine.frontend.v1`. |
+| Semantic snapshot | `pine2ast.semantic_snapshot.v1` for CI/debugging. |
+| Runtime marker | `runtime_contract_v1_4` for downstream compatibility. |
+| Builtin coverage | Version-aware builtin and namespace checks. |
+| Collections | Static contracts for `array<T>`, `matrix<T>`, and `map<K,V>`. |
+| UDT / enum / methods | Parsed and represented in semantic facts where supported. |
+| `request.*` / `strategy.*` | Static metadata and diagnostics only. |
+| Runtime/backtest | Out of scope; handled by PineLib, Backtest Engine, and OpenPine. |
 
-## Release compatibility
+## What it does
 
-| pine2ast | AST contract | Runtime contract | ast2python | pinelib |
-|---|---|---|---|---|
-| 2.17.x | `pain.ast_contract.v1` | `1.4` | 2.17.x | 2.17.x |
-| 2.18.x | `pain.ast_contract.v1` | `1.4` | 2.18.x | 2.18.x |
+- Parses Pine v5/v6 source into a stable AST contract.
+- Emits JSON suitable for CI pipelines, AST2Python, and OpenPine inspection.
+- Produces diagnostics, SARIF-style reports, semantic snapshots, and schema checks.
+- Validates builtin namespace usage and release-feature compatibility.
+- Exposes OpenPine-facing metadata contracts for strategy registration, inputs, dependencies, and static capabilities.
+- Provides corpus, golden, benchmark, and quality-gate commands for maintainers.
 
-A runtime contract mismatch is a deterministic `P2A_CONTRACT_VERSION_MISMATCH` error — never a silent fallback.
+## What it does not do
 
-Current compile-oracle snapshot:
-
-- fixtures: `35`
-- ok: `35`
-- pending: `0`
-- invalid: `0`
-- platform-blocked: `0`
+Pine2AST is not a TradingView runtime. It does not execute scripts, fetch market data, allocate runtime objects, simulate orders, calculate PnL, or claim full TradingView parity. Those responsibilities belong to downstream runtime/backtest packages.
 
 ## Install
 
 ```bash
-python -m pip install -e .
-```
-
-For development:
-
-```bash
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
 python -m pip install -e '.[dev]'
 ```
 
-## Quick start
+Install from GitHub tag:
+
+```bash
+python -m pip install 'git+https://github.com/s7cret/pine2ast.git@v4.0.0'
+```
+
+## Python quick start
 
 ```python
-from pine2ast import ast_to_json, parse_code
+from pine2ast import ParseOptions, ast_to_json, parse_code
 
-src = '''//@version=6
-indicator("My Indicator", overlay = true)
+source = '''//@version=6
+indicator("Demo", overlay=true)
 plot(close)
 '''
 
-result = parse_code(src)
+result = parse_code(source, ParseOptions(version=6))
 print(result.ok)
 print(ast_to_json(result.ast))
 ```
 
-## CLI
+OpenPine inspection payload:
+
+```python
+from pine2ast import ParseOptions, parse_code
+from pine2ast.inspect_contract import build_inspect_payload
+
+result = parse_code(source, ParseOptions(version=6))
+payload = build_inspect_payload(
+    result,
+    source_path="inline.pine",
+    include_openpine_contract=True,
+)
+print(payload["openpine_contract"]["schema_version"])
+```
+
+## CLI quick start
 
 ```bash
-pine2ast parse strategy.pine --json out.ast.json
-pine2ast tokens strategy.pine
+pine2ast parse strategy.pine --json strategy.ast.json
 pine2ast validate strategy.pine
-pine2ast dump-symbols strategy.pine
-pine2ast inspect strategy.pine --json inspect.json
+pine2ast inspect strategy.pine --openpine-contract --json inspect.json
+pine2ast semantic-snapshot strategy.pine --json semantic.snapshot.json
 pine2ast schema-check strategy.pine --json schema.json
+pine2ast contract-check strategy.pine --json contract.json
 pine2ast diagnostics-report strategy.pine --json diagnostics.json
-pine2ast diagnostics-diff diagnostics.json baseline.json
+pine2ast sarif strategy.pine --json diagnostics.sarif.json
 pine2ast quality-gate tests/fixtures/real_world --json quality.json
 ```
 
-Exit codes:
-
-| Code | Meaning |
-|---:|---|
-| 0 | parse ok, no `ERROR`/`FATAL` diagnostics |
-| 1 | `ERROR` diagnostics |
-| 2 | `FATAL` diagnostics |
-| 3 | internal error |
-
-## Development gates
+Release and compatibility helpers:
 
 ```bash
+pine2ast builtin-coverage --json builtin_coverage.json
+python -m pine2ast.semantic.signature_coverage --version 5 --fail-on-missing --fail-under-signature-ready-ratio 1.0
+python -m pine2ast.semantic.signature_coverage --version 6 --fail-on-missing --fail-under-signature-ready-ratio 1.0
+python -m pine2ast.distribution manifest --root .
+python -m pine2ast.quality architecture pine2ast --max-lines 700
+```
+
+## Repository layout
+
+```text
+pine2ast/
+  lexer/                  tokenization and trivia
+  parser/                 Pine grammar parser
+  ast/                    node model, schema, serialization
+  semantic/               semantic passes, builtin registries, signatures
+  diagnostics/            diagnostic model, formatter, SARIF/report output
+  openpine_contracts/     OpenPine-facing metadata contracts
+  compatibility/          release and signature compatibility matrices
+  layout/                 indentation and line wrapping helpers
+  tests/                  fixtures, golden files, contract tests
+```
+
+## Quality gates
+
+```bash
+python -m compileall -q pine2ast tests
 python -m ruff check .
 python -m black --check .
 python -m mypy pine2ast
-python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
-bash scripts/release_gate.sh
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q
+python -m pine2ast.distribution manifest --root .
+python -m pine2ast.release --root .
+bash scripts/wheel_smoke.sh
 ```
 
-Fallback without pytest:
+## Documentation
 
-```bash
-/usr/bin/python tools/run_tests_no_pytest.py
-/usr/bin/python tools/run_tests_no_pytest.py --include-integration
-```
-
-The fallback runner is a low-dependency smoke/regression aid. It does not replace the full pytest/coverage gate.
-
-## Implemented areas
-
-- UTF-8/BOM/CRLF source normalization.
-- Stateful lexer for literals, strings, comments/annotations, operators, and identifiers.
-- Layout processing with `NEWLINE`/`INDENT`/`DEDENT` and line wrapping support.
-- Recursive-descent + Pratt parser.
-- Stable AST node model and JSON serialization.
-- Semantic diagnostics for scopes/symbols, assignment forms, bool-v6 checks, history references, selected local-builtin restrictions, and method receiver typing.
-- Versioned Pine v6 builtin subset registry.
-- Integration-oriented `inspect` contract for downstream AST2Python/optimizer-style consumers.
-
-## Limitations
-
-- Pine2AST is not a TradingView runtime.
-- Oracle evidence covers the committed fixture corpus, not the entire Pine language.
-- `pine2ast/semantic/builtins_v6.json` is a supported-subset/confidence matrix, not a complete official builtin map.
-- Imports are parsed/diagnosed locally; there is no online import resolver.
-- Unsupported areas should surface as diagnostics rather than silent approximations.
+- `docs/ARCHITECTURE.md` — frontend pipeline and module ownership.
+- `docs/COMPATIBILITY.md` — v5/v6 compatibility matrix and runtime boundary.
+- `docs/OPENPINE_CONTRACT.md` — OpenPine-facing metadata contract.
+- `docs/DEVELOPMENT.md` — local setup and quality gates.
+- `docs/RELEASE_4_0.md` — release notes and tag checklist.
+- `docs/ROADMAP.md` — post-4.0 frontend work.
+- `docs/SECURITY.md` — parser input limits and safe integration guidance.
 
 ## License
 
 MIT. See `LICENSE`.
 
-## Installation, Docker, and Publication
+## Support
 
-```bash
-./scripts/install.sh --dev
-docker compose run --rm pine2ast
-```
-
-## Acknowledgements
-
-This project was developed with AI-assisted engineering workflows. The license and release obligations are defined only by `LICENSE` and the repository documentation above.
-
-## Support / Donations
-
-OpenPine development is independent and MIT-licensed. Donations are optional and help keep the public tooling maintained.
+OpenPine development is independent and MIT-licensed. Support is optional and does not change license terms, feature access, or project guarantees.
 
 - Telegram: https://t.me/OpenPine
 - TON: `UQAyIr2sQ4-_Q5L-4VINcU18khDas5GPbAlYEkQN6S_qzui2`
 - SOL: `EbxMUK2W4RGeQZCTRFrdgpEJvnqtyczPZvBrQa1cYJnQ`
-
-Support does not affect license terms, feature access, or project guarantees.

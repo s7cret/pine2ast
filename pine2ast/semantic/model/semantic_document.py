@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 
 from pine2ast.diagnostics import Diagnostic
 from pine2ast.semantic.scopes import Scope
+from typing import Any
+
 from pine2ast.semantic.symbols import Symbol
 
 
@@ -18,3 +20,4 @@ class SemanticModel:
     # Values are stable source-level paths, not object references, so reports remain JSON-safe.
     non_na_paths: dict[int, set[str]] = field(default_factory=dict)
     diagnostics: list[Diagnostic] = field(default_factory=list)
+    pass_results: tuple[Any, ...] = ()

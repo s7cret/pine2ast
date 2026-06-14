@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import functools
 import json
-from functools import lru_cache
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -43,7 +42,14 @@ _ALLOWED_PARAM_KEYS = {
     "unsupported",
     "unsupported_diagnostic_code",
 }
-_ALLOWED_OVERLOAD_KEYS = {"parameters", "returns", "metadata_version", "docs_url"}
+_ALLOWED_OVERLOAD_KEYS = {
+    "parameters",
+    "returns",
+    "metadata_version",
+    "docs_url",
+    "id",
+    "overload_id",
+}
 _ALLOWED_TYPE_ATOMS = {
     "any",
     "array",
@@ -141,8 +147,31 @@ def _validate_version_marker(value: Any, path: str) -> None:
         raise _schema_error(path, "expected Pine major version string")
 
 
+def _split_top_level_union(value: str) -> list[str]:
+    if "|" not in value:
+        return []
+    result: list[str] = []
+    depth = 0
+    start = 0
+    for idx, ch in enumerate(value):
+        if ch == "<":
+            depth += 1
+        elif ch == ">":
+            depth = max(0, depth - 1)
+        elif ch == "|" and depth == 0:
+            result.append(value[start:idx].strip())
+            start = idx + 1
+    result.append(value[start:].strip())
+    return [part for part in result if part]
+
+
 def _validate_type_ref(value: Any, path: str) -> None:
     typ = _require_string(value, path)
+    union_parts = _split_top_level_union(typ)
+    if union_parts:
+        for idx, part in enumerate(union_parts):
+            _validate_type_ref(part, f"{path}.union[{idx}]")
+        return
     if typ.startswith("tuple<") and typ.endswith(">"):
         for idx, part in enumerate(typ[6:-1].split(",")):
             _validate_type_ref(part.strip(), f"{path}.tuple[{idx}]")
@@ -265,8 +294,11 @@ def validate_builtin_registry(registry: dict[str, Any]) -> None:
         seen_names.add(name)
         if entry["kind"] not in _ALLOWED_FUNCTION_KINDS:
             raise _schema_error(f"$.functions.{name}.kind", f"unsupported kind {entry['kind']!r}")
-        if entry["pine_version"] != "6":
-            raise _schema_error(f"$.functions.{name}.pine_version", "must be '6'")
+        if entry["pine_version"] != root["pine_version"]:
+            raise _schema_error(
+                f"$.functions.{name}.pine_version",
+                f"must match registry pine_version {root['pine_version']!r}",
+            )
         scope = _require_string(entry["scope"], f"$.functions.{name}.scope")
         if scope not in _ALLOWED_FUNCTION_SCOPES:
             raise _schema_error(f"$.functions.{name}.scope", f"unsupported scope {scope!r}")

@@ -1,0 +1,599 @@
+from __future__ import annotations
+
+# mypy: ignore-errors
+
+# ruff: noqa: F401,F403,F405
+
+from collections.abc import Callable
+from typing import Any, Optional, TypeAlias
+
+from pine2ast.ast.base import ASTNode, Expression, Statement
+from pine2ast.ast.types import TypeRef
+from pine2ast.ast.nodes import (
+    BinaryExpr,
+    Block,
+    BreakStatement,
+    CallExpr,
+    ConditionalExpr,
+    ContinueStatement,
+    DeclarationStatement,
+    EnumDeclaration,
+    ForInStructure,
+    ForRangeStructure,
+    FunctionDeclaration,
+    GenericInstantiationExpr,
+    HistoryRefExpr,
+    Identifier,
+    IfStructure,
+    ImportDeclaration,
+    Literal,
+    MemberAccessExpr,
+    MethodDeclaration,
+    Program,
+    Reassignment,
+    SwitchStructure,
+    TupleDeclaration,
+    TupleExpr,
+    TypeDeclaration,
+    FieldDeclaration,
+    Parameter,
+    UnaryExpr,
+    VarDeclaration,
+    WhileStructure,
+)
+from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import codes
+from pine2ast.lexer.token import SourceSpan
+from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.semantic.builtin_registry import (
+    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
+    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
+    load_builtin_registry,
+)
+from pine2ast.semantic.model import SemanticModel
+from pine2ast.semantic.type_helpers import (
+    for_in_target_types,
+    generic_type_parts,
+    is_assignable_type,
+    is_valid_map_key_type,
+    split_type_args,
+    tuple_element_types,
+    type_ref_name,
+)
+from pine2ast.semantic.qualifier_infer import infer_qualifier
+from pine2ast.semantic.qualifier_validation import qualifier_rank
+from pine2ast.semantic.scopes import Scope, ScopeKind
+from pine2ast.semantic.symbols import Symbol, SymbolKind
+from pine2ast.semantic.type_infer import callee_name, infer_type
+from pine2ast.semantic.signatures import SignatureResolver
+from pine2ast.semantic.collection_signatures import (
+    generic_constructor_expected_arity,
+    is_collection_method,
+    resolve_collection_call,
+)
+from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
+from pine2ast.semantic.passes import (
+    BuiltinValidationPass,
+    CollectionValidationPass,
+    DeclarationCardinalityPass,
+    DeclarationIndexPass,
+    QualifierInferencePass,
+    ScopeSymbolPass,
+    StaticValidationPass,
+    StrategyContextValidationPass,
+    TypeInferencePass,
+    UnsupportedFeatureExtractionPass,
+)
+from pine2ast.semantic.passes.export_policy import validate_export_policy
+from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
+from pine2ast.semantic.passes.loop_dos import (
+    _is_literal_true,
+    _static_int_bound,
+)
+from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+
+
+class AnalyzerStatementMixin:
+    """Implementation mixin split out of :mod:`pine2ast.semantic.analyzer`."""
+
+    _script_type: str | None
+
+    def _analyze_declaration_statement(self, node: DeclarationStatement) -> None:
+        self._script_type = node.script_type
+        self._visit_expr(node.call)
+        for arg in node.call.arguments:
+            if infer_qualifier(arg.value, self.model.symbols) not in {
+                "const",
+                "input",
+            } and arg.name in {"title", "overlay", None}:
+                self._diag(
+                    Severity.ERROR,
+                    codes.DECLARATION_ARGS_NOT_CONST,
+                    "Declaration statement arguments must be const-compatible in Pine.",
+                    arg.span,
+                )
+
+    def _s_declaration_statement(self, node: DeclarationStatement) -> None:
+        if self.local_depth > 0 or self.function_depth > 0:
+            self._diag(
+                Severity.ERROR,
+                codes.DECLARATION_NOT_GLOBAL,
+                "indicator/strategy/library declaration must be in global scope.",
+                node.span,
+            )
+        self._analyze_declaration_statement(node)
+
+    def _s_var_declaration(self, node: VarDeclaration) -> None:
+        validate_export_policy(self, node)
+        init_type = self._infer_type(node.initializer)
+        explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
+        if node.type_ref is not None:
+            self._validate_type_ref(node.type_ref)
+        self._visit_expr(node.initializer)
+        self._validate_bool_cannot_be_na(explicit_type, node.initializer)
+        if node.type_ref is not None and not self._is_assignable_type(explicit_type, init_type):
+            self._diag(
+                Severity.ERROR,
+                codes.TYPE_MISMATCH,
+                f"Initializer for {node.name} expects {explicit_type}, got {init_type}.",
+                node.initializer.span,
+            )
+        init_qualifier = self._infer_qualifier(node.initializer)
+        qualifier: str
+        if node.explicit_qualifier:
+            qualifier = node.explicit_qualifier
+            self._validate_qualifier_assignment(
+                node.explicit_qualifier,
+                init_qualifier,
+                node.initializer.span,
+                f"Initializer for {node.name}",
+            )
+        else:
+            if init_qualifier == "input":
+                qualifier = "input"
+            elif init_qualifier == "const" and node.name not in self._reassigned_names:
+                qualifier = "const"
+            else:
+                qualifier = "series"
+        self._define(node.name, SymbolKind.VARIABLE, node.span, explicit_type, qualifier)
+
+    def _s_tuple_declaration(self, node: TupleDeclaration) -> None:
+        self._visit_expr(node.initializer)
+        init_type = infer_type(node.initializer, self.model.symbols)
+        element_types = self._tuple_element_types(init_type)
+        init_qualifier = infer_qualifier(node.initializer, self.model.symbols)
+        if not element_types:
+            self._diag(
+                Severity.ERROR,
+                codes.TYPE_MISMATCH,
+                f"Tuple declaration initializer must return a tuple, got {init_type}.",
+                node.initializer.span,
+            )
+        elif len(node.targets) != len(element_types):
+            self._diag(
+                Severity.ERROR,
+                codes.ARGUMENT_COUNT,
+                f"Tuple declaration target count {len(node.targets)} does not match initializer arity {len(element_types)}.",
+                node.span,
+            )
+        for index, target in enumerate(node.targets):
+            if target.name != "_":
+                target_type = element_types[index] if index < len(element_types) else "unknown"
+                self._define(
+                    target.name,
+                    SymbolKind.VARIABLE,
+                    target.span,
+                    target_type,
+                    init_qualifier if init_qualifier == "input" else "series",
+                )
+
+    def _s_reassignment(self, node: Reassignment) -> None:
+        self._visit_expr(node.value)
+        value_type = infer_type(node.value, self.model.symbols)
+        if isinstance(node.target, MemberAccessExpr):
+            root_sym = self._resolve_assignable(node.target)
+            field_type = self._member_field_type(node.target)
+            owner_type = self._member_owner_type(node.target)
+            if root_sym is None:
+                target_name = self._assignable_name(node.target) or "<expr>"
+                code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
+                self._diag(
+                    Severity.ERROR,
+                    code,
+                    f"Reassignment to undeclared variable {target_name}.",
+                    node.span,
+                )
+                return
+            if root_sym.qualifier == "const":
+                self._diag(
+                    Severity.ERROR,
+                    codes.CONST_REASSIGNMENT,
+                    f"Cannot reassign const symbol {root_sym.name}.",
+                    node.span,
+                )
+                return
+            if owner_type in self._udt_fields and field_type is None:
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNKNOWN_FIELD,
+                    f"Unknown field {node.target.member} for type {owner_type}.",
+                    node.target.span,
+                )
+                return
+            if field_type is not None:
+                if node.op in {"+=", "-=", "*=", "/=", "%="} and field_type not in {
+                    "int",
+                    "float",
+                    "unknown",
+                    None,
+                }:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Compound assignment {node.op} requires numeric field, got {field_type}.",
+                        node.span,
+                    )
+                elif not self._is_assignable_type(field_type, value_type):
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Cannot assign {value_type} to field {node.target.member} of type {field_type}.",
+                        node.value.span,
+                    )
+                self._validate_bool_cannot_be_na(field_type, node.value)
+                return
+        sym = self._resolve_assignable(node.target)
+        if sym is None:
+            target_name = self._assignable_name(node.target) or "<expr>"
+            code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
+            self._diag(
+                Severity.ERROR,
+                code,
+                f"Reassignment to undeclared variable {target_name}.",
+                node.span,
+            )
+        elif sym.qualifier == "const":
+            self._diag(
+                Severity.ERROR,
+                codes.CONST_REASSIGNMENT,
+                f"Cannot reassign const symbol {sym.name}.",
+                node.span,
+            )
+        else:
+            if node.op in {"+=", "-=", "*=", "/=", "%="} and sym.type not in {
+                "int",
+                "float",
+                "unknown",
+                None,
+            }:
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Compound assignment {node.op} requires numeric target, got {sym.type}.",
+                    node.span,
+                )
+            elif not self._is_assignable_type(sym.type, value_type):
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Cannot assign {value_type} to {sym.name} of type {sym.type}.",
+                    node.value.span,
+                )
+            self._validate_bool_cannot_be_na(sym.type, node.value)
+
+    def _s_function_declaration(self, node: FunctionDeclaration) -> None:
+        validate_export_policy(self, node)
+        if self.local_depth > 0 or self.function_depth > 0:
+            self._diag(
+                Severity.ERROR,
+                codes.NESTED_FUNCTION,
+                "Function definitions are allowed only in global scope.",
+                node.span,
+            )
+        if id(node) not in self._predeclared_nodes:
+            self._define(node.name, SymbolKind.FUNCTION, node.span, "function", None)
+            self._function_params[node.name] = node.parameters
+        self.function_depth += 1
+        self._push_scope(ScopeKind.FUNCTION)
+        for p in node.parameters:
+            if p.type_ref is not None:
+                self._validate_type_ref(p.type_ref)
+            if p.default_value is not None:
+                self._visit_expr(p.default_value)
+                expected = self._type_ref_name(p.type_ref) if p.type_ref else None
+                actual = infer_type(p.default_value, self.model.symbols)
+                if not self._is_assignable_type(expected, actual):
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Default value for parameter {p.name} expects {expected}, got {actual}.",
+                        p.default_value.span,
+                    )
+                self._validate_bool_cannot_be_na(expected, p.default_value)
+                if p.explicit_qualifier is not None:
+                    self._validate_qualifier_assignment(
+                        p.explicit_qualifier,
+                        infer_qualifier(p.default_value, self.model.symbols),
+                        p.default_value.span,
+                        f"Default value for parameter {p.name}",
+                    )
+            self._define(
+                p.name,
+                SymbolKind.VARIABLE,
+                p.span,
+                self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
+                p.explicit_qualifier,
+            )
+        self._visit_body(node.body)
+        sym = self._resolve(node.name)
+        if sym is not None:
+            sym.type = self._body_return_type(node.body)
+        self._pop_scope()
+        self.function_depth -= 1
+
+    def _s_method_declaration(self, node: MethodDeclaration) -> None:
+        validate_export_policy(self, node)
+        if self.local_depth > 0 or self.function_depth > 0:
+            self._diag(
+                Severity.ERROR,
+                codes.NESTED_FUNCTION,
+                "Method definitions are allowed only in global scope.",
+                node.span,
+            )
+        if node.receiver_type is None or node.receiver_name is None:
+            self._diag(
+                Severity.ERROR,
+                codes.METHOD_RECEIVER_REQUIRED,
+                "Method receiver must have explicit type.",
+                node.span,
+            )
+        elif self._resolve(node.receiver_type.name) is None:
+            self._diag(
+                Severity.ERROR,
+                codes.METHOD_RECEIVER_TYPE_NOT_FOUND,
+                f"Method receiver type {node.receiver_type.name} is not declared.",
+                node.receiver_type.span,
+            )
+        if id(node) not in self._predeclared_nodes:
+            self._define(node.name, SymbolKind.METHOD, node.span, "method", None)
+            self._function_params[node.name] = node.parameters
+            if node.receiver_type is not None:
+                rt = node.receiver_type.name
+                if node.name in self._method_receivers:
+                    existing = self._method_receivers[node.name]
+                    if isinstance(existing, set):
+                        existing.add(rt)
+                    else:
+                        self._method_receivers[node.name] = {existing, rt}
+                else:
+                    self._method_receivers[node.name] = rt
+        self._push_scope(ScopeKind.METHOD)
+        if node.receiver_name:
+            self._define(
+                node.receiver_name,
+                SymbolKind.VARIABLE,
+                node.span,
+                self._type_ref_name(node.receiver_type) if node.receiver_type else "unknown",
+                "series",
+            )
+        for p in node.parameters:
+            if p.type_ref is not None:
+                self._validate_type_ref(p.type_ref)
+            if p.default_value is not None:
+                self._visit_expr(p.default_value)
+                expected = self._type_ref_name(p.type_ref) if p.type_ref else None
+                actual = infer_type(p.default_value, self.model.symbols)
+                if not self._is_assignable_type(expected, actual):
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Default value for parameter {p.name} expects {expected}, got {actual}.",
+                        p.default_value.span,
+                    )
+                self._validate_bool_cannot_be_na(expected, p.default_value)
+                if p.explicit_qualifier is not None:
+                    self._validate_qualifier_assignment(
+                        p.explicit_qualifier,
+                        infer_qualifier(p.default_value, self.model.symbols),
+                        p.default_value.span,
+                        f"Default value for parameter {p.name}",
+                    )
+            self._define(
+                p.name,
+                SymbolKind.VARIABLE,
+                p.span,
+                self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
+                p.explicit_qualifier,
+            )
+        self._visit_body(node.body)
+        sym = self._resolve(node.name)
+        if sym is not None:
+            sym.type = self._body_return_type(node.body)
+        self._pop_scope()
+
+    def _s_type_declaration(self, node: TypeDeclaration) -> None:
+        validate_export_policy(self, node)
+        if id(node) not in self._predeclared_nodes:
+            self._define(node.name, SymbolKind.TYPE, node.span, "type", None)
+        self._udt_fields[node.name] = node.fields
+        seen_fields: set[str] = set()
+        for field in node.fields:
+            if field.name in seen_fields:
+                self._diag(
+                    Severity.ERROR,
+                    codes.REDECLARATION,
+                    f"Duplicate field {field.name} in type {node.name}.",
+                    field.span,
+                )
+            seen_fields.add(field.name)
+        self._push_scope(ScopeKind.TYPE_DECL)
+        for field in node.fields:
+            self._validate_type_ref(field.type_ref)
+            field_type = self._type_ref_name(field.type_ref)
+            self._define(field.name, SymbolKind.FIELD, field.span, field_type, "series")
+            self._define(
+                f"{node.name}.{field.name}",
+                SymbolKind.FIELD,
+                field.span,
+                field_type,
+                "series",
+                allow_existing=True,
+            )
+            if field.default_value is not None:
+                self._visit_expr(field.default_value)
+                default_type = infer_type(field.default_value, self.model.symbols)
+                if not self._is_assignable_type(field_type, default_type):
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Default value for field {field.name} expects {field_type}, got {default_type}.",
+                        field.default_value.span,
+                    )
+                self._validate_bool_cannot_be_na(field_type, field.default_value)
+        self._pop_scope()
+
+    def _s_enum_declaration(self, node: EnumDeclaration) -> None:
+        validate_export_policy(self, node)
+        if id(node) not in self._predeclared_nodes:
+            self._define(node.name, SymbolKind.ENUM, node.span, "enum", None)
+        seen_members: set[str] = set()
+        for m in node.members:
+            if m.name in seen_members:
+                self._diag(
+                    Severity.ERROR,
+                    codes.REDECLARATION,
+                    f"Duplicate enum member {m.name} in enum {node.name}.",
+                    m.span,
+                )
+                continue
+            seen_members.add(m.name)
+            self._define(
+                f"{node.name}.{m.name}",
+                SymbolKind.ENUM_MEMBER,
+                m.span,
+                node.name,
+                "const",
+                allow_existing=True,
+            )
+        self._enum_members[node.name] = seen_members
+
+    def _s_import_declaration(self, node: ImportDeclaration) -> None:
+        alias = node.alias or node.library or node.owner or node.path
+        if id(node) not in self._predeclared_nodes:
+            self._define(alias, SymbolKind.IMPORT_ALIAS, node.span, "external", None)
+            self._external_aliases.add(alias)
+
+    def _body_return_type(self, body) -> str:
+        if isinstance(body, Block):
+            if not body.statements:
+                return "void"
+            last = body.statements[-1]
+            if hasattr(last, "expression"):
+                return infer_type(last.expression, self.model.symbols)
+            if hasattr(last, "initializer"):
+                return infer_type(last.initializer, self.model.symbols)
+            if hasattr(last, "value"):
+                return infer_type(last.value, self.model.symbols)
+            return "void"
+        return infer_type(body, self.model.symbols)
+
+    def _body_return_shape(self, body) -> str | None:
+        """Best-effort return shape usable during global predeclaration.
+
+        The shape pass is deliberately syntax-only: it preserves tuple arity and
+        obvious scalar return types for forward function calls before local symbols
+        are available. Exact types are refined later by `_body_return_type()`.
+        """
+        target = self._body_return_expr(body)
+        if target is None:
+            return "void" if isinstance(body, Block) else None
+        return self._static_return_shape(target)
+
+    def _body_return_expr(self, body):
+        if isinstance(body, Block):
+            if not body.statements:
+                return None
+            last = body.statements[-1]
+            return (
+                getattr(last, "expression", None)
+                or getattr(last, "initializer", None)
+                or getattr(last, "value", None)
+            )
+        return body
+
+    def _static_return_shape(self, expr) -> str | None:
+        if isinstance(expr, TupleExpr):
+            return (
+                "tuple<"
+                + ",".join(self._static_return_shape(item) or "unknown" for item in expr.elements)
+                + ">"
+            )
+        if isinstance(expr, Literal):
+            return expr.literal_type
+        if isinstance(expr, ConditionalExpr):
+            left = self._static_return_shape(expr.if_true)
+            right = self._static_return_shape(expr.if_false)
+            return self._merge_return_shapes([left, right])
+        if isinstance(expr, IfStructure):
+            shapes: list[str | None] = []
+            target = self._body_return_expr(expr.then_block)
+            if target is not None:
+                shapes.append(self._static_return_shape(target))
+            for br in expr.else_if_branches:
+                target = self._body_return_expr(br.block)
+                if target is not None:
+                    shapes.append(self._static_return_shape(target))
+            if expr.else_block is not None:
+                target = self._body_return_expr(expr.else_block)
+                if target is not None:
+                    shapes.append(self._static_return_shape(target))
+            return self._merge_return_shapes(shapes)
+        if isinstance(expr, SwitchStructure):
+            switch_shapes: list[str | None] = []
+            for case in expr.cases:
+                target = (
+                    self._body_return_expr(case.body) if isinstance(case.body, Block) else case.body
+                )
+                if target is not None:
+                    switch_shapes.append(self._static_return_shape(target))
+            return self._merge_return_shapes(switch_shapes)
+        return None
+
+    def _merge_return_shapes(self, shapes: list[str | None]) -> str | None:
+        known = [shape for shape in shapes if shape]
+        if not known:
+            return None
+        if all(shape == known[0] for shape in known):
+            return known[0]
+        if set(known) <= {"int", "float"}:
+            return "float"
+        if all(shape.startswith("tuple<") and shape.endswith(">") for shape in known):
+            split = [self._split_type_args(shape[len("tuple<") : -1]) for shape in known]
+            if split and all(len(parts) == len(split[0]) for parts in split):
+                merged = [
+                    self._merge_return_shapes([parts[i] for parts in split]) or "unknown"
+                    for i in range(len(split[0]))
+                ]
+                return "tuple<" + ",".join(merged) + ">"
+        return None
+
+    def _visit_body(self, body: Block | Expression) -> None:
+        if isinstance(body, Block):
+            self._visit_block(body)
+        else:
+            self._visit_expr(body)
+
+    def _visit_block(
+        self,
+        block: Block,
+        *,
+        kind: ScopeKind = ScopeKind.LOCAL_BLOCK,
+        non_na_symbols: set[str] | None = None,
+        non_na_paths: set[str] | None = None,
+    ) -> None:
+        self.local_depth += 1
+        self._push_scope(kind, non_na_symbols=non_na_symbols, non_na_paths=non_na_paths)
+        for st in block.statements:
+            self._visit_statement(st)
+        self._pop_scope()
+        self.local_depth -= 1

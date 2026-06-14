@@ -30,7 +30,7 @@ def _load_official_index_payload(pine_version: int) -> dict[str, Any]:
 
 
 def _official_categories(index: dict[str, Any]) -> dict[str, set[str]]:
-    if index.get("schema_version") != "pain.official_pine_reference_index.v1":
+    if index.get("schema_version") != "pine.official_pine_reference_index.v1":
         raise ReferenceCatalogError("official reference index schema mismatch")
     categories = index.get("categories")
     if not isinstance(categories, dict):
@@ -89,7 +89,7 @@ def official_matrix_coverage_payload(
     missing_count = sum(len(items) for items in missing_by_category.values())
     tracked_count = official_count - missing_count
     return {
-        "schema_version": "pain.official_parity_matrix_coverage.v1",
+        "schema_version": "pine.official_parity_matrix_coverage.v1",
         "pine_version": pine_version,
         "summary": {
             "official_reference_count": official_count,
@@ -109,8 +109,8 @@ def _fail(errors: list[str]) -> None:
 
 def validate_catalog_payload(payload: dict[str, Any]) -> None:
     errors: list[str] = []
-    if payload.get("schema_version") != "pain.pine_reference_catalog.v1":
-        errors.append("catalog schema_version must be pain.pine_reference_catalog.v1")
+    if payload.get("schema_version") != "pine.pine_reference_catalog.v1":
+        errors.append("catalog schema_version must be pine.pine_reference_catalog.v1")
     if payload.get("pine_version") != 6:
         errors.append("catalog pine_version must be 6")
     entries = payload.get("entries")
@@ -163,8 +163,8 @@ def validate_matrix_payload(
     official_index: dict[str, Any] | None = None,
 ) -> None:
     errors: list[str] = []
-    if matrix.get("schema_version") != "pain.parity_matrix.v1":
-        errors.append("matrix schema_version must be pain.parity_matrix.v1")
+    if matrix.get("schema_version") != "pine.parity_matrix.v1":
+        errors.append("matrix schema_version must be pine.parity_matrix.v1")
     if matrix.get("pine_version") != 6:
         errors.append("matrix pine_version must be 6")
     items = matrix.get("items")

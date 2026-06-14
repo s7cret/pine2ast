@@ -7,7 +7,7 @@
     "variables": []
   },
   "pine_version": 6,
-  "schema_version": "pain.official_pine_reference_gap_baseline.v1",
+  "schema_version": "pine.official_pine_reference_gap_baseline.v1",
   "source": {
     "basis": "TradingView pine-script-reference webpack reference payload",
     "bundle_url": "https://static.tradingview.com/static/bundles/4876.d26c975c459001ae0719.js",

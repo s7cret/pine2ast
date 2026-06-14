@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
+from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+
 from pine2ast.ast.nodes import (
     CallExpr,
     DeclarationStatement,
@@ -56,20 +58,42 @@ class BaseParser:
 
         def parse_expression(self, min_prec: int = 0) -> Any: ...
         def parse_import(self, *, exported: bool = False) -> Any: ...
-        def parse_type_decl(self, *, exported: bool = False) -> Any: ...
-        def parse_enum_decl(self, *, exported: bool = False) -> Any: ...
-        def parse_method_decl(self, *, exported: bool = False) -> Any: ...
-        def parse_function_decl(self, *, exported: bool = False) -> Any: ...
-        def parse_var_decl(self, *, is_exported: bool = False, pending_annotations: list | None = None) -> Any: ...
-        def parse_statement(self) -> Any: ...
+        def parse_type_decl(
+            self, *, exported: bool = False, pending_annotations: list | None = None
+        ) -> Any: ...
+        def parse_enum_decl(
+            self, *, exported: bool = False, pending_annotations: list | None = None
+        ) -> Any: ...
+        def parse_method_decl(
+            self, *, exported: bool = False, pending_annotations: list | None = None
+        ) -> Any: ...
+        def parse_function_decl(
+            self, *, exported: bool = False, pending_annotations: list | None = None
+        ) -> Any: ...
+        def parse_var_decl(
+            self, *, is_exported: bool = False, pending_annotations: list | None = None
+        ) -> Any: ...
+        def parse_statement(self, *, pending_annotations: list | None = None) -> Any: ...
 
     def __init__(
-        self, tokens: list[Token], *, strict_v6: bool = True, max_diagnostics: int = 200
+        self,
+        tokens: list[Token],
+        *,
+        strict_v6: bool = True,
+        max_diagnostics: int = 200,
+        target_version: int = 6,
+        compatibility_mode: bool = False,
+        language_profile: PineLanguageProfile | None = None,
     ) -> None:
         self.tokens = tokens
         self.i = 0
         self.strict_v6 = strict_v6
         self.max_diagnostics = max_diagnostics
+        self.language_profile = language_profile or pine_language_profile(
+            target_version, strict=strict_v6, compatibility_mode=compatibility_mode
+        )
+        self.target_version = self.language_profile.version
+        self.compatibility_mode = self.language_profile.compatibility_mode
         self.diagnostics: list[Diagnostic] = []
 
     def parse(self) -> ParserResult:
@@ -79,9 +103,9 @@ class BaseParser:
         leading = self._consume_version_annotation()
         annotations = [leading] if leading is not None else []
         version = self._extract_version(annotations)
-        if version != 6:
+        if version is None:
             span = annotations[0].span if annotations else self._peek().span
-            if version is None:
+            if self.target_version == 6:
                 self._diag(
                     Severity.ERROR if self.strict_v6 else Severity.WARNING,
                     codes.MISSING_VERSION_6 if self.strict_v6 else codes.VERSION_ASSUMED,
@@ -90,18 +114,36 @@ class BaseParser:
                 )
                 if not self.strict_v6:
                     version = 6
-            elif version == 5:
+            else:
                 self._diag(
                     Severity.WARNING,
+                    codes.VERSION_ASSUMED,
+                    "Missing //@version=5 annotation; assuming Pine v5 profile.",
+                    span,
+                )
+                version = 5
+        elif version not in {5, 6}:
+            span = annotations[0].span if annotations else self._peek().span
+            self._diag(
+                Severity.ERROR if self.strict_v6 else Severity.WARNING,
+                codes.UNSUPPORTED_VERSION,
+                f"Unsupported Pine version {version}; this parser supports Pine v5/v6 profiles.",
+                span,
+            )
+        elif version != self.target_version:
+            span = annotations[0].span if annotations else self._peek().span
+            if version == 5 and self.target_version == 6:
+                self._diag(
+                    Severity.ERROR if self.strict_v6 else Severity.WARNING,
                     codes.UNSUPPORTED_VERSION,
                     "Pine version 5 is parsed in v6 compatibility mode.",
                     span,
                 )
-            else:
+            elif version == 6 and self.target_version == 5:
                 self._diag(
-                    Severity.ERROR if self.strict_v6 else Severity.WARNING,
+                    Severity.WARNING if self.compatibility_mode else Severity.ERROR,
                     codes.UNSUPPORTED_VERSION,
-                    f"Unsupported Pine version {version}; this parser targets v6.",
+                    "Pine version 6 source is not valid for a strict Pine v5 profile.",
                     span,
                 )
         self._skip_newlines()

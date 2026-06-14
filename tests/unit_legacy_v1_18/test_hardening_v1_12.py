@@ -1,5 +1,3 @@
-import pytest
-
 from pine2ast.api import ParseOptions, parse_code
 
 
@@ -56,9 +54,6 @@ plot(p.y)
 """) == []
 
 
-@pytest.mark.xfail(
-    reason="UDT constructor duplicate positional/named field detection not yet implemented"
-)
 def test_udt_constructor_duplicate_positional_and_named_field_is_rejected():
     codes = _errors("""//@version=6
 indicator("T")

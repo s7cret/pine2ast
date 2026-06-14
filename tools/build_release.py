@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build a versioned Pine2AST release archive")
-    parser.add_argument("--version", required=True, help="Release id, e.g. v2_16_0")
+    parser.add_argument("--version", required=True, help="Release id, e.g. v4_0_0")
     parser.add_argument("--root", default=str(ROOT))
     args = parser.parse_args(argv)
 

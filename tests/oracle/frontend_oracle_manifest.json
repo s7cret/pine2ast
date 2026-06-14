@@ -1,0 +1,67 @@
+{
+  "schema_version": "pine2ast.oracle_manifest.v1",
+  "cases": [
+    {
+      "id": "v6-valid-map-enum-key",
+      "version": 6,
+      "expect_ok": true,
+      "source": "//@version=6\nindicator(\"oracle\")\nenum Key\n    A\nmap<Key, float> weights = map.new<Key, float>()\nweights.put(Key.A, close)\nfloat x = weights.get(Key.A)\n"
+    },
+    {
+      "id": "v6-invalid-array-index",
+      "version": 6,
+      "expect_ok": false,
+      "expected_error_codes": [
+        "P2A1805"
+      ],
+      "source": "//@version=6\nindicator(\"oracle\")\narray<float> xs = array.new<float>()\nfloat x = xs.get(\"bad\")\n"
+    },
+    {
+      "id": "v5-invalid-local-request-without-dynamic",
+      "version": 5,
+      "expect_ok": false,
+      "expected_error_codes": [
+        "P2A1502"
+      ],
+      "description": "Pine v5 requires dynamic_requests=true for request.* in local scopes.",
+      "source": "//@version=5\nindicator(\"oracle\")\nif close > open\n    float x = request.security(syminfo.tickerid, timeframe.period, close)\n"
+    },
+    {
+      "id": "v5-valid-local-request-with-dynamic",
+      "version": 5,
+      "expect_ok": true,
+      "description": "Pine v5 local request.* is accepted when dynamic_requests is explicitly enabled.",
+      "source": "//@version=5\nindicator(\"oracle\", dynamic_requests=true)\nif close > open\n    float x = request.security(syminfo.tickerid, timeframe.period, close)\n"
+    },
+    {
+      "id": "v6-invalid-strategy-exit-no-action",
+      "version": 6,
+      "expect_ok": false,
+      "expected_error_codes": [
+        "P2A1404"
+      ],
+      "description": "strategy.exit() must define an effective exit action.",
+      "source": "//@version=6\nstrategy(\"oracle\")\nstrategy.entry(\"L\", strategy.long)\nstrategy.exit(\"LX\", \"L\")\n"
+    },
+    {
+      "id": "v6-invalid-const-int-division-to-int",
+      "version": 6,
+      "expect_ok": false,
+      "expected_error_codes": [
+        "P2A1801"
+      ],
+      "description": "Pine v6 const int divided by const int is inferred as float, so assigning to const int is invalid.",
+      "source": "//@version=6\nindicator(\"oracle\")\nconst int ratio = 1 / 2\n"
+    },
+    {
+      "id": "v6-invalid-dynamic-request-disabled",
+      "version": 6,
+      "expect_ok": false,
+      "expected_error_codes": [
+        "P2A1502"
+      ],
+      "description": "Pine v6 dynamic_requests=false blocks request.* that needs dynamic request semantics.",
+      "source": "//@version=6\nindicator(\"oracle\", dynamic_requests=false)\nif close > open\n    float x = request.security(syminfo.tickerid, timeframe.period, close)\n"
+    }
+  ]
+}

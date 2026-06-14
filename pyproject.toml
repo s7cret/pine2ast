@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "2.17.0"
-description = "Pine Script v6 to AST parser prototype with lexer, layout, semantic diagnostics and CLI"
+version = "4.0.0"
+description = "Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and metadata contracts"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
@@ -33,7 +33,7 @@ pine2ast = "pine2ast.cli:main"
 include = ["pine2ast*"]
 
 [tool.setuptools.package-data]
-pine2ast = ["semantic/*.json", "runtime_contract_v1_4/*.json", "reference_catalog/*.json"]
+pine2ast = ["semantic/*.json", "runtime_contract_v1_4/*.json", "reference_catalog/*.json", "compatibility/*.json", "compatibility/*.md"]
 
 [tool.black]
 line-length = 100

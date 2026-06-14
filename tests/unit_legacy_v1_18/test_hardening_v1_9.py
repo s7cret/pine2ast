@@ -21,7 +21,7 @@ def test_strategy_namespace_calls_allowed_in_strategy_scripts():
     assert _error_codes("""//@version=6
 strategy("S")
 strategy.entry("L", strategy.long)
-strategy.exit("X", "L")
+strategy.exit("X", "L", stop=low, limit=high)
 plot(close)
 """) == []
 

@@ -90,7 +90,7 @@ def parse_annotation(raw: str, span: SourceSpan) -> Annotation:
         if kind_token in _ROUTED_KINDS:
             # //@param x value  → kind=PARAM, name='x', value='value'
             # //@param=x=value  → same (alternate form)
-            after_kind = body[len(kind_token):].strip()
+            after_kind = body[len(kind_token) :].strip()
             if after_kind.startswith("="):
                 _, _, after_eq = after_kind.partition("=")
                 head, _, rest = after_eq.partition(" ")

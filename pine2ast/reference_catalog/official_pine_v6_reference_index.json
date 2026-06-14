@@ -1,5 +1,5 @@
 {
-  "schema_version": "pain.official_pine_reference_index.v1",
+  "schema_version": "pine.official_pine_reference_index.v1",
   "pine_version": 6,
   "source": {
     "reference_url": "https://www.tradingview.com/pine-script-reference/v6/",

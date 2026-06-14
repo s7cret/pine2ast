@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
-import os
 import time
 import tracemalloc
 from pathlib import Path
 from typing import Any
+
+from pine2ast.internal.fs import pine_files
 
 from pine2ast.ast.visitors import walk
 from pine2ast.lexer import Lexer
@@ -65,17 +66,6 @@ def _avg(rows: list[dict[str, Any]], key: str) -> float:
     return sum(float(r.get(key, 0.0)) for r in rows) / max(1, len(rows))
 
 
-def _pine_files(root: Path) -> list[Path]:
-    if root.suffix == ".pine":
-        return [root]
-    rows: list[Path] = []
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
-            if filename.endswith(".pine"):
-                rows.append(Path(dirpath) / filename)
-    return sorted(rows)
-
-
 def bench_corpus(
     path: str | Path,
     *,
@@ -84,7 +74,7 @@ def bench_corpus(
     run_semantic: bool = True,
 ) -> dict[str, Any]:
     root = Path(path)
-    files = _pine_files(root)
+    files = pine_files(root)
     baseline_by_file = {row.get("file"): row for row in (baseline or {}).get("files", [])}
     rows: list[dict[str, Any]] = []
 

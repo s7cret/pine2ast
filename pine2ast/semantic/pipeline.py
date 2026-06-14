@@ -11,6 +11,8 @@ PASS_PIPELINE = (
     "type_inference",
     "qualifier_inference",
     "builtin_validation",
+    "collection_validation",
+    "static_validation",
     "strategy_context_validation",
     "unsupported_feature_extraction",
     "declaration_cardinality",

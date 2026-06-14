@@ -105,6 +105,8 @@ def test_semantic_pass_pipeline_names_frontend_contract_phases() -> None:
         "type_inference",
         "qualifier_inference",
         "builtin_validation",
+        "collection_validation",
+        "static_validation",
         "strategy_context_validation",
         "unsupported_feature_extraction",
         "declaration_cardinality",

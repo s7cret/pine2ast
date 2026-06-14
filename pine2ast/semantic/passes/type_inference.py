@@ -20,4 +20,5 @@ class TypeInferencePass:
         self.analyzer = analyzer
 
     def run(self, program: Program) -> None:
+        self.analyzer.inference.collect_program_facts(program, self.analyzer.model)
         return None

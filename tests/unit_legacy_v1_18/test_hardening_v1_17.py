@@ -1,5 +1,3 @@
-import pytest
-
 from pine2ast.api import ParseOptions, parse_code
 from pine2ast.ast.nodes import Block, MethodDeclaration
 
@@ -58,7 +56,6 @@ plot(x)
 """) == []
 
 
-@pytest.mark.xfail(reason="UDT method return type inference not yet tracked through semantic layer")
 def test_udt_method_return_type_is_used_for_typed_assignment():
     codes = _error_codes("""//@version=6
 indicator("T")

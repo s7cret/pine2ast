@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+
+from pine2ast.internal.fs import pine_files
 
 from pine2ast.api import ParseOptions, parse_file
 from pine2ast.ast.schema import validate_ast_schema
@@ -81,20 +82,9 @@ class QualityGateReport:
         }
 
 
-def _pine_files(root: Path) -> list[Path]:
-    if root.suffix == ".pine":
-        return [root]
-    rows: list[Path] = []
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
-            if filename.endswith(".pine"):
-                rows.append(Path(dirpath) / filename)
-    return sorted(rows)
-
-
 def quality_gate(path: str | Path, *, run_semantic: bool = True) -> QualityGateReport:
     root = Path(path)
-    files = _pine_files(root)
+    files = pine_files(root)
     rows: list[QualityFileReport] = []
     all_diagnostics = []
     for file in files:
@@ -139,3 +129,192 @@ def quality_gate_json(path: str | Path, *, run_semantic: bool = True, indent: in
     return json.dumps(
         quality_gate(path, run_semantic=run_semantic).to_dict(), ensure_ascii=False, indent=indent
     )
+
+
+def duplicate_function_report(path: str | Path = "pine2ast") -> dict[str, Any]:
+    """Return a small exact-duplicate implementation report for maintainers.
+
+    This intentionally ignores methods and tiny functions to avoid reporting
+    protocol/pass boilerplate. It is a lightweight Stage 1 guard, not a clone
+    detector.
+    """
+
+    import ast
+    import hashlib
+
+    root = Path(path)
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for py_file in sorted(root.rglob("*.py") if root.is_dir() else [root]):
+        if "__pycache__" in py_file.parts:
+            continue
+        source = py_file.read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        parents: dict[ast.AST, ast.AST] = {}
+        for parent in ast.walk(tree):
+            for child in ast.iter_child_nodes(parent):
+                parents[child] = parent
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            if isinstance(parents.get(node), ast.ClassDef):
+                continue
+            if node.end_lineno is None or node.end_lineno - node.lineno < 5:
+                continue
+            normalized = ast.dump(
+                ast.Module(body=[*node.body], type_ignores=[]),
+                include_attributes=False,
+            )
+            args_shape = ast.dump(node.args, include_attributes=False)
+            digest = hashlib.sha256((args_shape + "\n" + normalized).encode("utf-8")).hexdigest()
+            groups.setdefault(digest, []).append(
+                {"file": str(py_file), "name": node.name, "line": node.lineno}
+            )
+    duplicates = [items for items in groups.values() if len(items) > 1]
+    return {
+        "schema_version": "pine2ast.quality.duplicates.v1",
+        "path": str(root),
+        "duplicate_group_count": len(duplicates),
+        "duplicates": duplicates,
+    }
+
+
+def duplicates_json(path: str | Path = "pine2ast", *, indent: int = 2) -> str:
+    return json.dumps(duplicate_function_report(path), ensure_ascii=False, indent=indent)
+
+
+@dataclass(slots=True)
+class ArchitectureBudgetFile:
+    file: str
+    line_count: int
+    max_lines: int
+
+    @property
+    def ok(self) -> bool:
+        return self.line_count <= self.max_lines
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "file": self.file,
+            "line_count": self.line_count,
+            "max_lines": self.max_lines,
+            "ok": self.ok,
+        }
+
+
+@dataclass(slots=True)
+class ArchitectureBudgetReport:
+    schema_version: str
+    path: str
+    max_lines: int
+    file_count: int
+    oversized: list[ArchitectureBudgetFile]
+
+    @property
+    def ok(self) -> bool:
+        return not self.oversized
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "ok": self.ok,
+            "path": self.path,
+            "max_lines": self.max_lines,
+            "file_count": self.file_count,
+            "oversized_count": len(self.oversized),
+            "oversized": [row.to_dict() for row in self.oversized],
+        }
+
+
+def architecture_budget_report(
+    path: str | Path = "pine2ast",
+    *,
+    max_lines: int = 700,
+    exclude: tuple[str, ...] = ("__pycache__",),
+) -> ArchitectureBudgetReport:
+    """Return a lightweight module-size budget report for release hygiene.
+
+    The gate is intentionally simple: it keeps frontend modules small enough for
+    code review after the 4.0 semantic-mixin split. Generated JSON files and test
+    fixtures are outside this report; only Python modules below ``path`` are
+    counted.
+    """
+
+    root = Path(path)
+    py_files = sorted(root.rglob("*.py") if root.is_dir() else [root])
+    checked: list[Path] = []
+    oversized: list[ArchitectureBudgetFile] = []
+    for py_file in py_files:
+        if any(part in exclude for part in py_file.parts):
+            continue
+        checked.append(py_file)
+        line_count = sum(1 for _ in py_file.open(encoding="utf-8"))
+        if line_count > max_lines:
+            oversized.append(
+                ArchitectureBudgetFile(
+                    file=str(py_file),
+                    line_count=line_count,
+                    max_lines=max_lines,
+                )
+            )
+    return ArchitectureBudgetReport(
+        schema_version="pine2ast.quality.architecture_budget.v1",
+        path=str(root),
+        max_lines=max_lines,
+        file_count=len(checked),
+        oversized=oversized,
+    )
+
+
+def architecture_budget_json(
+    path: str | Path = "pine2ast", *, max_lines: int = 700, indent: int = 2
+) -> str:
+    return json.dumps(
+        architecture_budget_report(path, max_lines=max_lines).to_dict(),
+        ensure_ascii=False,
+        indent=indent,
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(prog="python -m pine2ast.quality")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+    p_duplicates = sub.add_parser("duplicates")
+    p_duplicates.add_argument("path", nargs="?", default="pine2ast")
+    p_duplicates.add_argument("--json", dest="json_path")
+
+    p_architecture = sub.add_parser("architecture")
+    p_architecture.add_argument("path", nargs="?", default="pine2ast")
+    p_architecture.add_argument("--max-lines", type=int, default=700)
+    p_architecture.add_argument("--json", dest="json_path")
+
+    p_architecture_budget = sub.add_parser("architecture-budget")
+    p_architecture_budget.add_argument("path", nargs="?", default="pine2ast")
+    p_architecture_budget.add_argument("--max-lines", type=int, default=700)
+    p_architecture_budget.add_argument("--json", dest="json_path")
+
+    args = parser.parse_args(argv)
+    if args.cmd == "duplicates":
+        output = duplicates_json(args.path)
+        if args.json_path:
+            Path(args.json_path).write_text(output, encoding="utf-8")
+            print(args.json_path)
+        else:
+            print(output)
+        payload = json.loads(output)
+        return 0 if payload.get("duplicate_group_count") == 0 else 1
+    if args.cmd in {"architecture", "architecture-budget"}:
+        output = architecture_budget_json(args.path, max_lines=args.max_lines)
+        if args.json_path:
+            Path(args.json_path).write_text(output, encoding="utf-8")
+            print(args.json_path)
+        else:
+            print(output)
+        payload = json.loads(output)
+        return 0 if payload.get("ok") is True else 1
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -17,6 +17,7 @@ from pine2ast.ast.nodes import (
     UnaryExpr,
 )
 from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.semantic.type_helpers import split_type_args
 
 
 def callee_name(expr) -> str:
@@ -84,31 +85,13 @@ def _udt_constructor_return(expr: CallExpr, symbols: Mapping[str, object] | None
     return None
 
 
-def _split_type_args(inner: str) -> list[str]:
-    result: list[str] = []
-    depth = 0
-    start = 0
-    for idx, ch in enumerate(inner):
-        if ch == "<":
-            depth += 1
-        elif ch == ">":
-            depth -= 1
-        elif ch == "," and depth == 0:
-            result.append(inner[start:idx].strip() or "unknown")
-            start = idx + 1
-    tail = inner[start:].strip()
-    if tail:
-        result.append(tail)
-    return result
-
-
 def _collection_element_type(typ: str, *, map_value: bool = True) -> str | None:
     if typ.startswith("array<") and typ.endswith(">"):
         return typ[len("array<") : -1].strip() or "unknown"
     if typ.startswith("matrix<") and typ.endswith(">"):
         return typ[len("matrix<") : -1].strip() or "unknown"
     if typ.startswith("map<") and typ.endswith(">"):
-        parts = _split_type_args(typ[len("map<") : -1])
+        parts = split_type_args(typ[len("map<") : -1])
         if len(parts) >= 2:
             return parts[1] if map_value else parts[0]
     return None
@@ -154,6 +137,19 @@ def _collection_call_return(expr: CallExpr, symbols: Mapping[str, object] | None
     }:
         return _collection_element_type(infer_type(expr.callee.object, symbols))
     return None
+
+
+def _user_method_call_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
+    """Infer return type for receiver-style calls to user-defined methods."""
+    if not isinstance(expr.callee, MemberAccessExpr):
+        return None
+    method_name = expr.callee.member
+    if _symbol_kind(method_name, symbols) != "METHOD":
+        return None
+    method_type = _symbol_type(method_name, symbols)
+    if method_type in {None, "method", "function", "unknown"}:
+        return None
+    return method_type
 
 
 def _generic_collection_constructor_return(expr: CallExpr) -> str | None:
@@ -266,6 +262,9 @@ def infer_type(expr, symbols: Mapping[str, object] | None = None) -> str:
         collection_type = _collection_call_return(expr, symbols)
         if collection_type:
             return collection_type
+        user_method_type = _user_method_call_return(expr, symbols)
+        if user_method_type:
+            return user_method_type
         security_type = _request_security_return(expr, symbols)
         if security_type:
             return security_type

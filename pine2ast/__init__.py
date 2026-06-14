@@ -1,10 +1,22 @@
-from .api import ParseOptions, ParseResult, ast_to_dict, ast_to_json, parse_code, parse_file
+from .api import (
+    ParseOptions,
+    ParsePipeline,
+    ParseResult,
+    ast_to_dict,
+    ast_to_json,
+    parse_code,
+    parse_file,
+)
 from .ast.schema import SchemaReport, validate_ast_schema
 from ._version import __version__
+from .language_profiles import PineLanguageProfile, pine_language_profile
 
 __all__ = [
     "ParseOptions",
     "ParseResult",
+    "ParsePipeline",
+    "PineLanguageProfile",
+    "pine_language_profile",
     "parse_code",
     "parse_file",
     "ast_to_dict",

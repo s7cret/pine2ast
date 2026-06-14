@@ -10715,7 +10715,7 @@
     }
   ],
   "pine_version": 6,
-  "schema_version": "pain.pine_reference_catalog.v1",
+  "schema_version": "pine.pine_reference_catalog.v1",
   "scope": "amended_6pkg_p0",
   "status_legend": [
     "NOT_STARTED",

@@ -8175,6 +8175,6 @@
     }
   ],
   "pine_version": 6,
-  "schema_version": "pain.parity_matrix.v1",
+  "schema_version": "pine.parity_matrix.v1",
   "scope": "amended_6pkg_p0"
 }

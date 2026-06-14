@@ -27,7 +27,7 @@ class OfficialReferenceIndex:
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "schema_version": "pain.official_pine_reference_index.v1",
+            "schema_version": "pine.official_pine_reference_index.v1",
             "pine_version": self.pine_version,
             "source": {
                 "reference_url": self.source_url,
@@ -63,7 +63,7 @@ def fetch_official_reference_index(
 
 def load_official_reference_index(path: str) -> OfficialReferenceIndex:
     payload = json.loads(_read_text(path))
-    if payload.get("schema_version") != "pain.official_pine_reference_index.v1":
+    if payload.get("schema_version") != "pine.official_pine_reference_index.v1":
         raise OfficialReferenceError("official reference index schema mismatch")
     source = payload.get("source", {})
     categories = payload.get("categories", {})
@@ -81,16 +81,103 @@ def load_official_reference_index(path: str) -> OfficialReferenceIndex:
     )
 
 
+def _load_local_registry_for_index(index: OfficialReferenceIndex) -> dict[str, Any]:
+    try:
+        return load_builtin_registry(pine_version=index.pine_version)
+    except TypeError:  # pragma: no cover - compatibility with monkeypatched tests/helpers
+        return load_builtin_registry()
+
+
+def _entry_has_machine_signature(entry: Any) -> bool:
+    if not isinstance(entry, dict):
+        return False
+    if entry.get("_signature_pending"):
+        return False
+    overloads = entry.get("overloads") or entry.get("signatures")
+    if isinstance(overloads, list) and overloads:
+        return all(isinstance(item, dict) and "parameters" in item for item in overloads)
+    return bool("parameters" in entry or entry.get("allow_extra_positional"))
+
+
+def _signature_coverage_payload(
+    local: dict[str, Any], official_categories: dict[str, set[str]]
+) -> dict[str, Any]:
+    categories: dict[str, Any] = {}
+    total_official = 0
+    total_present = 0
+    total_machine_signature = 0
+    total_signature_pending = 0
+    for category in ("functions", "methods"):
+        official = official_categories.get(category, set())
+        bucket = local.get(category, {}) if isinstance(local.get(category, {}), dict) else {}
+        present = official & set(bucket)
+        with_signature = sorted(
+            name for name in present if _entry_has_machine_signature(bucket.get(name))
+        )
+        pending = sorted(name for name in present if name not in set(with_signature))
+        missing = sorted(official - set(bucket))
+        categories[category] = {
+            "official_count": len(official),
+            "present_count": len(present),
+            "machine_signature_count": len(with_signature),
+            "signature_pending_count": len(pending),
+            "missing_name_count": len(missing),
+            "name_coverage_ratio": None if not official else len(present) / len(official),
+            "machine_signature_coverage_ratio": (
+                None if not official else len(with_signature) / len(official)
+            ),
+            "signature_pending_sample": pending[:25],
+            "missing_name_sample": missing[:25],
+        }
+        total_official += len(official)
+        total_present += len(present)
+        total_machine_signature += len(with_signature)
+        total_signature_pending += len(pending)
+    totals: dict[str, int | float | None] = {
+        "official_count": total_official,
+        "present_count": total_present,
+        "machine_signature_count": total_machine_signature,
+        "signature_pending_count": total_signature_pending,
+        "name_coverage_ratio": None if total_official == 0 else total_present / total_official,
+        "machine_signature_coverage_ratio": (
+            None if total_official == 0 else total_machine_signature / total_official
+        ),
+    }
+    return {
+        "schema_version": "pine2ast.official_reference_signature_coverage.v1",
+        "summary": totals,
+        "categories": categories,
+    }
+
+
 def official_reference_diff_payload(index: OfficialReferenceIndex) -> dict[str, Any]:
-    local = load_builtin_registry()
+    local = _load_local_registry_for_index(index)
     local_categories = {
         "functions": set(local.get("functions", {})),
         "variables": set(local.get("variables", {})),
+        "methods": set(local.get("methods", {})),
+        "constants": set(local.get("constants", {})),
         "types": set(local.get("types", {})),
+        "operators": set(local.get("operators", {})),
+        "keywords": set(local.get("keywords", {})),
+        "annotations": set(local.get("annotations", {})),
         "namespaces": set(local.get("namespaces", {})),
     }
     official_categories = {key: set(value) for key, value in index.categories.items()}
-    comparable = ("functions", "variables", "types")
+    comparable = tuple(
+        key
+        for key in (
+            "functions",
+            "variables",
+            "methods",
+            "constants",
+            "types",
+            "operators",
+            "keywords",
+            "annotations",
+        )
+        if key in official_categories
+    )
     missing_by_category = {
         key: sorted(official_categories.get(key, set()) - local_categories.get(key, set()))
         for key in comparable
@@ -101,13 +188,13 @@ def official_reference_diff_payload(index: OfficialReferenceIndex) -> dict[str, 
     }
     namespace_counts = Counter(
         name.split(".", 1)[0] if "." in name else "<global>"
-        for name in missing_by_category["functions"]
+        for name in missing_by_category.get("functions", [])
     )
     missing_count = sum(len(v) for v in missing_by_category.values())
     official_count = sum(len(official_categories.get(key, set())) for key in comparable)
     modeled_count = official_count - missing_count
     return {
-        "schema_version": "pain.official_pine_reference_diff.v1",
+        "schema_version": "pine.official_pine_reference_diff.v1",
         "pine_version": index.pine_version,
         "source": index.to_dict()["source"],
         "summary": {
@@ -118,6 +205,13 @@ def official_reference_diff_payload(index: OfficialReferenceIndex) -> dict[str, 
         },
         "missing_by_category": missing_by_category,
         "extra_local_by_category": extra_by_category,
+        "coverage_axes": {
+            "name_coverage": "official item names present in the local registry/category snapshot",
+            "signature_coverage": "machine-readable parameter/signature metadata for callable official items",
+            "semantic_coverage": "tracked by the parity matrix and semantic tests",
+            "runtime_out_of_scope": "runtime execution is intentionally outside pine2ast",
+        },
+        "signature_coverage": _signature_coverage_payload(local, official_categories),
         "missing_function_namespaces": dict(sorted(namespace_counts.items())),
     }
 
@@ -126,7 +220,7 @@ def official_reference_gate_payload(
     index: OfficialReferenceIndex, baseline_path: str
 ) -> dict[str, Any]:
     baseline = json.loads(_read_text(baseline_path))
-    if baseline.get("schema_version") != "pain.official_pine_reference_gap_baseline.v1":
+    if baseline.get("schema_version") != "pine.official_pine_reference_gap_baseline.v1":
         raise OfficialReferenceError("official reference gap baseline schema mismatch")
     if int(baseline.get("pine_version")) != index.pine_version:
         raise OfficialReferenceError("official reference gap baseline Pine version mismatch")
@@ -159,7 +253,7 @@ def official_reference_gate_payload(
         failures.append("official coverage ratio fell below baseline")
 
     return {
-        "schema_version": "pain.official_pine_reference_gate.v1",
+        "schema_version": "pine.official_pine_reference_gate.v1",
         "status": "fail" if failures else "pass",
         "failures": failures,
         "pine_version": index.pine_version,

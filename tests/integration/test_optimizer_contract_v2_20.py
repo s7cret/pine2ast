@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import json
-import subprocess
-import sys
 from pathlib import Path
+
+from pine2ast.api import ParseOptions, parse_file
+from pine2ast.inspect_contract import build_inspect_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "optimizer_contract_v2_20"
@@ -30,14 +31,8 @@ REQUIRED_TOP_LEVEL = {
 
 def _inspect(path: Path) -> dict[str, object]:
     rel = path.relative_to(ROOT)
-    completed = subprocess.run(
-        [sys.executable, "-m", "pine2ast", "inspect", str(rel)],
-        cwd=ROOT,
-        check=True,
-        text=True,
-        stdout=subprocess.PIPE,
-    )
-    return json.loads(completed.stdout)
+    result = parse_file(str(path), ParseOptions(source_name=str(rel)))
+    return build_inspect_payload(result, source_path=str(rel), source_name=path.name)
 
 
 def test_optimizer_contract_snapshots_v2_20() -> None:

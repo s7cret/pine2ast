@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PYTHON="${PYTHON:-.venv/bin/python}"
+PYTHON="${PYTHON:-python}"
 "$PYTHON" - <<'PY'
 import json
 import pine2ast

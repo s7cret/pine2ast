@@ -1,14 +1,15 @@
 """Annotation attachment: //@function/param/returns/type/field/enum/variable → AST.documentation."""
+
 from pine2ast import parse_code
 
 
 def test_function_documentation_attachment():
-    src = '''//@function Computes the average
+    src = """//@function Computes the average
 //@param src the source series
 //@returns the average value
 avg(src) =>
     ta.sma(src, 14)
-'''
+"""
     result = parse_code(src)
     assert result.ast is not None
     funcs = [d for d in result.ast.items if d.__class__.__name__ == "FunctionDeclaration"]
@@ -23,12 +24,12 @@ avg(src) =>
 
 
 def test_param_documentation_attachment():
-    src = '''//@function helper
+    src = """//@function helper
 //@param a the first
 //@param b the second
 helper(a, b) =>
     a + b
-'''
+"""
     result = parse_code(src)
     funcs = [d for d in result.ast.items if d.__class__.__name__ == "FunctionDeclaration"]
     assert len(funcs) == 1
@@ -41,11 +42,11 @@ helper(a, b) =>
 
 
 def test_returns_documentation_attachment():
-    src = '''//@function compute
+    src = """//@function compute
 //@returns the result
 compute() =>
     42
-'''
+"""
     result = parse_code(src)
     funcs = [d for d in result.ast.items if d.__class__.__name__ == "FunctionDeclaration"]
     doc = funcs[0].documentation
@@ -54,14 +55,14 @@ compute() =>
 
 
 def test_type_documentation_attachment():
-    src = '''//@version=6
+    src = """//@version=6
 //@type A point on the chart
 //@field x the x coordinate
 //@field y the y coordinate
 type Point
     int x
     int y
-'''
+"""
     result = parse_code(src)
     type_decls = [d for d in result.ast.items if d.__class__.__name__ == "TypeDeclaration"]
     assert len(type_decls) == 1
@@ -79,14 +80,14 @@ type Point
 
 
 def test_field_documentation_attachment():
-    src = '''//@version=6
+    src = """//@version=6
 //@type a struct
 //@field name the name
 //@field value the value
 type Bag
     string name
     int value
-'''
+"""
     result = parse_code(src)
     type_decls = [d for d in result.ast.items if d.__class__.__name__ == "TypeDeclaration"]
     bag = type_decls[0]
@@ -98,11 +99,11 @@ type Bag
 
 
 def test_variable_documentation_attachment():
-    src = '''//@version=6
+    src = """//@version=6
 indicator("T")
 //@variable global state
 var float count = 0
-'''
+"""
     result = parse_code(src)
     var_decls = [d for d in result.ast.items if d.__class__.__name__ == "VarDeclaration"]
     assert len(var_decls) >= 1

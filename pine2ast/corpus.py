@@ -1,28 +1,18 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 from typing import Any
+
+from pine2ast.internal.fs import pine_files
 
 from pine2ast.api import ParseOptions, parse_file
 from pine2ast.diagnostics import Severity
 
 
-def _pine_files(root: Path) -> list[Path]:
-    if root.suffix == ".pine":
-        return [root]
-    rows: list[Path] = []
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
-            if filename.endswith(".pine"):
-                rows.append(Path(dirpath) / filename)
-    return sorted(rows)
-
-
 def validate_corpus(path: str | Path, *, run_semantic: bool = True) -> dict[str, Any]:
     root = Path(path)
-    files = _pine_files(root)
+    files = pine_files(root)
     rows: list[dict[str, Any]] = []
     for file in files:
         result = parse_file(

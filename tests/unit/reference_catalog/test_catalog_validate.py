@@ -34,12 +34,12 @@ def test_catalog_markdown_exports_status_table() -> None:
 
 def test_matrix_requires_explicit_owner_and_status_fields() -> None:
     official_index = {
-        "schema_version": "pain.official_pine_reference_index.v1",
+        "schema_version": "pine.official_pine_reference_index.v1",
         "pine_version": 6,
         "categories": {"functions": ["ta.ema"]},
     }
     matrix = {
-        "schema_version": "pain.parity_matrix.v1",
+        "schema_version": "pine.parity_matrix.v1",
         "pine_version": 6,
         "items": [
             {
@@ -61,7 +61,7 @@ def test_matrix_requires_explicit_owner_and_status_fields() -> None:
 
 def test_matrix_identity_includes_official_category() -> None:
     official_index = {
-        "schema_version": "pain.official_pine_reference_index.v1",
+        "schema_version": "pine.official_pine_reference_index.v1",
         "pine_version": 6,
         "categories": {
             "functions": ["array.avg"],
@@ -80,7 +80,7 @@ def test_matrix_identity_includes_official_category() -> None:
         "golden_status": "NOT_STARTED",
     }
     matrix = {
-        "schema_version": "pain.parity_matrix.v1",
+        "schema_version": "pine.parity_matrix.v1",
         "pine_version": 6,
         "items": [
             {
@@ -113,7 +113,7 @@ def test_matrix_identity_includes_official_category() -> None:
 
 def test_matrix_rejects_duplicate_official_ids() -> None:
     official_index = {
-        "schema_version": "pain.official_pine_reference_index.v1",
+        "schema_version": "pine.official_pine_reference_index.v1",
         "pine_version": 6,
         "categories": {"functions": ["plot"]},
     }
@@ -129,7 +129,7 @@ def test_matrix_rejects_duplicate_official_ids() -> None:
         "golden_status": "IMPLEMENTED_UNVERIFIED",
     }
     matrix = {
-        "schema_version": "pain.parity_matrix.v1",
+        "schema_version": "pine.parity_matrix.v1",
         "pine_version": 6,
         "items": [row, dict(row)],
     }
@@ -140,7 +140,7 @@ def test_matrix_rejects_duplicate_official_ids() -> None:
 
 def test_official_matrix_coverage_reports_missing_ids_by_category() -> None:
     official_index = {
-        "schema_version": "pain.official_pine_reference_index.v1",
+        "schema_version": "pine.official_pine_reference_index.v1",
         "pine_version": 6,
         "categories": {
             "functions": ["array.avg", "ta.ema"],
@@ -149,7 +149,7 @@ def test_official_matrix_coverage_reports_missing_ids_by_category() -> None:
         },
     }
     matrix = {
-        "schema_version": "pain.parity_matrix.v1",
+        "schema_version": "pine.parity_matrix.v1",
         "pine_version": 6,
         "items": [
             {

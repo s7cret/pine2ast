@@ -8,10 +8,12 @@ from pine2ast.semantic.analyzer import SemanticAnalyzer
 from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PASS_PIPELINE, PassResult, SemanticPass
 from pine2ast.semantic.passes import (
     BuiltinValidationPass,
+    CollectionValidationPass,
     DeclarationCardinalityPass,
     DeclarationIndexPass,
     QualifierInferencePass,
     ScopeSymbolPass,
+    StaticValidationPass,
     StrategyContextValidationPass,
     TypeInferencePass,
     UnsupportedFeatureExtractionPass,
@@ -45,6 +47,8 @@ def test_analyzer_pass_pipeline_rejects_unexpected_order() -> None:
         TypeInferencePass(analyzer),
         QualifierInferencePass(analyzer),
         BuiltinValidationPass(analyzer),
+        CollectionValidationPass(analyzer),
+        StaticValidationPass(analyzer),
         StrategyContextValidationPass(analyzer),
         UnsupportedFeatureExtractionPass(analyzer),
         DeclarationCardinalityPass(analyzer),

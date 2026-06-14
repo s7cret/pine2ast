@@ -20,6 +20,29 @@ from pine2ast.semantic.type_infer import callee_name
 
 _ORDER = {"const": 0, "input": 1, "simple": 2, "series": 3}
 
+_CONST_PROPAGATING_CALLS = {
+    "math.abs",
+    "math.ceil",
+    "math.floor",
+    "math.max",
+    "math.min",
+    "math.pow",
+    "math.round",
+    "math.sqrt",
+    "math.log",
+    "math.exp",
+    "math.sin",
+    "math.cos",
+    "str.tostring",
+    "str.tonumber",
+    "str.length",
+    "str.contains",
+    "str.startswith",
+    "str.endswith",
+    "str.replace",
+    "timestamp",
+}
+
 
 def _join_qualifiers(*values: str) -> str:
     return max(values or ("series",), key=lambda q: _ORDER.get(q, 3))
@@ -70,7 +93,9 @@ def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
         name = callee_name(expr.callee)
         if name.startswith("input."):
             return "input"
-        if name in {"na", "str.tostring", "array.from", "timestamp"} and expr.arguments:
+        if name in {"na", "array.from"} and expr.arguments:
+            return _join_qualifiers(*(infer_qualifier(a.value, symbols) for a in expr.arguments))
+        if name in _CONST_PROPAGATING_CALLS and expr.arguments:
             return _join_qualifiers(*(infer_qualifier(a.value, symbols) for a in expr.arguments))
         return "series"
     if isinstance(expr, GenericInstantiationExpr):

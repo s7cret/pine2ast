@@ -6,21 +6,25 @@ classes make the phase order explicit and give future work safe extraction seams
 
 from pine2ast.semantic.pipeline import PASS_PIPELINE
 from pine2ast.semantic.passes.builtin_validation import BuiltinValidationPass
+from pine2ast.semantic.passes.collection_validation import CollectionValidationPass
 from pine2ast.semantic.passes.declaration_cardinality import DeclarationCardinalityPass
 from pine2ast.semantic.passes.declaration_index import DeclarationIndexPass
 from pine2ast.semantic.passes.qualifier_inference import QualifierInferencePass
 from pine2ast.semantic.passes.scope_symbols import ScopeSymbolPass
+from pine2ast.semantic.passes.static_validation import StaticValidationPass
 from pine2ast.semantic.passes.strategy_context import StrategyContextValidationPass
 from pine2ast.semantic.passes.type_inference import TypeInferencePass
 from pine2ast.semantic.passes.unsupported_features import UnsupportedFeatureExtractionPass
 
 __all__ = [
     "BuiltinValidationPass",
+    "CollectionValidationPass",
     "DeclarationCardinalityPass",
     "DeclarationIndexPass",
     "PASS_PIPELINE",
     "QualifierInferencePass",
     "ScopeSymbolPass",
+    "StaticValidationPass",
     "StrategyContextValidationPass",
     "TypeInferencePass",
     "UnsupportedFeatureExtractionPass",

@@ -63,7 +63,7 @@ indicator("T")
 type Pivot
     int x
     float y
-var array<Pivot> pivots = array.new<Pivot>()
+var array<Pivot> pivots = array.new<Pivot>(0)
 p = Pivot.new(bar_index, close)
 array.push(pivots, p)
 plot(p.y)

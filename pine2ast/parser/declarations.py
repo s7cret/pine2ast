@@ -44,9 +44,7 @@ def _split_annotations(annotations: list[Annotation]) -> tuple[list[Annotation],
     return func_level, routed
 
 
-def _attach_documentation(
-    documentation: list[Annotation], routed: list[Annotation]
-) -> None:
+def _attach_documentation(documentation: list[Annotation], routed: list[Annotation]) -> None:
     """Append any PARAM/FIELD annotations to documentation (caller chooses target)."""
     for a in routed:
         documentation.append(a)

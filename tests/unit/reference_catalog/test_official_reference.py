@@ -72,6 +72,12 @@ def test_official_reference_diff_reports_missing_items(monkeypatch) -> None:
     assert payload["missing_by_category"]["functions"] == ["request.security"]
     assert payload["missing_by_category"]["variables"] == ["bar_index"]
     assert payload["missing_by_category"]["types"] == ["chart.point"]
+    assert (
+        payload["signature_coverage"]["schema_version"]
+        == "pine2ast.official_reference_signature_coverage.v1"
+    )
+    assert payload["signature_coverage"]["categories"]["functions"]["official_count"] == 2
+    assert payload["signature_coverage"]["categories"]["functions"]["signature_pending_count"] == 1
 
 
 def test_official_reference_gate_fails_on_new_missing(monkeypatch, tmp_path) -> None:
@@ -88,7 +94,7 @@ def test_official_reference_gate_fails_on_new_missing(monkeypatch, tmp_path) -> 
     baseline = tmp_path / "baseline.json"
     baseline.write_text(
         """{
-          "schema_version": "pain.official_pine_reference_gap_baseline.v1",
+          "schema_version": "pine.official_pine_reference_gap_baseline.v1",
           "pine_version": 6,
           "max_missing_official_count": 0,
           "min_coverage_ratio": 1.0,

@@ -9,7 +9,7 @@ def test_runtime_contract_v1_4_parse_serializes_producer_metadata():
     assert result.ast is not None
     payload = ast_to_dict(result.ast)
     metadata = payload["producer_metadata"]
-    assert metadata["contract"] == "pain.ast_contract.v1"
+    assert metadata["contract"] == "pine.ast_contract.v1"
     assert metadata["producer"]["name"] == "pine2ast"
     assert metadata["schema_version"] == payload["schema_version"]
     assert metadata["pine_language_version"] == 6

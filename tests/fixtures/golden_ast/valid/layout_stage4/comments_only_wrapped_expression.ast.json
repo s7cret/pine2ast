@@ -196,10 +196,10 @@
   "language": "pine",
   "language_version": 6,
   "producer_metadata": {
-    "contract": "pain.ast_contract.v1",
+    "contract": "pine.ast_contract.v1",
     "producer": {
       "name": "pine2ast",
-      "version": "2.17.0"
+      "version": "4.0.0"
     },
     "schema_version": "1.0",
     "pine_language_version": 6,
