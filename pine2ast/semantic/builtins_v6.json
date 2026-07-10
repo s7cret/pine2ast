@@ -17131,12 +17131,12 @@
         "total": 48
       },
       "variables": {
-        "implemented": 399,
+        "implemented": 403,
         "lowerable": 75,
-        "official_known": 399,
+        "official_known": 403,
         "oracle_verified": 0,
         "runtime_supported": 75,
-        "total": 399
+        "total": 403
       }
     },
     "data": {
@@ -26763,6 +26763,30 @@
           "oracle_verified": false,
           "runtime_supported": false
         },
+        "strategy.direction.all": {
+          "_note": "official constant name tracked; runtime lowering is downstream/out-of-scope",
+          "implemented": true,
+          "lowerable": false,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": false
+        },
+        "strategy.direction.long": {
+          "_note": "official constant name tracked; runtime lowering is downstream/out-of-scope",
+          "implemented": true,
+          "lowerable": false,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": false
+        },
+        "strategy.direction.short": {
+          "_note": "official constant name tracked; runtime lowering is downstream/out-of-scope",
+          "implemented": true,
+          "lowerable": false,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": false
+        },
         "strategy.equity": {
           "_note": "no parity_matrix entry",
           "implemented": true,
@@ -26773,6 +26797,14 @@
         },
         "strategy.eventrades": {
           "_note": "no parity_matrix entry",
+          "implemented": true,
+          "lowerable": false,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": false
+        },
+        "strategy.fixed": {
+          "_note": "official constant name tracked; runtime lowering is downstream/out-of-scope",
           "implemented": true,
           "lowerable": false,
           "official_known": true,
@@ -28906,6 +28938,18 @@
       "qualifier": "const",
       "type": "string"
     },
+    "strategy.direction.all": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.direction.long": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.direction.short": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
     "strategy.equity": {
       "qualifier": "series",
       "type": "float"
@@ -28913,6 +28957,10 @@
     "strategy.eventrades": {
       "qualifier": "series",
       "type": "int"
+    },
+    "strategy.fixed": {
+      "qualifier": "const",
+      "type": "string"
     },
     "strategy.grossloss": {
       "qualifier": "series",

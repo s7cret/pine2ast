@@ -57,6 +57,13 @@ P0_FAIL_CLOSED_CONSTANTS = {
     "color.fuchsia",
 }
 
+PHASE1_STRATEGY_CONSTANTS = {
+    "strategy.fixed": "string",
+    "strategy.direction.all": "strategy.direction",
+    "strategy.direction.long": "strategy.direction",
+    "strategy.direction.short": "strategy.direction",
+}
+
 
 def _error_codes(source: str) -> list[str]:
     result = parse_code(source, ParseOptions(strict_builtin_namespaces=True))
@@ -128,3 +135,29 @@ plot(m, color = c)
 
     assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
     assert codes.UNDECLARED_VARIABLE not in errors
+
+
+def test_phase1_strategy_constants_are_exposed_to_runtime_semantics() -> None:
+    for version in (5, 6):
+        registry = load_builtin_registry(version)
+        for name, expected_type in PHASE1_STRATEGY_CONSTANTS.items():
+            assert registry["variables"][name] == {
+                "qualifier": "const",
+                "type": expected_type,
+            }, (version, name)
+
+
+def test_phase1_strategy_constants_pass_strict_runtime_contract_semantics() -> None:
+    for version in (5, 6):
+        source = f"""//@version={version}
+strategy("strategy constants", default_qty_type=strategy.fixed)
+strategy.risk.allow_entry_in(strategy.direction.all)
+strategy.risk.allow_entry_in(strategy.direction.long)
+strategy.risk.allow_entry_in(strategy.direction.short)
+"""
+
+        errors = _error_codes(source)
+
+        assert codes.UNKNOWN_BUILTIN_MEMBER not in errors, version
+        assert codes.UNDECLARED_VARIABLE not in errors, version
+        assert codes.ARGUMENT_QUALIFIER not in errors, version

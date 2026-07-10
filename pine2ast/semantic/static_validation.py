@@ -21,7 +21,6 @@ from typing import Any, Iterable, Mapping
 
 from pine2ast.ast.nodes import (
     Argument,
-    Block,
     CallExpr,
     DeclarationStatement,
     FunctionDeclaration,
@@ -34,8 +33,10 @@ from pine2ast.ast.nodes import (
     VarDeclaration,
 )
 from pine2ast.ast.types import TypeRef
-from pine2ast.ast.walk import iter_child_nodes, iter_nodes
-from pine2ast.semantic._static_validation_walk import iter_calls_with_context_fast as _iter_calls_with_context_fast
+from pine2ast.ast.walk import iter_nodes
+from pine2ast.semantic._static_validation_walk import (
+    iter_calls_with_context_fast as _iter_calls_with_context_fast,
+)
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
@@ -79,6 +80,7 @@ _SORT_FIELD_COLLECTION_OPERATIONS = frozenset(
 )
 _SORTABLE_UDT_FIELD_TYPES = frozenset({"int", "float", "string"})
 
+
 @dataclass(frozen=True, slots=True)
 class StaticValidationIssue:
     """A diagnostics-ready Release 4.0 static validation issue."""
@@ -101,6 +103,7 @@ class StaticValidationIssue:
             "span": self.span.to_dict(),
             "details": self.details or {},
         }
+
 
 @dataclass(frozen=True, slots=True)
 class StaticValidationReport:
@@ -133,23 +136,28 @@ class StaticValidationReport:
             "issues": [issue.to_dict() for issue in self.issues],
         }
 
+
 def _profile_for_program(
     program: Program, profile: PineLanguageProfile | None
 ) -> PineLanguageProfile:
     return profile or pine_language_profile(program.version or program.language_version)
 
+
 def _symbols(semantic_model: Any | None) -> Mapping[str, Any] | None:
     return getattr(semantic_model, "symbols", None)
+
 
 def _iter_type_refs(program: Program) -> Iterable[TypeRef]:
     for node in iter_nodes(program):
         if isinstance(node, TypeRef):
             yield node
 
+
 def _iter_generic_instantiations(program: Program) -> Iterable[GenericInstantiationExpr]:
     for node in iter_nodes(program):
         if isinstance(node, GenericInstantiationExpr):
             yield node
+
 
 def _validate_type_ref_arity(type_ref: TypeRef) -> StaticValidationIssue | None:
     expected = _GENERIC_TYPE_ARITY.get(type_ref.name)
@@ -164,6 +172,7 @@ def _validate_type_ref_arity(type_ref: TypeRef) -> StaticValidationIssue | None:
         "generic_type_arity",
         {"type": type_ref.name, "expected": expected, "actual": actual},
     )
+
 
 def _validate_generic_constructor_arity(
     expr: GenericInstantiationExpr,
@@ -184,6 +193,7 @@ def _validate_generic_constructor_arity(
         {"constructor": base, "expected": expected, "actual": actual},
     )
 
+
 def _declaration_dynamic_requests(program: Program, profile: PineLanguageProfile) -> dict[str, Any]:
     default = profile.dynamic_requests_default
     explicit: bool | None = None
@@ -201,6 +211,7 @@ def _declaration_dynamic_requests(program: Program, profile: PineLanguageProfile
         "explicit": explicit,
         "enabled": default if explicit is None else explicit,
     }
+
 
 def _active_parameter_names(function_name: str, profile: PineLanguageProfile) -> list[str]:
     entry = (
@@ -222,6 +233,7 @@ def _active_parameter_names(function_name: str, profile: PineLanguageProfile) ->
             names.append(str(name))
     return names
 
+
 def _bind_argument_names(
     function_name: str, args: list[Argument], profile: PineLanguageProfile
 ) -> list[tuple[Argument, str | None]]:
@@ -236,6 +248,7 @@ def _bind_argument_names(
         positional_index += 1
         result.append((arg, param_name))
     return result
+
 
 def _dynamic_request_issues(
     calls: list,
@@ -285,6 +298,7 @@ def _dynamic_request_issues(
                 },
             )
 
+
 def _strategy_exit_issues(
     calls: list, *, profile: PineLanguageProfile
 ) -> Iterable[StaticValidationIssue]:
@@ -316,12 +330,14 @@ def _strategy_exit_issues(
             },
         )
 
+
 def _script_type(program: Program) -> str | None:
     return (
         program.declaration.script_type
         if isinstance(program.declaration, DeclarationStatement)
         else None
     )
+
 
 def _library_export_issues(
     program: Program, *, profile: PineLanguageProfile
@@ -380,6 +396,7 @@ def _library_export_issues(
                     {"variable": node.name, "profile": f"pine_v{profile.version}"},
                 )
 
+
 def _type_fields(program: Program) -> dict[str, tuple[tuple[str, str, SourceSpan], ...]]:
     fields: dict[str, tuple[tuple[str, str, SourceSpan], ...]] = {}
     for node in iter_nodes(program):
@@ -388,6 +405,7 @@ def _type_fields(program: Program) -> dict[str, tuple[tuple[str, str, SourceSpan
                 (field.name, type_ref_name(field.type_ref), field.span) for field in node.fields
             )
     return fields
+
 
 def _literal_int_value(expr: Any) -> int | None:
     if isinstance(expr, Literal) and expr.literal_type == "int":
@@ -399,10 +417,12 @@ def _literal_int_value(expr: Any) -> int | None:
         return value if expr.op == "+" else -value
     return None
 
+
 def _literal_string_value(expr: Any) -> str | None:
     if isinstance(expr, Literal) and expr.literal_type == "string":
         return str(expr.value)
     return None
+
 
 def _sort_field_binding(call: CallExpr, resolution: Any) -> Any | None:
     for binding in resolution.bindings:
@@ -411,11 +431,13 @@ def _sort_field_binding(call: CallExpr, resolution: Any) -> Any | None:
             return binding
     return None
 
+
 def _collection_element_type(receiver_type: str | None, collection_kind: str) -> str | None:
     base, args = generic_type_parts(receiver_type)
     if base in {"array", "matrix"} and collection_kind == base and args:
         return args[0]
     return None
+
 
 def _sort_field_target_field(
     binding: Any | None,
@@ -436,6 +458,7 @@ def _sort_field_target_field(
         name, field_type, _span = fields[field_index]
         return name, field_type, field_index
     return None
+
 
 def _sort_field_issues(
     calls: list,
@@ -574,6 +597,7 @@ def _sort_field_issues(
                 },
             )
 
+
 def build_static_validation_report(
     program: Program,
     *,
@@ -650,6 +674,7 @@ def build_static_validation_report(
         udt_sort_field_count=udt_sort_field_count,
     )
 
+
 def validate_static_semantics(
     program: Program,
     *,
@@ -659,6 +684,7 @@ def validate_static_semantics(
     return build_static_validation_report(
         program, semantic_model=semantic_model, profile=profile
     ).issues
+
 
 __all__ = [
     "StaticValidationIssue",

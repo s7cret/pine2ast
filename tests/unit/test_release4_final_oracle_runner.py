@@ -42,7 +42,11 @@ def test_oracle_manifest_can_be_loaded_from_json_fixture() -> None:
         "v6-invalid-strategy-exit-no-action",
         "v6-invalid-const-int-division-to-int",
         "v6-invalid-dynamic-request-disabled",
+        "v6-valid-strategy-fixed",
+        "v6-valid-strategy-direction-all",
+        "v6-valid-strategy-direction-long",
+        "v6-valid-strategy-direction-short",
     ]
     payload = json.loads(oracle_report_json(cases))
     assert payload["ok"] is True
-    assert payload["case_count"] == 7
+    assert payload["case_count"] == 11

@@ -62,6 +62,34 @@
       ],
       "description": "Pine v6 dynamic_requests=false blocks request.* that needs dynamic request semantics.",
       "source": "//@version=6\nindicator(\"oracle\", dynamic_requests=false)\nif close > open\n    float x = request.security(syminfo.tickerid, timeframe.period, close)\n"
+    },
+    {
+      "id": "v6-valid-strategy-fixed",
+      "version": 6,
+      "expect_ok": true,
+      "description": "strategy.fixed must resolve as a const runtime semantic value.",
+      "source": "//@version=6\nstrategy(\"oracle\", default_qty_type=strategy.fixed)\n"
+    },
+    {
+      "id": "v6-valid-strategy-direction-all",
+      "version": 6,
+      "expect_ok": true,
+      "description": "strategy.direction.all must resolve through the nested constant namespace.",
+      "source": "//@version=6\nstrategy(\"oracle\")\nstrategy.risk.allow_entry_in(strategy.direction.all)\n"
+    },
+    {
+      "id": "v6-valid-strategy-direction-long",
+      "version": 6,
+      "expect_ok": true,
+      "description": "strategy.direction.long must resolve through the nested constant namespace.",
+      "source": "//@version=6\nstrategy(\"oracle\")\nstrategy.risk.allow_entry_in(strategy.direction.long)\n"
+    },
+    {
+      "id": "v6-valid-strategy-direction-short",
+      "version": 6,
+      "expect_ok": true,
+      "description": "strategy.direction.short must resolve through the nested constant namespace.",
+      "source": "//@version=6\nstrategy(\"oracle\")\nstrategy.risk.allow_entry_in(strategy.direction.short)\n"
     }
   ]
 }

@@ -15773,12 +15773,12 @@
         "total": 25
       },
       "variables": {
-        "implemented": 347,
+        "implemented": 351,
         "lowerable": 0,
-        "official_known": 347,
+        "official_known": 351,
         "oracle_verified": 0,
         "runtime_supported": 0,
-        "total": 347
+        "total": 351
       }
     },
     "data": {
@@ -23724,6 +23724,27 @@
           "oracle_verified": false,
           "runtime_supported": true
         },
+        "strategy.direction.all": {
+          "implemented": true,
+          "lowerable": true,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": true
+        },
+        "strategy.direction.long": {
+          "implemented": true,
+          "lowerable": true,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": true
+        },
+        "strategy.direction.short": {
+          "implemented": true,
+          "lowerable": true,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": true
+        },
         "strategy.equity": {
           "implemented": true,
           "lowerable": true,
@@ -23732,6 +23753,13 @@
           "runtime_supported": true
         },
         "strategy.eventrades": {
+          "implemented": true,
+          "lowerable": true,
+          "official_known": true,
+          "oracle_verified": false,
+          "runtime_supported": true
+        },
+        "strategy.fixed": {
           "implemented": true,
           "lowerable": true,
           "official_known": true,
@@ -25507,6 +25535,18 @@
       "qualifier": "const",
       "type": "string"
     },
+    "strategy.direction.all": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.direction.long": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
+    "strategy.direction.short": {
+      "qualifier": "const",
+      "type": "strategy.direction"
+    },
     "strategy.equity": {
       "qualifier": "series",
       "type": "float"
@@ -25514,6 +25554,10 @@
     "strategy.eventrades": {
       "qualifier": "series",
       "type": "int"
+    },
+    "strategy.fixed": {
+      "qualifier": "const",
+      "type": "string"
     },
     "strategy.grossloss": {
       "qualifier": "series",

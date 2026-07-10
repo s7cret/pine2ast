@@ -49,6 +49,12 @@ def test_release_manifest_gate_passes_for_repo():
     assert payload["signature_coverage"]["v6"]["summary"]["missing_count"] == 0
     checks = {check["name"]: check for check in payload["checks"]}
     assert checks["distribution_hygiene"]["ok"] is True
+    registry_oracle = checks["runtime_registry_semantic_oracle"]
+    assert registry_oracle["ok"] is True
+    assert set(registry_oracle["details"]) == {"v5", "v6"}
+    for version in ("v5", "v6"):
+        assert registry_oracle["details"][version]["missing"] == []
+        assert registry_oracle["details"][version]["mismatched"] == []
 
 
 def test_release_manifest_json_is_valid_json():

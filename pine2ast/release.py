@@ -21,6 +21,7 @@ from pine2ast.compatibility.release_features import (
     release_feature_summary,
     validate_release_feature_matrix,
 )
+from pine2ast.semantic.builtin_registry import load_builtin_registry
 from pine2ast.semantic.signature_coverage import build_signature_coverage_report
 from pine2ast.api import ParseOptions, parse_code
 from pine2ast.inspect_contract import build_inspect_payload
@@ -259,6 +260,36 @@ def build_release_manifest(
             bool(signature_reports["v5"].get("ok")) and bool(signature_reports["v6"].get("ok")),
             "v5/v6 official names are present in the bundled registries",
             {"v5": v5_summary, "v6": v6_summary},
+        )
+    )
+
+    runtime_registry_details: dict[str, dict[str, Any]] = {}
+    for version in (5, 6):
+        runtime_registry = load_builtin_registry(version)
+        constants = runtime_registry.get("constants", {})
+        semantic_values = runtime_registry.get("variables", {})
+        missing_runtime_values = sorted(set(constants) - set(semantic_values))
+        mismatched_runtime_values = sorted(
+            name
+            for name in set(constants) & set(semantic_values)
+            if semantic_values[name].get("type") != constants[name].get("type")
+            or semantic_values[name].get("qualifier") != constants[name].get("qualifier")
+        )
+        runtime_registry_details[f"v{version}"] = {
+            "constant_count": len(constants),
+            "semantic_value_count": len(semantic_values),
+            "missing": missing_runtime_values,
+            "mismatched": mismatched_runtime_values,
+        }
+    checks.append(
+        ReleaseCheck(
+            "runtime_registry_semantic_oracle",
+            all(
+                not details["missing"] and not details["mismatched"]
+                for details in runtime_registry_details.values()
+            ),
+            "official v5/v6 constants are exposed through the runtime semantic value registries",
+            runtime_registry_details,
         )
     )
     checks.append(

@@ -261,11 +261,7 @@ class AnalyzerBuiltinValidationMixin:
             or self._is_known_deferred_or_unsupported_builtin(name)
         ):
             return
-        if (
-            name in self.registry.get("variables", {})
-            or name in self.registry.get("functions", {})
-            or name in self.registry.get("namespaces", {})
-        ):
+        if self._registry_exposes_value_or_namespace(name):
             return
         # v5→v6 migration: same logic as for function calls — if the
         # name is a v6-only constant/variable, emit a warning.
@@ -284,6 +280,23 @@ class AnalyzerBuiltinValidationMixin:
             expr.span,
         )
 
+    def _registry_exposes_value_or_namespace(self, name: str) -> bool:
+        """Return whether the runtime registry can resolve ``name`` as a value path.
+
+        Constants must be mirrored into ``variables`` to become typed semantic values.
+        A nested prefix such as ``strategy.direction`` is also a valid namespace
+        when the registry exposes ``strategy.direction.long`` and peers.
+        """
+        sections = ("variables", "functions", "namespaces")
+        if any(name in self.registry.get(section, {}) for section in sections):
+            return True
+        prefix = name + "."
+        return any(
+            candidate.startswith(prefix)
+            for section in sections
+            for candidate in self.registry.get(section, {})
+        )
+
     def _exists_in_v6_registry(self, name: str, *, kind: str) -> bool:
         """True if `name` exists as a function/variable in the v6 registry.
 
@@ -292,8 +305,8 @@ class AnalyzerBuiltinValidationMixin:
         (warning) instead of UNKNOWN_BUILTIN_MEMBER (error).
         """
         v6 = load_builtin_registry(pine_version=6)
-        section = "functions" if kind == "function" else "variables"
-        return name in v6.get(section, {})
+        sections = ("functions",) if kind == "function" else ("variables", "constants")
+        return any(name in v6.get(section, {}) for section in sections)
 
     def _is_v6_only_namespace_root(self, root: str) -> bool:
         """True if `root` is a v6-only namespace/variable/function prefix.
@@ -309,7 +322,7 @@ class AnalyzerBuiltinValidationMixin:
             return False
         v6 = load_builtin_registry(pine_version=6)
         prefix = root + "."
-        for section in ("functions", "variables"):
+        for section in ("functions", "variables", "constants"):
             for name in v6.get(section, {}):
                 if name.startswith(prefix):
                     return True
