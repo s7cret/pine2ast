@@ -27,8 +27,21 @@ def test_runtime_contract_metadata_records_semantic_failure_gate():
     assert any(d.severity.name in {"ERROR", "FATAL"} for d in result.diagnostics)
 
     metadata = ast_to_dict(result.ast)["producer_metadata"]
-    assert metadata["parser_gate"] == "fail"
+    assert metadata["parser_gate"] == "pass"
     assert metadata["semantic_gate"] == "fail"
+
+
+def test_visual_runtime_contract_error_does_not_poison_parser_or_semantic_gates():
+    result = parse_code(
+        b'//@version=6\nindicator("visual")\nplot(close)\n',
+        runtime_contract_v1_4_options(),
+    )
+    assert result.ast is not None
+    assert any(d.code == "P2A1507" for d in result.diagnostics)
+
+    metadata = ast_to_dict(result.ast)["producer_metadata"]
+    assert metadata["parser_gate"] == "pass"
+    assert metadata["semantic_gate"] == "pass"
 
 
 def test_runtime_contract_metadata_distinguishes_semantic_not_run():

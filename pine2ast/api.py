@@ -315,6 +315,8 @@ class ParsePipeline:
         diagnostics.extend(parsed.diagnostics)
         semantic_model = None
         ast = parsed.program
+        parser_gate_ok = False
+        semantic_gate_ok = False
 
         # Legacy behaviour: default v6 strict parsing treats //@version=5 as an
         # error. Native v5 mode (`ParseOptions(version=5)`) does not.
@@ -323,9 +325,19 @@ class ParsePipeline:
                 if diag.code == codes.UNSUPPORTED_VERSION:
                     diag.severity = Severity.ERROR
 
+        if ast is not None:
+            parser_gate_ok = not any(
+                diagnostic.severity in {Severity.ERROR, Severity.FATAL}
+                for diagnostic in diagnostics
+            )
+
         if ast is not None and options.run_semantic:
             semantic_model = self.semantic_only(ast)
             diagnostics.extend(semantic_model.diagnostics)
+            semantic_gate_ok = parser_gate_ok and not any(
+                diagnostic.severity in {Severity.ERROR, Severity.FATAL}
+                for diagnostic in semantic_model.diagnostics
+            )
         if ast is not None and options.runtime_contract_profile in {
             "v1.4",
             "runtime_contract_v1_4",
@@ -357,7 +369,6 @@ class ParsePipeline:
         if ast is not None:
             ast.diagnostics = diagnostics
             profile = options.runtime_contract_profile
-            gate_ok = not any(d.severity in {Severity.ERROR, Severity.FATAL} for d in diagnostics)
             ast.producer_metadata = {
                 "contract": "pine.ast_contract.v1",
                 "producer": {"name": "pine2ast", "version": _producer_version()},
@@ -369,9 +380,11 @@ class ParsePipeline:
                     if profile in {"v1.4", "runtime_contract_v1_4"}
                     else profile
                 ),
-                "parser_gate": "pass" if gate_ok else "fail",
+                "parser_gate": "pass" if parser_gate_ok else "fail",
                 "semantic_gate": (
-                    "not_run" if not options.run_semantic else ("pass" if gate_ok else "fail")
+                    "not_run"
+                    if not options.run_semantic
+                    else ("pass" if semantic_gate_ok else "fail")
                 ),
             }
         return ParseResult(
