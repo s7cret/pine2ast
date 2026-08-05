@@ -27,6 +27,8 @@ DEFAULT_EXCLUDED_DIRS = frozenset(
         ".release_gate_reports",
         ".ruff_cache",
         ".setuptools-build",
+        ".venv",
+        "venv",
         "htmlcov",
         "__pycache__",
         "build",
@@ -34,7 +36,7 @@ DEFAULT_EXCLUDED_DIRS = frozenset(
         ".eggs",
     }
 )
-DEFAULT_EXCLUDED_SUFFIXES = frozenset({".pyc", ".pyo"})
+DEFAULT_EXCLUDED_SUFFIXES = frozenset({".pyc", ".pyo", ".zip"})
 DEFAULT_EXCLUDED_NAMES = frozenset({".coverage", "coverage.xml", "RELEASE_MANIFEST.json"})
 REQUIRED_RELEASE_FILES = (
     "README.md",

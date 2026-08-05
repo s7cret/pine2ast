@@ -105,15 +105,15 @@ def artifact_path(value: str) -> Path:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_LOCAL_v4_0_0.json")
+    parser.add_argument("--json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_LOCAL_v4_0_1.json")
     parser.add_argument(
-        "--quality-json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_v4_0_0.json"
+        "--quality-json", default=f"{DEFAULT_ARTIFACT_DIR}/QUALITY_GATE_v4_0_1.json"
     )
     parser.add_argument(
-        "--builtin-json", default=f"{DEFAULT_ARTIFACT_DIR}/BUILTIN_COVERAGE_v4_0_0.json"
+        "--builtin-json", default=f"{DEFAULT_ARTIFACT_DIR}/BUILTIN_COVERAGE_v4_0_1.json"
     )
-    parser.add_argument("--test-log", default=f"{DEFAULT_ARTIFACT_DIR}/TEST_RUN_v4_0_0.log")
-    parser.add_argument("--coverage-md", default=f"{DEFAULT_ARTIFACT_DIR}/COVERAGE_v4_0_0.md")
+    parser.add_argument("--test-log", default=f"{DEFAULT_ARTIFACT_DIR}/TEST_RUN_v4_0_1.log")
+    parser.add_argument("--coverage-md", default=f"{DEFAULT_ARTIFACT_DIR}/COVERAGE_v4_0_1.md")
     parser.add_argument(
         "--strict-dev-tools",
         action="store_true",
@@ -247,14 +247,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     coverage_md_path.parent.mkdir(parents=True, exist_ok=True)
     coverage_md_path.write_text(
-        "# Coverage 4.0.0\n\n" + coverage_note + "\n",
+        "# Coverage 4.0.1\n\n" + coverage_note + "\n",
         encoding="utf-8",
     )
 
     report = {
         "schema_version": 1,
         "project": "pine2ast",
-        "release": "4.0.0",
+        "release": "4.0.1",
         "ok": all(step["ok"] for step in steps),
         "strict_dev_tools": dev_tools_required,
         "allow_missing_dev_tools": args.allow_missing_dev_tools,

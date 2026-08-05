@@ -37,9 +37,9 @@ def test_quality_gate_requires_dev_tools_by_default() -> None:
 
 def test_quality_gate_default_artifacts_do_not_write_repo_root() -> None:
     parser_defaults = [
-        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_LOCAL_v4_0_0.json"),
-        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_v4_0_0.json"),
-        run_quality_gate.artifact_path(".release_gate_reports/BUILTIN_COVERAGE_v4_0_0.json"),
+        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_LOCAL_v4_0_1.json"),
+        run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_v4_0_1.json"),
+        run_quality_gate.artifact_path(".release_gate_reports/BUILTIN_COVERAGE_v4_0_1.json"),
     ]
 
     assert all(".release_gate_reports" in path.parts for path in parser_defaults)

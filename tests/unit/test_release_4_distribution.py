@@ -25,6 +25,11 @@ def test_distribution_manifest_selects_required_files_and_excludes_caches(tmp_pa
     (root / "pine2ast.egg-info" / "PKG-INFO").write_text("generated", encoding="utf-8")
     (root / ".release_gate_reports").mkdir()
     (root / ".release_gate_reports" / "QUALITY_GATE_FINAL.json").write_text("{}", encoding="utf-8")
+    (root / ".venv" / "bin").mkdir(parents=True)
+    (root / ".venv" / "bin" / "python").write_bytes(b"binary")
+    (root / "venv" / "lib").mkdir(parents=True)
+    (root / "venv" / "lib" / "native.so").write_bytes(b"binary")
+    (root / "pine2ast-4.0.0.zip").write_bytes(b"archive")
     (root / "docs" / "README.md").write_text("docs", encoding="utf-8")
 
     manifest = build_distribution_manifest(root)
@@ -34,7 +39,10 @@ def test_distribution_manifest_selects_required_files_and_excludes_caches(tmp_pa
     assert "pine2ast/__pycache__/x.pyc" not in selected
     assert "pine2ast.egg-info/PKG-INFO" not in selected
     assert ".release_gate_reports/QUALITY_GATE_FINAL.json" not in selected
-    assert manifest.excluded_file_count == 3
+    assert ".venv/bin/python" not in selected
+    assert "venv/lib/native.so" not in selected
+    assert "pine2ast-4.0.0.zip" not in selected
+    assert manifest.excluded_file_count == 6
 
 
 def test_distribution_zip_is_deterministic_and_extractable(tmp_path):

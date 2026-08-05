@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.1
+
+- Published the hardened OpenPine 4.0.1 stack while preserving `pine.ast_contract.v1`, `openpine.frontend.v1`, and `runtime_contract_v1_4`.
+- Aligned package, producer, lock, documentation, and release-gate metadata for reproducible immutable-SHA consumers.
+
 ## 4.0.0
 
 Pine2AST 4.0.0 is the GitHub-ready production frontend release for the OpenPine toolchain. It consolidates the 3.x hardening work into a clean public release surface with stable contracts, canonical docs, deterministic distribution hygiene, and strict release gates.

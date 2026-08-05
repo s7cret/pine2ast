@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import tomllib
+from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
@@ -31,7 +32,7 @@ from pine2ast.distribution import build_distribution_manifest
 from pine2ast.testing.oracle import load_oracle_manifest, run_oracle_cases
 
 RELEASE_LINE = "4.0"
-RELEASE_VERSION = "4.0.0"
+RELEASE_VERSION = "4.0.1"
 AST_CONTRACT_VERSION = "pine.ast_contract.v1"
 OPENPINE_CONTRACT_VERSION = "openpine.frontend.v1"
 RUNTIME_CONTRACT_PROFILE = "runtime_contract_v1_4"
@@ -89,6 +90,7 @@ class ReleaseManifest:
     checks: tuple[ReleaseCheck, ...]
     signature_coverage: Mapping[str, Any]
     release_features: Mapping[str, Any]
+    compatibility: Mapping[str, Any]
     oracle: Mapping[str, Any] | None = None
 
     @property
@@ -111,6 +113,7 @@ class ReleaseManifest:
             "checks": [check.to_dict() for check in self.checks],
             "signature_coverage": dict(self.signature_coverage),
             "release_features": dict(self.release_features),
+            "compatibility": dict(self.compatibility),
             "oracle": dict(self.oracle) if self.oracle is not None else None,
         }
 
@@ -177,6 +180,107 @@ def _readme_checks(root: Path) -> tuple[ReleaseCheck, ...]:
     return tuple(checks)
 
 
+_COMPATIBILITY_AXES = ("parser", "semantic", "codegen", "runtime", "golden")
+_COMPATIBILITY_STATUSES = {
+    "DONE_VERIFIED",
+    "IMPLEMENTED_UNVERIFIED",
+    "UNSUPPORTED_DIAGNOSTIC",
+    "PARTIAL",
+    "NOT_STARTED",
+}
+
+
+def _compatibility_matrix_status(root_path: Path) -> tuple[bool, dict[str, Any]]:
+    """Validate the shipped capability matrix and expose its frontend-only scope."""
+
+    matrix_path = root_path / "pine2ast" / "compatibility" / "compatibility_matrix.json"
+    errors: list[str] = []
+    payload: Any = None
+    try:
+        payload = json.loads(matrix_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"cannot read compatibility matrix: {exc}")
+
+    summary: dict[str, dict[str, int]] = {axis: {} for axis in _COMPATIBILITY_AXES}
+    item_count = 0
+    frontend_ready = False
+    source_scope: Any = None
+    if not isinstance(payload, dict):
+        if not errors:
+            errors.append("compatibility matrix must be an object")
+    else:
+        source_scope = payload.get("scope")
+        if payload.get("schema_version") != "openpine.compatibility_matrix.v1":
+            errors.append("unsupported compatibility matrix schema")
+        if source_scope != "amended_6pkg_p0":
+            errors.append("compatibility matrix scope must be amended_6pkg_p0")
+        if payload.get("axes") != list(_COMPATIBILITY_AXES):
+            errors.append("compatibility matrix axes are incomplete or out of order")
+        status_values = payload.get("status_values")
+        if not isinstance(status_values, list) or set(status_values) != _COMPATIBILITY_STATUSES:
+            errors.append("compatibility matrix status values are incomplete")
+
+        items = payload.get("items")
+        declared_summary = payload.get("summary")
+        if not isinstance(items, list) or not items:
+            errors.append("compatibility matrix items must be a non-empty array")
+            items = []
+        if not isinstance(declared_summary, dict):
+            errors.append("compatibility matrix summary must be an object")
+            declared_summary = {}
+
+        item_count = len(items)
+        seen_items: set[tuple[str, str]] = set()
+        recomputed: dict[str, Counter[str]] = {axis: Counter() for axis in _COMPATIBILITY_AXES}
+        frontend_statuses: list[str] = []
+        for index, item in enumerate(items):
+            if not isinstance(item, dict):
+                errors.append(f"items[{index}] must be an object")
+                continue
+            item_id = item.get("id")
+            category = item.get("category")
+            if not isinstance(item_id, str) or not item_id:
+                errors.append(f"items[{index}].id must be a non-empty string")
+            if not isinstance(category, str) or not category:
+                errors.append(f"items[{index}].category must be a non-empty string")
+            if isinstance(item_id, str) and item_id and isinstance(category, str) and category:
+                item_key = (category, item_id)
+                if item_key in seen_items:
+                    errors.append(f"duplicate compatibility item: {category}:{item_id}")
+                else:
+                    seen_items.add(item_key)
+            for axis in _COMPATIBILITY_AXES:
+                key = "oracle" if axis == "golden" else axis
+                status = item.get(key)
+                if status not in _COMPATIBILITY_STATUSES:
+                    errors.append(f"items[{index}].{key} has invalid status {status!r}")
+                    continue
+                recomputed[axis][status] += 1
+                if axis in {"parser", "semantic"}:
+                    frontend_statuses.append(status)
+
+        summary = {axis: dict(recomputed[axis]) for axis in _COMPATIBILITY_AXES}
+        for axis in _COMPATIBILITY_AXES:
+            if declared_summary.get(axis) != summary[axis]:
+                errors.append(f"compatibility summary mismatch for {axis}")
+        frontend_ready = bool(frontend_statuses) and all(
+            status in {"DONE_VERIFIED", "UNSUPPORTED_DIAGNOSTIC"} for status in frontend_statuses
+        )
+        if not frontend_ready:
+            errors.append("frontend parser/semantic capability set is not release-ready")
+
+    details: dict[str, Any] = {
+        "scope": "frontend_only",
+        "source_scope": source_scope,
+        "full_pipeline_parity_claimed": False,
+        "item_count": item_count,
+        "frontend_ready": frontend_ready,
+        "summary": summary,
+        "errors": errors,
+    }
+    return not errors, details
+
+
 def build_release_manifest(
     root: str | Path = ".",
     *,
@@ -195,6 +299,7 @@ def build_release_manifest(
 
     root_path = Path(root).resolve()
     checks: list[ReleaseCheck] = []
+    compatibility_ok, compatibility = _compatibility_matrix_status(root_path)
 
     pyproject_version = _read_pyproject_version(root_path)
     lock_version = _read_lock_version(root_path)
@@ -204,7 +309,7 @@ def build_release_manifest(
             __version__ == RELEASE_VERSION
             and pyproject_version == RELEASE_VERSION
             and (lock_version in {None, RELEASE_VERSION}),
-            "package, pyproject, and uv.lock versions are aligned for 4.0.0",
+            f"package, pyproject, and uv.lock versions are aligned for {RELEASE_VERSION}",
             {
                 "package": __version__,
                 "pyproject": pyproject_version,
@@ -235,6 +340,14 @@ def build_release_manifest(
         )
     )
     checks.extend(_readme_checks(root_path))
+    checks.append(
+        ReleaseCheck(
+            "compatibility_scope_truthfulness",
+            compatibility_ok,
+            "frontend capabilities are complete and downstream gaps remain explicit",
+            compatibility,
+        )
+    )
 
     release_payload = load_v6_release_features()
     release_errors = validate_release_feature_matrix(release_payload)
@@ -391,6 +504,7 @@ def build_release_manifest(
         checks=tuple(checks),
         signature_coverage=signature_reports,
         release_features={"summary": release_summary, "errors": list(release_errors)},
+        compatibility=compatibility,
         oracle=oracle_payload,
     )
 

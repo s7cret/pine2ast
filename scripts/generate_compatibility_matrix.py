@@ -35,6 +35,7 @@ STATUS_VALUES = {
 }
 
 AXES = ["parser", "semantic", "codegen", "runtime", "golden"]
+AXIS_ITEM_KEYS = {"golden": "oracle"}
 
 
 def load_parity() -> dict[str, Any]:
@@ -61,7 +62,7 @@ def build_matrix(parity: dict[str, Any]) -> dict[str, Any]:
     summary: dict[str, Counter] = {ax: Counter() for ax in AXES}
     for it in items:
         for ax in AXES:
-            val = it.get(ax, "NOT_STARTED")
+            val = it.get(AXIS_ITEM_KEYS.get(ax, ax), "NOT_STARTED")
             if val not in STATUS_VALUES:
                 val = "NOT_STARTED"
             summary[ax][val] += 1

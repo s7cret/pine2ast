@@ -1,7 +1,7 @@
 {
   "schema_version": "pine2ast.release_manifest.v1",
   "ok": true,
-  "package_version": "4.0.0",
+  "package_version": "4.0.1",
   "release_line": "4.0",
   "contracts": {
     "ast": "pine.ast_contract.v1",
@@ -23,12 +23,12 @@
     {
       "name": "version_metadata",
       "ok": true,
-      "message": "package, pyproject, and uv.lock versions are aligned for 4.0.0",
+      "message": "package, pyproject, and uv.lock versions are aligned for 4.0.1",
       "details": {
-        "package": "4.0.0",
-        "pyproject": "4.0.0",
-        "uv_lock": "4.0.0",
-        "expected": "4.0.0"
+        "package": "4.0.1",
+        "pyproject": "4.0.1",
+        "uv_lock": "4.0.1",
+        "expected": "4.0.1"
       }
     },
     {
@@ -79,6 +79,46 @@
       "details": {}
     },
     {
+      "name": "compatibility_scope_truthfulness",
+      "ok": true,
+      "message": "frontend capabilities are complete and downstream gaps remain explicit",
+      "details": {
+        "scope": "frontend_only",
+        "source_scope": "amended_6pkg_p0",
+        "full_pipeline_parity_claimed": false,
+        "item_count": 743,
+        "frontend_ready": true,
+        "summary": {
+          "parser": {
+            "DONE_VERIFIED": 742,
+            "UNSUPPORTED_DIAGNOSTIC": 1
+          },
+          "semantic": {
+            "DONE_VERIFIED": 742,
+            "UNSUPPORTED_DIAGNOSTIC": 1
+          },
+          "codegen": {
+            "NOT_STARTED": 379,
+            "UNSUPPORTED_DIAGNOSTIC": 220,
+            "IMPLEMENTED_UNVERIFIED": 98,
+            "DONE_VERIFIED": 46
+          },
+          "runtime": {
+            "NOT_STARTED": 374,
+            "UNSUPPORTED_DIAGNOSTIC": 228,
+            "IMPLEMENTED_UNVERIFIED": 92,
+            "DONE_VERIFIED": 48,
+            "PARTIAL": 1
+          },
+          "golden": {
+            "NOT_STARTED": 703,
+            "IMPLEMENTED_UNVERIFIED": 40
+          }
+        },
+        "errors": []
+      }
+    },
+    {
       "name": "v6_release_feature_matrix",
       "ok": true,
       "message": "v6 release-feature matrix has no unknown, duplicate, or not_started items",
@@ -101,7 +141,7 @@
           "official_count": 1065,
           "implemented_count": 1065,
           "missing_count": 0,
-          "registry_extra_count": 201,
+          "registry_extra_count": 205,
           "signature_ready_count": 1065,
           "signature_pending_count": 0,
           "name_coverage_ratio": 1.0,
@@ -111,11 +151,30 @@
           "official_count": 1161,
           "implemented_count": 1161,
           "missing_count": 0,
-          "registry_extra_count": 291,
+          "registry_extra_count": 295,
           "signature_ready_count": 1161,
           "signature_pending_count": 0,
           "name_coverage_ratio": 1.0,
           "signature_ready_ratio": 1.0
+        }
+      }
+    },
+    {
+      "name": "runtime_registry_semantic_oracle",
+      "ok": true,
+      "message": "official v5/v6 constants are exposed through the runtime semantic value registries",
+      "details": {
+        "v5": {
+          "constant_count": 198,
+          "semantic_value_count": 351,
+          "missing": [],
+          "mismatched": []
+        },
+        "v6": {
+          "constant_count": 239,
+          "semantic_value_count": 403,
+          "missing": [],
+          "mismatched": []
         }
       }
     },
@@ -128,7 +187,7 @@
           "official_count": 1065,
           "implemented_count": 1065,
           "missing_count": 0,
-          "registry_extra_count": 201,
+          "registry_extra_count": 205,
           "signature_ready_count": 1065,
           "signature_pending_count": 0,
           "name_coverage_ratio": 1.0,
@@ -138,7 +197,7 @@
           "official_count": 1161,
           "implemented_count": 1161,
           "missing_count": 0,
-          "registry_extra_count": 291,
+          "registry_extra_count": 295,
           "signature_ready_count": 1161,
           "signature_pending_count": 0,
           "name_coverage_ratio": 1.0,
@@ -171,7 +230,7 @@
         "ok": true,
         "path": "pine2ast",
         "max_lines": 700,
-        "file_count": 129,
+        "file_count": 130,
         "oversized_count": 0,
         "oversized": []
       }
@@ -184,9 +243,9 @@
         "schema_version": "pine2ast.distribution_manifest.v1",
         "ok": true,
         "root": ".",
-        "package_version": "4.0.0",
-        "selected_file_count": 971,
-        "excluded_file_count": 0,
+        "package_version": "4.0.1",
+        "selected_file_count": 972,
+        "excluded_file_count": 8961,
         "finding_count": 0,
         "findings": []
       }
@@ -197,7 +256,7 @@
       "message": "bundled frontend oracle manifest passes",
       "details": {
         "path": "tests/oracle/frontend_oracle_manifest.json",
-        "case_count": 7,
+        "case_count": 11,
         "failure_count": 0
       }
     }
@@ -211,7 +270,7 @@
         "official_count": 1065,
         "implemented_count": 1065,
         "missing_count": 0,
-        "registry_extra_count": 201,
+        "registry_extra_count": 205,
         "signature_ready_count": 1065,
         "signature_pending_count": 0,
         "name_coverage_ratio": 1.0,
@@ -256,14 +315,14 @@
         "variables": {
           "category": "variables",
           "official_count": 153,
-          "registry_count": 347,
+          "registry_count": 351,
           "implemented_count": 153,
           "name_coverage_ratio": 1.0,
           "signature_ready_count": 153,
           "signature_ready_ratio": 1.0,
           "missing_count": 0,
           "missing": [],
-          "registry_extra_count": 194,
+          "registry_extra_count": 198,
           "registry_extra": [
             "adjustment.dividends",
             "adjustment.none",
@@ -440,6 +499,10 @@
             "strategy.commission.cash_per_contract",
             "strategy.commission.cash_per_order",
             "strategy.commission.percent",
+            "strategy.direction.all",
+            "strategy.direction.long",
+            "strategy.direction.short",
+            "strategy.fixed",
             "strategy.long",
             "strategy.oca.cancel",
             "strategy.oca.none",
@@ -556,7 +619,7 @@
         "official_count": 1161,
         "implemented_count": 1161,
         "missing_count": 0,
-        "registry_extra_count": 291,
+        "registry_extra_count": 295,
         "signature_ready_count": 1161,
         "signature_pending_count": 0,
         "name_coverage_ratio": 1.0,
@@ -627,14 +690,14 @@
         "variables": {
           "category": "variables",
           "official_count": 161,
-          "registry_count": 399,
+          "registry_count": 403,
           "implemented_count": 161,
           "name_coverage_ratio": 1.0,
           "signature_ready_count": 161,
           "signature_ready_ratio": 1.0,
           "missing_count": 0,
           "missing": [],
-          "registry_extra_count": 238,
+          "registry_extra_count": 242,
           "registry_extra": [
             "adjustment.dividends",
             "adjustment.none",
@@ -849,6 +912,10 @@
             "strategy.commission.cash_per_contract",
             "strategy.commission.cash_per_order",
             "strategy.commission.percent",
+            "strategy.direction.all",
+            "strategy.direction.long",
+            "strategy.direction.short",
+            "strategy.fixed",
             "strategy.long",
             "strategy.oca.cancel",
             "strategy.oca.none",
@@ -994,10 +1061,45 @@
     },
     "errors": []
   },
+  "compatibility": {
+    "scope": "frontend_only",
+    "source_scope": "amended_6pkg_p0",
+    "full_pipeline_parity_claimed": false,
+    "item_count": 743,
+    "frontend_ready": true,
+    "summary": {
+      "parser": {
+        "DONE_VERIFIED": 742,
+        "UNSUPPORTED_DIAGNOSTIC": 1
+      },
+      "semantic": {
+        "DONE_VERIFIED": 742,
+        "UNSUPPORTED_DIAGNOSTIC": 1
+      },
+      "codegen": {
+        "NOT_STARTED": 379,
+        "UNSUPPORTED_DIAGNOSTIC": 220,
+        "IMPLEMENTED_UNVERIFIED": 98,
+        "DONE_VERIFIED": 46
+      },
+      "runtime": {
+        "NOT_STARTED": 374,
+        "UNSUPPORTED_DIAGNOSTIC": 228,
+        "IMPLEMENTED_UNVERIFIED": 92,
+        "DONE_VERIFIED": 48,
+        "PARTIAL": 1
+      },
+      "golden": {
+        "NOT_STARTED": 703,
+        "IMPLEMENTED_UNVERIFIED": 40
+      }
+    },
+    "errors": []
+  },
   "oracle": {
     "schema_version": "pine2ast.oracle_report.v1",
     "ok": true,
-    "case_count": 7,
+    "case_count": 11,
     "failure_count": 0,
     "results": [
       {
@@ -1159,6 +1261,46 @@
             }
           }
         ]
+      },
+      {
+        "id": "v6-valid-strategy-fixed",
+        "ok": true,
+        "expected_ok": true,
+        "actual_ok": true,
+        "error_codes": [],
+        "expected_error_codes": [],
+        "missing_expected_codes": [],
+        "diagnostics": []
+      },
+      {
+        "id": "v6-valid-strategy-direction-all",
+        "ok": true,
+        "expected_ok": true,
+        "actual_ok": true,
+        "error_codes": [],
+        "expected_error_codes": [],
+        "missing_expected_codes": [],
+        "diagnostics": []
+      },
+      {
+        "id": "v6-valid-strategy-direction-long",
+        "ok": true,
+        "expected_ok": true,
+        "actual_ok": true,
+        "error_codes": [],
+        "expected_error_codes": [],
+        "missing_expected_codes": [],
+        "diagnostics": []
+      },
+      {
+        "id": "v6-valid-strategy-direction-short",
+        "ok": true,
+        "expected_ok": true,
+        "actual_ok": true,
+        "error_codes": [],
+        "expected_error_codes": [],
+        "missing_expected_codes": [],
+        "diagnostics": []
       }
     ]
   }

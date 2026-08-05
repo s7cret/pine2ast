@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "4.0.0"
+version = "4.0.1"
 description = "Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and metadata contracts"
 readme = "README.md"
 requires-python = ">=3.11"

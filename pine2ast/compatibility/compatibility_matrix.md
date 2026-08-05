@@ -18,7 +18,7 @@ Status values per axis:
 | semantic | 742 | 0 | 1 | 0 | 0 |
 | codegen | 46 | 98 | 220 | 0 | 379 |
 | runtime | 48 | 92 | 228 | 1 | 374 |
-| golden | 0 | 0 | 0 | 0 | 743 |
+| golden | 0 | 40 | 0 | 0 | 703 |
 
 ## Overall readiness
 

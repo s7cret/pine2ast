@@ -46,8 +46,8 @@ For the GitHub tag, use a clean clone or clean working tree and run:
 ```bash
 python -m pip install -e '.[dev]'
 bash scripts/release_gate.sh
-python -m pine2ast.distribution build-zip --root . --output ../pine2ast-4.0.0.zip
-unzip -tq ../pine2ast-4.0.0.zip
+python -m pine2ast.distribution build-zip --root . --output ../pine2ast-4.0.1.zip
+unzip -tq ../pine2ast-4.0.1.zip
 ```
 
 The wheel smoke is intentionally separate from the deterministic source zip: it builds a wheel with `pip wheel`, installs it into a temporary virtual environment, parses a minimal Pine v6 script, and checks that the packaged CLI contract entrypoint imports correctly.
@@ -55,7 +55,7 @@ The wheel smoke is intentionally separate from the deterministic source zip: it 
 For constrained automation environments where third-party dev tools are unavailable, do not mark `ruff`, `black`, or `mypy` as passed. Use:
 
 ```bash
-python tools/run_quality_gate.py --allow-missing-dev-tools --json .release_gate_reports/QUALITY_GATE_LOCAL_v4_0_0.json
+python tools/run_quality_gate.py --allow-missing-dev-tools --json .release_gate_reports/QUALITY_GATE_LOCAL_v4_0_1.json
 ```
 
 and require the full strict gate in CI before tagging.

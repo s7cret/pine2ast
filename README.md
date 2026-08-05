@@ -1,8 +1,8 @@
-# Pine2AST 4.0.0
+# Pine2AST 4.0.1
 
 > Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and OpenPine metadata contracts.
 
-[![Version](https://img.shields.io/badge/version-4.0.0-blue)](https://github.com/s7cret/pine2ast) [![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)](https://github.com/s7cret/pine2ast) [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/s7cret/pine2ast)
+[![Version](https://img.shields.io/badge/version-4.0.1-blue)](https://github.com/s7cret/pine2ast) [![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)](https://github.com/s7cret/pine2ast) [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/s7cret/pine2ast)
 
 
 **GitHub description:** Pine2AST parses Pine Script v5/v6 into stable AST and metadata contracts for OpenPine, with static diagnostics, semantic snapshots, compatibility gates, and CI-friendly quality reports.
@@ -61,7 +61,7 @@ python -m pip install -e '.[dev]'
 Install from GitHub tag:
 
 ```bash
-python -m pip install 'git+https://github.com/s7cret/pine2ast.git@v4.0.0'
+python -m pip install 'git+https://github.com/s7cret/pine2ast.git@v4.0.1'
 ```
 
 ## Python quick start
