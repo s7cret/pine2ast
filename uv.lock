@@ -370,7 +370,7 @@ wheels = [
 
 [[package]]
 name = "pine2ast"
-version = "4.0.1"
+version = "4.0.2"
 source = { editable = "." }
 
 [package.optional-dependencies]

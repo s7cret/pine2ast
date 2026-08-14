@@ -1,7 +1,7 @@
 {
   "schema_version": "pine2ast.release_manifest.v1",
   "ok": true,
-  "package_version": "4.0.1",
+  "package_version": "4.0.2",
   "release_line": "4.0",
   "contracts": {
     "ast": "pine.ast_contract.v1",
@@ -23,12 +23,12 @@
     {
       "name": "version_metadata",
       "ok": true,
-      "message": "package, pyproject, and uv.lock versions are aligned for 4.0.1",
+      "message": "package, pyproject, and uv.lock versions are aligned for 4.0.2",
       "details": {
-        "package": "4.0.1",
-        "pyproject": "4.0.1",
-        "uv_lock": "4.0.1",
-        "expected": "4.0.1"
+        "package": "4.0.2",
+        "pyproject": "4.0.2",
+        "uv_lock": "4.0.2",
+        "expected": "4.0.2"
       }
     },
     {
@@ -243,9 +243,9 @@
         "schema_version": "pine2ast.distribution_manifest.v1",
         "ok": true,
         "root": ".",
-        "package_version": "4.0.1",
+        "package_version": "4.0.2",
         "selected_file_count": 972,
-        "excluded_file_count": 8961,
+        "excluded_file_count": 9637,
         "finding_count": 0,
         "findings": []
       }

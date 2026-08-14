@@ -32,7 +32,7 @@ from pine2ast.distribution import build_distribution_manifest
 from pine2ast.testing.oracle import load_oracle_manifest, run_oracle_cases
 
 RELEASE_LINE = "4.0"
-RELEASE_VERSION = "4.0.1"
+RELEASE_VERSION = "4.0.2"
 AST_CONTRACT_VERSION = "pine.ast_contract.v1"
 OPENPINE_CONTRACT_VERSION = "openpine.frontend.v1"
 RUNTIME_CONTRACT_PROFILE = "runtime_contract_v1_4"

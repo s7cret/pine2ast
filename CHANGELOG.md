@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2
+
+- Refreshed package, release-manifest, semantic-snapshot, and generated producer metadata for the coordinated OpenPine 4.0.2 stack.
+- Preserved the Pine v6 AST and semantic contracts without parser behavior changes.
+
 ## 4.0.1
 
 - Published the hardened OpenPine 4.0.1 stack while preserving `pine.ast_contract.v1`, `openpine.frontend.v1`, and `runtime_contract_v1_4`.

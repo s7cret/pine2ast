@@ -254,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
     report = {
         "schema_version": 1,
         "project": "pine2ast",
-        "release": "4.0.1",
+        "release": "4.0.2",
         "ok": all(step["ok"] for step in steps),
         "strict_dev_tools": dev_tools_required,
         "allow_missing_dev_tools": args.allow_missing_dev_tools,

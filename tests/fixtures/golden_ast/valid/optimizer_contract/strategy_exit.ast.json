@@ -352,7 +352,7 @@
     "contract": "pine.ast_contract.v1",
     "producer": {
       "name": "pine2ast",
-      "version": "4.0.1"
+      "version": "4.0.2"
     },
     "schema_version": "1.0",
     "pine_language_version": 6,

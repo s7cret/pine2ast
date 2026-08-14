@@ -78,7 +78,7 @@ class SignatureResolution:
 class SignatureResolver:
     """Bind Pine call arguments to registry signatures.
 
-    Release 4.0.1 extends the earlier foundation with overload candidates and a
+    Release 4.0.2 extends the earlier foundation with overload candidates and a
     small type/qualifier scoring layer. The resolver remains optional from the
     legacy analyzer's perspective: it only emits type/qualifier issues when the
     caller supplies symbol facts or explicit resolver callbacks.
