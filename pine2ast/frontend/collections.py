@@ -20,7 +20,7 @@ from pine2ast.semantic.facts import (
 )
 from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.type_helpers import is_assignable_type, is_valid_map_key_type, type_ref_name
-from pine2ast.openpine_contracts.helpers import *
+from pine2ast.frontend.helpers import *
 
 _COLLECTION_LIMITS = {
     "array_elements": 100_000,

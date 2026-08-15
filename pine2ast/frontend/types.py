@@ -8,7 +8,7 @@ from pine2ast.ast.nodes import Identifier, MemberAccessExpr, Program
 from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
 from pine2ast.semantic.type_helpers import type_ref_name
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.openpine_contracts.helpers import *
+from pine2ast.frontend.helpers import *
 
 
 def extract_type_contract(

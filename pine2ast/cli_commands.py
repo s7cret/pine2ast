@@ -29,7 +29,7 @@ from pine2ast.semantic.type_infer import callee_name
 from pine2ast.inspect_contract import build_inspect_payload
 from pine2ast.semantic.snapshot import build_semantic_snapshot_payload
 from pine2ast.contracts import contract_check_file_payload
-from pine2ast.openpine_contracts.schema import openpine_contract_schema
+from pine2ast.frontend.schema import openpine_contract_schema
 from pine2ast.benchmark import bench_corpus_json, perf_baseline_json
 from pine2ast.corpus import validate_corpus_json
 from pine2ast.testing.golden import compare_golden, generate_golden

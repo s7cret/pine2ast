@@ -7,7 +7,7 @@ from typing import Any
 from pine2ast.ast.nodes import DeclarationStatement, Program
 from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.openpine_contracts.helpers import *
+from pine2ast.frontend.helpers import *
 
 
 def _strategy_call_bucket(name: str) -> str:

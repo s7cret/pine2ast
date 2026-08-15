@@ -14,7 +14,7 @@ from pine2ast.ast.nodes import (
     WhileStructure,
 )
 from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.openpine_contracts.helpers import *
+from pine2ast.frontend.helpers import *
 
 
 def extract_control_flow_contract(

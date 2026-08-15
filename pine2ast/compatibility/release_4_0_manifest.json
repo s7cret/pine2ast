@@ -5,7 +5,7 @@
   "release_line": "4.0",
   "contracts": {
     "ast": "pine.ast_contract.v1",
-    "openpine": "openpine.frontend.v1",
+    "openpine": "openpine.frontend.v2",
     "runtime_contract_profile": "runtime_contract_v1_4",
     "semantic_snapshot": "pine2ast.semantic_snapshot.v1"
   },

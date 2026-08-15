@@ -6,18 +6,14 @@ from typing import Any
 from pine2ast._version import __version__
 from pine2ast.api import ParseOptions, ParseResult, parse_file
 from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.openpine_contracts.callables import extract_callable_contract
-from pine2ast.openpine_contracts.collections import extract_collection_contract
-from pine2ast.openpine_contracts.control_flow import extract_control_flow_contract
-from pine2ast.openpine_contracts.requests import extract_request_contract
-from pine2ast.openpine_contracts.schema import (
-    FRONTEND_CONTRACT,
-    FRONTEND_SCHEMA_CONTRACT,
-    SECTION_CONTRACTS,
-)
-from pine2ast.openpine_contracts.strategy import extract_strategy_contract
-from pine2ast.openpine_contracts.types import extract_type_contract
-from pine2ast.openpine_contracts.validation import extract_validation_contract
+from pine2ast.frontend.callables import extract_callable_contract
+from pine2ast.frontend.collections import extract_collection_contract
+from pine2ast.frontend.control_flow import extract_control_flow_contract
+from pine2ast.frontend.ids import FRONTEND_CONTRACT, SECTION_CONTRACTS
+from pine2ast.frontend.requests import extract_request_contract
+from pine2ast.frontend.strategy import extract_strategy_contract
+from pine2ast.frontend.types import extract_type_contract
+from pine2ast.frontend.validation import extract_validation_contract
 from pine2ast.semantic.facts import extract_method_contract
 
 
@@ -36,10 +32,8 @@ def build_openpine_contract_payload(
     return {
         "schema_version": 1,
         "contract": FRONTEND_CONTRACT,
-        "schema_contract": FRONTEND_SCHEMA_CONTRACT,
         "contracts": {
             "frontend": FRONTEND_CONTRACT,
-            "schema": FRONTEND_SCHEMA_CONTRACT,
             "sections": dict(SECTION_CONTRACTS),
         },
         "producer": {"name": "pine2ast", "version": __version__},

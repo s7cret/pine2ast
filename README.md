@@ -27,7 +27,7 @@ The package is intentionally focused on parsing and static contracts. It does no
 |---|---|
 | Pine profiles | v5 and v6 static profiles. |
 | AST JSON | Stable `pine.ast_contract.v1`. |
-| OpenPine metadata | Stable `openpine.frontend.v1`. |
+| OpenPine metadata | Catalog `openpine.frontend.v2`. |
 | Semantic snapshot | `pine2ast.semantic_snapshot.v1` for CI/debugging. |
 | Runtime marker | `runtime_contract_v1_4` for downstream compatibility. |
 | Builtin coverage | Version-aware builtin and namespace checks. |

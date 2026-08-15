@@ -90,7 +90,7 @@ def test_inspect_contract_can_optionally_embed_openpine_contract(tmp_path: Path)
     )
 
     assert "openpine_contract" not in base
-    assert embedded["openpine_contract"]["contract"] == "openpine.frontend.v1"
+    assert embedded["openpine_contract"]["contract"] == "openpine.frontend.v2"
 
 
 def test_release_feature_matrix_has_no_unknown_statuses() -> None:

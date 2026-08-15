@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from pine2ast.openpine_contracts import (
+from pine2ast.frontend import (
     FRONTEND_CONTRACT,
-    FRONTEND_SCHEMA_CONTRACT,
     SECTION_CONTRACTS,
+    build_frontend_v2_payload,
     build_openpine_contract_payload,
     extract_callable_contract,
     extract_collection_contract,
@@ -19,10 +19,13 @@ from pine2ast.openpine_contracts import (
     validate_openpine_contract_payload_dict,
 )
 
+FRONTEND_SCHEMA_CONTRACT = FRONTEND_CONTRACT
+
 __all__ = [
     "FRONTEND_CONTRACT",
     "FRONTEND_SCHEMA_CONTRACT",
     "SECTION_CONTRACTS",
+    "build_frontend_v2_payload",
     "build_openpine_contract_payload",
     "openpine_contract_file_payload",
     "openpine_contract_schema",

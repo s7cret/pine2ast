@@ -14,7 +14,7 @@ from typing import Any, Mapping
 
 from pine2ast.api import ParseOptions, parse_file
 from pine2ast.inspect_contract import build_inspect_payload
-from pine2ast.openpine_contracts.schema import FRONTEND_CONTRACT, SECTION_CONTRACTS
+from pine2ast.frontend.ids import FRONTEND_CONTRACT, SECTION_CONTRACTS
 
 INSPECT_CONTRACT = "pine2ast.inspect.optimizer.v1"
 OPENPINE_CONTRACT = FRONTEND_CONTRACT
@@ -275,7 +275,7 @@ def validate_contract_payload(
 
     The validator supports three public integration surfaces:
     `pine.ast_contract.v1`, `pine2ast.inspect.optimizer.v1`,
-    `pine2ast.semantic_snapshot.v1`, and `openpine.frontend.v1`.
+    `pine2ast.semantic_snapshot.v1`, and `openpine.frontend.v2`.
     Unknown contracts produce a failed report rather
     than silently succeeding.
     """

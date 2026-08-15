@@ -22,17 +22,17 @@ plot(close)
 def test_openpine_contract_schema_lists_public_sections() -> None:
     schema = openpine_contract_schema()
 
-    assert schema["contract"] == "openpine.frontend.schema.v1"
-    assert schema["frontend_contract"] == "openpine.frontend.v1"
+    assert schema["schema_id"] == "openpine.frontend.v2"
+    assert schema["frontend_contract"] == "openpine.frontend.v2"
     assert schema["section_contracts"] == SECTION_CONTRACTS
-    assert "diagnostics" in schema["top_level_required"]
+    assert "content_hash" in schema["top_level_required"]
 
 
 def test_openpine_contract_payload_validates_against_schema() -> None:
     result = parse_code(SOURCE, ParseOptions(version=6, source_name="schema_smoke.pine"))
     payload = build_openpine_contract_payload(result)
 
-    assert payload["schema_contract"] == "openpine.frontend.schema.v1"
+    assert payload["contract"] == "openpine.frontend.v2"
     assert validate_openpine_contract_payload(payload) == ()
     assert validate_openpine_contract_payload_dict(payload)["ok"] is True
 
@@ -52,7 +52,7 @@ def test_cli_contract_schema_outputs_json(tmp_path) -> None:
 
     assert exit_code == 0
     payload = json.loads(out.read_text(encoding="utf-8"))
-    assert payload["contract"] == "openpine.frontend.schema.v1"
+    assert payload["schema_id"] == "openpine.frontend.v2"
 
 
 def test_cli_semantic_snapshot_parser_command_exists(tmp_path) -> None:

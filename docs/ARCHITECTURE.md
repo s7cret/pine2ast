@@ -24,7 +24,7 @@ SourceNormalizer
 | `pine2ast.semantic` | profiles, scopes, type/qualifier facts, signatures, static checks |
 | `pine2ast.inspect_contract` | stable in-process payload for downstream tooling |
 | `pine2ast.openpine_contract` | Thin public façade for the OpenPine frontend metadata contract |
-| `pine2ast.openpine_contracts` | Split contract extractors for collections, types, callables, requests, strategy, control flow, validation, and payload assembly |
+| `pine2ast.frontend` | Split contract extractors for collections, types, callables, requests, strategy, control flow, validation, and payload assembly |
 | `pine2ast.compatibility` | release-feature matrix and compatibility metadata |
 
 ## Semantic pipeline

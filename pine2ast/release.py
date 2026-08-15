@@ -34,7 +34,7 @@ from pine2ast.testing.oracle import load_oracle_manifest, run_oracle_cases
 RELEASE_LINE = "4.0"
 RELEASE_VERSION = "4.0.2"
 AST_CONTRACT_VERSION = "pine.ast_contract.v1"
-OPENPINE_CONTRACT_VERSION = "openpine.frontend.v1"
+OPENPINE_CONTRACT_VERSION = "openpine.frontend.v2"
 RUNTIME_CONTRACT_PROFILE = "runtime_contract_v1_4"
 SEMANTIC_SNAPSHOT_CONTRACT_VERSION = SEMANTIC_SNAPSHOT_CONTRACT
 

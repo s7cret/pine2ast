@@ -31,7 +31,7 @@ def test_docs_are_canonical_for_3_2():
 def test_readme_top_level_description_is_release_focused():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "4.0.2" in readme
-    assert "openpine.frontend.v1" in readme
+    assert "openpine.frontend.v2" in readme
     assert "not a TradingView runtime" in readme
     assert "docs/STAGE" not in readme
     assert "release_readiness" not in readme
@@ -43,7 +43,7 @@ def test_release_manifest_gate_passes_for_repo():
     assert manifest.ok, [check.to_dict() for check in manifest.checks if not check.ok]
     payload = manifest.to_dict()
     assert payload["contracts"]["ast"] == "pine.ast_contract.v1"
-    assert payload["contracts"]["openpine"] == "openpine.frontend.v1"
+    assert payload["contracts"]["openpine"] == "openpine.frontend.v2"
     assert payload["contracts"]["runtime_contract_profile"] == "runtime_contract_v1_4"
     assert payload["contracts"]["semantic_snapshot"] == "pine2ast.semantic_snapshot.v1"
     assert payload["signature_coverage"]["v5"]["summary"]["missing_count"] == 0
