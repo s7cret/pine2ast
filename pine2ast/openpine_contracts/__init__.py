@@ -3,6 +3,13 @@ from __future__ import annotations
 from pine2ast.openpine_contracts.callables import extract_callable_contract
 from pine2ast.openpine_contracts.collections import extract_collection_contract
 from pine2ast.openpine_contracts.control_flow import extract_control_flow_contract
+from pine2ast.openpine_contracts.frontend_v2 import (
+    FRONTEND_V2,
+    SUPPORT_PROFILE_V2,
+    build_frontend_v2_payload,
+    build_support_profile_v2,
+    resolve_semantic_profile,
+)
 from pine2ast.openpine_contracts.payload import (
     build_openpine_contract_payload,
     openpine_contract_file_payload,
@@ -24,6 +31,11 @@ from pine2ast.semantic.facts import extract_method_contract
 __all__ = [
     "FRONTEND_CONTRACT",
     "FRONTEND_SCHEMA_CONTRACT",
+    "FRONTEND_V2",
+    "SUPPORT_PROFILE_V2",
+    "build_frontend_v2_payload",
+    "build_support_profile_v2",
+    "resolve_semantic_profile",
     "SECTION_CONTRACTS",
     "build_openpine_contract_payload",
     "openpine_contract_file_payload",
