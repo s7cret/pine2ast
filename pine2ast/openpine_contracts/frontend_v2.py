@@ -85,9 +85,7 @@ def build_frontend_v2_payload(
     semantic_profile: str | None = None,
 ) -> dict[str, Any]:
     profile = resolve_semantic_profile(semantic_profile)
-    v1 = build_openpine_contract_payload(
-        result, source_path=source_path, source_name=source_name
-    )
+    v1 = build_openpine_contract_payload(result, source_path=source_path, source_name=source_name)
     support = build_support_profile_v2(semantic_profile=profile)
     return {
         "schema_id": FRONTEND_V2,
