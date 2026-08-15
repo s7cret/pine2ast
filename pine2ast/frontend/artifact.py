@@ -48,10 +48,10 @@ def _seal(schema_id: str, payload: dict[str, Any]) -> dict[str, Any]:
 
 def resolve_semantic_profile(value: str | None = None) -> str:
     if value is None:
-        return SemanticProfile.LEGACY_4X.value
+        return SemanticProfile.STRICT_5X.value
     allowed = {item.value for item in SemanticProfile}
     if value not in allowed:
-        raise ValueError(f"unknown semantic profile: {value}")
+        raise ValueError(f"PL_UNKNOWN_SEMANTIC_PROFILE: {value}")
     return value
 
 
@@ -68,7 +68,9 @@ def build_support_profile_v2(
         "producer_version": __version__,
         "producer_commit": producer_commit or _producer_commit(),
         "stack_id": STACK_ID,
-        "created_at_utc_ms": created_at_utc_ms if created_at_utc_ms is not None else _now_ms(),
+        "created_at_utc_ms": (
+            created_at_utc_ms if created_at_utc_ms is not None else _now_ms()
+        ),
         "serializer_id": SERIALIZER_ID,
         "content_hash_alg": CONTENT_HASH_ALG,
         "features": [dict(item) for item in (features or ())],
@@ -86,7 +88,9 @@ def build_frontend_v2_payload(
     profile = resolve_semantic_profile(semantic_profile)
     created_at = _now_ms()
     commit = _producer_commit()
-    support = build_support_profile_v2(created_at_utc_ms=created_at, producer_commit=commit)
+    support = build_support_profile_v2(
+        created_at_utc_ms=created_at, producer_commit=commit
+    )
     metadata = build_openpine_contract_payload(
         result, source_path=source_path, source_name=source_name
     )
@@ -96,7 +100,10 @@ def build_frontend_v2_payload(
     if program is not None:
         inputs = [
             {"name": str(item.get("name") or item.get("input_function") or "input")}
-            for item in (input_dict(row) for row in extract_inputs(program, result.semantic_model))
+            for item in (
+                input_dict(row)
+                for row in extract_inputs(program, result.semantic_model)
+            )
         ]
         request_usage = sorted(
             {
@@ -107,7 +114,9 @@ def build_frontend_v2_payload(
         )
     declarations = {
         "ok": bool(metadata.get("ok")),
-        "source_name": str((metadata.get("source") or {}).get("name") or source_name or ""),
+        "source_name": str(
+            (metadata.get("source") or {}).get("name") or source_name or ""
+        ),
         "sections_present": {
             key: metadata.get(key) is not None for key in SECTION_CONTRACTS
         },

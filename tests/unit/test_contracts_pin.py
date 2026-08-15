@@ -132,5 +132,5 @@ def test_frontend_v2_artifact_validates_against_catalog() -> None:
     )
     payload = build_frontend_v2_payload(result, source_path="frontend_v2.pine")
     validate_payload(FRONTEND_V2, payload)
-    assert payload["schema_id"] == FRONTEND_V2
+    assert payload["semantic_profile"] == "strict_5x"
     assert payload["producer"] == "pine2ast"
