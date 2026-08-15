@@ -25,3 +25,31 @@ def test_unknown_semantic_profile_fail_closed() -> None:
     else:
         raise AssertionError("unknown profile must fail")
     assert resolve_semantic_profile("legacy_4x") == "legacy_4x"
+    assert resolve_semantic_profile(None) == "strict_5x"
+
+
+def test_support_profile_accepts_explicit_features() -> None:
+    from pine2ast.openpine_contracts.frontend_v2 import build_support_profile_v2
+
+    payload = build_support_profile_v2(
+        semantic_profile="legacy_4x",
+        features=[
+            {
+                "feature_id": "strategy.entry",
+                "parse": "SUPPORTED",
+                "bind_type": "SUPPORTED",
+                "lower": "SUPPORTED",
+                "runtime": "SUPPORTED",
+                "data_mtf": "NOT_APPLICABLE",
+                "simulation": "SUPPORTED",
+                "live_safe": "CONDITIONAL",
+                "visual": "NOT_APPLICABLE",
+                "numeric_parity": "CONDITIONAL",
+                "capability_predicate": "none",
+                "limitation_code": "",
+                "fixture_id": "entry",
+            }
+        ],
+    )
+    assert payload["semantic_profile"] == "legacy_4x"
+    assert payload["features"][0]["feature_id"] == "strategy.entry"
