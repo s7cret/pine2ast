@@ -9,14 +9,12 @@ from openpine_contracts import get_schema, list_schema_ids, validate_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / "pine2ast"
-PIN = "51e32ebaaf02eecb81443e8ca7e89b2543cb25a3"
+PIN = "af9ecbc455e9af83cdc609f6b6ff85c40fb6c8bb"
 FRONTEND_V2 = "openpine.frontend.v2"
 GENERATED_ARTIFACT_V2 = "openpine.generated_artifact.v2"
 INTENT_V2 = "openpine.intent.v2"
 
-_HANDMADE_ENUMS = frozenset(
-    {"Finality", "RevisionState", "SemanticProfile", "WarmupMode"}
-)
+_HANDMADE_ENUMS = frozenset({"Finality", "RevisionState", "SemanticProfile", "WarmupMode"})
 _CATALOG_SCHEMA_COPIES = frozenset(
     {
         "openpine.frontend.v2.json",
@@ -45,8 +43,7 @@ def test_contracts_pin_and_catalog() -> None:
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert (
         "openpine-contracts @ git+https://github.com/s7cret/openpine-contracts.git@"
-        f"{PIN}"
-        in text
+        f"{PIN}" in text
     )
     ids = list_schema_ids()
     assert FRONTEND_V2 in ids
@@ -114,9 +111,7 @@ def test_release_and_validation_use_catalog_frontend_v2() -> None:
 
 def test_release_manifest_pins_catalog_frontend_v2() -> None:
     manifest = json.loads(
-        (PACKAGE / "compatibility" / "release_4_0_manifest.json").read_text(
-            encoding="utf-8"
-        )
+        (PACKAGE / "compatibility" / "release_4_0_manifest.json").read_text(encoding="utf-8")
     )
     assert manifest["contracts"]["openpine"] == FRONTEND_V2
     assert manifest["package_version"] == "4.0.2"

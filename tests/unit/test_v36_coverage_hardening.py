@@ -153,7 +153,9 @@ d = Dummy.new(1)
 y = d.get()
 z = ext.remote(close)
 plot(f(close))
-""".replace("\n type", "\ntype")
+""".replace(
+        "\n type", "\ntype"
+    )
     result = parse_code(source, ParseOptions(run_semantic=True))
     assert result.ast is not None
 

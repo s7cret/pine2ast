@@ -57,45 +57,53 @@ def test_v2_18_ambiguous_continuation_shapes_are_preserved():
 
 
 def test_v2_18_unclosed_call_recovers_at_next_statement():
-    result = parse_without_semantics("""//@version=6
+    result = parse_without_semantics(
+        """//@version=6
 indicator("Recovery")
 x = ta.sma(close, 20
 y = open
-""")
+"""
+    )
     assert result.ast is not None
     assert codes.SYNTAX_ERROR in {diag.code for diag in result.diagnostics}
     assert [getattr(item, "name", None) for item in result.ast.items] == ["x", "y"]
 
 
 def test_v2_18_unclosed_history_ref_recovers_at_next_statement():
-    result = parse_without_semantics("""//@version=6
+    result = parse_without_semantics(
+        """//@version=6
 indicator("Recovery")
 x = close[1
 y = open
-""")
+"""
+    )
     assert result.ast is not None
     assert codes.SYNTAX_ERROR in {diag.code for diag in result.diagnostics}
     assert [getattr(item, "name", None) for item in result.ast.items] == ["x", "y"]
 
 
 def test_v2_18_bad_block_indentation_does_not_eat_following_statement():
-    result = parse_without_semantics("""//@version=6
+    result = parse_without_semantics(
+        """//@version=6
 indicator("Recovery")
 if close > open
 x = close
 y = open
-""")
+"""
+    )
     assert result.ast is not None
     assert codes.SYNTAX_ERROR in {diag.code for diag in result.diagnostics}
     assert [getattr(item, "name", None) for item in result.ast.items[1:]] == ["x", "y"]
 
 
 def test_v2_18_unknown_token_reports_and_recovers():
-    result = parse_without_semantics("""//@version=6
+    result = parse_without_semantics(
+        """//@version=6
 indicator("Recovery")
 x = close @ open
 y = open
-""")
+"""
+    )
     assert result.ast is not None
     assert codes.UNKNOWN_TOKEN in {diag.code for diag in result.diagnostics}
     assert [getattr(item, "name", None) for item in result.ast.items if hasattr(item, "name")] == [
@@ -105,10 +113,12 @@ y = open
 
 
 def test_v2_18_invalid_declaration_call_reports_without_schema_change():
-    result = parse_without_semantics("""//@version=6
+    result = parse_without_semantics(
+        """//@version=6
 indicator("Recovery",
 x = close
-""")
+"""
+    )
     assert result.ast is not None
     assert result.ast.declaration is not None
     assert result.ast.declaration.script_type == "indicator"

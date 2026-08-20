@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from pine2ast.api import ParseOptions, parse_code
 from pine2ast.cli import main as cli_main
 from pine2ast.inspect_contract import build_inspect_payload
+from pine2ast.frontend import schema as frontend_schema
 from pine2ast.openpine_contract import (
     SECTION_CONTRACTS,
     build_openpine_contract_payload,
@@ -26,6 +29,17 @@ def test_openpine_contract_schema_lists_public_sections() -> None:
     assert schema["frontend_contract"] == "openpine.frontend.v2"
     assert schema["section_contracts"] == SECTION_CONTRACTS
     assert "content_hash" in schema["top_level_required"]
+
+
+def test_openpine_contract_schema_rejects_malformed_required_catalog(monkeypatch) -> None:
+    monkeypatch.setattr(
+        frontend_schema,
+        "get_schema",
+        lambda _schema_id: {"required": "content_hash"},
+    )
+
+    with pytest.raises(ValueError, match="required must be a list"):
+        openpine_contract_schema()
 
 
 def test_openpine_contract_payload_validates_against_schema() -> None:

@@ -68,9 +68,7 @@ def build_support_profile_v2(
         "producer_version": __version__,
         "producer_commit": producer_commit or _producer_commit(),
         "stack_id": STACK_ID,
-        "created_at_utc_ms": (
-            created_at_utc_ms if created_at_utc_ms is not None else _now_ms()
-        ),
+        "created_at_utc_ms": (created_at_utc_ms if created_at_utc_ms is not None else _now_ms()),
         "serializer_id": SERIALIZER_ID,
         "content_hash_alg": CONTENT_HASH_ALG,
         "features": [dict(item) for item in (features or ())],
@@ -88,9 +86,7 @@ def build_frontend_v2_payload(
     profile = resolve_semantic_profile(semantic_profile)
     created_at = _now_ms()
     commit = _producer_commit()
-    support = build_support_profile_v2(
-        created_at_utc_ms=created_at, producer_commit=commit
-    )
+    support = build_support_profile_v2(created_at_utc_ms=created_at, producer_commit=commit)
     metadata = build_openpine_contract_payload(
         result, source_path=source_path, source_name=source_name
     )
@@ -100,26 +96,15 @@ def build_frontend_v2_payload(
     if program is not None:
         inputs = [
             {"name": str(item.get("name") or item.get("input_function") or "input")}
-            for item in (
-                input_dict(row)
-                for row in extract_inputs(program, result.semantic_model)
-            )
+            for item in (input_dict(row) for row in extract_inputs(program, result.semantic_model))
         ]
         request_usage = sorted(
-            {
-                name
-                for call in extract_request_calls(program)
-                if (name := callee_name(call.callee))
-            }
+            {name for call in extract_request_calls(program) if (name := callee_name(call.callee))}
         )
     declarations = {
         "ok": bool(metadata.get("ok")),
-        "source_name": str(
-            (metadata.get("source") or {}).get("name") or source_name or ""
-        ),
-        "sections_present": {
-            key: metadata.get(key) is not None for key in SECTION_CONTRACTS
-        },
+        "source_name": str((metadata.get("source") or {}).get("name") or source_name or ""),
+        "sections_present": {key: metadata.get(key) is not None for key in SECTION_CONTRACTS},
     }
     payload: dict[str, Any] = {
         "schema_id": FRONTEND_CONTRACT,

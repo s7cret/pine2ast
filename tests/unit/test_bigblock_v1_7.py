@@ -10,11 +10,13 @@ def _codes(src: str):
 
 
 def test_tuple_declaration_gets_element_types_from_tuple_return():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Tuple types")
 [basis, upper, lower] = ta.bb(close, 20, 2)
 plot(upper)
-""")
+"""
+    )
     assert codes.SYNTAX_ERROR not in errors
     assert res.semantic_model.symbols["basis"].type == "float"
     assert res.semantic_model.symbols["upper"].type == "float"
@@ -22,25 +24,29 @@ plot(upper)
 
 
 def test_user_function_argument_type_and_count_are_validated():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("User call checks")
 f(float x, int n) => x + n
 badType = f("x", 2)
 badCount = f(close, 2, 3)
 plot(close)
-""")
+"""
+    )
     assert codes.ARGUMENT_TYPE in errors
     assert codes.ARGUMENT_COUNT in errors
 
 
 def test_builtin_argument_type_and_count_are_validated():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Builtin call checks")
 a = ta.linreg(close, "20", 0)
 b = ta.linreg(close, 20, 0, 1)
 c = ta.linreg(close, 20)
 plot(close)
-""")
+"""
+    )
     assert codes.ARGUMENT_TYPE in errors
     assert codes.ARGUMENT_COUNT in errors
     messages = [
@@ -50,10 +56,12 @@ plot(close)
 
 
 def test_unknown_builtin_namespace_value_is_rejected():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Builtin namespace value checks")
 plot(ta.atr20)
-""")
+"""
+    )
     assert codes.UNKNOWN_BUILTIN_MEMBER in errors
     messages = [
         d.message for d in res.diagnostics if d.severity in {Severity.ERROR, Severity.FATAL}
@@ -62,10 +70,12 @@ plot(ta.atr20)
 
 
 def test_syminfo_mintick_is_known_simple_float():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Syminfo mintick")
 plot(syminfo.mintick)
-""")
+"""
+    )
     assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
     assert codes.UNDECLARED_VARIABLE not in errors
     assert res.semantic_model.symbols["syminfo.mintick"].type == "float"
@@ -73,10 +83,12 @@ plot(syminfo.mintick)
 
 
 def test_strategy_commission_namespace_and_initial_capital_are_known():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 strategy("Strategy metadata", commission_type=strategy.commission.percent, initial_capital=10000)
 plot(strategy.initial_capital)
-""")
+"""
+    )
     assert codes.UNKNOWN_BUILTIN_MEMBER not in errors
     assert codes.UNDECLARED_VARIABLE not in errors
     assert res.semantic_model.symbols["strategy.initial_capital"].type == "float"
@@ -84,16 +96,19 @@ plot(strategy.initial_capital)
 
 
 def test_strategy_entry_qty_type_is_validated_but_direction_constant_is_ok():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 strategy("Strategy type checks")
 strategy.entry("L", strategy.long, qty = "bad")
-""")
+"""
+    )
     assert codes.ARGUMENT_TYPE in errors
     assert codes.UNDECLARED_VARIABLE not in errors
 
 
 def test_udt_constructor_required_fields_and_field_types_are_validated():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("UDT ctor checks")
 type Pivot
     int x
@@ -101,33 +116,38 @@ type Pivot
 missing = Pivot.new(bar_index)
 bad = Pivot.new(bar_index, "bad")
 plot(close)
-""")
+"""
+    )
     assert codes.ARGUMENT_COUNT in errors
     assert codes.ARGUMENT_TYPE in errors
 
 
 def test_udt_constructor_default_field_can_be_omitted():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("UDT ctor defaults")
 type Pivot
     int x
     float y = 0.0
 p = Pivot.new(bar_index)
 plot(p.y)
-""")
+"""
+    )
     assert codes.ARGUMENT_COUNT not in errors
     assert codes.ARGUMENT_TYPE not in errors
 
 
 def test_input_enum_member_options_are_extracted_as_stable_names():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Input enum options")
 enum Mode
     Fast "Fast"
     Slow "Slow"
 mode = input.enum(Mode.Fast, "Mode", options = [Mode.Fast, Mode.Slow])
 plot(close)
-""")
+"""
+    )
     assert codes.SYNTAX_ERROR not in errors
     inputs = extract_inputs(res.ast, res.semantic_model)
     assert inputs[0].default_value == "Mode.Fast"
@@ -135,9 +155,11 @@ plot(close)
 
 
 def test_typed_tuple_target_overflow_is_diagnosed():
-    res, errors = _codes("""//@version=6
+    res, errors = _codes(
+        """//@version=6
 indicator("Tuple overflow")
 [a, b, c, d] = ta.bb(close, 20, 2)
 plot(close)
-""")
+"""
+    )
     assert codes.ARGUMENT_COUNT in errors

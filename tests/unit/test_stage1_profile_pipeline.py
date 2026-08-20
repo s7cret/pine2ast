@@ -79,10 +79,12 @@ def test_dynamic_requests_parameter_is_known_on_declarations() -> None:
 
 
 def test_exported_const_can_use_const_math_call() -> None:
-    result = parse_code("""//@version=6
+    result = parse_code(
+        """//@version=6
 library("MyConstants")
 export const float SILVER_RATIO = 1.0 + math.sqrt(2)
-""")
+"""
+    )
 
     assert result.ok
     assert codes.QUALIFIER_MISMATCH not in {diag.code for diag in result.diagnostics}

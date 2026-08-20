@@ -30,11 +30,14 @@ def openpine_contract_schema() -> dict[str, Any]:
     """Return the catalog frontend schema plus extractor section inventory."""
 
     catalog = dict(get_schema(FRONTEND_CONTRACT))
+    required = catalog.get("required", [])
+    if not isinstance(required, list):
+        raise ValueError("frontend schema required must be a list")
     return {
         "schema_id": FRONTEND_CONTRACT,
         "frontend_contract": FRONTEND_CONTRACT,
         "catalog_schema": catalog,
-        "top_level_required": list(catalog.get("required", ())),
+        "top_level_required": list(required),
         "section_contracts": dict(SECTION_CONTRACTS),
         "compatibility": {
             "additive_sections_allowed": True,

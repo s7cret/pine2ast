@@ -70,14 +70,16 @@ plot(x)
 
 
 def test_na_narrowing_is_scope_local_semantic_metadata():
-    result = parse_code("""//@version=6
+    result = parse_code(
+        """//@version=6
 indicator("na narrowing")
 float x = na
 if not na(x)
     y = x + 1
 z = x + 2
 plot(z)
-""")
+"""
+    )
     narrowed = [
         scope.non_na_symbols
         for scope in result.semantic_model.scopes

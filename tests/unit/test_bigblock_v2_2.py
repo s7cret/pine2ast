@@ -13,42 +13,52 @@ def _codes(code: str) -> list[str]:
 
 
 def test_array_literal_generic_assignment_rejects_wrong_element_type():
-    codes = _codes("""//@version=6
+    codes = _codes(
+        """//@version=6
 indicator("x")
 array<float> values = array.from("bad")
-""")
+"""
+    )
     assert "P2A1801" in codes
 
 
 def test_array_push_validates_element_type_function_and_method_forms():
-    function_codes = _codes("""//@version=6
+    function_codes = _codes(
+        """//@version=6
 indicator("x")
 array<float> values = array.from(1.0)
 array.push(values, "bad")
-""")
-    method_codes = _codes("""//@version=6
+"""
+    )
+    method_codes = _codes(
+        """//@version=6
 indicator("x")
 array<float> values = array.from(1.0)
 values.push("bad")
-""")
+"""
+    )
     assert "P2A1805" in function_codes
     assert "P2A1805" in method_codes
 
 
 def test_map_put_validates_key_and_value_types():
-    codes = _codes("""//@version=6
+    codes = _codes(
+        """//@version=6
 indicator("x")
 map<string,float> values = map.new<string,float>()
 map.put(values, 1, "bad")
-""")
+"""
+    )
     assert codes.count("P2A1805") == 2
 
 
 def test_generic_collection_constructor_validates_initial_value():
-    codes = _codes("""//@version=6
+    codes = _codes(
+        """//@version=6
 indicator("x")
 array<float> values = array.new<float>(1, "bad")
-""")
+"""
+    )
     assert "P2A1805" in codes
 
 
