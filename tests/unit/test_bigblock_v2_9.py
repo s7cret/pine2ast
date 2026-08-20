@@ -4,15 +4,13 @@ from pine2ast.diagnostics import Severity
 
 
 def test_malformed_for_in_arity_diagnostic_is_deduplicated():
-    result = parse_code(
-        """//@version=6
+    result = parse_code("""//@version=6
 indicator("bad-for-in")
 values = array.from(1.0, 2.0)
 for [i, v, extra] in values
     x = v
 plot(close)
-"""
-    )
+""")
     p2a1902 = [d for d in result.diagnostics if d.code == codes.FOR_IN_TARGET_ARITY]
     assert len(p2a1902) == 1
     assert result.ast is not None
@@ -38,27 +36,23 @@ x = ta.future_unknown(close)
 
 
 def test_forward_numeric_branch_return_shape_allows_float_assignment():
-    result = parse_code(
-        """//@version=6
+    result = parse_code("""//@version=6
 indicator("return-shape")
 float y = choose(true)
 choose(bool flag) => flag ? 1 : 2.5
 plot(y)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     assert result.semantic_model.symbols["choose"].type == "float"
 
 
 def test_forward_tuple_branch_return_shape_preserves_merged_element_types():
-    result = parse_code(
-        """//@version=6
+    result = parse_code("""//@version=6
 indicator("tuple-branch")
 [a, b] = pair(true)
 pair(bool flag) => flag ? [1, 2.0] : [3, 4.5]
 plot(b)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     assert result.semantic_model.symbols["a"].type == "int"
     assert result.semantic_model.symbols["b"].type == "float"

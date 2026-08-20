@@ -25,67 +25,51 @@ def _error_codes(source: str, *, strict_builtin_namespaces: bool = False) -> lis
 
 
 def test_equal_declares_and_coloneq_reassigns_existing_symbol():
-    assert (
-        _error_codes(
-            """//@version=6
+    assert _error_codes("""//@version=6
 indicator("T")
 x = 1
 x := 2
-"""
-        )
-        == []
-    )
-    assert "P2A1102" in _error_codes(
-        """//@version=6
+""") == []
+    assert "P2A1102" in _error_codes("""//@version=6
 indicator("T")
 x = 1
 x = 2
-"""
-    )
-    assert "P2A1103" in _error_codes(
-        """//@version=6
+""")
+    assert "P2A1103" in _error_codes("""//@version=6
 indicator("T")
 x := 1
-"""
-    )
+""")
 
 
 def test_const_reassignment_and_compound_target_type():
-    assert "P2A1104" in _error_codes(
-        """//@version=6
+    assert "P2A1104" in _error_codes("""//@version=6
 indicator("T")
 const float x = 1.0
 x := 2.0
-"""
-    )
-    assert "P2A1801" in _error_codes(
-        """//@version=6
+""")
+    assert "P2A1801" in _error_codes("""//@version=6
 indicator("T")
 string s = "a"
 s += "b"
-"""
-    )
+""")
 
 
 def test_bool_context_v6_and_na_bool_rules():
-    codes = _error_codes(
-        """//@version=6
+    codes = _error_codes("""//@version=6
 indicator("T")
 if close
     x = 1
 if na
     y = 2
 bool b = na
-"""
-    )
+""")
     assert "P2A1201" in codes
     assert "P2A1202" in codes
     assert "P2A1203" in codes
 
 
 def test_history_literal_repeated_integer_offset_and_local_warning():
-    diagnostics = _diagnostics(
-        """//@version=6
+    diagnostics = _diagnostics("""//@version=6
 indicator("T")
 x = 1[2]
 y = close[1][2]
@@ -93,8 +77,7 @@ z = close[1.5]
 if true
     local = close
     w = local[1]
-"""
-    )
+""")
     codes = [d.code for d in diagnostics]
     assert "P2A1301" in codes
     assert "P2A1302" in codes
@@ -103,8 +86,7 @@ if true
 
 
 def test_break_continue_and_nested_function_method_rejected_outside_allowed_scope():
-    codes = _error_codes(
-        """//@version=6
+    codes = _error_codes("""//@version=6
 indicator("T")
 type Foo
     int x
@@ -113,20 +95,17 @@ continue
 if true
     f() => 1
     method get(Foo this) => this.x
-"""
-    )
+""")
     assert codes.count("P2A1701") == 2
     assert codes.count("P2A1601") == 2
 
 
 def test_import_alias_conflict_and_unknown_builtin_strict_mode():
-    assert "P2A1102" in _error_codes(
-        """//@version=6
+    assert "P2A1102" in _error_codes("""//@version=6
 indicator("T")
 import user/lib/1 as math
 x = math.foo()
-"""
-    )
+""")
     strict_codes = _error_codes(
         """//@version=6
 indicator("T")

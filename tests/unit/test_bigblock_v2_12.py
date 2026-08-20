@@ -20,37 +20,32 @@ def error_codes(src: str):
 
 
 def test_v212_nested_and_records_all_stable_non_na_facts():
-    result, _ = diagnostics(
-        """//@version=6
+    result, _ = diagnostics("""//@version=6
 indicator("nested and")
 float x = na
 float y = na
 if not na(x) and (not na(y) and (x > 0 and y > 0))
     z = x + y
 plot(close)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     assert any({"x", "y"}.issubset(paths) for paths in result.semantic_model.non_na_paths.values())
 
 
 def test_v212_or_guard_does_not_record_unsound_non_na_fact():
-    result, _ = diagnostics(
-        """//@version=6
+    result, _ = diagnostics("""//@version=6
 indicator("or no narrowing")
 float x = na
 if not na(x) or close > open
     z = close
 plot(close)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     assert not any("x" in paths for paths in result.semantic_model.non_na_paths.values())
 
 
 def test_v212_else_if_narrowing_is_branch_local_only():
-    result, _ = diagnostics(
-        """//@version=6
+    result, _ = diagnostics("""//@version=6
 indicator("branch local")
 float x = na
 float y = na
@@ -61,8 +56,7 @@ else if not na(y)
 else
     c = close
 plot(close)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     path_sets = list(result.semantic_model.non_na_paths.values())
     assert any(paths == {"x"} for paths in path_sets)
@@ -71,14 +65,12 @@ plot(close)
 
 
 def test_v212_unstable_na_guard_emits_info_not_error():
-    result, diags = diagnostics(
-        """//@version=6
+    result, diags = diagnostics("""//@version=6
 indicator("unstable na")
 if not na(close + open)
     z = close
 plot(close)
-"""
-    )
+""")
     assert result.ok, [d.to_dict() for d in result.diagnostics]
     assert any(d.code == codes.UNSTABLE_NA_NARROWING and d.severity is Severity.INFO for d in diags)
 
@@ -116,12 +108,10 @@ plot(remote)
 
 
 def test_v212_strategy_when_is_still_removed_after_metadata_expansion():
-    assert codes.STRATEGY_WHEN_REMOVED in error_codes(
-        """//@version=6
+    assert codes.STRATEGY_WHEN_REMOVED in error_codes("""//@version=6
 strategy("when removed")
 strategy.order("L", strategy.long, when = close > open)
-"""
-    )
+""")
 
 
 def test_v212_input_metadata_accepts_ui_options_and_typed_options():

@@ -67,14 +67,12 @@ plot(ma)
 
 
 def test_semantic_report_groups_user_symbols_without_builtins():
-    res = parse_code(
-        """//@version=6
+    res = parse_code("""//@version=6
 indicator("semantic")
 f(float x) => x + 1
 v = f(close)
 plot(v)
-"""
-    )
+""")
     report = semantic_report(res.semantic_model).to_dict()
     assert report["by_kind"]["FUNCTION"] >= 1
     assert report["by_kind"]["VARIABLE"] >= 1
