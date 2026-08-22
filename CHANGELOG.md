@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0rc3
+
+- Emits immutable catalog-valid frontend, AST, and support-profile artifacts.
+- Binds exact producer provenance, direct capabilities, inputs, and blocking diagnostics.
+
 ## 4.0.2
 
 - Refreshed package, release-manifest, semantic-snapshot, and generated producer metadata for the coordinated OpenPine 4.0.2 stack.

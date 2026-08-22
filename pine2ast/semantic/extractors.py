@@ -27,6 +27,7 @@ class InputParameter:
     maxval: object | None
     step: object | None
     options: list[object] | None
+    group: str | None
     span: SourceSpan
 
 
@@ -101,6 +102,14 @@ def extract_inputs(program: Program, semantic=None) -> list[InputParameter]:
                         maxval=_literal_value(maxval_arg) if maxval_arg else None,
                         step=_literal_value(step_arg) if step_arg else None,
                         options=_literal_sequence(_named(node.arguments, "options")),
+                        group=(
+                            str(group_value)
+                            if (
+                                (group_arg := _named(node.arguments, "group")) is not None
+                                and (group_value := _literal_value(group_arg)) is not None
+                            )
+                            else None
+                        ),
                         span=node.span,
                     )
                 )

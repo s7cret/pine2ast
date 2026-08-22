@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Optional
 
@@ -54,6 +54,12 @@ class ParseOptions:
     loop_max_iterations: int = security.DEFAULT_LOOP_MAX_ITERATIONS
     strict_builtin_namespaces: bool = False
     runtime_contract_profile: str | None = None
+    # Catalog semantic profile attached to the production frontend artifact.
+    # ``None`` resolves to the coordinated 5.x default (``strict_5x``).
+    semantic_profile: str | None = None
+    # Exact producer identity supplied by the orchestrator for immutable
+    # frontend artifacts. Wheel installs cannot discover this from local Git.
+    producer_commit: str | None = None
     # P2.2: optional hook for shipping security-tier rejections
     # (P2A1106-1113, P2A9001-9003, P2A9201) to a SIEM / audit log.
     # The hook receives a SecurityAuditEvent per security diagnostic.
@@ -93,6 +99,8 @@ class ParseOptions:
             ),
             strict_builtin_namespaces=self.strict_builtin_namespaces,
             runtime_contract_profile=self.runtime_contract_profile,
+            semantic_profile=self.semantic_profile,
+            producer_commit=self.producer_commit,
             security_audit_hook=self.security_audit_hook,
         )
 
@@ -117,12 +125,16 @@ def runtime_contract_v1_4_options(**overrides: object) -> ParseOptions:
     return options
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class ParseResult:
     ast: Optional[Program]
     diagnostics: list[Diagnostic]
     tokens: Optional[list[Token]] = None
     semantic_model: Optional[SemanticModel] = None
+    ast_artifact: Optional[dict[str, object]] = None
+    frontend_artifact: Optional[dict[str, object]] = None
+    support_profile: Optional[dict[str, object]] = None
+    created_at_utc_ms: int | None = None
 
     @property
     def ok(self) -> bool:
@@ -321,9 +333,14 @@ class ParsePipeline:
         # Legacy behaviour: default v6 strict parsing treats //@version=5 as an
         # error. Native v5 mode (`ParseOptions(version=5)`) does not.
         if ast is not None and ast.version == 5 and options.strict_v6 and self.profile.version != 5:
-            for diag in diagnostics:
-                if diag.code == codes.UNSUPPORTED_VERSION:
-                    diag.severity = Severity.ERROR
+            diagnostics = [
+                (
+                    replace(diag, severity=Severity.ERROR)
+                    if diag.code == codes.UNSUPPORTED_VERSION
+                    else diag
+                )
+                for diag in diagnostics
+            ]
 
         if ast is not None:
             parser_gate_ok = not any(
@@ -393,7 +410,17 @@ class ParsePipeline:
 
 
 def parse_code(code: str | bytes, options: ParseOptions | None = None) -> ParseResult:
-    return ParsePipeline(options).parse(code)
+    pipeline = ParsePipeline(options)
+    result = pipeline.parse(code)
+    from pine2ast.frontend.artifact import attach_frontend_artifacts
+
+    return attach_frontend_artifacts(
+        result,
+        source=code,
+        options=pipeline.options,
+        source_path=pipeline.options.source_name,
+        semantic_profile=pipeline.options.semantic_profile,
+    )
 
 
 def parse_file(path: str, options: ParseOptions | None = None) -> ParseResult:

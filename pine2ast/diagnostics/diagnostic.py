@@ -13,7 +13,7 @@ class Severity(str, Enum):
     INFO = "INFO"
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class Diagnostic:
     severity: Severity
     code: str

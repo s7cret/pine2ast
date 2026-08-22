@@ -16,10 +16,10 @@ from pine2ast.release import (
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_release_version_metadata_is_4_0_1():
+def test_release_version_metadata_is_5_0_0rc3():
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    assert __version__ == RELEASE_VERSION == "4.0.2"
-    assert pyproject["project"]["version"] == "4.0.2"
+    assert __version__ == RELEASE_VERSION == "5.0.0rc3"
+    assert pyproject["project"]["version"] == "5.0.0rc3"
 
 
 def test_docs_are_canonical_for_3_2():
@@ -30,7 +30,7 @@ def test_docs_are_canonical_for_3_2():
 
 def test_readme_top_level_description_is_release_focused():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "4.0.2" in readme
+    assert "5.0.0rc3" in readme
     assert "openpine.frontend.v2" in readme
     assert "not a TradingView runtime" in readme
     assert "docs/STAGE" not in readme
@@ -100,15 +100,15 @@ def test_packaged_release_manifest_has_no_local_paths():
     manifest_path = ROOT / "pine2ast" / "compatibility" / "release_4_0_manifest.json"
     text = manifest_path.read_text(encoding="utf-8")
     payload = json.loads(text)
-    assert payload["package_version"] == "4.0.2"
+    assert payload["package_version"] == "5.0.0rc3"
     version_check = next(
         check for check in payload["checks"] if check["name"] == "version_metadata"
     )
     assert version_check["details"] == {
-        "package": "4.0.2",
-        "pyproject": "4.0.2",
-        "uv_lock": "4.0.2",
-        "expected": "4.0.2",
+        "package": "5.0.0rc3",
+        "pyproject": "5.0.0rc3",
+        "uv_lock": "5.0.0rc3",
+        "expected": "5.0.0rc3",
     }
     assert payload["compatibility"]["scope"] == "frontend_only"
     assert payload["compatibility"]["full_pipeline_parity_claimed"] is False

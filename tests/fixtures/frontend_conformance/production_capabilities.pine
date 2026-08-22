@@ -1,0 +1,6 @@
+//@version=6
+strategy("Production frontend artifact", calc_on_order_fills=true)
+length = input.int(14, "Length", minval=1, maxval=100, step=1, options=[1, 14, 50], group="Core")
+htf = request.security(syminfo.tickerid, "1D", close)
+float position = strategy.position_size
+plot(htf)

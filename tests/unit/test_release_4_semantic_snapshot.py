@@ -18,7 +18,7 @@ plot(basis)
     payload = build_semantic_snapshot_payload(result, source_path="snapshot.pine")
 
     assert payload["contract"] == SEMANTIC_SNAPSHOT_CONTRACT
-    assert payload["producer"]["version"] == "4.0.2"
+    assert payload["producer"]["version"] == "5.0.0rc3"
     assert payload["profile"]["version"] == 6
     assert payload["counts"]["symbols"] > 0
     assert payload["counts"]["node_facts"] > 0

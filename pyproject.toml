@@ -1,17 +1,17 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "4.0.2"
+version = "5.0.0rc3"
 description = "Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and metadata contracts"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 authors = [{name = "Interpipe Solutions"}]
 dependencies = [
-  "openpine-contracts @ git+https://github.com/s7cret/openpine-contracts.git@af9ecbc455e9af83cdc609f6b6ff85c40fb6c8bb",
+  "openpine-contracts==5.0.0rc3",
 ]
 
 [project.urls]
