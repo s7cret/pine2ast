@@ -14,11 +14,19 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: s7cret/openpine-contracts
+          ref: 91c405e759206b542d22df242ef55ac49b1f0bb4
+          path: openpine-contracts
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dev dependencies
-        run: python -m pip install -U pip && python -m pip install -e .[dev]
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e ./openpine-contracts
+          python -m pip install -e .[dev]
       - name: Ruff lint
         run: python -m ruff check .
       - name: Black format check
@@ -59,11 +67,19 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: s7cret/openpine-contracts
+          ref: 91c405e759206b542d22df242ef55ac49b1f0bb4
+          path: openpine-contracts
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install dev dependencies
-        run: python -m pip install -U pip && python -m pip install -e .[dev]
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e ./openpine-contracts
+          python -m pip install -e .[dev]
       - name: Latency/memory regression gate
         id: gate
         env:
