@@ -44,17 +44,17 @@ def _feature_map(result: Any) -> dict[str, dict[str, Any]]:
     return {row["feature_id"]: row for row in result.support_profile["features"]}
 
 
-def test_candidate_metadata_is_exact_rc3_and_has_no_vcs_dependency() -> None:
+def test_candidate_metadata_is_exact_rc4_and_has_no_vcs_dependency() -> None:
     pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     pyproject = tomllib.loads(pyproject_text)
 
-    assert pyproject["project"]["version"] == "5.0.0rc3"
-    assert pyproject["project"]["dependencies"] == ["openpine-contracts==5.0.0rc3"]
+    assert pyproject["project"]["version"] == "5.0.0rc4"
+    assert pyproject["project"]["dependencies"] == ["openpine-contracts==5.0.0rc4"]
     assert "git+" not in pyproject_text
 
     from pine2ast import __version__
 
-    assert __version__ == "5.0.0rc3"
+    assert __version__ == "5.0.0rc4"
 
 
 def test_canonical_parse_returns_ast_artifact_and_support_as_one_immutable_result() -> None:
@@ -93,7 +93,7 @@ def test_artifacts_have_exact_provenance_and_catalog_semver() -> None:
 
     for payload in (result.frontend_artifact, result.support_profile):
         assert payload["producer"] == "pine2ast"
-        assert payload["producer_version"] == "5.0.0-rc.3"
+        assert payload["producer_version"] == "5.0.0-rc.4"
         assert PRODUCER_COMMIT_RE.fullmatch(payload["producer_commit"])
         assert payload["producer_commit"] != "unknown"
 
@@ -149,7 +149,11 @@ def test_support_profile_is_complete_and_request_usage_is_capability_bound() -> 
         assert SUPPORT_AXES.issubset(feature)
 
     artifact = result.frontend_artifact
-    assert artifact["request_usage"] == ["mtf_requested_series"]
+    assert artifact["request_usage"] == [
+        "mtf_requested_series",
+        "chart_series_identity",
+        "requested_series_identity",
+    ]
     assert set(artifact["request_usage"]).issubset(features)
     assert artifact["strategy_settings"]["calc_on_order_fills"] == {
         "enabled": True,

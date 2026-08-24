@@ -3,12 +3,12 @@
   "contract": "pine2ast.inspect.optimizer.v1",
   "producer": {
     "name": "pine2ast",
-    "version": "5.0.0rc3",
+    "version": "5.0.0rc4",
     "contract": "pine2ast.inspect.optimizer.v1"
   },
   "tool": {
     "name": "pine2ast",
-    "version": "5.0.0rc3"
+    "version": "5.0.0rc4"
   },
   "source": {
     "path": "tests/fixtures/optimizer_contract_v2_20/request_security_tuple.pine",

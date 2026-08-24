@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0rc4
+
+- Emits exact AST-derived execution-setting, instrument-rule, chart/request identity, and per-order/risk capability requirements.
+- Pins `openpine-contracts==5.0.0rc4` and both CI Contracts checkouts to `bb1a56181e37c6f0ff7a60366d9a550103fcb8df`.
+
 ## 5.0.0rc3
 
 - Emits immutable catalog-valid frontend, AST, and support-profile artifacts.

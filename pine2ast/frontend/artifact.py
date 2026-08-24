@@ -17,6 +17,7 @@ from openpine_contracts.hashing import CONTENT_HASH_ALG, SERIALIZER_ID
 
 from pine2ast._version import __version__
 from pine2ast.api import ParseOptions, ParseResult
+from pine2ast.ast.nodes import CallExpr, Literal, MemberAccessExpr
 from pine2ast.ast.visitors import walk
 from pine2ast.frontend.ids import (
     AST_CATALOG_CONTRACT,
@@ -42,6 +43,37 @@ _SUPPORT_AXES = (
     "live_safe",
     "visual",
     "numeric_parity",
+)
+
+_EXECUTION_SETTING_CAPABILITIES = (
+    "calc_on_order_fills",
+    "calc_on_every_tick",
+    "process_orders_on_close",
+)
+_INSTRUMENT_FEATURE_PREDICATES = {
+    "syminfo.tickerid": "canonical_instrument_identity",
+    "syminfo.mintick": "canonical_instrument_rules",
+    "syminfo.pointvalue": "canonical_instrument_rules",
+}
+_SERIES_IDENTITY_FEATURE_PREDICATES = {
+    "chart_series_identity": "canonical_chart_series_identity",
+    "requested_series_identity": "canonical_requested_series_identity",
+}
+_ORDER_AND_RISK_FEATURES = frozenset(
+    {
+        "strategy.entry",
+        "strategy.order",
+        "strategy.exit",
+        "strategy.risk.max_cons_loss_days",
+    }
+)
+_DYNAMIC_FEATURE_IDS = frozenset(
+    {
+        *_EXECUTION_SETTING_CAPABILITIES,
+        *_INSTRUMENT_FEATURE_PREDICATES,
+        *_SERIES_IDENTITY_FEATURE_PREDICATES,
+        *_ORDER_AND_RISK_FEATURES,
+    }
 )
 
 
@@ -137,8 +169,11 @@ def _feature(
     return row
 
 
-def _support_features(blocking_diagnostics: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    return [
+def _support_features(
+    blocking_diagnostics: Sequence[Mapping[str, Any]],
+    required_feature_ids: Sequence[str] = (),
+) -> list[dict[str, Any]]:
+    features = [
         _feature(
             "broker_projection_reads",
             capability_predicate="interactive_broker_projection",
@@ -171,6 +206,15 @@ def _support_features(blocking_diagnostics: Sequence[Mapping[str, Any]]) -> list
             ),
         ),
     ]
+    existing = {row["feature_id"] for row in features}
+    for feature_id in sorted(set(required_feature_ids) - existing):
+        if feature_id not in _DYNAMIC_FEATURE_IDS:
+            raise ValueError(f"unknown frontend capability feature: {feature_id}")
+        predicate = _INSTRUMENT_FEATURE_PREDICATES.get(
+            feature_id, _SERIES_IDENTITY_FEATURE_PREDICATES.get(feature_id)
+        )
+        features.append(_feature(feature_id, capability_predicate=predicate))
+    return features
 
 
 def build_support_profile_v2(
@@ -248,25 +292,69 @@ def _capability_usage(
 ) -> tuple[list[str], list[str], list[str], dict[str, Any]]:
     if result.ast is None:
         return [], [], [], {}
-    request_names = {callee_name(call.callee) for call in extract_request_calls(result.ast)}
-    request_usage = ["mtf_requested_series"] if "request.security" in request_names else []
+    nodes = list(walk(result.ast))
+    request_calls = extract_request_calls(result.ast)
+    request_names = {callee_name(call.callee) for call in request_calls}
+    requested_context_nodes: set[int] = set()
+    for request_call in request_calls:
+        if callee_name(request_call.callee) != "request.security":
+            continue
+        expression = next(
+            (
+                argument.value
+                for argument in request_call.arguments
+                if argument.name == "expression"
+            ),
+            None,
+        )
+        if expression is None:
+            positional = [
+                argument.value for argument in request_call.arguments if argument.name is None
+            ]
+            expression = positional[2] if len(positional) > 2 else None
+        if expression is not None:
+            requested_context_nodes.update(id(node) for node in walk(expression))
+
+    member_paths = {
+        id(node): callee_name(node) for node in nodes if isinstance(node, MemberAccessExpr)
+    }
+    request_usage: list[str] = []
+    if "request.security" in request_names:
+        request_usage.extend(("mtf_requested_series", "requested_series_identity"))
+    if any(
+        path == "syminfo.tickerid" and node_id not in requested_context_nodes
+        for node_id, path in member_paths.items()
+    ):
+        request_usage.insert(1 if request_usage else 0, "chart_series_identity")
     visual_requirements = ["visuals"] if extract_plots(result.ast) else []
-    referenced_names = {name for node in walk(result.ast) if (name := callee_name(node))}
-    referenced_builtins = (
-        ["broker_projection_reads"]
-        if any(name.startswith("strategy.position") for name in referenced_names)
-        else []
-    )
+    referenced_builtins = {
+        path for path in member_paths.values() if path in _INSTRUMENT_FEATURE_PREDICATES
+    }
+    call_names = {callee_name(node.callee) for node in nodes if isinstance(node, CallExpr)}
+    referenced_builtins.update(call_names & _ORDER_AND_RISK_FEATURES)
+    if any(path.startswith("strategy.position") for path in member_paths.values()):
+        referenced_builtins.add("broker_projection_reads")
     settings: dict[str, Any] = {}
     declaration = getattr(result.ast, "declaration", None)
     call = getattr(declaration, "call", None)
     for argument in getattr(call, "arguments", ()):
-        if argument.name == "calc_on_order_fills":
-            settings["calc_on_order_fills"] = {
-                "enabled": bool(getattr(argument.value, "value", False)),
-                "capability": "calc_on_order_fills",
+        if (
+            argument.name in _EXECUTION_SETTING_CAPABILITIES
+            and isinstance(argument.value, Literal)
+            and argument.value.literal_type == "bool"
+        ):
+            settings[argument.name] = {
+                "enabled": argument.value.value is True,
+                "capability": argument.name,
             }
-    return referenced_builtins, request_usage, visual_requirements, settings
+    return sorted(referenced_builtins), request_usage, visual_requirements, settings
+
+
+def _result_support_features(result: ParseResult) -> list[dict[str, Any]]:
+    referenced, requests, visuals, settings = _capability_usage(result)
+    required = set(referenced) | set(requests) | set(visuals)
+    required.update(str(setting["capability"]) for setting in settings.values())
+    return _support_features(_blocking_diagnostics(result), sorted(required))
 
 
 def _frontend_payload(
@@ -323,11 +411,10 @@ def build_frontend_v2_payload(
 ) -> dict[str, Any]:
     created_at = _now_ms()
     commit = _producer_commit(producer_commit)
-    blocking = _blocking_diagnostics(result)
     support = build_support_profile_v2(
         created_at_utc_ms=created_at,
         producer_commit=commit,
-        features=_support_features(blocking),
+        features=_result_support_features(result),
     )
     return _frontend_payload(
         result,
@@ -400,11 +487,10 @@ def attach_frontend_artifacts(
 
     created_at = _now_ms()
     commit = _producer_commit(options.producer_commit)
-    blocking = _blocking_diagnostics(result)
     support = build_support_profile_v2(
         created_at_utc_ms=created_at,
         producer_commit=commit,
-        features=_support_features(blocking),
+        features=_result_support_features(result),
     )
     frontend = _frontend_payload(
         result,

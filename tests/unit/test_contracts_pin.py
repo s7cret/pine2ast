@@ -9,7 +9,8 @@ from openpine_contracts import get_schema, list_schema_ids, validate_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / "pine2ast"
-CONTRACTS_VERSION = "5.0.0rc3"
+CONTRACTS_VERSION = "5.0.0rc4"
+CONTRACTS_COMMIT = "bb1a56181e37c6f0ff7a60366d9a550103fcb8df"
 FRONTEND_V2 = "openpine.frontend.v2"
 GENERATED_ARTIFACT_V2 = "openpine.generated_artifact.v2"
 INTENT_V2 = "openpine.intent.v2"
@@ -49,12 +50,18 @@ def test_contracts_pin_and_catalog() -> None:
     assert INTENT_V2 in ids
 
 
-def test_package_identity_is_5_0_0rc3() -> None:
+def test_ci_contracts_checkouts_use_exact_rc4_commit() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert workflow.count(f"ref: {CONTRACTS_COMMIT}") == 2
+    assert "91c405e759206b542d22df242ef55ac49b1f0bb4" not in workflow
+
+
+def test_package_identity_is_5_0_0rc4() -> None:
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     from pine2ast._version import __version__
 
-    assert pyproject["project"]["version"] == "5.0.0rc3"
-    assert __version__ == "5.0.0rc3"
+    assert pyproject["project"]["version"] == "5.0.0rc4"
+    assert __version__ == "5.0.0rc4"
 
 
 def test_no_local_openpine_contracts_sot_copy() -> None:
@@ -112,7 +119,7 @@ def test_release_manifest_pins_catalog_frontend_v2() -> None:
         (PACKAGE / "compatibility" / "release_4_0_manifest.json").read_text(encoding="utf-8")
     )
     assert manifest["contracts"]["openpine"] == FRONTEND_V2
-    assert manifest["package_version"] == "5.0.0rc3"
+    assert manifest["package_version"] == "5.0.0rc4"
 
 
 def test_frontend_v2_artifact_validates_against_catalog() -> None:
