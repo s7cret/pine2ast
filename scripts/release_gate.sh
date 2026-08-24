@@ -29,8 +29,8 @@ run_log() {
   fi
 }
 
-run_log RUFF_FINAL.log "$PYTHON" -m ruff check .
-run_log BLACK_FINAL.log "$PYTHON" -m black --check .
+run_log RUFF_FINAL.log "$PYTHON" -m ruff check pine2ast tests tools scripts
+run_log BLACK_FINAL.log "$PYTHON" -m black --check pine2ast tests tools scripts
 run_log MYPY_FINAL.log "$PYTHON" -m mypy pine2ast
 run_log SMOKE_IMPORT_PARSE_FINAL.log bash scripts/smoke_import_parse.sh
 run_log WHEEL_SMOKE_FINAL.log bash scripts/wheel_smoke.sh

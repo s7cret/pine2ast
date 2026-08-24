@@ -35,6 +35,16 @@ def test_quality_gate_requires_dev_tools_by_default() -> None:
     )
 
 
+def test_static_checks_are_scoped_to_pine2ast_owned_paths() -> None:
+    assert run_quality_gate.STATIC_CHECK_PATHS == ("pine2ast", "tests", "tools", "scripts")
+    workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")
+    release_gate = Path("scripts/release_gate.sh").read_text(encoding="utf-8")
+    assert "ruff check ." not in workflow
+    assert "black --check ." not in workflow
+    assert "ruff check ." not in release_gate
+    assert "black --check ." not in release_gate
+
+
 def test_quality_gate_default_artifacts_do_not_write_repo_root() -> None:
     parser_defaults = [
         run_quality_gate.artifact_path(".release_gate_reports/QUALITY_GATE_LOCAL_v4_0_1.json"),

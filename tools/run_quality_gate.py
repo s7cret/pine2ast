@@ -18,6 +18,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARTIFACT_DIR = ".release_gate_reports"
+STATIC_CHECK_PATHS = ("pine2ast", "tests", "tools", "scripts")
 
 
 def has_module(name: str) -> bool:
@@ -174,8 +175,8 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     for module, command in [
-        ("ruff", [py, "-m", "ruff", "check", "."]),
-        ("black", [py, "-m", "black", "--check", "."]),
+        ("ruff", [py, "-m", "ruff", "check", *STATIC_CHECK_PATHS]),
+        ("black", [py, "-m", "black", "--check", *STATIC_CHECK_PATHS]),
         ("mypy", [py, "-m", "mypy", "pine2ast"]),
     ]:
         if has_module(module):

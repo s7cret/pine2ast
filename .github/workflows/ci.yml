@@ -28,9 +28,9 @@ jobs:
           python -m pip install -e ./openpine-contracts
           python -m pip install -e .[dev]
       - name: Ruff lint
-        run: python -m ruff check .
+        run: python -m ruff check pine2ast tests tools scripts
       - name: Black format check
-        run: python -m black --check .
+        run: python -m black --check pine2ast tests tools scripts
       - name: Tests with coverage
         run: python -m pytest tests/unit tests/integration --cov=pine2ast --cov-report=term-missing --cov-report=xml
       - name: Mypy
