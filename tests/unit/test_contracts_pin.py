@@ -56,6 +56,13 @@ def test_ci_contracts_checkouts_use_exact_rc4_commit() -> None:
     assert "91c405e759206b542d22df242ef55ac49b1f0bb4" not in workflow
 
 
+def test_ci_deduplicates_feature_branch_push_and_pull_request_runs() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "push:\n    branches: [main]" in workflow
+    assert "pull_request:\n    branches: [main]" in workflow
+    assert "github.event.pull_request.number || github.ref" in workflow
+
+
 def test_package_identity_is_5_0_0rc4() -> None:
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     from pine2ast._version import __version__
