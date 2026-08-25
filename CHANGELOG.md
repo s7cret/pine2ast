@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0rc5
+
+- Advances frontend package and producer metadata to the coordinated RC.5 identity.
+- Pins the RC.5 Contracts catalog without changing parser or semantic behavior.
+
 ## 5.0.0rc4
 
 - Emits exact AST-derived execution-setting, instrument-rule, chart/request identity, and per-order/risk capability requirements.

@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "5.0.0rc4"
+version = "5.0.0rc5"
 description = "Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and metadata contracts"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{name = "Interpipe Solutions"}]
 dependencies = [
-  "openpine-contracts==5.0.0rc4",
+  "openpine-contracts==5.0.0rc5",
 ]
 
 [project.urls]

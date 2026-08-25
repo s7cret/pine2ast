@@ -48,13 +48,13 @@ def test_candidate_metadata_is_exact_rc4_and_has_no_vcs_dependency() -> None:
     pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     pyproject = tomllib.loads(pyproject_text)
 
-    assert pyproject["project"]["version"] == "5.0.0rc4"
-    assert pyproject["project"]["dependencies"] == ["openpine-contracts==5.0.0rc4"]
+    assert pyproject["project"]["version"] == "5.0.0rc5"
+    assert pyproject["project"]["dependencies"] == ["openpine-contracts==5.0.0rc5"]
     assert "git+" not in pyproject_text
 
     from pine2ast import __version__
 
-    assert __version__ == "5.0.0rc4"
+    assert __version__ == "5.0.0rc5"
 
 
 def test_canonical_parse_returns_ast_artifact_and_support_as_one_immutable_result() -> None:
@@ -93,7 +93,7 @@ def test_artifacts_have_exact_provenance_and_catalog_semver() -> None:
 
     for payload in (result.frontend_artifact, result.support_profile):
         assert payload["producer"] == "pine2ast"
-        assert payload["producer_version"] == "5.0.0-rc.4"
+        assert payload["producer_version"] == "5.0.0-rc.5"
         assert PRODUCER_COMMIT_RE.fullmatch(payload["producer_commit"])
         assert payload["producer_commit"] != "unknown"
 
