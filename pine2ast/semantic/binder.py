@@ -132,10 +132,15 @@ class SemanticFactBuilder:
             artifact=artifact,
         )
 
+    def _declaration_key(self, node: ASTNode) -> str:
+        if isinstance(node, MethodDeclaration) and node.receiver_type is not None:
+            return f"{type_ref_name(node.receiver_type)}.{node.name}"
+        return getattr(node, "name", "")
+
     def _index_declarations(self, program: Program) -> None:
         for node in self.index.nodes if self.index else ():
             if isinstance(node, (FunctionDeclaration, MethodDeclaration, TypeDeclaration)):
-                self._declarations[node.name] = node
+                self._declarations[self._declaration_key(node)] = node
 
     def _assign_scopes(self, node: ASTNode, scope_id: str) -> None:
         assert self.index is not None
@@ -333,7 +338,13 @@ class SemanticFactBuilder:
         declaration = self._declarations.get(raw_name)
         call_form = "USER_FUNCTION"
         if declaration is None and isinstance(call.callee, MemberAccessExpr):
-            declaration = self._declarations.get(call.callee.member)
+            receiver_base, _ = generic_type_parts(receiver_type or "")
+            method_key = (
+                f"{receiver_base}.{call.callee.member}" if receiver_base else ""
+            )
+            declaration = self._declarations.get(method_key) or self._declarations.get(
+                call.callee.member
+            )
             if isinstance(declaration, MethodDeclaration):
                 call_form = "USER_METHOD"
                 raw_name = declaration.name

@@ -98,40 +98,6 @@ def build_frontend_contract_payload(
     }
 
 
-def build_openpine_contract_payload(
-    result: ParseResult,
-    *,
-    source_path: str | Path = "<memory>",
-    source_name: str | None = None,
-    profile: PineVersionContext | None = None,
-) -> dict[str, Any]:
-    """Compatibility spelling for the current Pine2AST frontend envelope."""
-
-    return build_frontend_contract_payload(
-        result,
-        source_path=source_path,
-        source_name=source_name,
-        profile=profile,
-    )
-
-
-def build_frontend_v2_payload(
-    result: ParseResult,
-    *,
-    source_path: str | Path = "<memory>",
-    source_name: str | None = None,
-    profile: PineVersionContext | None = None,
-) -> dict[str, Any]:
-    """Retained v2 API name mapped to the versioned current envelope contract."""
-
-    return build_frontend_contract_payload(
-        result,
-        source_path=source_path,
-        source_name=source_name,
-        profile=profile,
-    )
-
-
 def frontend_contract_file_payload(
     path: str | Path,
     options: ParseOptions | None = None,
@@ -142,19 +108,7 @@ def frontend_contract_file_payload(
     )
 
 
-def openpine_contract_file_payload(
-    path: str | Path,
-    options: ParseOptions | None = None,
-) -> dict[str, Any]:
-    """Compatibility spelling for :func:`frontend_contract_file_payload`."""
-
-    return frontend_contract_file_payload(path, options)
-
-
 __all__ = [
     "build_frontend_contract_payload",
-    "build_frontend_v2_payload",
-    "build_openpine_contract_payload",
     "frontend_contract_file_payload",
-    "openpine_contract_file_payload",
 ]

@@ -138,6 +138,7 @@ class SemanticFact:
         return {
             "node_id": self.node_id,
             "kind": self.kind,
+            "node_kind": self.kind,
             "classification": self.classification,
             "span": dict(self.span),
             "scope_id": self.scope_id,

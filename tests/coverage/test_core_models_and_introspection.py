@@ -326,17 +326,21 @@ def test_iter_ast_nodes_artifact_payload_and_version_pack_integrity(
         introspection.version_pack(6)
 
 
-def test_parse_source_compatibility_fallbacks(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_parse_source_uses_native_rc6_options(monkeypatch: pytest.MonkeyPatch) -> None:
     import pine2ast
 
     calls: list[tuple[str, object | None]] = []
 
-    def old_parse(source: str, options: object | None = None) -> object:
+    def native_parse(source: str, options: object | None = None) -> object:
         calls.append((source, options))
-        if options is not None:
-            raise TypeError("old API")
         return {"source": source}
 
-    monkeypatch.setattr(pine2ast, "parse_code", old_parse)
-    assert introspection.parse_source("x", source_name="legacy") == {"source": "x"}
-    assert len(calls) == 2
+    monkeypatch.setattr(pine2ast, "parse_code", native_parse)
+    assert introspection.parse_source("x", source_name="native", producer_commit="a" * 40) == {
+        "source": "x"
+    }
+    assert len(calls) == 1
+    options = calls[0][1]
+    assert options is not None
+    assert options.source_name == "native"
+    assert options.producer_commit == "a" * 40

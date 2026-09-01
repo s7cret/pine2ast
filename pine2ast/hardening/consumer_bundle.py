@@ -135,6 +135,7 @@ def build_consumer_bundle(
         source,
         source_name=source_name,
         created_at_utc_ms=created_at_utc_ms,
+        producer_commit=producer_commit,
     )
     diagnostics = diagnostics_payload(result)
     production_blockers = _production_diagnostic_codes(diagnostics)
@@ -166,7 +167,7 @@ def build_consumer_bundle(
         "node_index_hash": content_hash(index),
     }
     optional_payloads: dict[str, Any] = {}
-    for name in ("ast_artifact", "frontend_artifact", "support_profile"):
+    for name in ("source_manifest", "ast_artifact", "frontend_artifact", "support_profile"):
         payload = artifact_payload(result, name)
         if payload is not None:
             optional_payloads[name] = payload
@@ -250,6 +251,9 @@ def verify_consumer_bundle(
         )
         if bundle.get("release_axes") != _release_axes(facts, diagnostic_rows):
             raise ConsumerBundleError("consumer bundle release axes mismatch")
+        for axis_name, axis in bundle["release_axes"].items():
+            if isinstance(axis, Mapping) and axis.get("status") == "FAIL":
+                raise ConsumerBundleError(f"release axis {axis_name} failed")
         validate_version_context(context)
         validate_ast_identity(ast, context)
         validate_semantic_facts(ast, facts, node_index=bundle.get("node_index"))
@@ -277,6 +281,62 @@ def verify_consumer_bundle(
             )
         if producer_commit != expected_producer_commit:
             raise ConsumerBundleError("producer commit mismatch")
+        facts_producer = facts.get("producer")
+        if facts_producer is not None:
+            if not isinstance(facts_producer, Mapping):
+                raise ConsumerBundleError("semantic facts producer mismatch")
+            if facts_producer.get("name") != producer.get("name"):
+                raise ConsumerBundleError("semantic facts producer mismatch")
+            if facts_producer.get("version") != producer.get("version"):
+                raise ConsumerBundleError("semantic facts producer mismatch")
+            if facts_producer.get("commit") != producer_commit:
+                raise ConsumerBundleError("semantic facts producer mismatch")
+        linked = bundle.get("linked_artifacts")
+        if not isinstance(linked, Mapping):
+            raise ConsumerBundleError("linked artifacts are missing")
+        required_linked = {"source_manifest", "ast_artifact", "frontend_artifact", "support_profile"}
+        if producer_commit is not None and set(linked) != required_linked:
+            raise ConsumerBundleError("linked artifact inventory mismatch")
+        for name, payload in linked.items():
+            if not isinstance(payload, Mapping):
+                raise ConsumerBundleError(f"linked artifact {name} is not an object")
+            payload_body = {key: deepcopy(value) for key, value in payload.items() if key != "content_hash"}
+            if payload.get("content_hash") != content_hash(payload_body):
+                raise ConsumerBundleError(f"linked artifact {name} content hash mismatch")
+            if artifacts.get(f"{name}_hash") not in {None, content_hash(payload)}:
+                raise ConsumerBundleError(f"linked artifact {name} envelope hash mismatch")
+            payload_producer = payload.get("producer")
+            if isinstance(payload_producer, Mapping):
+                if payload_producer.get("name") != producer.get("name"):
+                    raise ConsumerBundleError("linked artifact producer mismatch")
+                if payload_producer.get("version") != producer.get("version"):
+                    raise ConsumerBundleError("linked artifact producer mismatch")
+                if payload_producer.get("commit") != producer_commit:
+                    raise ConsumerBundleError("linked artifact producer mismatch")
+
+        if required_linked <= set(linked):
+            source_manifest = linked["source_manifest"]
+            ast_artifact = linked["ast_artifact"]
+            frontend_artifact = linked["frontend_artifact"]
+            support_profile = linked["support_profile"]
+            expected_refs = {
+                "source_manifest_ref": source_manifest["content_hash"],
+                "ast_ref": ast_artifact["content_hash"],
+                "semantic_facts_ref": facts.get("content_hash"),
+                "frontend_support_ref": support_profile["content_hash"],
+            }
+            linked_refs = {
+                "ast_artifact": {"source_manifest_ref"},
+                "support_profile": {"source_manifest_ref", "ast_ref", "semantic_facts_ref"},
+                "frontend_artifact": set(expected_refs),
+            }
+            for name, ref_names in linked_refs.items():
+                payload = linked[name]
+                for ref_name in ref_names:
+                    if payload.get(ref_name) != expected_refs[ref_name]:
+                        raise ConsumerBundleError("linked artifact reference mismatch")
+            if source_manifest.get("source_hash") != bundle["source"].get("source_hash"):
+                raise ConsumerBundleError("linked artifact reference mismatch")
         if source is not None:
             if bundle["source"].get("source_hash") != sha256_bytes(source.encode("utf-8")):
                 raise ConsumerBundleError("source hash mismatch")
@@ -290,6 +350,7 @@ def verify_consumer_bundle(
                 source,
                 source_name=str(source_name),
                 created_at_utc_ms=created_at_utc_ms,
+                producer_commit=producer_commit,
             )
             parsed_diagnostics = diagnostics_payload(parsed_source)
             if not result_ok(parsed_source) or _production_diagnostic_codes(parsed_diagnostics):
@@ -297,6 +358,9 @@ def verify_consumer_bundle(
             reparsed_ast = ast_payload(parsed_source)
             if content_hash(reparsed_ast) != content_hash(ast):
                 raise ConsumerBundleError("source and AST do not match")
+            reparsed_facts = semantic_facts_payload(parsed_source, reparsed_ast)
+            if content_hash(reparsed_facts) != content_hash(facts):
+                raise ConsumerBundleError("source and semantic facts do not match")
     except InvariantViolation as exc:
         raise ConsumerBundleError(str(exc)) from exc
 

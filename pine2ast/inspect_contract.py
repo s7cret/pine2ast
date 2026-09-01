@@ -150,9 +150,9 @@ def build_inspect_payload(
         ),
     }
     if include_openpine_contract:
-        from pine2ast.openpine_contract import build_openpine_contract_payload
+        from pine2ast.frontend import build_frontend_contract_payload
 
-        payload["openpine_contract"] = build_openpine_contract_payload(
+        payload["openpine_contract"] = build_frontend_contract_payload(
             result, source_path=source_path, source_name=source_name or path.name
         )
     if include_semantic_snapshot:

@@ -16,22 +16,16 @@ def parse_source(
     *,
     source_name: str = "<stage4>",
     created_at_utc_ms: int | None = None,
+    producer_commit: str | None = None,
 ) -> Any:
-    from pine2ast import parse_code
+    from pine2ast import ParseOptions, parse_code
 
-    try:
-        from pine2ast import ParseOptions
-
-        try:
-            options = ParseOptions(
-                source_name=source_name,
-                created_at_utc_ms=created_at_utc_ms,
-            )
-            return parse_code(source, options)
-        except TypeError:
-            return parse_code(source)
-    except ImportError:
-        return parse_code(source)
+    options = ParseOptions(
+        source_name=source_name,
+        created_at_utc_ms=created_at_utc_ms,
+        producer_commit=producer_commit,
+    )
+    return parse_code(source, options)
 
 
 def ast_payload(result: Any) -> dict[str, Any]:
@@ -127,6 +121,7 @@ def normalize_semantic_facts(value: dict[str, Any]) -> dict[str, Any]:
         isinstance(payload.get(k), list) for k in ("facts", "nodes", "node_facts")
     ):
         normalized = {**normalized, **payload}
+    canonical_schema = normalized.get("schema_id") == "pine.semantic_facts.v1"
     for key in ("facts", "nodes", "node_facts"):
         raw = normalized.get(key)
         if not isinstance(raw, list):
@@ -137,7 +132,8 @@ def normalize_semantic_facts(value: dict[str, Any]) -> dict[str, Any]:
                 continue
             row = dict(item)
             row.setdefault("node_id", row.get("id", f"n{index:08d}"))
-            row.setdefault("node_kind", row.get("kind", row.get("ast_kind", "Unknown")))
+            if not canonical_schema:
+                row.setdefault("node_kind", row.get("kind", row.get("ast_kind", "Unknown")))
             row.setdefault("span", row.get("source_span", row.get("location")))
             rows.append(row)
         normalized["facts"] = rows

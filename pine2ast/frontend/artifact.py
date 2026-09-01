@@ -84,7 +84,11 @@ def _source_manifest(
     return seal_hash(payload)
 
 
-def _semantic_artifact(result: ParseResult) -> dict[str, Any] | None:
+def _semantic_artifact(
+    result: ParseResult,
+    *,
+    producer: Mapping[str, Any],
+) -> dict[str, Any] | None:
     facts = getattr(result.semantic_model, "semantic_facts", None)
     artifact = getattr(facts, "artifact", None)
     if artifact is None:
@@ -95,7 +99,7 @@ def _semantic_artifact(result: ParseResult) -> dict[str, Any] | None:
         raise ValueError("semantic facts artifact has an unexpected schema_id")
     if not verify_hash(artifact):
         raise ValueError("semantic facts artifact content_hash is invalid")
-    return artifact
+    return seal_hash({**artifact, "producer": dict(producer)})
 
 
 def _ast_artifact(
@@ -208,7 +212,7 @@ def _build_artifacts(
         created_at=created_at,
         producer=producer,
     )
-    semantic_artifact = _semantic_artifact(result)
+    semantic_artifact = _semantic_artifact(result, producer=producer)
     support = _support_profile(
         result,
         semantic_artifact=semantic_artifact,

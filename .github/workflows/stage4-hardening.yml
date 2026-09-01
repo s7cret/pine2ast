@@ -18,9 +18,13 @@ jobs:
         with: {python-version: "${{ matrix.python }}"}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev]"
+      - run: python -m ruff check pine2ast tests tools
+      - run: python -m black --check pine2ast tests tools
+      - run: python -m mypy pine2ast
       - run: python tools/catalog/build_catalog.py --check
       - run: python tools/stage4_gate.py --fuzz-cases 2000 --performance-repeats 3 --json stage4-gate.json
-      - run: pytest -q tests/unit/test_stage4_hardening.py
+      - run: python -m pytest --cov=pine2ast --cov-report=term-missing -m "not performance"
+      - run: python -m pytest -m performance
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: "stage4-${{ matrix.python }}", path: stage4-gate.json}

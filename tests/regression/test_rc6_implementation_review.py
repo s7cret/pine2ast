@@ -127,7 +127,51 @@ def test_consumer_bundle_rejects_resealed_missing_call_argument_type_evidence(
         "verified": 0,
         "total": 1,
     }
-    with pytest.raises(ConsumerBundleError, match="S4_CALL_ARGUMENT_TYPE_EVIDENCE"):
+    with pytest.raises(ConsumerBundleError, match="release axis arguments_bound failed"):
+        verify_consumer_bundle(forged, source=_VALID_V6)
+
+
+@pytest.mark.parametrize(
+    "missing_field",
+    ["argument_node_id", "parameter_name", "parameter_index", "binding"],
+)
+def test_consumer_bundle_rejects_resealed_incomplete_argument_binding(
+    missing_field: str,
+) -> None:
+    forged = deepcopy(build_consumer_bundle(_VALID_V6))
+    forged["semantic_facts"]["calls"][0]["arguments"][0][missing_field] = None
+    _reseal_semantic_facts(forged)
+    forged["release_axes"] = _release_axes(forged["semantic_facts"], forged["diagnostics"])
+    _reseal_bundle(forged)
+
+    assert forged["release_axes"]["arguments_bound"]["status"] == "FAIL"
+    with pytest.raises(ConsumerBundleError, match="release axis arguments_bound failed"):
+        verify_consumer_bundle(forged, source=_VALID_V6)
+
+
+def test_consumer_bundle_rejects_resealed_failed_qualifier_axis() -> None:
+    forged = deepcopy(build_consumer_bundle(_VALID_V6))
+    argument = forged["semantic_facts"]["calls"][0]["arguments"][0]
+    argument["actual_qualifier"] = "series"
+    argument["max_qualifier"] = "simple"
+    _reseal_semantic_facts(forged)
+    forged["release_axes"] = _release_axes(forged["semantic_facts"], forged["diagnostics"])
+    _reseal_bundle(forged)
+
+    assert forged["release_axes"]["qualifier_enforced"]["status"] == "FAIL"
+    with pytest.raises(ConsumerBundleError, match="release axis qualifier_enforced failed"):
+        verify_consumer_bundle(forged, source=_VALID_V6)
+
+
+def test_consumer_bundle_rejects_resealed_forged_complete_argument_binding() -> None:
+    forged = deepcopy(build_consumer_bundle(_VALID_V6))
+    forged["semantic_facts"]["calls"][0]["arguments"][0]["parameter_name"] = "forged"
+    _reseal_semantic_facts(forged)
+    forged["release_axes"] = _release_axes(forged["semantic_facts"], forged["diagnostics"])
+    _reseal_bundle(forged)
+
+    assert forged["release_axes"]["arguments_bound"]["status"] == "PASS"
+    with pytest.raises(ConsumerBundleError, match="linked artifact reference mismatch"):
         verify_consumer_bundle(forged, source=_VALID_V6)
 
 
@@ -156,7 +200,7 @@ def test_consumer_bundle_rejects_source_ast_mismatch_even_when_resealed() -> Non
     forged["source"]["byte_length"] = len(different_source.encode("utf-8"))
     _reseal_bundle(forged)
 
-    with pytest.raises(ConsumerBundleError, match="source.*AST"):
+    with pytest.raises(ConsumerBundleError, match="linked artifact reference mismatch"):
         verify_consumer_bundle(forged, source=different_source)
 
 
@@ -207,6 +251,61 @@ def test_consumer_bundle_requires_trusted_producer_commit() -> None:
         verify_consumer_bundle(forged, source=_VALID_V6, expected_producer_commit=trusted_commit)
 
 
+def test_consumer_bundle_propagates_producer_identity_to_every_linked_artifact() -> None:
+    trusted_commit = "a" * 40
+    bundle = build_consumer_bundle(_VALID_V6, producer_commit=trusted_commit)
+    expected = {
+        "name": "pine2ast",
+        "version": bundle["producer"]["version"],
+        "commit": trusted_commit,
+        "source_state": "COMMIT_PINNED",
+    }
+
+    assert bundle["semantic_facts"]["producer"] == expected
+    assert bundle["linked_artifacts"]
+    assert all(
+        artifact["producer"] == expected for artifact in bundle["linked_artifacts"].values()
+    )
+    verify_consumer_bundle(
+        bundle,
+        source=_VALID_V6,
+        expected_producer_commit=trusted_commit,
+    )
+
+
+def test_consumer_bundle_rejects_resealed_linked_producer_forgery() -> None:
+    trusted_commit = "a" * 40
+    forged = deepcopy(build_consumer_bundle(_VALID_V6, producer_commit=trusted_commit))
+    linked = forged["linked_artifacts"]["ast_artifact"]
+    linked["producer"]["commit"] = "b" * 40
+    linked["content_hash"] = content_hash(
+        {key: value for key, value in linked.items() if key != "content_hash"}
+    )
+    forged["artifacts"]["ast_artifact_hash"] = content_hash(linked)
+    _reseal_bundle(forged)
+
+    with pytest.raises(ConsumerBundleError, match="linked artifact producer mismatch"):
+        verify_consumer_bundle(
+            forged,
+            source=_VALID_V6,
+            expected_producer_commit=trusted_commit,
+        )
+
+
+def test_consumer_bundle_rejects_resealed_broken_linked_reference() -> None:
+    forged = deepcopy(build_consumer_bundle(_VALID_V6))
+    linked = forged["linked_artifacts"]["frontend_artifact"]
+    linked["source_manifest_ref"] = "sha256:" + "0" * 64
+    linked["content_hash"] = content_hash(
+        {key: value for key, value in linked.items() if key != "content_hash"}
+    )
+    forged["artifacts"]["frontend_artifact_hash"] = content_hash(linked)
+    _reseal_bundle(forged)
+
+    with pytest.raises(ConsumerBundleError, match="linked artifact reference mismatch"):
+        verify_consumer_bundle(forged, source=_VALID_V6)
+
+
 def test_user_methods_with_same_name_are_dispatched_by_receiver_type() -> None:
     source = """//@version=6
 indicator("methods")
@@ -215,11 +314,11 @@ type Foo
 type Bar
     float y
 method ping(Foo this) => this.x
-method ping(Bar this) => this.y
+method ping(Bar this, float scale) => this.y * scale
 foo = Foo.new(1.0)
 bar = Bar.new(2.0)
 a = foo.ping()
-b = bar.ping()
+b = bar.ping(3.0)
 """
 
     result = parse_code(source)

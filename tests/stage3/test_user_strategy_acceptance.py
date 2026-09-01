@@ -1,4 +1,5 @@
 from pine2ast import ParseOptions, parse_code
+from pine2ast.catalog.hashing import verify_hash
 
 SOURCE_NAME = "synthetic_v6_semantic_acceptance.pine"
 SOURCE = """//@version=6
@@ -28,7 +29,12 @@ def test_synthetic_v6_strategy_has_complete_static_facts():
     assert bundle.coverage.unresolved_calls == ()
     assert all(call.resolution_status == "RESOLVED" for call in bundle.calls)
     assert all(call.overload_id for call in bundle.calls)
-    assert result.semantic_facts_artifact["content_hash"] == bundle.artifact["content_hash"]
+    assert verify_hash(bundle.artifact)
+    semantic_artifact = result.semantic_facts_artifact
+    assert semantic_artifact is not None
+    assert verify_hash(semantic_artifact)
+    assert semantic_artifact["producer"]["commit"] == "a" * 40
+    assert semantic_artifact["producer"]["source_state"] == "COMMIT_PINNED"
 
 
 def test_synthetic_udf_is_inferred_without_unknown_fallback():
