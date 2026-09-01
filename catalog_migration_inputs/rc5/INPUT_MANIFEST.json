@@ -1,0 +1,30 @@
+{
+  "corrections": [
+    {
+      "field": "functions.strategy.parameters.calc_on_every_history_tick",
+      "id": "pine-v6-2026-calc-on-every-history-tick",
+      "reason": "TradingView Pine v6 release-note addition validated by Stage 6 requirement PINE.V6.HISTORICAL_TICK_DECLARATION_2026"
+    },
+    {
+      "field": "functions.array.binary_search*.parameters.sort_field",
+      "id": "pine-v6-2026-udt-binary-search-sort-field",
+      "reason": "TradingView Pine v6 release-note addition validated by Stage 6 requirement PINE.V6.UDT_BINARY_SEARCH_2026"
+    }
+  ],
+  "inputs": {
+    "5": {
+      "bytes": 678438,
+      "git_blob_sha1": "859e7ae4b305b5b6357029c56645ba9b12d36542",
+      "sha256": "sha256:017291cb971d827177609c7254813606d2ef19cb5bda5851374f409f204e2b7e"
+    },
+    "6": {
+      "bytes": 793968,
+      "git_blob_sha1": "ec4289065d7da39f522100e7c50347c60f238432",
+      "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+    }
+  },
+  "runtime_package_data": false,
+  "schema_id": "pine.catalog.migration_inputs.v1",
+  "source_commit": "325ddd17f4ced3c42739fa58bc902a927c2d4ac6",
+  "source_repository": "s7cret/pine2ast"
+}

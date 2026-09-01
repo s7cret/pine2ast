@@ -1,0 +1,4 @@
+//@version=2
+study('v2')
+a = b + true
+b = 1

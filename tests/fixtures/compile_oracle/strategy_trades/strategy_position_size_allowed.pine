@@ -1,3 +1,0 @@
-//@version=6
-strategy("Position Size Test")
-plot(strategy.position_size)

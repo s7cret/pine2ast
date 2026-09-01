@@ -1,0 +1,4 @@
+//@version=6
+indicator("function")
+f(src, length) => ta.sma(src, length)
+y = f(close, 3)

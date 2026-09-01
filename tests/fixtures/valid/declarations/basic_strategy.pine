@@ -1,3 +1,0 @@
-//@version=6
-strategy("Basic Strategy")
-strategy.entry("L", strategy.long)

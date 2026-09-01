@@ -8,7 +8,7 @@ from html import unescape
 from typing import Any
 from urllib.request import urlopen
 
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.catalog import load_catalog_view
 
 TRADINGVIEW_ORIGIN = "https://www.tradingview.com"
 STATIC_ORIGIN = "https://static.tradingview.com"
@@ -82,10 +82,7 @@ def load_official_reference_index(path: str) -> OfficialReferenceIndex:
 
 
 def _load_local_registry_for_index(index: OfficialReferenceIndex) -> dict[str, Any]:
-    try:
-        return load_builtin_registry(pine_version=index.pine_version)
-    except TypeError:  # pragma: no cover - compatibility with monkeypatched tests/helpers
-        return load_builtin_registry()
+    return load_catalog_view(pine_version=index.pine_version)
 
 
 def _entry_has_machine_signature(entry: Any) -> bool:

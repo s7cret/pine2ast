@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
-
-# ruff: noqa: F401
 
 import json
 import sys
@@ -13,18 +10,8 @@ from pine2ast.api import (
     ast_to_json,
     diagnostics_to_json,
     parse_file,
-    runtime_contract_v1_4_options,
 )
 from pine2ast.ast.nodes import DeclarationStatement, Literal
-from pine2ast.semantic.extractors import (
-    extract_alertconditions,
-    extract_dependencies,
-    extract_drawing_calls,
-    extract_inputs,
-    extract_plots,
-    extract_request_calls,
-    extract_strategy_calls,
-)
 from pine2ast.semantic.type_infer import callee_name
 from pine2ast.inspect_contract import build_inspect_payload
 from pine2ast.semantic.snapshot import build_semantic_snapshot_payload
@@ -39,7 +26,7 @@ from pine2ast.diagnostics.reports import diff_diagnostic_reports, summarize_diag
 from pine2ast.quality import quality_gate_json
 from pine2ast.diagnostics.sarif import diagnostics_to_sarif_json
 from pine2ast.semantic.reports import semantic_report
-from pine2ast.semantic.builtin_registry import builtin_registry_coverage_report
+from pine2ast.catalog import catalog_coverage_report
 from pine2ast.release import build_release_manifest
 from pine2ast.reference_catalog import (
     OfficialReferenceError,
@@ -106,7 +93,7 @@ def _script_dict(ast):
     return {
         "type": ast.declaration.script_type,
         "title": title,
-        "pine_version": ast.version or ast.language_version,
+        "pine_version": ast.version_context.pine_version,
     }
 
 
@@ -141,8 +128,6 @@ def _parse_options(args, **overrides: object) -> ParseOptions:
         "strict_builtin_namespaces": getattr(args, "strict_builtin_namespaces", False),
     }
     values.update(overrides)
-    if getattr(args, "runtime_contract_v1_4", False):
-        return runtime_contract_v1_4_options(**values)
     return ParseOptions(**values)
 
 
@@ -218,8 +203,8 @@ def run_cli_command(args) -> int:
             print(output)
         return 0
 
-    if args.cmd == "builtin-coverage":
-        output = json.dumps(builtin_registry_coverage_report(), ensure_ascii=False, indent=2)
+    if args.cmd == "catalog-coverage":
+        output = json.dumps(catalog_coverage_report(), ensure_ascii=False, indent=2)
         if args.json_path:
             Path(args.json_path).write_text(output, encoding="utf-8")
             print(args.json_path)

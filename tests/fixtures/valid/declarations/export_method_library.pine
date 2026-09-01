@@ -1,6 +1,0 @@
-//@version=6
-library("Lib method")
-type Pivot
-    float y
-export method value(Pivot p) =>
-    p.y

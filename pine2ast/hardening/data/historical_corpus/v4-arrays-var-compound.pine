@@ -1,0 +1,7 @@
+//@version=4
+study('v4')
+var float x = na
+varip int ticks = 0
+ticks += 1
+var float[] values = array.new_float(0)
+array.push(values, close)

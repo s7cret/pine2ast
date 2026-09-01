@@ -7,6 +7,7 @@ from pine2ast.ast.base import ASTNode, Expression
 from pine2ast.ast.nodes import Block, FunctionDeclaration, MethodDeclaration
 from pine2ast.ast.visitors import walk
 from pine2ast.lexer.token import SourceSpan
+from pine2ast.versioning import PineVersionContext
 
 
 @dataclass(slots=True)
@@ -21,7 +22,7 @@ class SchemaIssue:
             "code": self.code,
             "message": self.message,
             "node_kind": self.node_kind,
-            "span": self.span.to_dict() if self.span is not None else None,
+            "span": self.span.to_dict() if self.span else None,
         }
 
 
@@ -30,7 +31,8 @@ class SchemaReport:
     ok: bool
     schema_version: str | None
     language: str | None
-    language_version: int | None
+    pine_version: int | None
+    version_context: dict[str, Any] | None
     node_count: int
     kind_counts: dict[str, int] = field(default_factory=dict)
     issues: list[SchemaIssue] = field(default_factory=list)
@@ -40,44 +42,26 @@ class SchemaReport:
             "ok": self.ok,
             "schema_version": self.schema_version,
             "language": self.language,
-            "language_version": self.language_version,
+            "pine_version": self.pine_version,
+            "version_context": self.version_context,
             "node_count": self.node_count,
             "kind_counts": dict(sorted(self.kind_counts.items())),
-            "issues": [issue.to_dict() for issue in self.issues],
+            "issues": [item.to_dict() for item in self.issues],
         }
 
 
-def _span_order_valid(span: SourceSpan) -> bool:
-    return (
-        span.start_offset <= span.end_offset
-        and span.start_line >= 1
-        and span.end_line >= span.start_line
-        and span.start_col >= 1
-        and span.end_col >= 1
-    )
-
-
 def validate_ast_schema(program: ASTNode) -> SchemaReport:
-    """Validate Pine2AST's stable JSON-facing AST contract.
-
-    This is intentionally structural, not semantic: it checks that every AST node has
-    a kind/span, that spans are sane, and that the Program-level schema metadata is
-    present for downstream AST2Python/optimizer consumers.
-    """
     issues: list[SchemaIssue] = []
     seen_ids: set[int] = set()
     kind_counts: dict[str, int] = {}
-    node_count = 0
-
     schema_version = getattr(program, "schema_version", None)
     language = getattr(program, "language", None)
-    language_version = getattr(program, "language_version", None)
-
-    if schema_version is None:
+    context = getattr(program, "version_context", None)
+    if schema_version != "2.0":
         issues.append(
             SchemaIssue(
-                "AST_SCHEMA_VERSION_MISSING",
-                "Program.schema_version is required.",
+                "AST_SCHEMA_VERSION_INVALID",
+                "Program.schema_version must be 2.0.",
                 getattr(program, "kind", None),
                 getattr(program, "span", None),
             )
@@ -91,20 +75,19 @@ def validate_ast_schema(program: ASTNode) -> SchemaReport:
                 getattr(program, "span", None),
             )
         )
-    if language_version != 6:
+    if not isinstance(context, PineVersionContext):
         issues.append(
             SchemaIssue(
-                "AST_LANGUAGE_VERSION_INVALID",
-                "Program.language_version must be 6 for this package version.",
+                "AST_VERSION_CONTEXT_INVALID",
+                "Program.version_context must be PineVersionContext.",
                 getattr(program, "kind", None),
                 getattr(program, "span", None),
             )
         )
-
+    node_count = 0
     for node in walk(program):
         node_count += 1
-        obj_id = id(node)
-        if obj_id in seen_ids:
+        if id(node) in seen_ids:
             issues.append(
                 SchemaIssue(
                     "AST_SHARED_NODE",
@@ -114,7 +97,7 @@ def validate_ast_schema(program: ASTNode) -> SchemaReport:
                 )
             )
             continue
-        seen_ids.add(obj_id)
+        seen_ids.add(id(node))
         kind_counts[node.kind] = kind_counts.get(node.kind, 0) + 1
         span = getattr(node, "span", None)
         if not isinstance(span, SourceSpan):
@@ -123,34 +106,39 @@ def validate_ast_schema(program: ASTNode) -> SchemaReport:
                     "AST_SPAN_MISSING", "Every AST node must carry SourceSpan.", node.kind, None
                 )
             )
-        elif not _span_order_valid(span):
+        elif not (
+            span.start_offset <= span.end_offset
+            and span.start_line >= 1
+            and span.end_line >= span.start_line
+            and span.start_col >= 1
+            and span.end_col >= 1
+        ):
             issues.append(
                 SchemaIssue(
-                    "AST_SPAN_INVALID",
-                    "AST node span has invalid ordering or coordinates.",
-                    node.kind,
-                    span,
+                    "AST_SPAN_INVALID", "AST node span has invalid coordinates.", node.kind, span
                 )
             )
-
         if isinstance(node, (FunctionDeclaration, MethodDeclaration)) and not isinstance(
             node.body, (Block, Expression)
         ):
             issues.append(
                 SchemaIssue(
                     "AST_DECLARATION_BODY_INVALID",
-                    "FunctionDeclaration and MethodDeclaration body must be a Block or Expression.",
+                    "Function/method body must be Block or Expression.",
                     node.kind,
                     span if isinstance(span, SourceSpan) else None,
                 )
             )
-
     return SchemaReport(
         ok=not issues,
         schema_version=schema_version,
         language=language,
-        language_version=language_version,
+        pine_version=context.pine_version if isinstance(context, PineVersionContext) else None,
+        version_context=context.to_dict() if isinstance(context, PineVersionContext) else None,
         node_count=node_count,
         kind_counts=kind_counts,
         issues=issues,
     )
+
+
+__all__ = ["SchemaIssue", "SchemaReport", "validate_ast_schema"]

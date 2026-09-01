@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
@@ -13,17 +12,26 @@ from pine2ast.ast.nodes import (
     SwitchStructure,
     WhileStructure,
 )
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.frontend.helpers import *
+from pine2ast.versioning import PineVersionContext
+from pine2ast.frontend.helpers import (
+    _collection_kind_from_type,
+    _expr_descriptor,
+    _for_range_static_iterations,
+    _inference_engine,
+    _iter_nodes,
+    _literal_int_value,
+    _span_dict,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 
 def extract_control_flow_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     engine = _inference_engine(profile, symbols)
     loops: list[dict[str, Any]] = []
@@ -125,8 +133,8 @@ def extract_control_flow_contract(
             )
 
     return {
-        "contract": "openpine.control_flow.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["control_flow"],
+        "profile": f"pine_v{profile.pine_version}",
         "loops": loops,
         "conditions": conditions,
         "history_refs": history_refs,

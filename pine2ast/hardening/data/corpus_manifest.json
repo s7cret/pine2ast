@@ -1,0 +1,228 @@
+{
+  "cases": [
+    {
+      "category": "positive",
+      "expect_ok": true,
+      "expected_version": 5,
+      "file": "v5_minimal.pine",
+      "id": "v5-minimal",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "positive",
+      "expect_ok": true,
+      "expected_version": 6,
+      "file": "v6_minimal.pine",
+      "id": "v6-minimal",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": true,
+      "expected_version": 5,
+      "file": "v5_numeric_condition.pine",
+      "id": "v5-numeric-condition",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": false,
+      "expected_version": 6,
+      "file": "v6_numeric_condition.pine",
+      "id": "v6-numeric-condition",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": true,
+      "expected_version": 5,
+      "file": "v5_bool_na.pine",
+      "id": "v5-bool-na",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": false,
+      "expected_version": 6,
+      "file": "v6_bool_na.pine",
+      "id": "v6-bool-na",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": true,
+      "expected_version": 5,
+      "file": "v5_strategy_when.pine",
+      "id": "v5-strategy-when",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": false,
+      "expected_version": 6,
+      "file": "v6_strategy_when.pine",
+      "id": "v6-strategy-when",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": false,
+      "expected_version": 5,
+      "file": "v5_multiline_string.pine",
+      "id": "v5-multiline-string",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "differential",
+      "expect_ok": true,
+      "expected_version": 6,
+      "file": "v6_multiline_string.pine",
+      "id": "v6-multiline-string",
+      "source_refs": [
+        "tv-v6-migration"
+      ]
+    },
+    {
+      "category": "negative",
+      "expect_ok": false,
+      "expected_version": 1,
+      "file": "missing_version.pine",
+      "id": "missing-version",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "negative",
+      "context_optional": true,
+      "expect_ok": false,
+      "expected_version": 7,
+      "file": "future_version.pine",
+      "id": "future-version",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "negative",
+      "context_optional": true,
+      "expect_ok": false,
+      "file": "malformed_version.pine",
+      "id": "malformed-version",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "negative",
+      "context_optional": true,
+      "expect_ok": false,
+      "file": "duplicate_version.pine",
+      "id": "duplicate-version",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "positive",
+      "expect_ok": true,
+      "expected_version": 6,
+      "file": "fake_version_in_string.pine",
+      "id": "fake-version-in-string",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "positive",
+      "expect_ok": true,
+      "expected_version": 6,
+      "file": "v6_user_function.pine",
+      "id": "v6-user-function",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "category": "positive",
+      "expect_ok": true,
+      "expected_version": 6,
+      "file": "v6_strategy_orders.pine",
+      "id": "v6-strategy-orders",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    }
+  ],
+  "claims": "This corpus verifies selected high-risk version/static rules; it is not a claim of full TradingView oracle parity.",
+  "differential_pairs": [
+    {
+      "id": "numeric-condition",
+      "left": "v5-numeric-condition",
+      "right": "v6-numeric-condition"
+    },
+    {
+      "id": "bool-na",
+      "left": "v5-bool-na",
+      "right": "v6-bool-na"
+    },
+    {
+      "id": "strategy-when",
+      "left": "v5-strategy-when",
+      "right": "v6-strategy-when"
+    },
+    {
+      "id": "multiline-string",
+      "left": "v5-multiline-string",
+      "right": "v6-multiline-string"
+    }
+  ],
+  "schema_id": "pine2ast.stage4.corpus.v1",
+  "schema_version": "1.0.0",
+  "scope": "curated_normative_frontend_corpus",
+  "sources": [
+    {
+      "id": "tv-script-structure",
+      "url": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "used_for": [
+        "version-resolution"
+      ]
+    },
+    {
+      "id": "tv-v6-migration",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "used_for": [
+        "numeric-condition",
+        "bool-na",
+        "strategy-when",
+        "lazy-operators"
+      ]
+    },
+    {
+      "id": "tv-release-notes",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "used_for": [
+        "multiline-string",
+        "rolling-v6-snapshot"
+      ]
+    }
+  ]
+}

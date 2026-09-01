@@ -1,0 +1,357 @@
+{
+  "cases": [
+    {
+      "expect_ok": true,
+      "expected_version": 1,
+      "file": "v1-default-minimal.pine",
+      "id": "v1-default-minimal",
+      "source_refs": [
+        "tv-script-structure"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 1,
+      "file": "v1-self-bool-security.pine",
+      "id": "v1-self-bool-security",
+      "required_coercion_reasons": [
+        "coercion.bool_to_number.allow.v1"
+      ],
+      "required_rule_ids": [
+        "request.security.lookahead.on.v1"
+      ],
+      "source_refs": [
+        "tv-migration-v2",
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 1,
+      "file": "v1-if-rejected.pine",
+      "id": "v1-if-rejected",
+      "source_refs": [
+        "tv-v3-language"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 1,
+      "file": "v1-reassignment-rejected.pine",
+      "id": "v1-reassignment-rejected",
+      "required_error_codes": [
+        "P2A2011"
+      ],
+      "source_refs": [
+        "tv-v3-language"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 2,
+      "file": "v2-control-flow.pine",
+      "id": "v2-control-flow",
+      "source_refs": [
+        "tv-v3-language"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 2,
+      "file": "v2-forward-bool.pine",
+      "id": "v2-forward-bool",
+      "required_coercion_reasons": [
+        "coercion.bool_to_number.allow.v2"
+      ],
+      "required_rule_ids": [
+        "operator.add.v2"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 2,
+      "file": "v2-security-default.pine",
+      "id": "v2-security-default",
+      "required_rule_ids": [
+        "request.security.lookahead.on.v2"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 2,
+      "file": "v2-mutable-security-rejected.pine",
+      "id": "v2-mutable-security-rejected",
+      "required_error_codes": [
+        "P2A2014"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 3,
+      "file": "v3-forward-rejected.pine",
+      "id": "v3-forward-rejected",
+      "required_error_codes": [
+        "P2A1101"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 3,
+      "file": "v3-bool-arithmetic-rejected.pine",
+      "id": "v3-bool-arithmetic-rejected",
+      "required_error_codes": [
+        "P2A2012"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 3,
+      "file": "v3-numeric-condition.pine",
+      "id": "v3-numeric-condition",
+      "required_rule_ids": [
+        "control.condition.v3"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 3,
+      "file": "v3-security-default.pine",
+      "id": "v3-security-default",
+      "required_rule_ids": [
+        "request.security.lookahead.off.v3"
+      ],
+      "source_refs": [
+        "tv-migration-v3"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 3,
+      "file": "v3-tuple.pine",
+      "id": "v3-tuple",
+      "source_refs": [
+        "tv-v3-language"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 3,
+      "file": "v3-typed-na-rejected.pine",
+      "id": "v3-typed-na-rejected",
+      "source_refs": [
+        "tv-migration-v4"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 3,
+      "file": "v3-ternary-eager.pine",
+      "id": "v3-ternary-eager",
+      "required_rule_ids": [
+        "operator.ternary.eager.v3"
+      ],
+      "source_refs": [
+        "tv-v4-release-notes"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 4,
+      "file": "v4-pre-namespace.pine",
+      "id": "v4-pre-namespace",
+      "required_rule_ids": [
+        "request.security.lookahead.off.v4"
+      ],
+      "source_refs": [
+        "tv-migration-v4",
+        "tv-migration-v5"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 4,
+      "file": "v4-modern-namespace-rejected.pine",
+      "id": "v4-modern-namespace-rejected",
+      "required_error_codes": [
+        "P2A1101"
+      ],
+      "source_refs": [
+        "tv-migration-v5"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 4,
+      "file": "v4-typed-na.pine",
+      "id": "v4-typed-na",
+      "source_refs": [
+        "tv-migration-v4"
+      ]
+    },
+    {
+      "expect_ok": false,
+      "expected_version": 4,
+      "file": "v4-untyped-na-rejected.pine",
+      "id": "v4-untyped-na-rejected",
+      "required_error_codes": [
+        "P2A2013"
+      ],
+      "source_refs": [
+        "tv-migration-v4"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 4,
+      "file": "v4-arrays-var-compound.pine",
+      "id": "v4-arrays-var-compound",
+      "source_refs": [
+        "tv-v4-release-notes"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 4,
+      "file": "v4-unified-input.pine",
+      "id": "v4-unified-input",
+      "source_refs": [
+        "tv-migration-v5"
+      ]
+    },
+    {
+      "expect_ok": true,
+      "expected_version": 4,
+      "file": "v4-ternary-lazy.pine",
+      "id": "v4-ternary-lazy",
+      "required_rule_ids": [
+        "operator.ternary.lazy.v4"
+      ],
+      "source_refs": [
+        "tv-v4-release-notes"
+      ]
+    }
+  ],
+  "claims": {
+    "exhaustive_historical_reference_catalog": false,
+    "historical_static_semantics": true,
+    "tradingview_runtime_parity": false
+  },
+  "differential_pairs": [
+    {
+      "expect_outcome_difference": true,
+      "id": "v1-v2-control-flow",
+      "left": "v1-if-rejected",
+      "right": "v2-control-flow"
+    },
+    {
+      "expect_outcome_difference": true,
+      "id": "v2-v3-forward-bool",
+      "left": "v2-forward-bool",
+      "right": "v3-bool-arithmetic-rejected"
+    },
+    {
+      "expect_outcome_difference": true,
+      "id": "v3-v4-typed-na",
+      "left": "v3-typed-na-rejected",
+      "right": "v4-typed-na"
+    },
+    {
+      "expect_outcome_difference": false,
+      "id": "v3-v4-ternary",
+      "left": "v3-ternary-eager",
+      "left_required_rule": "operator.ternary.eager.v3",
+      "right": "v4-ternary-lazy",
+      "right_required_rule": "operator.ternary.lazy.v4"
+    },
+    {
+      "expect_outcome_difference": false,
+      "id": "v2-v3-security-default",
+      "left": "v2-security-default",
+      "left_required_rule": "request.security.lookahead.on.v2",
+      "right": "v3-security-default",
+      "right_required_rule": "request.security.lookahead.off.v3"
+    }
+  ],
+  "schema_id": "pine2ast.stage5.historical_corpus.v1",
+  "schema_version": "1.0.0",
+  "scope": "documented_historical_static_semantics_v1_v4",
+  "sources": [
+    {
+      "assertions": [
+        "missing_version_defaults_to_v1",
+        "compiler_annotation_selects_language_version"
+      ],
+      "id": "tv-script-structure",
+      "url": "https://www.tradingview.com/pine-script-docs/language/script-structure/"
+    },
+    {
+      "assertions": [
+        "v2_is_backward_compatible_with_v1"
+      ],
+      "id": "tv-migration-v2",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/"
+    },
+    {
+      "assertions": [
+        "security_lookahead_default_changed",
+        "self_and_forward_references_removed",
+        "bool_to_number_arithmetic_removed",
+        "mutable_security_expression_forbidden"
+      ],
+      "id": "tv-migration-v3",
+      "url": "https://www.tradingview.com/pine-script-docs/v5/migration-guides/to-pine-version-3/"
+    },
+    {
+      "assertions": [
+        "namespace_renames",
+        "bar_index_rename",
+        "explicit_type_required_for_na"
+      ],
+      "id": "tv-migration-v4",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/"
+    },
+    {
+      "assertions": [
+        "v2_if_for_reassignment_and_user_functions",
+        "v3_tuple_declarations"
+      ],
+      "id": "tv-v3-language",
+      "url": "https://www.tradingview.com/pine-script-docs/v3/language/expressions-declarations-and-statements/"
+    },
+    {
+      "assertions": [
+        "v4_var_varip_arrays_compound_assignment",
+        "v4_lazy_ternary"
+      ],
+      "id": "tv-v4-release-notes",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/release-notes/"
+    },
+    {
+      "assertions": [
+        "study_to_indicator",
+        "builtin_namespace_migration",
+        "input_split"
+      ],
+      "id": "tv-migration-v5",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+    }
+  ]
+}

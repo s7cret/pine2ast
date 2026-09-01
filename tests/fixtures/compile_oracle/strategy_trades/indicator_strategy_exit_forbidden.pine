@@ -1,3 +1,0 @@
-//@version=6
-indicator("Exit Forbidden")
-strategy.close("Long")

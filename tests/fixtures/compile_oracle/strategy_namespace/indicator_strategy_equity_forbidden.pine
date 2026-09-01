@@ -1,4 +1,0 @@
-//@version=6
-indicator("indicator strategy.equity forbidden")
-x = strategy.equity
-plot(close)

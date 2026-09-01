@@ -1,0 +1,3 @@
+//@version=4
+study('v4')
+x = ta.sma(close, 10)

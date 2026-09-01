@@ -1,25 +1,36 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
 from pine2ast.ast.nodes import Identifier, MemberAccessExpr, Program
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.type_helpers import type_ref_name
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.frontend.helpers import *
+from pine2ast.frontend.helpers import (
+    _bound_arguments,
+    _build_type_maps,
+    _constructor_assignees,
+    _declared_arg_bindings,
+    _field_dict,
+    _inference_engine,
+    _iter_calls_with_context,
+    _iter_nodes,
+    _span_dict,
+    _target_descriptor,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 
 def extract_type_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
     """Extract UDT/enum constructor and reference facts for OpenPine runtime layers."""
 
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     engine = _inference_engine(profile, symbols)
     type_map, enum_map, _function_map, method_map = _build_type_maps(program)
@@ -174,8 +185,8 @@ def extract_type_contract(
             )
 
     return {
-        "contract": "openpine.types.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["types"],
+        "profile": f"pine_v{profile.pine_version}",
         "udts": declarations,
         "enums": enums,
         "constructors": constructors,

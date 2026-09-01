@@ -1,3 +1,0 @@
-//@version=6
-indicator("x")
-x = close[1][2]

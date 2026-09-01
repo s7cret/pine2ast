@@ -1,0 +1,3 @@
+//@version=6
+indicator("v6-minimal")
+x = close

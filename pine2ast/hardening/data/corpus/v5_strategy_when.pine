@@ -1,0 +1,3 @@
+//@version=5
+strategy("v5-when")
+strategy.entry("L", strategy.long, when = close > open)

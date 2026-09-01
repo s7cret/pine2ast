@@ -1,0 +1,17 @@
+{
+  "callable_count": 713,
+  "catalog_hash": "sha256:79d90c3089356272493c6d5426b525ad33535130ac29047140d93e1fe3d87dd9",
+  "checked_field_count": 10149,
+  "coverage_basis": "pinned_reference_registry_static_snapshot",
+  "coverage_ratio": 1.0,
+  "gap_count": 0,
+  "gaps": [],
+  "ok": true,
+  "operator_count": 21,
+  "overload_count": 8,
+  "pine_version": 6,
+  "schema_id": "pine.static_completeness.v2",
+  "scope": "pinned_hash_bound_reference_catalog",
+  "status": "STATIC_COMPLETE",
+  "symbol_count": 1511
+}

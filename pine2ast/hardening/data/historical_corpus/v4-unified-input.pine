@@ -1,0 +1,6 @@
+//@version=4
+study('v4')
+length = input(14, title='Length', type=input.integer)
+a = iff(close > open, close, open)
+b = offset(a, 1)
+r = rsi(close, length)

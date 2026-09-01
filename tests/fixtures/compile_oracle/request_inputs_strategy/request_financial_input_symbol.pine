@@ -1,5 +1,0 @@
-//@version=6
-indicator("Financial")
-sym = input.symbol("NASDAQ:AAPL", "Symbol")
-rev = request.financial(sym, "TOTAL_REVENUE", "FQ")
-plot(rev)

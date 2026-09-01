@@ -1,4 +1,0 @@
-//@version=6
-indicator("Unsupported request")
-float value = request.economic("US", "GDP")
-plot(value)

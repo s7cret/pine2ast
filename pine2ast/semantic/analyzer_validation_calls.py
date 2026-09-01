@@ -1,99 +1,26 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
-
-from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
+from pine2ast.ast.base import Expression
 from pine2ast.ast.nodes import (
-    BinaryExpr,
-    Block,
-    BreakStatement,
     CallExpr,
-    ConditionalExpr,
-    ContinueStatement,
-    DeclarationStatement,
-    EnumDeclaration,
-    ForInStructure,
-    ForRangeStructure,
-    FunctionDeclaration,
-    GenericInstantiationExpr,
-    HistoryRefExpr,
     Identifier,
-    IfStructure,
-    ImportDeclaration,
-    Literal,
     MemberAccessExpr,
-    MethodDeclaration,
-    Program,
-    Reassignment,
-    SwitchStructure,
-    TupleDeclaration,
-    TupleExpr,
-    TypeDeclaration,
     FieldDeclaration,
     Parameter,
-    UnaryExpr,
-    VarDeclaration,
-    WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
-    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
-)
-from pine2ast.semantic.model import SemanticModel
-from pine2ast.semantic.type_helpers import (
-    for_in_target_types,
-    generic_type_parts,
-    is_assignable_type,
-    is_valid_map_key_type,
-    split_type_args,
-    tuple_element_types,
-    type_ref_name,
-)
-from pine2ast.semantic.qualifier_infer import infer_qualifier
-from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
+from pine2ast.semantic.symbols import SymbolKind
 from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.semantic.collection_signatures import (
-    generic_constructor_expected_arity,
     is_collection_method,
-    resolve_collection_call,
 )
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
-from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
-from pine2ast.semantic.passes.loop_dos import (
-    _is_literal_true,
-    _static_int_bound,
-)
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerCallValidationMixin:
+class AnalyzerCallValidationMixin(AnalyzerMixinHost):
     """Focused semantic validation mixin extracted for Pine2AST 4.0."""
 
     def _validate_udt_constructor_call(self, expr: CallExpr) -> None:
@@ -156,7 +83,7 @@ class AnalyzerCallValidationMixin:
                     if getattr(fields[idx], "type_ref", None) is not None
                     else None
                 )
-                actual = infer_type(arg.value, self.model.symbols)
+                actual = self._infer_type(arg.value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -173,7 +100,7 @@ class AnalyzerCallValidationMixin:
                     if getattr(field, "type_ref", None) is not None
                     else None
                 )
-                actual = infer_type(arg.value, self.model.symbols)
+                actual = self._infer_type(arg.value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -223,7 +150,7 @@ class AnalyzerCallValidationMixin:
         ):
             return
 
-        receiver_type = infer_type(receiver_expr, self.model.symbols)
+        receiver_type = self._infer_type(receiver_expr)
         field_type = self._member_field_type(expr.callee)
         if field_type is not None:
             self._diag(
@@ -260,7 +187,7 @@ class AnalyzerCallValidationMixin:
         receiver_type = self._method_receivers.get(method_name)
         if receiver_type is None:
             return
-        actual = infer_type(expr.callee.object, self.model.symbols)
+        actual = self._infer_type(expr.callee.object)
         valid_receivers = receiver_type if isinstance(receiver_type, set) else {receiver_type}
 
         def _receiver_matches(candidate: str, valid_set: set[str]) -> bool:
@@ -279,9 +206,10 @@ class AnalyzerCallValidationMixin:
             self._diag(
                 Severity.ERROR,
                 codes.ARGUMENT_TYPE,
-                f"Method {method_name} expects receiver {receiver_type}, got {actual}.",
+                f"Method {method_name} expects receiver {sorted(valid_receivers)}, got {actual}.",
                 expr.callee.span,
             )
+            return
         if self._is_collection_method(actual, method_name):
             # Collection receivers are generic (array<T>, matrix<T>, map<K,V>),
             # so method-form validation is delegated to CollectionValidationPass
@@ -293,10 +221,13 @@ class AnalyzerCallValidationMixin:
         #  2. Builtin methods with full signature in the registry.
         # Builtin methods registered as _signature_pending are skipped
         # here — codegen/runtime layers own their parameter validation.
-        params: list[Parameter] | None = None
-        if method_name in self._user_method_params:
-            params = self._user_method_params[method_name]
-        elif method_name in self._builtin_method_params:
+        params: list[Parameter] | None = self._user_method_params.get((actual, method_name))
+        if params is None:
+            for (receiver, name), candidate_params in self._user_method_params.items():
+                if name == method_name and _receiver_matches(actual, {receiver}):
+                    params = candidate_params
+                    break
+        if params is None and method_name in self._builtin_method_params:
             if actual in self._builtin_method_params[method_name]:
                 params = self._builtin_method_params[method_name][actual]
             else:
@@ -358,7 +289,7 @@ class AnalyzerCallValidationMixin:
         for idx, arg in enumerate(positional):
             if idx < len(params) and params[idx].type_ref is not None:
                 expected = self._type_ref_name(params[idx].type_ref)
-                actual = infer_type(arg.value, self.model.symbols)
+                actual = self._infer_type(arg.value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -371,7 +302,7 @@ class AnalyzerCallValidationMixin:
         for arg in args:
             if arg.name and arg.name in by_name and by_name[arg.name].type_ref is not None:
                 expected = self._type_ref_name(by_name[arg.name].type_ref)
-                actual = infer_type(arg.value, self.model.symbols)
+                actual = self._infer_type(arg.value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -384,7 +315,7 @@ class AnalyzerCallValidationMixin:
     def _validate_builtin_call(self, name: str, entry: dict | None, expr: CallExpr) -> None:
         if not entry:
             return
-        resolution = SignatureResolver(pine_version=self.pine_version).resolve_builtin(
+        resolution = SignatureResolver(version_context=self.version_context).resolve_builtin(
             name,
             entry,
             expr.arguments,
@@ -398,6 +329,8 @@ class AnalyzerCallValidationMixin:
             self._diag(issue.severity, issue.code, issue.message, issue.span)
         for resolved in resolution.resolved_arguments:
             arg = resolved.argument
+            if arg is None:
+                raise RuntimeError("source argument resolution is missing its AST argument")
             param = resolved.parameter
             if param and param.get("unsupported"):
                 self._diag(
@@ -409,7 +342,7 @@ class AnalyzerCallValidationMixin:
 
     def _param_removed_in_current_version(self, param: dict) -> bool:
         removed_in = param.get("removed_in")
-        return bool(removed_in and self.pine_version >= int(removed_in))
+        return bool(removed_in and self.version_context.pine_version >= int(removed_in))
 
     def _validate_argument_qualifier(self, callee: str, arg, param: dict | None) -> None:
         if not param:
@@ -418,7 +351,7 @@ class AnalyzerCallValidationMixin:
         if not max_q:
             return
         order = {"const": 0, "input": 1, "simple": 2, "series": 3}
-        q = infer_qualifier(arg.value, self.model.symbols)
+        q = self._infer_qualifier(arg.value)
         if order.get(q, 3) > order.get(max_q, 3):
             pname = param.get("name") or "<positional>"
             self._diag(

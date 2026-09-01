@@ -1,0 +1,67 @@
+{
+  "$id": "pine2ast.consumer_bundle.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifacts": {
+      "type": "object"
+    },
+    "ast": {
+      "type": "object"
+    },
+    "consumer_contract": {
+      "type": "object"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "diagnostics": {
+      "type": "array"
+    },
+    "linked_artifacts": {
+      "type": "object"
+    },
+    "node_index": {
+      "type": "array"
+    },
+    "producer": {
+      "type": "object"
+    },
+    "release_axes": {
+      "type": "object"
+    },
+    "schema_id": {
+      "const": "pine2ast.consumer_bundle.v1"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "semantic_facts": {
+      "type": "object"
+    },
+    "source": {
+      "type": "object"
+    },
+    "version_context": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_id",
+    "schema_version",
+    "producer",
+    "source",
+    "version_context",
+    "ast",
+    "semantic_facts",
+    "node_index",
+    "diagnostics",
+    "release_axes",
+    "artifacts",
+    "linked_artifacts",
+    "consumer_contract",
+    "content_hash"
+  ],
+  "type": "object"
+}

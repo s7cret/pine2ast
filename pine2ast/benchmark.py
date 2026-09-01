@@ -10,6 +10,9 @@ from pine2ast.internal.fs import pine_files
 
 from pine2ast.ast.visitors import walk
 from pine2ast.lexer import Lexer
+from pine2ast.catalog import CatalogRepository
+from pine2ast.policy import policy_bundle_from_catalog
+from pine2ast.versioning import PineVersionResolver
 from pine2ast.layout import LayoutProcessor
 from pine2ast.parser import Parser
 from pine2ast.semantic import SemanticAnalyzer
@@ -19,14 +22,39 @@ from pine2ast.source import SourceNormalizer
 def _parse_once(
     source: str | bytes, *, source_name: str, run_semantic: bool = True
 ) -> dict[str, Any]:
-    metrics: dict[str, Any] = {}
+    """Benchmark the real production pipeline with one admitted version context."""
 
+    metrics: dict[str, Any] = {}
     t0 = time.perf_counter()
     normalized = SourceNormalizer().normalize(source, source_name=source_name)
     metrics["normalizer_ms"] = (time.perf_counter() - t0) * 1000
 
+    repository = CatalogRepository.default()
+    resolution = PineVersionResolver(repository.identity_tuple).resolve(normalized.text)
+    if resolution.context is None or not resolution.context.production_frontend_supported:
+        diagnostics = list(normalized.diagnostics) + list(resolution.diagnostics)
+        return {
+            **metrics,
+            "lexer_ms": 0.0,
+            "layout_ms": 0.0,
+            "parser_ms": 0.0,
+            "semantic_ms": 0.0,
+            "token_count": 0,
+            "ast_node_count": 0,
+            "diagnostic_count": len(diagnostics),
+            "ok": False,
+        }
+    context = resolution.context
+    catalog = repository.view(context.pine_version)
+    policies = policy_bundle_from_catalog(context, catalog)
+
     t0 = time.perf_counter()
-    lexed = Lexer(normalized.text, source_name=source_name).lex()
+    lexed = Lexer(
+        normalized.text,
+        version_context=context,
+        syntax_policy=policies.syntax,
+        source_name=source_name,
+    ).lex()
     metrics["lexer_ms"] = (time.perf_counter() - t0) * 1000
 
     t0 = time.perf_counter()
@@ -34,30 +62,39 @@ def _parse_once(
     metrics["layout_ms"] = (time.perf_counter() - t0) * 1000
 
     t0 = time.perf_counter()
-    parsed = Parser(layout.tokens).parse()
+    parsed = Parser(
+        layout.tokens,
+        version_context=context,
+        syntax_policy=policies.syntax,
+    ).parse()
     metrics["parser_ms"] = (time.perf_counter() - t0) * 1000
 
     semantic_diagnostics = []
     semantic_model = None
     t0 = time.perf_counter()
     if run_semantic and parsed.program is not None:
-        semantic_model = SemanticAnalyzer().analyze(parsed.program)
+        semantic_model = SemanticAnalyzer(
+            version_context=context,
+            catalog=catalog,
+            policy=policies.semantic,
+        ).analyze(parsed.program)
         semantic_diagnostics = semantic_model.diagnostics
     metrics["semantic_ms"] = (time.perf_counter() - t0) * 1000
 
     diagnostics = (
-        normalized.diagnostics
-        + lexed.diagnostics
-        + layout.diagnostics
-        + parsed.diagnostics
-        + semantic_diagnostics
+        list(normalized.diagnostics)
+        + list(resolution.diagnostics)
+        + list(lexed.diagnostics)
+        + list(layout.diagnostics)
+        + list(parsed.diagnostics)
+        + list(semantic_diagnostics)
     )
     metrics["token_count"] = len(layout.tokens)
     metrics["ast_node_count"] = sum(1 for _ in walk(parsed.program)) if parsed.program else 0
     metrics["diagnostic_count"] = len(diagnostics)
     metrics["ok"] = parsed.program is not None and not any(
-        getattr(getattr(d, "severity", None), "value", None) in {"ERROR", "FATAL"}
-        for d in diagnostics
+        getattr(getattr(item, "severity", None), "value", None) in {"ERROR", "FATAL"}
+        for item in diagnostics
     )
     return metrics
 

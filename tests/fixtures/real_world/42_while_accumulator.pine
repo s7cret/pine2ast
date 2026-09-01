@@ -1,8 +1,0 @@
-//@version=6
-indicator("While Accumulator")
-i = 0
-acc = 0.0
-while i < 3
-    acc += close[i]
-    i += 1
-plot(acc)

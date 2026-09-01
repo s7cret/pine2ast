@@ -1,0 +1,1331 @@
+{
+  "mapping_review": {
+    "method": "manual-semantic-review",
+    "requirements_reviewed": 66,
+    "status": "complete"
+  },
+  "requirements": [
+    {
+      "catalog_test_id": "stage6.version.single_source",
+      "description": "Version is resolved once from compiler annotation or the TradingView v1 default.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/versioning/resolver.py",
+        "pine2ast/versioning/context.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage2/test_version_kernel.py::test_annotation_resolves_exactly_once_for_every_known_version"
+      ],
+      "requirement_id": "PINE.VERSION.SINGLE_SOURCE",
+      "title": "Version is resolved once from compiler annotation or the TradingView v1 default."
+    },
+    {
+      "catalog_test_id": "stage6.version.no_fallback",
+      "description": "Unknown and future versions fail closed; no neighbouring profile is substituted.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/versioning/resolver.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage2/test_version_kernel.py::test_future_version_never_falls_back"
+      ],
+      "requirement_id": "PINE.VERSION.NO_NEAREST_FALLBACK",
+      "title": "Unknown and future versions fail closed; no neighbouring profile is substituted."
+    },
+    {
+      "catalog_test_id": "stage6.version.catalog_hash",
+      "description": "The selected version pack and AST share one sealed catalog identity.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/catalog/repository.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage3/test_policy_and_version_binding.py::test_policy_refuses_catalog_hash_mismatch",
+        "tests/stage3/test_policy_and_version_binding.py::test_parser_analyzer_and_artifacts_share_one_context"
+      ],
+      "requirement_id": "PINE.VERSION.CATALOG_HASH_BOUND",
+      "title": "The selected version pack and AST share one sealed catalog identity."
+    },
+    {
+      "catalog_test_id": "stage6.ast.spans",
+      "description": "Every source-derived AST node carries a deterministic source span.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/ast/schema.py",
+        "pine2ast/lexer/token.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_core_ast_binding_type_qualifier_and_overload_facts"
+      ],
+      "requirement_id": "PINE.AST.NODE_SPANS",
+      "title": "Every source-derived AST node carries a deterministic source span."
+    },
+    {
+      "catalog_test_id": "stage6.binding.symbol_ids",
+      "description": "Identifiers bind to stable semantic symbol identities.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "implementation_refs": [
+        "pine2ast/semantic/binder.py",
+        "pine2ast/semantic/facts.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_core_ast_binding_type_qualifier_and_overload_facts"
+      ],
+      "requirement_id": "PINE.STATIC.SYMBOL_BINDING",
+      "title": "Identifiers bind to stable semantic symbol identities."
+    },
+    {
+      "catalog_test_id": "stage6.types.facts",
+      "description": "Expression type facts are emitted for all expressions supported by the selected profile.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "implementation_refs": [
+        "pine2ast/semantic/type_infer.py",
+        "pine2ast/semantic/facts.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_core_ast_binding_type_qualifier_and_overload_facts",
+        "tests/stage3/test_user_strategy_acceptance.py::test_synthetic_v6_strategy_has_complete_static_facts"
+      ],
+      "requirement_id": "PINE.STATIC.TYPE_FACTS",
+      "title": "Expression type facts are emitted for all expressions supported by the selected profile."
+    },
+    {
+      "catalog_test_id": "stage6.qualifiers.facts",
+      "description": "Qualifier facts are emitted where the version defines qualifier semantics.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "implementation_refs": [
+        "pine2ast/semantic/qualifier_infer.py",
+        "pine2ast/semantic/facts.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_core_ast_binding_type_qualifier_and_overload_facts"
+      ],
+      "requirement_id": "PINE.STATIC.QUALIFIER_FACTS",
+      "title": "Qualifier facts are emitted where the version defines qualifier semantics."
+    },
+    {
+      "catalog_test_id": "stage6.overload.identity",
+      "description": "Resolved calls have deterministic symbol and overload identities.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "implementation_refs": [
+        "pine2ast/semantic/signatures.py",
+        "pine2ast/semantic/binder.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_core_ast_binding_type_qualifier_and_overload_facts",
+        "tests/stage3/test_user_strategy_acceptance.py::test_synthetic_v6_strategy_has_complete_static_facts"
+      ],
+      "requirement_id": "PINE.STATIC.OVERLOAD_IDENTITY",
+      "title": "Resolved calls have deterministic symbol and overload identities."
+    },
+    {
+      "catalog_test_id": "stage6.availability.fail_closed",
+      "description": "Features unavailable in a selected version are rejected instead of accepted by a modern parser fallback.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v1_semantics.py::test_v1_rejects_structures_added_in_v2_or_later",
+        "tests/stage6/test_version_semantic_hardening.py::test_v4_rejects_modern_namespace"
+      ],
+      "requirement_id": "PINE.STATIC.UNAVAILABLE_FEATURE_FAILS",
+      "title": "Features unavailable in a selected version are rejected instead of accepted by a modern parser fallback."
+    },
+    {
+      "catalog_test_id": "stage6.declaration.cardinality",
+      "description": "A script has one valid version-appropriate declaration.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/semantic/passes/declaration_cardinality.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_declaration_cardinality_and_version_spelling"
+      ],
+      "requirement_id": "PINE.STATIC.DECLARATION_CARDINALITY",
+      "title": "A script has one valid version-appropriate declaration."
+    },
+    {
+      "catalog_test_id": "stage6.v1.default",
+      "description": "A source without //@version resolves to Pine v1.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "implementation_refs": [
+        "pine2ast/versioning/resolver.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage2/test_version_kernel.py::test_missing_annotation_is_v1_and_uses_v1_frontend"
+      ],
+      "requirement_id": "PINE.V1.MISSING_ANNOTATION_DEFAULT",
+      "title": "A source without //@version resolves to Pine v1."
+    },
+    {
+      "catalog_test_id": "stage6.v1.declarations",
+      "description": "Historical study()/strategy() declarations are accepted and indicator()/library() are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_declaration_cardinality_and_version_spelling"
+      ],
+      "requirement_id": "PINE.V1.STUDY_DECLARATION",
+      "title": "Historical study()/strategy() declarations are accepted and indicator()/library() are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v1.control_flow",
+      "description": "Statement if/for/while/switch constructs are unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v1_semantics.py::test_v1_rejects_structures_added_in_v2_or_later"
+      ],
+      "requirement_id": "PINE.V1.NO_STATEMENT_CONTROL_FLOW",
+      "title": "Statement if/for/while/switch constructs are unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v1.functions",
+      "description": "User-defined function declaration syntax is unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v1_rejects_function_declaration"
+      ],
+      "requirement_id": "PINE.V1.NO_USER_FUNCTION_DECLARATIONS",
+      "title": "User-defined function declaration syntax is unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v1.reassignment",
+      "description": "The := reassignment form is unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v1_rejects_reassignment"
+      ],
+      "requirement_id": "PINE.V1.NO_REASSIGNMENT",
+      "title": "The := reassignment form is unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v1.typed_declarations",
+      "description": "Typed, var and varip declarations are unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_declaration_cardinality_and_version_spelling"
+      ],
+      "requirement_id": "PINE.V1.NO_TYPED_DECLARATIONS",
+      "title": "Typed, var and varip declarations are unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v1.spellings",
+      "description": "Historical unnamespaced builtin spellings are used.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py",
+        "pine2ast/semantic/analyzer_validation_builtins.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_declaration_cardinality_and_version_spelling"
+      ],
+      "requirement_id": "PINE.V1.LEGACY_CALL_SPELLINGS",
+      "title": "Historical unnamespaced builtin spellings are used."
+    },
+    {
+      "catalog_test_id": "stage6.v1.self_reference",
+      "description": "Historical self-reference compatibility is represented explicitly.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v1_semantics.py::test_v1_supports_comma_separated_global_statements_and_self_reference"
+      ],
+      "requirement_id": "PINE.V1.SELF_REFERENCE_STATIC_POLICY",
+      "title": "Historical self-reference compatibility is represented explicitly."
+    },
+    {
+      "catalog_test_id": "stage6.v1.forward_reference",
+      "description": "Historical forward-reference compatibility is represented explicitly.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_declaration_cardinality_and_version_spelling"
+      ],
+      "requirement_id": "PINE.V1.FORWARD_REFERENCE_STATIC_POLICY",
+      "title": "Historical forward-reference compatibility is represented explicitly."
+    },
+    {
+      "catalog_test_id": "stage6.v1.bool_numeric",
+      "description": "Historical boolean-to-numeric coercion is represented in semantic facts.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_types.py",
+        "pine2ast/semantic/binder.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v1_semantics.py::test_v1_bool_to_number_and_security_lookahead_are_version_bound"
+      ],
+      "requirement_id": "PINE.V1.BOOL_NUMERIC_COERCION",
+      "title": "Historical boolean-to-numeric coercion is represented in semantic facts."
+    },
+    {
+      "catalog_test_id": "stage6.v2.version",
+      "description": "//@version=2 selects the Pine v2 pack.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/versioning/resolver.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_single_version_context[2]"
+      ],
+      "requirement_id": "PINE.V2.EXPLICIT_VERSION",
+      "title": "//@version=2 selects the Pine v2 pack."
+    },
+    {
+      "catalog_test_id": "stage6.v2.v1_compat",
+      "description": "v1-valid static constructs remain recognized under v2.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_adds_if_for_break_continue_udf_and_reassignment"
+      ],
+      "requirement_id": "PINE.V2.V1_BACKWARD_COMPATIBILITY",
+      "title": "v1-valid static constructs remain recognized under v2."
+    },
+    {
+      "catalog_test_id": "stage6.v2.control_flow",
+      "description": "v2 control-flow forms in the pinned historical snapshot are version gated.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_adds_if_for_break_continue_udf_and_reassignment"
+      ],
+      "requirement_id": "PINE.V2.CONTROL_FLOW_DELTA",
+      "title": "v2 control-flow forms in the pinned historical snapshot are version gated."
+    },
+    {
+      "catalog_test_id": "stage6.v2.functions",
+      "description": "v2 user-function forms in the pinned historical snapshot are version gated.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_adds_if_for_break_continue_udf_and_reassignment"
+      ],
+      "requirement_id": "PINE.V2.USER_FUNCTION_DELTA",
+      "title": "v2 user-function forms in the pinned historical snapshot are version gated."
+    },
+    {
+      "catalog_test_id": "stage6.v2.reassignment",
+      "description": "v2 reassignment forms in the pinned historical snapshot are version gated.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_adds_if_for_break_continue_udf_and_reassignment"
+      ],
+      "requirement_id": "PINE.V2.REASSIGNMENT_DELTA",
+      "title": "v2 reassignment forms in the pinned historical snapshot are version gated."
+    },
+    {
+      "catalog_test_id": "stage6.v2.self_reference",
+      "description": "Self-referencing declarations remain representable under the historical v2 profile.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_preserves_self_and_forward_reference_declarations"
+      ],
+      "requirement_id": "PINE.V2.SELF_REFERENCE_ALLOWED",
+      "title": "Self-referencing declarations remain representable under the historical v2 profile."
+    },
+    {
+      "catalog_test_id": "stage6.v2.forward_reference",
+      "description": "Forward references remain representable under the historical v2 profile.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_preserves_self_and_forward_reference_declarations"
+      ],
+      "requirement_id": "PINE.V2.FORWARD_REFERENCE_ALLOWED",
+      "title": "Forward references remain representable under the historical v2 profile."
+    },
+    {
+      "catalog_test_id": "stage6.v2.bool_numeric",
+      "description": "Boolean arithmetic remains accepted in the historical v2 profile.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_types.py",
+        "pine2ast/semantic/binder.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_allows_bool_to_number_but_records_explicit_coercion"
+      ],
+      "requirement_id": "PINE.V2.BOOL_NUMERIC_ALLOWED",
+      "title": "Boolean arithmetic remains accepted in the historical v2 profile."
+    },
+    {
+      "catalog_test_id": "stage6.v2.security_mutable",
+      "description": "Mutable-expression restrictions for security() are statically surfaced.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/static_validation.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v2_semantics.py::test_v2_security_default_is_lookahead_on_and_mutable_expression_is_forbidden"
+      ],
+      "requirement_id": "PINE.V2.SECURITY_MUTABLE_EXPRESSION_RULE",
+      "title": "Mutable-expression restrictions for security() are statically surfaced."
+    },
+    {
+      "catalog_test_id": "stage6.v3.self_reference",
+      "description": "Self-referencing declarations are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v3_semantics.py::test_v3_removes_self_and_forward_reference_declarations"
+      ],
+      "requirement_id": "PINE.V3.NO_SELF_REFERENCE",
+      "title": "Self-referencing declarations are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v3.forward_reference",
+      "description": "Forward references are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v3_semantics.py::test_v3_removes_self_and_forward_reference_declarations"
+      ],
+      "requirement_id": "PINE.V3.NO_FORWARD_REFERENCE",
+      "title": "Forward references are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v3.bool_arithmetic",
+      "description": "Boolean values are rejected in arithmetic expressions.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_types.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v3_semantics.py::test_v3_forbids_bool_to_number_but_keeps_numeric_conditions"
+      ],
+      "requirement_id": "PINE.V3.NO_BOOL_ARITHMETIC",
+      "title": "Boolean values are rejected in arithmetic expressions."
+    },
+    {
+      "catalog_test_id": "stage6.v3.numeric_condition",
+      "description": "Numeric expressions remain valid condition operands under the historical profile.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_expressions.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v3_semantics.py::test_v3_forbids_bool_to_number_but_keeps_numeric_conditions"
+      ],
+      "requirement_id": "PINE.V3.NUMERIC_CONDITIONS",
+      "title": "Numeric expressions remain valid condition operands under the historical profile."
+    },
+    {
+      "catalog_test_id": "stage6.v3.tuples",
+      "description": "Tuple destructuring is version gated and typed.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "implementation_refs": [
+        "pine2ast/parser/statements.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v3_semantics.py::test_v3_adds_tuple_declarations_but_not_v4_typed_declarations"
+      ],
+      "requirement_id": "PINE.V3.TUPLE_DESTRUCTURING",
+      "title": "Tuple destructuring is version gated and typed."
+    },
+    {
+      "catalog_test_id": "stage6.v4.declarations",
+      "description": "study()/strategy() are valid declarations; indicator()/library() are unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/parser/declarations.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v4_declarations_arrays_and_historical_overloads"
+      ],
+      "requirement_id": "PINE.V4.STUDY_DECLARATION",
+      "title": "study()/strategy() are valid declarations; indicator()/library() are unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v4.typed_declarations",
+      "description": "Explicit types and v4 declaration syntax are supported.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/parser/statements.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_supports_typed_var_varip_arrays_and_compound_assignment"
+      ],
+      "requirement_id": "PINE.V4.TYPED_DECLARATIONS",
+      "title": "Explicit types and v4 declaration syntax are supported."
+    },
+    {
+      "catalog_test_id": "stage6.v4.na_type",
+      "description": "A declaration initialized with na requires a usable explicit type.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_statements.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_requires_explicit_type_for_na_declaration"
+      ],
+      "requirement_id": "PINE.V4.NA_REQUIRES_EXPLICIT_TYPE",
+      "title": "A declaration initialized with na requires a usable explicit type."
+    },
+    {
+      "catalog_test_id": "stage6.v4.var",
+      "description": "var persistence declarations are statically represented.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/parser/statements.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_supports_typed_var_varip_arrays_and_compound_assignment"
+      ],
+      "requirement_id": "PINE.V4.VAR_DECLARATIONS",
+      "title": "var persistence declarations are statically represented."
+    },
+    {
+      "catalog_test_id": "stage6.v4.arrays",
+      "description": "Historical v4 array APIs are available while map/matrix APIs are unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/semantic/collection_signatures.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v4_declarations_arrays_and_historical_overloads",
+        "tests/stage5/test_v4_semantics.py::test_v4_supports_typed_var_varip_arrays_and_compound_assignment"
+      ],
+      "requirement_id": "PINE.V4.ARRAYS",
+      "title": "Historical v4 array APIs are available while map/matrix APIs are unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v4.compound",
+      "description": "Compound assignment operators are available and type checked.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_statements.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_supports_typed_var_varip_arrays_and_compound_assignment"
+      ],
+      "requirement_id": "PINE.V4.COMPOUND_ASSIGNMENT",
+      "title": "Compound assignment operators are available and type checked."
+    },
+    {
+      "catalog_test_id": "stage6.v4.input",
+      "description": "Historical input() overloads are available; typed input.* forms are unavailable.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_retains_unified_input_iff_offset_and_legacy_rsi_overload",
+        "tests/stage6/test_version_semantic_hardening.py::test_v4_rejects_typed_input_namespace"
+      ],
+      "requirement_id": "PINE.V4.UNIFIED_INPUT",
+      "title": "Historical input() overloads are available; typed input.* forms are unavailable."
+    },
+    {
+      "catalog_test_id": "stage6.v4.iff_offset",
+      "description": "Historical iff()/offset() spellings are available.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_retains_unified_input_iff_offset_and_legacy_rsi_overload"
+      ],
+      "requirement_id": "PINE.V4.IFF_OFFSET",
+      "title": "Historical iff()/offset() spellings are available."
+    },
+    {
+      "catalog_test_id": "stage6.v4.rsi",
+      "description": "The historical rsi() overload set is represented.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/signatures.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_retains_unified_input_iff_offset_and_legacy_rsi_overload"
+      ],
+      "requirement_id": "PINE.V4.HISTORICAL_RSI_OVERLOAD",
+      "title": "The historical rsi() overload set is represented."
+    },
+    {
+      "catalog_test_id": "stage6.v4.no_v5_forms",
+      "description": "v5-only library, method, UDT, enum, switch, while, map and matrix forms fail closed.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v4_declarations_arrays_and_historical_overloads",
+        "tests/stage3/test_legacy_versions_fail_closed.py::test_v1_to_v4_are_native_version_bound_frontends"
+      ],
+      "requirement_id": "PINE.V4.NO_V5_LANGUAGE_FORMS",
+      "title": "v5-only library, method, UDT, enum, switch, while, map and matrix forms fail closed."
+    },
+    {
+      "catalog_test_id": "stage6.v5.declarations",
+      "description": "indicator()/strategy()/library() declarations are recognized and study() is rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/parser/declarations.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v5_modern_language_surface"
+      ],
+      "requirement_id": "PINE.V5.MODERN_DECLARATIONS",
+      "title": "indicator()/strategy()/library() declarations are recognized and study() is rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v5.namespaces",
+      "description": "Modern namespace spellings are bound to canonical symbol identities.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py",
+        "pine2ast/semantic/analyzer_validation_builtins.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v5_modern_language_surface"
+      ],
+      "requirement_id": "PINE.V5.NAMESPACED_BUILTINS",
+      "title": "Modern namespace spellings are bound to canonical symbol identities."
+    },
+    {
+      "catalog_test_id": "stage6.v5.inputs",
+      "description": "input.int/input.float/input.bool and related typed inputs are resolved.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py",
+        "pine2ast/semantic/analyzer_validation_builtins.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v5_modern_language_surface"
+      ],
+      "requirement_id": "PINE.V5.TYPED_INPUTS",
+      "title": "input.int/input.float/input.bool and related typed inputs are resolved."
+    },
+    {
+      "catalog_test_id": "stage6.v5.language_forms",
+      "description": "UDTs, methods, enums, libraries/imports and exports are statically represented.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/parser/declarations.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v5_modern_language_surface"
+      ],
+      "requirement_id": "PINE.V5.UDT_METHOD_ENUM_LIBRARY",
+      "title": "UDTs, methods, enums, libraries/imports and exports are statically represented."
+    },
+    {
+      "catalog_test_id": "stage6.v5.control_flow",
+      "description": "switch and while constructs are statically represented.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/parser/statements.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_traceability_v5_modern_language_surface"
+      ],
+      "requirement_id": "PINE.V5.SWITCH_WHILE",
+      "title": "switch and while constructs are statically represented."
+    },
+    {
+      "catalog_test_id": "stage6.v5.named_constants",
+      "description": "Parameters requiring named constants reject raw equivalent values.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/signatures.py",
+        "pine2ast/semantic/static_validation.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_named_constant_parameter_rule"
+      ],
+      "requirement_id": "PINE.V5.NAMED_CONSTANT_ARGUMENTS",
+      "title": "Parameters requiring named constants reject raw equivalent values."
+    },
+    {
+      "catalog_test_id": "stage6.v5.timeframe_args",
+      "description": "resolution/resolution_gaps are rejected in favor of timeframe/timeframe_gaps.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_rejects_resolution_parameter"
+      ],
+      "requirement_id": "PINE.V5.RESOLUTION_PARAMETER_RENAME",
+      "title": "resolution/resolution_gaps are rejected in favor of timeframe/timeframe_gaps."
+    },
+    {
+      "catalog_test_id": "stage6.v5.rsi",
+      "description": "Removed historical rsi() overloads are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "implementation_refs": [
+        "pine2ast/semantic/signatures.py",
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage5/test_v4_semantics.py::test_v4_retains_unified_input_iff_offset_and_legacy_rsi_overload",
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_rejects_legacy_spelling"
+      ],
+      "requirement_id": "PINE.V5.RSI_OVERLOAD_CHANGE",
+      "title": "Removed historical rsi() overloads are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v5.bool_na",
+      "description": "bool may carry na under v5 static semantics.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_types.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_bool_na_delta"
+      ],
+      "requirement_id": "PINE.V5.BOOL_NA",
+      "title": "bool may carry na under v5 static semantics."
+    },
+    {
+      "catalog_test_id": "stage6.v5.numeric_condition",
+      "description": "Numeric condition coercion remains available under v5.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_expressions.py",
+        "pine2ast/policy/models.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_numeric_condition_delta"
+      ],
+      "requirement_id": "PINE.V5.NUMERIC_CONDITION",
+      "title": "Numeric condition coercion remains available under v5."
+    },
+    {
+      "catalog_test_id": "stage6.v5.when",
+      "description": "The strategy when parameter remains statically available.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_allows_strategy_when"
+      ],
+      "requirement_id": "PINE.V5.STRATEGY_WHEN",
+      "title": "The strategy when parameter remains statically available."
+    },
+    {
+      "catalog_test_id": "stage6.v6.bool",
+      "description": "bool is two-state and cannot be na.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_types.py",
+        "pine2ast/semantic/signatures.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_bool_na_delta"
+      ],
+      "requirement_id": "PINE.V6.BOOL_TWO_STATE",
+      "title": "bool is two-state and cannot be na."
+    },
+    {
+      "catalog_test_id": "stage6.v6.numeric_condition",
+      "description": "Numeric values do not implicitly convert to bool in conditions.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_expressions.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_numeric_condition_delta"
+      ],
+      "requirement_id": "PINE.V6.NO_NUMERIC_CONDITION",
+      "title": "Numeric values do not implicitly convert to bool in conditions."
+    },
+    {
+      "catalog_test_id": "stage6.v6.when",
+      "description": "Removed strategy when parameters are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_rejects_strategy_when"
+      ],
+      "requirement_id": "PINE.V6.NO_STRATEGY_WHEN",
+      "title": "Removed strategy when parameters are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v6.transp",
+      "description": "Removed transp parameters are rejected.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/version_semantics.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_rejects_transp_parameter"
+      ],
+      "requirement_id": "PINE.V6.NO_TRANSP_PARAMETER",
+      "title": "Removed transp parameters are rejected."
+    },
+    {
+      "catalog_test_id": "stage6.v6.unique_types",
+      "description": "Unique-type parameters cannot receive na.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/signatures.py",
+        "pine2ast/semantic/type_model.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_unique_type_argument_rejects_na"
+      ],
+      "requirement_id": "PINE.V6.UNIQUE_TYPES_NOT_NA",
+      "title": "Unique-type parameters cannot receive na."
+    },
+    {
+      "catalog_test_id": "stage6.v6.negative_index",
+      "description": "Supported array operations accept negative indices in v6 and reject them in earlier versions.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_validation_collections.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_negative_collection_index_delta"
+      ],
+      "requirement_id": "PINE.V6.NEGATIVE_COLLECTION_INDEX",
+      "title": "Supported array operations accept negative indices in v6 and reject them in earlier versions."
+    },
+    {
+      "catalog_test_id": "stage6.v6.history",
+      "description": "v6 rejects history references on literals and UDT fields while accepting history on the UDT object.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "implementation_refs": [
+        "pine2ast/semantic/analyzer_expressions.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v5_v6_history_target_delta"
+      ],
+      "requirement_id": "PINE.V6.HISTORY_EXPANSION",
+      "title": "v6 rejects history references on literals and UDT fields while accepting history on the UDT object."
+    },
+    {
+      "catalog_test_id": "stage6.v6.multiline_strings",
+      "description": "Current v6 multiline strings are parsed and source mapped.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "implementation_refs": [
+        "pine2ast/lexer/lexer.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_multiline_string",
+        "tests/stage3/test_version_differentials.py::test_multiline_string_is_version_bound"
+      ],
+      "requirement_id": "PINE.V6.MULTILINE_STRINGS_2026",
+      "title": "Current v6 multiline strings are parsed and source mapped."
+    },
+    {
+      "catalog_test_id": "stage6.v6.historical_tick",
+      "description": "calc_on_every_history_tick is catalogued as a current v6 declaration capability.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "implementation_refs": [
+        "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+        "pine2ast/semantic/signatures.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_historical_tick_declaration_is_catalogued"
+      ],
+      "requirement_id": "PINE.V6.HISTORICAL_TICK_DECLARATION_2026",
+      "title": "calc_on_every_history_tick is catalogued as a current v6 declaration capability."
+    },
+    {
+      "catalog_test_id": "stage6.v6.udt_binary_search",
+      "description": "Current v6 UDT array binary-search sort_field signatures are catalogued.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "implementation_refs": [
+        "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+        "pine2ast/semantic/collection_signatures.py",
+        "pine2ast/semantic/static_validation.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_udt_binary_search_sort_field_is_catalogued"
+      ],
+      "requirement_id": "PINE.V6.UDT_BINARY_SEARCH_2026",
+      "title": "Current v6 UDT array binary-search sort_field signatures are catalogued."
+    },
+    {
+      "catalog_test_id": "stage6.v6.market_metadata",
+      "description": "Current v6 bid/ask and current-contract metadata are catalogued.",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "implementation_refs": [
+        "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+        "pine2ast/versioning/context.py"
+      ],
+      "mapping_basis": {
+        "implementation_rationale": "References point to the concrete resolver/parser/semantic path that implements this requirement.",
+        "pytest_rationale": "The mapped pytest node directly exercises the described behavior and its version boundary where applicable.",
+        "review": "manual-semantic"
+      },
+      "owner": "pine2ast",
+      "pytest_nodes": [
+        "tests/stage6/test_version_semantic_hardening.py::test_v6_bid_ask_and_current_contract_are_catalogued"
+      ],
+      "requirement_id": "PINE.V6.BID_ASK_CURRENT_CONTRACT",
+      "title": "Current v6 bid/ask and current-contract metadata are catalogued."
+    }
+  ],
+  "schema_version": "1.0",
+  "scope": "pine2ast-frontend",
+  "source_catalog": "pine2ast/semantic/version_semantic_requirements.json",
+  "source_selection": {
+    "description": "owner == 'pine2ast'",
+    "kind": "single",
+    "quality": 50
+  },
+  "summary": {
+    "categories": {
+      "ast": 1,
+      "catalog": 4,
+      "metadata": 1,
+      "parser": 2,
+      "versions": 58
+    },
+    "distinct_implementation_refs": 17,
+    "distinct_pytest_nodes": 33,
+    "requirements": 66,
+    "unique_requirement_ids": 66
+  }
+}

@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
 
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.catalog import load_catalog_view
 from pine2ast.semantic.collection_signatures import collection_function_names
 
 _REFERENCE_INDEX_FILES = {
@@ -175,7 +175,7 @@ def _registry_entry(registry: Mapping[str, Any], category: str, name: str) -> An
 
 def build_signature_coverage_report(pine_version: int = 6) -> SignatureCoverageReport:
     version = 5 if pine_version == 5 else 6
-    registry = load_builtin_registry(pine_version=version)
+    registry = load_catalog_view(pine_version=version)
     official = load_official_reference_index(version)
     category_reports: list[CategorySignatureCoverage] = []
     for category in _SIGNATURE_CATEGORIES:

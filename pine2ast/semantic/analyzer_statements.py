@@ -1,99 +1,34 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
-
-from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
+from pine2ast.ast.base import Expression
 from pine2ast.ast.nodes import (
-    BinaryExpr,
     Block,
-    BreakStatement,
-    CallExpr,
     ConditionalExpr,
-    ContinueStatement,
     DeclarationStatement,
     EnumDeclaration,
-    ForInStructure,
-    ForRangeStructure,
     FunctionDeclaration,
-    GenericInstantiationExpr,
-    HistoryRefExpr,
-    Identifier,
     IfStructure,
     ImportDeclaration,
     Literal,
     MemberAccessExpr,
     MethodDeclaration,
-    Program,
     Reassignment,
     SwitchStructure,
     TupleDeclaration,
     TupleExpr,
     TypeDeclaration,
-    FieldDeclaration,
-    Parameter,
-    UnaryExpr,
     VarDeclaration,
-    WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
-    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
-)
-from pine2ast.semantic.model import SemanticModel
-from pine2ast.semantic.type_helpers import (
-    for_in_target_types,
-    generic_type_parts,
-    is_assignable_type,
-    is_valid_map_key_type,
-    split_type_args,
-    tuple_element_types,
-    type_ref_name,
-)
-from pine2ast.semantic.qualifier_infer import infer_qualifier
-from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
-from pine2ast.semantic.signatures import SignatureResolver
-from pine2ast.semantic.collection_signatures import (
-    generic_constructor_expected_arity,
-    is_collection_method,
-    resolve_collection_call,
-)
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
+from pine2ast.semantic.scopes import ScopeKind
+from pine2ast.semantic.symbols import SymbolKind
 from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
-from pine2ast.semantic.passes.loop_dos import (
-    _is_literal_true,
-    _static_int_bound,
-)
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerStatementMixin:
+class AnalyzerStatementMixin(AnalyzerMixinHost):
     """Implementation mixin split out of :mod:`pine2ast.semantic.analyzer`."""
 
     _script_type: str | None
@@ -102,7 +37,7 @@ class AnalyzerStatementMixin:
         self._script_type = node.script_type
         self._visit_expr(node.call)
         for arg in node.call.arguments:
-            if infer_qualifier(arg.value, self.model.symbols) not in {
+            if self._infer_qualifier(arg.value) not in {
                 "const",
                 "input",
             } and arg.name in {"title", "overlay", None}:
@@ -127,6 +62,21 @@ class AnalyzerStatementMixin:
         validate_export_policy(self, node)
         init_type = self._infer_type(node.initializer)
         explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
+        if (
+            node.type_ref is None
+            and isinstance(node.initializer, Literal)
+            and node.initializer.literal_type == "na"
+            and self.policy.requires_explicit_na_type
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.NA_DECLARATION_TYPE_REQUIRED,
+                (
+                    f"Pine v{self.version_context.pine_version} requires an explicit "
+                    "type when a variable is initialized with na."
+                ),
+                node.span,
+            )
         if node.type_ref is not None:
             self._validate_type_ref(node.type_ref)
         self._visit_expr(node.initializer)
@@ -151,17 +101,25 @@ class AnalyzerStatementMixin:
         else:
             if init_qualifier == "input":
                 qualifier = "input"
-            elif init_qualifier == "const" and node.name not in self._reassigned_names:
-                qualifier = "const"
+            elif init_qualifier in {"const", "simple"} and node.name not in self._reassigned_names:
+                qualifier = init_qualifier
             else:
                 qualifier = "series"
-        self._define(node.name, SymbolKind.VARIABLE, node.span, explicit_type, qualifier)
+        if id(node) in self._predeclared_nodes:
+            symbol = self._resolve(node.name)
+            if symbol is None:
+                raise RuntimeError("predeclared Pine variable disappeared before analysis")
+            symbol.type = explicit_type
+            symbol.qualifier = qualifier
+            symbol.declared_at = node.span
+        else:
+            self._define(node.name, SymbolKind.VARIABLE, node.span, explicit_type, qualifier)
 
     def _s_tuple_declaration(self, node: TupleDeclaration) -> None:
         self._visit_expr(node.initializer)
-        init_type = infer_type(node.initializer, self.model.symbols)
+        init_type = self._infer_type(node.initializer)
         element_types = self._tuple_element_types(init_type)
-        init_qualifier = infer_qualifier(node.initializer, self.model.symbols)
+        init_qualifier = self._infer_qualifier(node.initializer)
         if not element_types:
             self._diag(
                 Severity.ERROR,
@@ -189,7 +147,7 @@ class AnalyzerStatementMixin:
 
     def _s_reassignment(self, node: Reassignment) -> None:
         self._visit_expr(node.value)
-        value_type = infer_type(node.value, self.model.symbols)
+        value_type = self._infer_type(node.value)
         if isinstance(node.target, MemberAccessExpr):
             root_sym = self._resolve_assignable(node.target)
             field_type = self._member_field_type(node.target)
@@ -301,7 +259,7 @@ class AnalyzerStatementMixin:
             if p.default_value is not None:
                 self._visit_expr(p.default_value)
                 expected = self._type_ref_name(p.type_ref) if p.type_ref else None
-                actual = infer_type(p.default_value, self.model.symbols)
+                actual = self._infer_type(p.default_value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -313,7 +271,7 @@ class AnalyzerStatementMixin:
                 if p.explicit_qualifier is not None:
                     self._validate_qualifier_assignment(
                         p.explicit_qualifier,
-                        infer_qualifier(p.default_value, self.model.symbols),
+                        self._infer_qualifier(p.default_value),
                         p.default_value.span,
                         f"Default value for parameter {p.name}",
                     )
@@ -355,16 +313,23 @@ class AnalyzerStatementMixin:
                 node.receiver_type.span,
             )
         if id(node) not in self._predeclared_nodes:
-            self._define(node.name, SymbolKind.METHOD, node.span, "method", None)
-            self._function_params[node.name] = node.parameters
+            self._define(
+                node.name,
+                SymbolKind.METHOD,
+                node.span,
+                "method",
+                None,
+                allow_existing=True,
+            )
             if node.receiver_type is not None:
                 rt = node.receiver_type.name
-                if node.name in self._method_receivers:
-                    existing = self._method_receivers[node.name]
-                    if isinstance(existing, set):
-                        existing.add(rt)
-                    else:
-                        self._method_receivers[node.name] = {existing, rt}
+                method_key = (rt, node.name)
+                self._user_method_params.setdefault(method_key, node.parameters)
+                existing = self._method_receivers.get(node.name)
+                if isinstance(existing, set):
+                    existing.add(rt)
+                elif isinstance(existing, str):
+                    self._method_receivers[node.name] = {existing, rt}
                 else:
                     self._method_receivers[node.name] = rt
         self._push_scope(ScopeKind.METHOD)
@@ -382,7 +347,7 @@ class AnalyzerStatementMixin:
             if p.default_value is not None:
                 self._visit_expr(p.default_value)
                 expected = self._type_ref_name(p.type_ref) if p.type_ref else None
-                actual = infer_type(p.default_value, self.model.symbols)
+                actual = self._infer_type(p.default_value)
                 if not self._is_assignable_type(expected, actual):
                     self._diag(
                         Severity.ERROR,
@@ -394,7 +359,7 @@ class AnalyzerStatementMixin:
                 if p.explicit_qualifier is not None:
                     self._validate_qualifier_assignment(
                         p.explicit_qualifier,
-                        infer_qualifier(p.default_value, self.model.symbols),
+                        self._infer_qualifier(p.default_value),
                         p.default_value.span,
                         f"Default value for parameter {p.name}",
                     )
@@ -441,7 +406,7 @@ class AnalyzerStatementMixin:
             )
             if field.default_value is not None:
                 self._visit_expr(field.default_value)
-                default_type = infer_type(field.default_value, self.model.symbols)
+                default_type = self._infer_type(field.default_value)
                 if not self._is_assignable_type(field_type, default_type):
                     self._diag(
                         Severity.ERROR,
@@ -489,13 +454,13 @@ class AnalyzerStatementMixin:
                 return "void"
             last = body.statements[-1]
             if hasattr(last, "expression"):
-                return infer_type(last.expression, self.model.symbols)
+                return self._infer_type(last.expression)
             if hasattr(last, "initializer"):
-                return infer_type(last.initializer, self.model.symbols)
+                return self._infer_type(last.initializer)
             if hasattr(last, "value"):
-                return infer_type(last.value, self.model.symbols)
+                return self._infer_type(last.value)
             return "void"
-        return infer_type(body, self.model.symbols)
+        return self._infer_type(body)
 
     def _body_return_shape(self, body) -> str | None:
         """Best-effort return shape usable during global predeclaration.

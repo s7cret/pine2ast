@@ -1,4 +1,0 @@
-//@version=6
-indicator("Gradient")
-c = color.from_gradient(close, low, high, color.red, color.green)
-plot(close, color = c)

@@ -1,0 +1,26 @@
+{
+  "fingerprint_scope": "canonical URL, page title, and verified section headings",
+  "host": "www.tradingview.com",
+  "pine_versions": [
+    6
+  ],
+  "raw_body_redistributed": false,
+  "retrieval_method": "official HTTPS page metadata and section-heading verification",
+  "retrieval_status": "SUCCESS",
+  "retrieved_at_utc": "2026-08-27T20:18:09Z",
+  "review_status": "VERIFIED",
+  "reviewed_by": "stage6-review-agent",
+  "schema_id": "pine2ast.official_source_record.v1",
+  "schema_version": "1.0.0",
+  "scope": [
+    "rolling Pine v6 additions"
+  ],
+  "source_fingerprint": "sha256:2dc63f279e7f2777037f0dc2d39c482f01027cae538306fe4e6cb7d989449431",
+  "source_id": "tv.pine.release_notes",
+  "source_kind": "RELEASE_NOTES",
+  "title": "Release notes",
+  "url": "https://www.tradingview.com/pine-script-docs/release-notes/",
+  "verified_headings": [
+    "Release notes"
+  ]
+}

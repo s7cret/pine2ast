@@ -23,8 +23,6 @@ Threat model (TZ §7.7 simplified):
   - **Path disclosure in errors** → sanitize ``source_name`` before it
                                      appears in diagnostics.
   - **Symlink traversal**         → refuse symlink targets in ``parse_file``.
-  - **Profile confusion**         → ``runtime_contract_profile`` must be
-                                     one of the whitelisted profiles.
   - **Numeric overflow in source** → reject ``1e500`` style literals at
                                      lex time (Python would parse as ``inf``).
 
@@ -66,12 +64,6 @@ ABSOLUTE_MAX_LOOP_ITERATIONS: Final = 10_000_000
 # `for i = 0 to 1000` × `for j = 0 to 1000` shape.
 ABSOLUTE_NESTED_LOOP_BOUND: Final = 100_000_000
 
-# Whitelisted runtime-contract profiles. Anything else is rejected with
-# a P2A1104 diagnostic. ``None`` (default) and ``"compatibility"`` are
-# always allowed.
-ALLOWED_RUNTIME_CONTRACT_PROFILES: Final = frozenset(
-    {None, "compatibility", "v1.4", "runtime_contract_v1_4"}
-)
 
 # Maximum number of path components we'll echo back from a normalized
 # source_name. Keeps a `/home/x/y/z/script.pine` honest but stops a
@@ -133,11 +125,6 @@ def sanitize_source_name(name: str | None) -> str:
             # some platforms). Fall back to the truncated string.
             pass
     return cleaned
-
-
-def is_safe_runtime_contract_profile(value: str | None) -> bool:
-    """Whitelist check for ``runtime_contract_profile``."""
-    return value in ALLOWED_RUNTIME_CONTRACT_PROFILES
 
 
 def safe_resolve_path(path: str | Path, *, must_exist: bool = True) -> Path:

@@ -15,10 +15,20 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
+from pine2ast.versioning import PineVersionContext
+from pine2ast.policy import SemanticPolicy, semantic_policy_from_catalog
 from pine2ast.ast.base import ASTNode, Expression
 from pine2ast.ast.walk import iter_nodes
-from pine2ast.ast.nodes import BinaryExpr, CallExpr, GenericInstantiationExpr, MemberAccessExpr
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.ast.nodes import (
+    BinaryExpr,
+    CallExpr,
+    ConditionalExpr,
+    GenericInstantiationExpr,
+    IfStructure,
+    MemberAccessExpr,
+    SwitchStructure,
+)
+from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.qualifier_infer import infer_qualifier as legacy_infer_qualifier
 from pine2ast.semantic.symbols import SymbolKind
@@ -29,6 +39,7 @@ from pine2ast.semantic.type_model import (
     is_reference_type_name,
     parse_type_string,
     strip_series_type,
+    merge_type_names,
 )
 from pine2ast.semantic.values import SemanticValue, expression_can_be_na
 
@@ -122,20 +133,27 @@ class PineInferenceEngine:
     def __init__(
         self,
         *,
+        version_context: PineVersionContext,
         symbols: Mapping[str, Any] | None = None,
-        pine_version: int = 6,
         registry: Mapping[str, Any] | None = None,
+        policy: SemanticPolicy | None = None,
     ) -> None:
+        self.version_context = version_context
         self.symbols = symbols
-        self.pine_version = 5 if pine_version == 5 else 6
-        self.registry = registry or load_builtin_registry(pine_version=self.pine_version)
+        self.registry = registry or load_catalog_readonly_view(version_context.pine_version)
+        self.policy = policy or semantic_policy_from_catalog(version_context, self.registry)
+        self.policy.validate_context(version_context)
 
     @classmethod
     def from_analyzer(cls, analyzer: Any) -> "PineInferenceEngine":
+        context = getattr(analyzer, "version_context", None)
+        if not isinstance(context, PineVersionContext):
+            raise ValueError("analyzer must expose PineVersionContext")
         return cls(
+            version_context=context,
             symbols=getattr(getattr(analyzer, "model", None), "symbols", None),
-            pine_version=getattr(analyzer, "pine_version", 6),
             registry=getattr(analyzer, "registry", None),
+            policy=getattr(analyzer, "policy", None),
         )
 
     def bind_model(self, model: SemanticModel) -> None:
@@ -152,7 +170,28 @@ class PineInferenceEngine:
             specialized = self._binary_return_type(expr)
             if specialized:
                 return specialized
-        legacy = legacy_infer_type(expr, self.symbols)
+        if isinstance(expr, ConditionalExpr):
+            return merge_type_names([self.infer_type(expr.if_true), self.infer_type(expr.if_false)])
+        if isinstance(expr, IfStructure):
+            values: list[str] = []
+            if expr.then_block.statements:
+                values.append(self._statement_value_type(expr.then_block.statements[-1]))
+            for branch in expr.else_if_branches:
+                if branch.block.statements:
+                    values.append(self._statement_value_type(branch.block.statements[-1]))
+            if expr.else_block and expr.else_block.statements:
+                values.append(self._statement_value_type(expr.else_block.statements[-1]))
+            return merge_type_names(values)
+        if isinstance(expr, SwitchStructure):
+            values = []
+            for case in expr.cases:
+                body = case.body
+                if hasattr(body, "statements") and body.statements:
+                    values.append(self._statement_value_type(body.statements[-1]))
+                elif isinstance(body, Expression):
+                    values.append(self.infer_type(body))
+            return merge_type_names(values)
+        legacy = legacy_infer_type(expr, self.symbols, registry=self.registry)
         if isinstance(expr, CallExpr):
             specialized = self._call_return_type(expr, legacy)
             if specialized:
@@ -213,15 +252,34 @@ class PineInferenceEngine:
                 )
         return tuple(facts)
 
+    def _statement_value_type(self, statement: Any) -> str:
+        from pine2ast.ast.nodes import ExpressionStatement, Reassignment, VarDeclaration
+
+        if isinstance(statement, VarDeclaration):
+            return self.infer_type(statement.initializer)
+        if isinstance(statement, ExpressionStatement):
+            return self.infer_type(statement.expression)
+        if isinstance(statement, Reassignment):
+            return self.infer_type(statement.value)
+        if isinstance(statement, Expression):
+            return self.infer_type(statement)
+        return "void"
+
     def _binary_return_type(self, expr: BinaryExpr) -> str | None:
-        # Pine v6 changed the compile-time result of const-int division: a
-        # division between two const int values can produce a fractional value,
-        # so downstream type checks should see float rather than int. Keep v5
-        # compatibility untouched.
-        if expr.op != "/" or self.pine_version < 6:
-            return None
         left_type = self.infer_type(expr.left)
         right_type = self.infer_type(expr.right)
+        if (
+            expr.op in {"+", "-", "*", "/", "%"}
+            and self.policy.allows_bool_to_number
+            and (left_type == "bool" or right_type == "bool")
+        ):
+            numeric_types = {"int" if item == "bool" else item for item in (left_type, right_type)}
+            return "float" if "float" in numeric_types else "int"
+
+        if expr.op != "/":
+            return None
+        if not self.policy.const_int_division_fractional:
+            return None
         if left_type == right_type == "int" and {
             self.infer_qualifier(expr.left),
             self.infer_qualifier(expr.right),
@@ -230,6 +288,13 @@ class PineInferenceEngine:
         return None
 
     def _call_return_type(self, expr: CallExpr, legacy: str) -> str | None:
+        _, entry = registry_entry_for_call(expr.callee, self.registry)
+        if entry and entry.get("return_rule_id") == "return.input.defval_type.v1":
+            if expr.arguments:
+                # Historical input() preserves the type of its defval argument.
+                # This fact is required for deterministic overload resolution in
+                # v1-v4 and is part of the catalog's explicit return rule.
+                return self.infer_type(expr.arguments[0].value)
         # Collection method/function forms are receiver-specialized by the Release 4.0
         # signature layer. Prefer those facts because broad registry entries
         # often say only "unknown" for generic methods such as array.slice(),

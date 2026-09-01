@@ -1,6 +1,0 @@
-//@version=6
-indicator("Bad")
-type Foo
-    int x
-if true
-    method get(Foo this) => this.x

@@ -1,6 +1,0 @@
-//@version=6
-strategy("strategy matrix", overlay=true)
-if barstate.isconfirmed
-    strategy.entry("L", strategy.long)
-    strategy.exit("LX", "L", stop=low, limit=high)
-plot(strategy.position_size)

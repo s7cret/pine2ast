@@ -1,3 +1,0 @@
-//@version=6
-indicator("x")
-type X { int a }

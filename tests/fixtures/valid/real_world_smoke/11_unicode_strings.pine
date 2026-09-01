@@ -1,6 +1,0 @@
-//@version=6
-indicator("Unicode")
-msg = "Привет мир"
-multiline = """multi
-строка"""
-plot(close)

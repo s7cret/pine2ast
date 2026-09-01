@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
 from pine2ast.ast.nodes import Argument, CallExpr, MemberAccessExpr, Program
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.collection_signatures import (
     collection_return_type as _collection_return_type,
     resolve_collection_call as _resolve_collection_call,
@@ -20,7 +19,22 @@ from pine2ast.semantic.facts import (
 )
 from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.type_helpers import is_assignable_type, is_valid_map_key_type, type_ref_name
-from pine2ast.frontend.helpers import *
+from pine2ast.frontend.helpers import (
+    Context,
+    _bound_arguments,
+    _call_base_name,
+    _collection_constructor_base,
+    _collection_kind_from_type,
+    _collection_type_parts,
+    _constructor_result_type,
+    _enum_type_names,
+    _expr_descriptor,
+    _generic_type_args,
+    _inference_engine,
+    _iter_var_declarations,
+    _target_descriptor,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 _COLLECTION_LIMITS = {
     "array_elements": 100_000,
@@ -77,7 +91,7 @@ def _collection_descriptor_from_resolution(
     *,
     symbols: dict[str, Any] | None,
     context: Context,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     include_result: bool,
 ) -> dict[str, Any] | None:
     engine = _inference_engine(profile, symbols)
@@ -134,7 +148,7 @@ def _collection_mutation_descriptor(
     *,
     symbols: dict[str, Any] | None,
     context: Context,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
 ) -> dict[str, Any] | None:
     name = _call_base_name(call)
     engine = _inference_engine(profile, symbols)
@@ -281,9 +295,9 @@ def extract_collection_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     constructor_assignees: dict[int, list[dict[str, Any]]] = {}
     declarations: list[dict[str, Any]] = []
@@ -367,8 +381,8 @@ def extract_collection_contract(
             accesses.append(access)
 
     return {
-        "contract": "openpine.collections.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["collections"],
+        "profile": f"pine_v{profile.pine_version}",
         "limits": dict(_COLLECTION_LIMITS),
         "declarations": declarations,
         "constructors": constructors,
@@ -382,7 +396,7 @@ def _collection_access_descriptor(
     *,
     symbols: dict[str, Any] | None,
     context: Context,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
 ) -> dict[str, Any] | None:
     name = _call_base_name(call)
     engine = _inference_engine(profile, symbols)

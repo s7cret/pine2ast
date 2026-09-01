@@ -1,0 +1,35 @@
+{
+  "fingerprint_scope": "canonical URL, page title, and verified section headings",
+  "host": "www.tradingview.com",
+  "pine_versions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "raw_body_redistributed": false,
+  "retrieval_method": "official HTTPS page metadata and section-heading verification",
+  "retrieval_status": "SUCCESS",
+  "retrieved_at_utc": "2026-08-27T20:18:09Z",
+  "review_status": "VERIFIED",
+  "reviewed_by": "stage6-review-agent",
+  "schema_id": "pine2ast.official_source_record.v1",
+  "schema_version": "1.0.0",
+  "scope": [
+    "version annotation",
+    "declaration statements",
+    "script structure"
+  ],
+  "source_fingerprint": "sha256:d6ca81e4a1726f7d868b4f2b38165181dbfcc2d39febf0366e66b82064671ce4",
+  "source_id": "tv.pine.language.script_structure",
+  "source_kind": "USER_MANUAL",
+  "title": "Language / Script structure",
+  "url": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+  "verified_headings": [
+    "Script structure",
+    "Version",
+    "Declaration statement"
+  ]
+}

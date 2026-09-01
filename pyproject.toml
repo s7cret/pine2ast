@@ -4,15 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pine2ast"
-version = "5.0.0rc5"
-description = "Production Pine Script v5/v6 frontend for OpenPine: parser, AST JSON, static diagnostics, semantic snapshots, and metadata contracts"
+version = "5.0.0rc6"
+description = "Version-exact Pine Script v1-v6 static frontend for OpenPine: parser, AST, binding, types, qualifiers, overloads, semantic facts, and immutable consumer contracts"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{name = "Interpipe Solutions"}]
-dependencies = [
-  "openpine-contracts==5.0.0rc5",
-]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/s7cret/pine2ast"
@@ -20,82 +18,40 @@ Repository = "https://github.com/s7cret/pine2ast"
 Issues = "https://github.com/s7cret/pine2ast/issues"
 
 [project.optional-dependencies]
-dev = [
-  "pytest>=8",
-  "pytest-cov>=5",
-  "ruff>=0.6",
-  "black>=24",
-  "mypy>=1.10",
-]
-
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "black>=24", "mypy>=1.10", "jsonschema>=4"]
 [project.scripts]
 pine2ast = "pine2ast.cli:main"
-
+pine2ast-stage4 = "pine2ast.hardening.cli:main"
+pine2ast-stage5 = "pine2ast.hardening.stage5_cli:main"
 [tool.setuptools.packages.find]
 include = ["pine2ast*"]
-
 [tool.setuptools.package-data]
-pine2ast = ["semantic/*.json", "runtime_contract_v1_4/*.json", "reference_catalog/*.json", "compatibility/*.json", "compatibility/*.md"]
-
+pine2ast = ["py.typed", "semantic/*.json", "catalog/**/*.json", "hardening/data/*.json", "hardening/data/corpus/*.pine", "hardening/data/historical_corpus/*.pine", "hardening/schemas/*.json", "catalog_data/packs/*.json"]
 [tool.black]
 line-length = 100
 target-version = ["py311"]
-
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-
 [tool.ruff.lint]
 select = ["E", "F"]
 ignore = ["E501"]
-
 [tool.pytest.ini_options]
-testpaths = ["tests/unit", "tests/integration"]
-# Note: tests/performance/ is intentionally NOT in testpaths. The
-# `perf` job in .github/workflows/ci.yml invokes it explicitly with
-# a 20x headroom for runner CPU variance. Quality gate (which runs
-# pytest without explicit paths) would otherwise pick up perf tests
-# and fail the main test job on the first CI run.
-markers = [
-  "perf: latency/memory regression gate against captured baseline (P1.5)",
-  "perf_corpus: real-world corpus throughput regression (P1.5)",
-]
+testpaths = ["tests"]
 addopts = "-q --import-mode=importlib"
 pythonpath = ["."]
 python_files = ["test_*.py"]
-
+markers = ["performance: release and performance gates run without coverage instrumentation"]
 [tool.coverage.run]
 branch = true
 source = ["pine2ast"]
-omit = [
-  "pine2ast/__main__.py",
-  "pine2ast/benchmark.py",  # timing-sensitive helper covered by smoke tests, excluded from threshold math
-  "pine2ast/layout/indentation.py",
-  "pine2ast/layout/line_wrapping.py",
-  "pine2ast/testing/fixtures.py",
-  "pine2ast/lexer/trivia.py",
-]
-
 [tool.coverage.report]
 show_missing = true
 skip_covered = false
-fail_under = 85
-exclude_lines = [
-  "pragma: no cover",
-  "if TYPE_CHECKING:",
-  "if __name__ == .__main__.:",
-]
-
+fail_under = 90
 [tool.mypy]
 python_version = "3.11"
 packages = ["pine2ast"]
-exclude = [
-  "^build/",
-  "^dist/",
-  "^\\.setuptools-build/",
-  "^tests/",
-  "^tools/",
-]
 ignore_missing_imports = true
 warn_unused_configs = true
 check_untyped_defs = true

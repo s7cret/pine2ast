@@ -1,0 +1,6 @@
+include pine2ast/py.typed
+
+recursive-include pine2ast/catalog_data/packs *.json
+recursive-include catalog_source *.json *.jsonl
+recursive-include catalog_reports *.json
+recursive-include catalog_migration_inputs *.json

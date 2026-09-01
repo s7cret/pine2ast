@@ -1,0 +1,3 @@
+//@version=4
+study('v4')
+float x = na

@@ -1,0 +1,4 @@
+//@version=4
+study('v4')
+x = sma(close, 10)
+y = security(tickerid, 'D', close)

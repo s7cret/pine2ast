@@ -1,4 +1,5 @@
-from .api import (
+from pine2ast._version import __version__
+from pine2ast.api import (
     ParseOptions,
     ParsePipeline,
     ParseResult,
@@ -7,21 +8,25 @@ from .api import (
     parse_code,
     parse_file,
 )
-from .ast.schema import SchemaReport, validate_ast_schema
-from ._version import __version__
-from .language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.ast.schema import SchemaReport, validate_ast_schema
+from pine2ast.catalog import CatalogRepository, CatalogStatus, catalog_coverage_report
+from pine2ast.versioning import PineVersionContext, PineVersionResolver, VersionOrigin
 
 __all__ = [
+    "CatalogRepository",
+    "CatalogStatus",
     "ParseOptions",
-    "ParseResult",
     "ParsePipeline",
-    "PineLanguageProfile",
-    "pine_language_profile",
-    "parse_code",
-    "parse_file",
+    "ParseResult",
+    "PineVersionContext",
+    "PineVersionResolver",
+    "SchemaReport",
+    "VersionOrigin",
+    "__version__",
     "ast_to_dict",
     "ast_to_json",
+    "catalog_coverage_report",
+    "parse_code",
+    "parse_file",
     "validate_ast_schema",
-    "SchemaReport",
-    "__version__",
 ]

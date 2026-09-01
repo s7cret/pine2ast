@@ -1,3 +1,0 @@
-//@version=6
-library("TVParityLib")
-export f(float x) => x + 1.0

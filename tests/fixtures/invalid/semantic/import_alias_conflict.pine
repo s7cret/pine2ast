@@ -1,4 +1,0 @@
-//@version=6
-indicator("Bad")
-import user/lib/1 as math
-x = math.foo()

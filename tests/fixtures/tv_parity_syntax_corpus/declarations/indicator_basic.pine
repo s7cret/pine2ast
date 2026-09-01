@@ -1,3 +1,0 @@
-//@version=6
-indicator("TV Parity Basic Indicator", overlay = true)
-plot(close)

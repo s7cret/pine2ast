@@ -121,7 +121,7 @@ def run_oracle_cases(cases: Iterable[OracleCase]) -> OracleReport:
     for case in cases:
         parsed = parse_code(
             case.source,
-            ParseOptions(version=case.version, source_name=f"oracle:{case.id}"),
+            ParseOptions(expected_pine_version=case.version, source_name=f"oracle:{case.id}"),
         )
         codes = _error_codes(parsed)
         missing = tuple(code for code in case.expected_error_codes if code not in set(codes))

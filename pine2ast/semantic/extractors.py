@@ -201,9 +201,9 @@ def extract_dependencies(program: Program, semantic=None) -> DependencyReport:
         ImportDeclaration,
         GenericInstantiationExpr,
     )
-    from pine2ast.semantic.builtin_registry import load_builtin_registry
+    from pine2ast.catalog import load_catalog_view
 
-    registry = load_builtin_registry()
+    registry = load_catalog_view(program.version_context.pine_version)
     builtin_functions = set(registry.get("functions", {}))
     namespaces = set(registry.get("namespaces", {}))
     user_functions = {n.name for n in walk(program) if isinstance(n, FunctionDeclaration)}

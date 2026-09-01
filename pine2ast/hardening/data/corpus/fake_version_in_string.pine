@@ -1,0 +1,3 @@
+//@version=6
+indicator("string")
+string text = "//@version=5"

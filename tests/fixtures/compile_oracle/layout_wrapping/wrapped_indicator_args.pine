@@ -1,6 +1,0 @@
-//@version=6
-indicator(
-  "Wrapped",
-  overlay = true
-)
-plot(close)

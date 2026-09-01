@@ -1,0 +1,4 @@
+//@version=5
+indicator("v5-multiline")
+string text = """one
+two"""

@@ -1,0 +1,364 @@
+{
+  "canonical_identity": {
+    "description": "historical spelling changes retain the canonical v5/v6 symbol_id",
+    "exact_function_aliases": {
+      "color": "color.new",
+      "iff": "legacy.iff",
+      "offset": "legacy.offset",
+      "study": "indicator",
+      "tickerid": "ticker.new"
+    },
+    "exact_variable_aliases_v3": {
+      "interval": "timeframe.multiplier",
+      "n": "bar_index",
+      "period": "timeframe.period",
+      "ticker": "syminfo.ticker",
+      "tickerid": "syminfo.tickerid"
+    },
+    "prefix_function_aliases": {
+      "math.": "",
+      "request.": "",
+      "str.": "",
+      "ta.": "",
+      "ticker.": ""
+    }
+  },
+  "schema_id": "pine.catalog.historical_projection.v1",
+  "schema_version": "1.0.0",
+  "scope": "documented final static language snapshots for Pine v1-v4, projected from the canonical v5 registry through explicit official migration deltas",
+  "snapshot_date": "2026-08-27",
+  "sources": [
+    {
+      "applies_to": [
+        1,
+        2
+      ],
+      "assertions": [
+        "v2_fully_backward_compatible_with_v1"
+      ],
+      "id": "tv.migration.v2",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/"
+    },
+    {
+      "applies_to": [
+        2,
+        3
+      ],
+      "assertions": [
+        "security_default_lookahead_changed",
+        "self_reference_removed",
+        "forward_reference_removed",
+        "mutable_security_argument_forbidden_since_v2",
+        "bool_to_number_removed_in_v3"
+      ],
+      "id": "tv.migration.v3",
+      "url": "https://www.tradingview.com/pine-script-docs/v5/migration-guides/to-pine-version-3/"
+    },
+    {
+      "applies_to": [
+        3,
+        4
+      ],
+      "assertions": [
+        "namespace_renames",
+        "bar_index_rename",
+        "explicit_type_required_for_na"
+      ],
+      "id": "tv.migration.v4",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/"
+    },
+    {
+      "applies_to": [
+        4,
+        5
+      ],
+      "assertions": [
+        "study_to_indicator",
+        "builtin_namespace_migration",
+        "tickerid_to_ticker_new",
+        "input_split",
+        "iff_offset_removed",
+        "rsi_overload_removed"
+      ],
+      "id": "tv.migration.v5",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+    },
+    {
+      "applies_to": [
+        1,
+        2,
+        3
+      ],
+      "assertions": [
+        "reassignment_introduced_v2",
+        "if_available_v2",
+        "self_reference_v2"
+      ],
+      "id": "tv.v3.expressions",
+      "url": "https://www.tradingview.com/pine-script-docs/v3/language/expressions-declarations-and-statements/"
+    },
+    {
+      "applies_to": [
+        4
+      ],
+      "assertions": [
+        "arrays_v4",
+        "varip_final_v4",
+        "compound_assignment_final_v4",
+        "ternary_lazy_v4"
+      ],
+      "id": "tv.v4.release_notes",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/release-notes/"
+    },
+    {
+      "applies_to": [
+        4
+      ],
+      "assertions": [
+        "comma_statement_separator",
+        "study_or_strategy_declaration"
+      ],
+      "id": "tv.v4.structure",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/language/structure-of-the-script/"
+    }
+  ],
+  "v1": {
+    "inherits_symbols_from": 2,
+    "keywords": [
+      "and",
+      "or",
+      "not"
+    ],
+    "operators": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "%",
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "==",
+      "!=",
+      "?:",
+      "[]"
+    ]
+  },
+  "v2": {
+    "inherits_symbols_from": 3,
+    "keywords": [
+      "and",
+      "or",
+      "not",
+      "if",
+      "else",
+      "for",
+      "to",
+      "by",
+      "break",
+      "continue"
+    ],
+    "operators": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "%",
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "==",
+      "!=",
+      "?:",
+      "[]",
+      ":=",
+      "=>"
+    ]
+  },
+  "v3": {
+    "constant_prefix_unwrap": [
+      "color.",
+      "plot.style_",
+      "hline.style_",
+      "dayofweek.",
+      "input."
+    ],
+    "function_exact_renames": {
+      "color.new": "color"
+    },
+    "keywords": [
+      "and",
+      "or",
+      "not",
+      "if",
+      "else",
+      "for",
+      "to",
+      "by",
+      "break",
+      "continue"
+    ],
+    "operators": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "%",
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "==",
+      "!=",
+      "?:",
+      "[]",
+      ":=",
+      "=>"
+    ],
+    "remove_prefixes": [
+      "array.",
+      "line.",
+      "label.",
+      "box.",
+      "table."
+    ],
+    "remove_types": [
+      "array",
+      "line",
+      "label",
+      "box",
+      "table"
+    ],
+    "variable_exact_renames": {
+      "bar_index": "n",
+      "syminfo.ticker": "ticker",
+      "syminfo.tickerid": "tickerid",
+      "timeframe.multiplier": "interval",
+      "timeframe.period": "period"
+    },
+    "variable_prefix_unwrap": [
+      "timeframe."
+    ]
+  },
+  "v4": {
+    "constant_remove_prefixes": [
+      "map.",
+      "matrix.",
+      "polyline.",
+      "linefill.",
+      "chart.",
+      "log.",
+      "runtime."
+    ],
+    "function_exact_renames": {
+      "indicator": "study",
+      "request.dividends": "dividends",
+      "request.earnings": "earnings",
+      "request.economic": "economic",
+      "request.financial": "financial",
+      "request.quandl": "quandl",
+      "request.security": "security",
+      "request.splits": "splits",
+      "ticker.heikinashi": "heikinashi",
+      "ticker.kagi": "kagi",
+      "ticker.linebreak": "linebreak",
+      "ticker.new": "tickerid",
+      "ticker.pointfigure": "pointfigure",
+      "ticker.renko": "renko"
+    },
+    "function_prefix_unwrap": [
+      "ta.",
+      "math.",
+      "str."
+    ],
+    "function_remove_names": [
+      "library",
+      "request.security_lower_tf",
+      "request.currency_rate",
+      "request.seed",
+      "request.footprint",
+      "ticker.standard",
+      "ticker.modify",
+      "ticker.inherit"
+    ],
+    "function_remove_prefixes": [
+      "input.",
+      "map.",
+      "matrix.",
+      "polyline.",
+      "linefill.",
+      "chart.",
+      "log.",
+      "runtime."
+    ],
+    "keywords": [
+      "and",
+      "or",
+      "not",
+      "if",
+      "else",
+      "for",
+      "to",
+      "by",
+      "break",
+      "continue",
+      "var",
+      "varip"
+    ],
+    "method_policy": "none",
+    "operators": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "%",
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "==",
+      "!=",
+      "?:",
+      "[]",
+      ":=",
+      "+=",
+      "-=",
+      "*=",
+      "/=",
+      "%=",
+      "=>"
+    ],
+    "types_keep": [
+      "int",
+      "float",
+      "bool",
+      "string",
+      "color",
+      "line",
+      "label",
+      "box",
+      "table",
+      "array",
+      "array<any>",
+      "array<int>",
+      "array<float>",
+      "array<bool>",
+      "array<string>",
+      "array<color>"
+    ],
+    "variable_prefix_unwrap": [
+      "ta."
+    ],
+    "variable_remove_prefixes": [
+      "map.",
+      "matrix.",
+      "polyline.",
+      "linefill.",
+      "chart.",
+      "log.",
+      "runtime."
+    ]
+  }
+}

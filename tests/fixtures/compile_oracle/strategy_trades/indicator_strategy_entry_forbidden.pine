@@ -1,3 +1,0 @@
-//@version=6
-indicator("Entry Forbidden")
-strategy.entry("Long", strategy.long)

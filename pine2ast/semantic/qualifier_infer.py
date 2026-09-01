@@ -21,6 +21,10 @@ from pine2ast.semantic.type_infer import callee_name
 _ORDER = {"const": 0, "input": 1, "simple": 2, "series": 3}
 
 _CONST_PROPAGATING_CALLS = {
+    "int",
+    "float",
+    "bool",
+    "string",
     "math.abs",
     "math.ceil",
     "math.floor",

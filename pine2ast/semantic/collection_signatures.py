@@ -102,9 +102,18 @@ COLLECTION_METHOD_PARAMETER_TEMPLATES: dict[str, dict[str, list[CollectionParame
     "array": {
         "abs": [],
         "avg": [],
-        "binary_search": [("value", "T", "value")],
-        "binary_search_leftmost": [("value", "T", "value")],
-        "binary_search_rightmost": [("value", "T", "value")],
+        "binary_search": [
+            ("value", "T", "value"),
+            ("sort_field", "int|string", "sort_field", False),
+        ],
+        "binary_search_leftmost": [
+            ("value", "T", "value"),
+            ("sort_field", "int|string", "sort_field", False),
+        ],
+        "binary_search_rightmost": [
+            ("value", "T", "value"),
+            ("sort_field", "int|string", "sort_field", False),
+        ],
         "clear": [],
         "concat": [("array_id", "array<T>", "array_id")],
         "copy": [],

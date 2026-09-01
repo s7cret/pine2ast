@@ -1,3 +1,0 @@
-//@version=6
-strategy("Decl strategy", overlay=true)
-strategy.entry("L", strategy.long)

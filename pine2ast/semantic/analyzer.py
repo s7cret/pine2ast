@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
+from typing import Any, Mapping, Optional, TypeAlias
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
 from pine2ast.ast.types import TypeRef
@@ -37,23 +37,22 @@ from pine2ast.ast.nodes import (
     WhileStructure,
 )
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    load_builtin_registry,
-)
+from pine2ast.diagnostics import Severity, codes
+from pine2ast.versioning import PineVersionContext
+from pine2ast.policy import SemanticPolicy
 from pine2ast.semantic.model import SemanticModel
-from pine2ast.semantic.qualifier_infer import infer_qualifier
 from pine2ast.semantic.scopes import Scope, ScopeKind
 from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import infer_type
 from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
 from pine2ast.semantic.passes import (
     BuiltinValidationPass,
+    CallableInferencePass,
     CollectionValidationPass,
     DeclarationCardinalityPass,
     DeclarationIndexPass,
     QualifierInferencePass,
     ScopeSymbolPass,
+    SemanticFactsPass,
     StaticValidationPass,
     StrategyContextValidationPass,
     TypeInferencePass,
@@ -79,25 +78,27 @@ class SemanticAnalyzer(
     def __init__(
         self,
         *,
+        version_context: PineVersionContext,
+        catalog: Mapping[str, Any],
+        policy: SemanticPolicy,
         max_diagnostics: int = 200,
         strict_builtin_namespaces: bool = False,
-        pine_version: int = 6,
         loop_max_iterations: int = 100_000,
-        language_profile: PineLanguageProfile | None = None,
     ) -> None:
-        # pine_version is normalized at construction time so all
-        # downstream lookups (registry, method receivers, qualifier
-        # checks) see a stable value. v5 loads the v5 subset of the
-        # registry; v6 loads the full v6 set.
-        normalized_version = 5 if pine_version == 5 else 6
-        self.language_profile = language_profile or pine_language_profile(normalized_version)
-        self.pine_version = self.language_profile.version
-        self.registry = load_builtin_registry(pine_version=self.pine_version)
-        self.model = SemanticModel()
+        policy.validate_context(version_context)
+        if str(catalog.get("pine_version")) != str(version_context.pine_version):
+            raise ValueError("semantic catalog Pine version does not match PineVersionContext")
+        if catalog.get("catalog_hash") != version_context.catalog_hash:
+            raise ValueError("semantic catalog hash does not match PineVersionContext")
+        self.version_context = version_context
+        self.registry = dict(catalog)
+        self.policy = policy
+        self.model = SemanticModel(version_context=version_context)
         self.inference = PineInferenceEngine(
+            version_context=self.version_context,
             symbols=self.model.symbols,
-            pine_version=self.pine_version,
             registry=self.registry,
+            policy=self.policy,
         )
         self.max_diagnostics = max_diagnostics
         self.strict_builtin_namespaces = strict_builtin_namespaces
@@ -114,7 +115,7 @@ class SemanticAnalyzer(
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
         self._function_params: dict[str, list[Parameter]] = {}
-        self._user_method_params: dict[str, list[Parameter]] = {}
+        self._user_method_params: dict[tuple[str, str], list[Parameter]] = {}
         self._method_receivers: dict[str, str | set[str]] = {}
         self._builtin_method_params: dict[str, dict[str, list[Parameter]]] = {}
         self._external_aliases: set[str] = set()
@@ -126,31 +127,15 @@ class SemanticAnalyzer(
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
-        if program.version is not None and program.version != self.pine_version:
-            # The Pine version annotation in the source overrides the
-            # constructor default. Reload the registry to match — this
-            # is what allows v5 scripts to be parsed with the v5 subset
-            # of the builtin catalog, even if the caller passed
-            # pine_version=6 to ParseOptions.
-            normalized = 5 if program.version == 5 else 6
-            self.language_profile = pine_language_profile(
-                normalized,
-                strict=self.language_profile.strict,
-                compatibility_mode=self.language_profile.compatibility_mode,
-            )
-            self.pine_version = self.language_profile.version
-            self.registry = load_builtin_registry(pine_version=self.pine_version)
-            self.inference = PineInferenceEngine(
-                symbols=self.model.symbols,
-                pine_version=self.pine_version,
-                registry=self.registry,
-            )
+        if program.version_context != self.version_context:
+            raise ValueError("semantic analyzer version context does not match Program")
         self._reassigned_names = self._collect_reassigned_names(program)
         self._push_scope(ScopeKind.GLOBAL)
         pipeline = AnalyzerPassPipeline(
             (
                 DeclarationIndexPass(self),
                 ScopeSymbolPass(self),
+                CallableInferencePass(self),
                 TypeInferencePass(self),
                 QualifierInferencePass(self),
                 BuiltinValidationPass(self),
@@ -159,6 +144,7 @@ class SemanticAnalyzer(
                 StrategyContextValidationPass(self),
                 UnsupportedFeatureExtractionPass(self),
                 DeclarationCardinalityPass(self),
+                SemanticFactsPass(self),
             )
         )
         self.pass_results = pipeline.run(
@@ -207,7 +193,28 @@ class SemanticAnalyzer(
 
     def _predeclare_globals(self, items: list[Statement]) -> None:
         for item in items:
-            if isinstance(item, FunctionDeclaration):
+            if isinstance(item, VarDeclaration) and (
+                self.policy.allows_self_reference or self.policy.allows_forward_reference
+            ):
+                # Pine v1/v2 resolve global declarations as a mutually visible
+                # set. Predeclaration is deliberately policy-bound and never
+                # leaks into v3+, where self/forward references are invalid.
+                initial_type = (
+                    self._type_ref_name(item.type_ref) if item.type_ref is not None else "unknown"
+                )
+                qualifier = item.explicit_qualifier or "series"
+                if (
+                    self._define(
+                        item.name,
+                        SymbolKind.VARIABLE,
+                        item.span,
+                        initial_type,
+                        qualifier,
+                    )
+                    is not None
+                ):
+                    self._predeclared_nodes.add(id(item))
+            elif isinstance(item, FunctionDeclaration):
                 return_shape = self._body_return_shape(item.body) or "function"
                 if (
                     self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None)
@@ -217,15 +224,35 @@ class SemanticAnalyzer(
                     self._function_params[item.name] = item.parameters
             elif isinstance(item, MethodDeclaration):
                 return_shape = self._body_return_shape(item.body) or "method"
-                if (
-                    self._define(item.name, SymbolKind.METHOD, item.span, return_shape, None)
-                    is not None
-                ):
+                receiver_name = item.receiver_type.name if item.receiver_type is not None else ""
+                method_key = (receiver_name, item.name)
+                if method_key in self._user_method_params:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.REDECLARATION,
+                        f"Method {item.name} is already declared for receiver {receiver_name}.",
+                        item.span,
+                    )
                     self._predeclared_nodes.add(id(item))
-                    self._function_params[item.name] = item.parameters
-                    self._user_method_params[item.name] = item.parameters
-                    if item.receiver_type is not None:
-                        self._method_receivers[item.name] = item.receiver_type.name
+                    continue
+                self._define(
+                    item.name,
+                    SymbolKind.METHOD,
+                    item.span,
+                    return_shape,
+                    None,
+                    allow_existing=True,
+                )
+                self._predeclared_nodes.add(id(item))
+                self._user_method_params[method_key] = item.parameters
+                if receiver_name:
+                    existing = self._method_receivers.get(item.name)
+                    if isinstance(existing, set):
+                        existing.add(receiver_name)
+                    elif isinstance(existing, str):
+                        self._method_receivers[item.name] = {existing, receiver_name}
+                    else:
+                        self._method_receivers[item.name] = receiver_name
             elif isinstance(item, TypeDeclaration):
                 if self._define(item.name, SymbolKind.TYPE, item.span, "type", None) is not None:
                     self._predeclared_nodes.add(id(item))
@@ -261,15 +288,16 @@ class SemanticAnalyzer(
             self._define(ns, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
         for name in self.registry.get("types", {}):
             self._define(name, SymbolKind.TYPE, zero, "type", None, allow_existing=True)
-        for name, meta in self.registry.get("variables", {}).items():
-            self._define(
-                name,
-                SymbolKind.BUILTIN,
-                zero,
-                meta.get("type"),
-                meta.get("qualifier"),
-                allow_existing=True,
-            )
+        for section in ("variables", "constants"):
+            for name, meta in self.registry.get(section, {}).items():
+                self._define(
+                    name,
+                    SymbolKind.BUILTIN,
+                    zero,
+                    meta.get("type"),
+                    meta.get("qualifier", "const" if section == "constants" else None),
+                    allow_existing=True,
+                )
         for name in self.registry.get("functions", {}):
             root = name.split(".", 1)[0]
             self._define(root, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
@@ -344,8 +372,8 @@ class SemanticAnalyzer(
     # -------------------------------------------------------------------------
 
     def _visit_expr(self, expr: Expression) -> None:
-        self.model.node_types[id(expr)] = infer_type(expr, self.model.symbols)
-        self.model.node_qualifiers[id(expr)] = infer_qualifier(expr, self.model.symbols)
+        self.model.node_types[id(expr)] = self._infer_type(expr)
+        self.model.node_qualifiers[id(expr)] = self._infer_qualifier(expr)
         handler = _EXPR_HANDLERS.get(type(expr))
         if handler is not None:
             handler(self, expr)

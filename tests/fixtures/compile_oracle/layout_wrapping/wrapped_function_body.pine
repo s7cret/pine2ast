@@ -1,5 +1,0 @@
-//@version=6
-indicator("Wrapped fn")
-f(x) =>
-    x + 1
-plot(f(close))

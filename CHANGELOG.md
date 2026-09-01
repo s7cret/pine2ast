@@ -1,132 +1,62 @@
 # Changelog
 
-## 5.0.0rc5
+## 5.0.0rc6 — Stage 6 corrected delivery
 
-- Advances frontend package and producer metadata to the coordinated RC.5 identity.
-- Pins the RC.5 Contracts catalog without changing parser or semantic behavior.
+- Fixed invalid duplicate package-data TOML key and restored standards-compliant builds.
+- Corrected historical `study()` handling for Pine v1-v4.
+- Rebuilt the v6 catalog from the authoritative snapshot, including `calc_on_every_history_tick`.
+- Assigned unique Stage 6 diagnostic IDs and removed diagnostic-code collisions.
+- Enforced the final diagnostic ceiling after version-semantic validation.
+- Recomputed aggregate frontend/semantic gates after all static passes.
+- Replaced parse-time `verified_rule_ids` claims with `applicable_rule_ids`.
+- Added packaging, wheel RECORD, clean-install, all-version smoke, and regression evidence.
+- Synchronized the Stage 6 review probes with the dedicated `P2A2101`–`P2A2110` diagnostics.
+- Replaced self-attested requirement labels with a concrete 66-node evidence graph bound to collected pytest nodes and JUnit outcomes.
+- Added tamper-evident official-source records for every TradingView documentation URL referenced by the frontend requirements.
+- Closed Ruff, Black, MyPy, and 90% branch-aware package coverage gates without excluding critical modules.
+- Separated timing-sensitive performance tests from coverage instrumentation while retaining them in the complete suite.
+- Kept coordinated Ast2Python acceptance explicit and fail-closed; producer review readiness does not authorize release.
 
-## 5.0.0rc4
+## 5.0.0rc6 — Stage 6 semantic closure
 
-- Emits exact AST-derived execution-setting, instrument-rule, chart/request identity, and per-order/risk capability requirements.
-- Pins `openpine-contracts==5.0.0rc4` and both CI Contracts checkouts to `bb1a56181e37c6f0ff7a60366d9a550103fcb8df`.
+- Added a version-exact static-semantic hardening pass for Pine v1-v6.
+- Closed historical/modern declaration, namespace, collection, parameter, and spelling availability gaps.
+- Added a normative requirement catalog with explicit downstream ownership boundaries.
+- Split verified static coverage, internal catalog completeness, official-reference completeness, and runtime/oracle parity into independent axes.
+- Added official-document provenance hashes, adjacent-version differential tests, deterministic fuzzing, mutation gates, and a Stage 6 review report.
+- Updated package description and version-support documentation without adding compatibility aliases or source rewriting.
 
-## 5.0.0rc3
+## 5.0.0rc6 Stage 5
 
-- Emits immutable catalog-valid frontend, AST, and support-profile artifacts.
-- Binds exact producer provenance, direct capabilities, inputs, and blocking diagnostics.
+- Implements version-bound historical static semantics for Pine v1, v2, v3, and v4.
+- Adds official-source-linked historical corpus and adjacent-version differential gates.
+- Adds stable historical symbol identity checks and all-version consumer bundles.
+- Preserves fail-closed boundaries: historical catalogs are conservative snapshots, not asserted exhaustive manuals.
+- Retains Stage 1-4 version, catalog, semantic-facts, mutation, reproducibility, and packaging gates.
 
-## 4.0.2
+## 5.0.0rc6 — Stage 4 hardening
 
-- Refreshed package, release-manifest, semantic-snapshot, and generated producer metadata for the coordinated OpenPine 4.0.2 stack.
-- Preserved the Pine v6 AST and semantic contracts without parser behavior changes.
+- Added deterministic corpus, differential, fuzz, contract-mutation and performance gates.
+- Added `pine2ast.consumer_bundle.v1` and explicit fail-closed Ast2Python coordinated boundary.
+- Made catalog build tooling independent of caller `PYTHONPATH` and working directory.
 
-## 4.0.1
+# Changelog
 
-- Published the hardened OpenPine 4.0.1 stack while preserving `pine.ast_contract.v1`, `openpine.frontend.v1`, and `runtime_contract_v1_4`.
-- Aligned package, producer, lock, documentation, and release-gate metadata for reproducible immutable-SHA consumers.
+## 5.0.0rc6
 
-## 4.0.0
+### Stage 3
 
-Pine2AST 4.0.0 is the GitHub-ready production frontend release for the OpenPine toolchain. It consolidates the 3.x hardening work into a clean public release surface with stable contracts, canonical docs, deterministic distribution hygiene, and strict release gates.
+- Bound lexer, parser and semantic analyzer to one hash-verified version context.
+- Added structured syntax/semantic policies for v5 and v6.
+- Added deterministic callable fixed-point inference for UDF signatures.
+- Made overload resolution fail closed on invalid and ambiguous calls.
+- Added stable overload IDs, parametric return-rule IDs and operator rule IDs.
+- Added complete node/call facts in `pine.semantic_facts.v1`.
+- Added sealed source -> AST -> facts -> support -> frontend lineage.
+- Added pinned-catalog static completeness gates for v5/v6.
 
-### Added
+### Stages 1–2
 
-- Canonical `docs/RELEASE_4_0.md` notes and GitHub tag checklist.
-- Bundled 4.0 release manifest: `pine2ast/compatibility/release_4_0_manifest.json`.
-- Bundled v6 release-feature matrix: `pine2ast/compatibility/release_features_v6_4_0.json`.
-
-### Changed
-
-- Package and producer metadata bumped to `4.0.0`.
-- Top-level README rewritten for deployment as the public GitHub release description.
-- Golden AST and inspect fixtures refreshed to producer version `4.0.0`.
-- Release-readiness docs and scripts now use 4.0 artifact names.
-
-### Compatibility
-
-- No public contract ID change from the stabilized 3.x line.
-- AST contract remains `pine.ast_contract.v1`.
-- OpenPine frontend contract remains `openpine.frontend.v1`.
-- Semantic snapshot contract remains `pine2ast.semantic_snapshot.v1`.
-- Runtime profile marker remains `runtime_contract_v1_4`.
-
-## 3.2.0
-
-Pine2AST 3.2.0 is the final functional hardening step before release-polish. It keeps public contracts stable while adding deterministic artifact hygiene and stronger release gates.
-
-### Added
-
-- Dependency-free distribution manifest and deterministic source-zip builder:
-  - `python -m pine2ast.distribution manifest --root .`
-  - `python -m pine2ast.distribution build-zip --root . --output pine2ast-3.2.0.zip`
-- Release manifest check for source-archive file selection.
-- Canonical `docs/RELEASE_3_2.md` notes.
-- Wheel install smoke script: `bash scripts/wheel_smoke.sh`.
-
-### Changed
-
-- Package and producer metadata bumped to `3.2.0`.
-- Release feature matrix and bundled manifest renamed to the 3.2 line.
-- README and development gates now include distribution hygiene, wheel-install smoke, and final release checklist commands.
-- Legacy quality-gate artifact names were aligned with the 3.2 release line.
-
-### Compatibility
-
-- No breaking contract change.
-- AST contract remains `pine.ast_contract.v1`.
-- OpenPine frontend contract remains `openpine.frontend.v1`.
-- Semantic snapshot contract remains `pine2ast.semantic_snapshot.v1`.
-
-## 3.1.0
-
-Pine2AST 3.1.0 is a post-3.0 hardening release for the OpenPine frontend line. It keeps public AST and OpenPine contract identifiers stable while tightening release gates and maintainability budgets.
-
-### Added
-
-- Public dependency-free contract validator for:
-  - `pine.ast_contract.v1`;
-  - `pine2ast.inspect.optimizer.v1`;
-  - `openpine.frontend.v1`;
-  - `pine2ast.semantic_snapshot.v1`.
-- CLI/API contract check path through `pine2ast contract-check` and `pine2ast.contracts.validation`.
-- Semantic snapshot sidecar contract through `pine2ast semantic-snapshot` and `--semantic-snapshot` on inspect payloads.
-- Architecture budget quality gate.
-- Release manifest architecture-budget and public-contract smoke checks.
-
-### Changed
-
-- Semantic validation mixin split into smaller focused modules for builtin namespace checks, type checks, collection checks, call validation, and member validation.
-- Golden AST and inspect fixtures refreshed to producer version `3.1.0`.
-- v6 release-feature matrix aligned with the 3.1 line.
-
-### Compatibility
-
-- Stable AST contract remains `pine.ast_contract.v1`.
-- Stable OpenPine contract remains `openpine.frontend.v1`.
-- Runtime profile marker remains `runtime_contract_v1_4`.
-
-## 3.0.0
-
-Pine2AST 3.0.0 promotes the project from a parser-prototype release line to an OpenPine frontend release line.
-
-### Added
-
-- Explicit Pine v5/v6 language profiles.
-- Public `ParsePipeline` staging API.
-- Version-aware `SignatureResolver` and signature coverage reporting.
-- Shared `PineInferenceEngine` for type/qualifier facts.
-- Collection signature validation for `array<T>`, `matrix<T>`, and `map<K,V>`.
-- Static validation pass for dynamic requests, exported libraries, strategy exits, generic collection arity, and v6 const-int division.
-- `openpine.frontend.v1` metadata sections for static validation, requests, strategies, collections, types, methods, callables, and control flow.
-- Release manifest helper: `python -m pine2ast.release`.
-
-### Changed
-
-- Package version is `3.0.0`.
-- AST contract id corrected to `pine.ast_contract.v1` before 3.x stabilization.
-- CLI and OpenPine contract module are thin public façades.
-- Golden AST and inspect fixtures refreshed to producer version `3.0.0`.
-
-### Non-goals
-
-- Pine2AST does not execute Pine scripts or emulate TradingView runtime/backtest behavior.
+- Unified Pine version identity.
+- Removed legacy compatibility/runtime coupling.
+- Added canonical sparse catalog and deterministic packs v1–v6.

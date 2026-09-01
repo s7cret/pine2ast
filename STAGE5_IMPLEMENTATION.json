@@ -1,0 +1,21 @@
+{
+  "architecture": {
+    "consumer_boundary": "pine2ast.consumer_bundle.v1",
+    "legacy_compatibility_runtime": false,
+    "nearest_version_fallback": false,
+    "sequential_catalog_deltas": true,
+    "single_version_context": true,
+    "source_rewrite": false
+  },
+  "basis": "exact_stage4_delivery_bytes",
+  "coordinated_consumer_status": "PENDING_AST2PYTHON_5.0.0rc6",
+  "package_version": "5.0.0rc6",
+  "release_authorized": false,
+  "schema_id": "pine2ast.stage5.implementation.v1",
+  "scope": {
+    "exhaustive_historical_reference_catalog": false,
+    "pine_v1_v4": "documented_historical_static_semantics_snapshot",
+    "pine_v5_v6": "pinned_static_frontend_snapshot",
+    "runtime_parity": false
+  }
+}

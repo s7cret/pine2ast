@@ -1,5 +1,0 @@
-//@version=6
-indicator("Wrapped binary")
-x = open + high +
-  low + close
-plot(x)

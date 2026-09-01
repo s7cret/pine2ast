@@ -1,0 +1,9 @@
+{"name":"break","op":"ADD","section":"keywords","semantic_id":"sha256:6b60d6d285c7410f97bb2590d4c62e8654a1d9323d9c30c77c6c00a8c55a5a1f","symbol_id":"pine:keyword:break"}
+{"name":"by","op":"ADD","section":"keywords","semantic_id":"sha256:b987fbc2cdb3ac783c0237dd74ee1eed7c0512501aa24d1967cecda9cfe35588","symbol_id":"pine:keyword:by"}
+{"name":"continue","op":"ADD","section":"keywords","semantic_id":"sha256:3994c729a7f0bbca4c3b510ac0b17f578f826b4dedb9f8ffce464eace321b3fe","symbol_id":"pine:keyword:continue"}
+{"name":"else","op":"ADD","section":"keywords","semantic_id":"sha256:5bafb92aa33e1792585921077e63f1df1c76cdeec75adc157837a6336132b7e3","symbol_id":"pine:keyword:else"}
+{"name":"for","op":"ADD","section":"keywords","semantic_id":"sha256:d90dd38013def7daad1472030d2b8c809d3f6ffb1fa36ce997d9d221294478b9","symbol_id":"pine:keyword:for"}
+{"name":"if","op":"ADD","section":"keywords","semantic_id":"sha256:b223b4f44e182c8d6ddd811ed141ae679ccbfadd431b9d539f4a0f5c7cff3e49","symbol_id":"pine:keyword:if"}
+{"name":"to","op":"ADD","section":"keywords","semantic_id":"sha256:c08e11498f9ad21667dc4676cc75e4a13f034a38ea30c8823862ff2fbc923d56","symbol_id":"pine:keyword:to"}
+{"name":":=","op":"ADD","section":"operators","semantic_id":"sha256:12e239f107a11e15e50b087e5372daebf9328c7f8e278622b032200131993d22","symbol_id":"pine:operator:u003au003d"}
+{"name":"=>","op":"ADD","section":"operators","semantic_id":"sha256:d4475a81df04820fbe69ac1a05c9c35c9036bdfe6239e7149e48821b69ef8c6f","symbol_id":"pine:operator:u003du003e"}

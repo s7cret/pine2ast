@@ -78,14 +78,19 @@ class ExpressionsMixin(BaseParser):
             self._advance()
             return Identifier(tok.span, tok.text)
         if tok.kind is TokenKind.LBRACKET:
+            self._require_syntax("tuple_declarations", tok.span)
             return self.parse_tuple_expr()
         if tok.kind is TokenKind.IF:
+            self._require_syntax("conditional_structures", tok.span)
             return self.parse_if()
         if tok.kind is TokenKind.SWITCH:
+            self._require_syntax("switch_structures", tok.span)
             return self.parse_switch()
         if tok.kind is TokenKind.FOR:
+            self._require_syntax("for_loops", tok.span)
             return self.parse_for()
         if tok.kind is TokenKind.WHILE:
+            self._require_syntax("while_loops", tok.span)
             return self.parse_while()
         if self._match(TokenKind.LPAREN):
             expr = self.parse_expression()
@@ -108,6 +113,7 @@ class ExpressionsMixin(BaseParser):
                 expr = MemberAccessExpr(join_span(expr.span, member.span), expr, member.text)
                 continue
             if self._at(TokenKind.LT) and self._looks_like_template_suffix():
+                self._require_syntax("generic_types", self._peek().span)
                 self._advance()
                 type_args: list[TypeRef] = []
                 while not self._at(TokenKind.GT, TokenKind.EOF):

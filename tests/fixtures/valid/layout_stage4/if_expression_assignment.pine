@@ -1,6 +1,0 @@
-//@version=6
-indicator("If expression assignment")
-value = if close > open
-    close
-else
-    open

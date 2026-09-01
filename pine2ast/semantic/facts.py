@@ -11,6 +11,8 @@ from __future__ import annotations
 from typing import Any, Iterable
 
 from pine2ast.ast.base import ASTNode
+from pine2ast.contract_ids import SECTION_CONTRACTS
+
 from pine2ast.ast.nodes import (
     Argument,
     Block,
@@ -33,7 +35,7 @@ from pine2ast.ast.nodes import (
     WhileStructure,
 )
 from pine2ast.ast.walk import iter_child_nodes, iter_nodes
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.collection_signatures import (
     collection_return_type as _collection_signature_return_type,
@@ -195,8 +197,8 @@ def _symbol_kind(symbol: Any | None) -> str | None:
     return getattr(kind, "value", kind)
 
 
-def _engine(profile: PineLanguageProfile, semantic_model: Any | None) -> PineInferenceEngine:
-    return PineInferenceEngine(symbols=_symbols(semantic_model), pine_version=profile.version)
+def _engine(profile: PineVersionContext, semantic_model: Any | None) -> PineInferenceEngine:
+    return PineInferenceEngine(version_context=profile, symbols=_symbols(semantic_model))
 
 
 def _literal_bool(expr: Any) -> bool | None:
@@ -292,7 +294,7 @@ def _udt_constructor_fact(
     *,
     context: Context,
     fields_by_type: dict[str, list[Any]],
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     semantic_model: Any | None,
 ) -> dict[str, Any] | None:
     if not isinstance(call.callee, MemberAccessExpr) or call.callee.member != "new":
@@ -361,9 +363,9 @@ def extract_type_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    actual_profile = profile or pine_language_profile(program.version or program.language_version)
+    actual_profile = profile or program.version_context
     engine = _engine(actual_profile, semantic_model)
     symbols = _symbols(semantic_model) or {}
     fields_by_type = _udt_field_map(program)
@@ -488,8 +490,8 @@ def extract_type_contract(
             constructors.append(constructor)
 
     return {
-        "contract": "openpine.types.v1",
-        "profile": f"pine_v{actual_profile.version}",
+        "contract": SECTION_CONTRACTS["types"],
+        "profile": f"pine_v{actual_profile.pine_version}",
         "udts": udts,
         "constructors": constructors,
         "field_accesses": field_accesses,
@@ -558,9 +560,9 @@ def extract_method_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    actual_profile = profile or pine_language_profile(program.version or program.language_version)
+    actual_profile = profile or program.version_context
     engine = _engine(actual_profile, semantic_model)
     declarations = _method_declarations(program)
     declaration_rows = []
@@ -638,8 +640,8 @@ def extract_method_contract(
         )
 
     return {
-        "contract": "openpine.methods.v1",
-        "profile": f"pine_v{actual_profile.version}",
+        "contract": SECTION_CONTRACTS["methods"],
+        "profile": f"pine_v{actual_profile.pine_version}",
         "declarations": declaration_rows,
         "calls": call_rows,
     }
@@ -649,12 +651,12 @@ def extract_semantic_facts(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    actual_profile = profile or pine_language_profile(program.version or program.language_version)
+    actual_profile = profile or program.version_context
     return {
         "schema_version": 1,
-        "profile": f"pine_v{actual_profile.version}",
+        "profile": f"pine_v{actual_profile.pine_version}",
         "types": extract_type_contract(
             program, semantic_model=semantic_model, profile=actual_profile
         ),

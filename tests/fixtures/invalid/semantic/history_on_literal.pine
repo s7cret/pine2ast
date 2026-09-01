@@ -1,3 +1,0 @@
-//@version=6
-indicator("x")
-x = 1[2]

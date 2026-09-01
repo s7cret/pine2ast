@@ -1,3 +1,0 @@
-//@version=6
-library("Lib")
-export f(float x) => x + 1

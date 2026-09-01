@@ -1,3 +1,0 @@
-//@version=6
-indicator("Decl minimal")
-plot(close)

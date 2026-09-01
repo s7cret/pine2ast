@@ -1,7 +1,0 @@
-//@version=6
-indicator(
-    "Multiline declaration",
-    overlay = true,
-    max_lines_count = 10
-)
-x = close

@@ -1,0 +1,35 @@
+{
+  "fingerprint_scope": "canonical URL, page title, and verified section headings",
+  "host": "www.tradingview.com",
+  "pine_versions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "raw_body_redistributed": false,
+  "retrieval_method": "official HTTPS page metadata and section-heading verification",
+  "retrieval_status": "SUCCESS",
+  "retrieved_at_utc": "2026-08-27T20:18:09Z",
+  "review_status": "VERIFIED",
+  "reviewed_by": "stage6-review-agent",
+  "schema_id": "pine2ast.official_source_record.v1",
+  "schema_version": "1.0.0",
+  "scope": [
+    "types",
+    "qualifiers",
+    "compatibility"
+  ],
+  "source_fingerprint": "sha256:80584b3391f9aeb24e2d395da92da9e2f36649e1d16ebf41fbd2436dd144b059",
+  "source_id": "tv.pine.language.type_system",
+  "source_kind": "USER_MANUAL",
+  "title": "Language / Type system",
+  "url": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+  "verified_headings": [
+    "Type system",
+    "Qualifiers",
+    "Types"
+  ]
+}

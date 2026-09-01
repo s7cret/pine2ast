@@ -21,8 +21,8 @@ from pine2ast.ast.nodes import (
     TypeDeclaration,
     VarDeclaration,
 )
-from pine2ast.language_profiles import PineLanguageProfile
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.versioning import PineVersionContext
+from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.semantic.facts import (
     expr_summary as _expr_summary,
     iter_calls_with_context as _iter_calls_with_context,
@@ -82,7 +82,7 @@ def _declaration_title(declaration: DeclarationStatement | None) -> str | None:
 
 def _declaration_dynamic_requests(
     program: Program,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
 ) -> dict[str, Any]:
     default = profile.dynamic_requests_default
     explicit: bool | None = None
@@ -98,10 +98,10 @@ def _declaration_dynamic_requests(
 
 
 def _inference_engine(
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     symbols: dict[str, Any] | None,
 ) -> PineInferenceEngine:
-    return PineInferenceEngine(symbols=symbols, pine_version=profile.version)
+    return PineInferenceEngine(version_context=profile, symbols=symbols)
 
 
 def _iter_child_nodes(node: ASTNode) -> Iterable[ASTNode]:
@@ -116,16 +116,16 @@ def _bound_arguments(
     name: str,
     args: list[Argument],
     *,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     symbols: dict[str, Any] | None,
     call_span: Any | None = None,
 ) -> list[dict[str, Any]]:
-    registry = load_builtin_registry(pine_version=profile.version)
-    engine = PineInferenceEngine(symbols=symbols, pine_version=profile.version, registry=registry)
+    registry = load_catalog_readonly_view(pine_version=profile.pine_version)
+    engine = PineInferenceEngine(version_context=profile, symbols=symbols, registry=registry)
     entry = registry.get("functions", {}).get(name)
     resolved_by_id: dict[int, tuple[dict[str, Any] | None, int | None, str]] = {}
     if entry:
-        resolution = SignatureResolver(pine_version=profile.version).resolve_builtin(
+        resolution = SignatureResolver(version_context=profile).resolve_builtin(
             name,
             entry,
             args,
@@ -206,7 +206,7 @@ def _constructor_result_type(
     call: CallExpr,
     symbols: dict[str, Any] | None,
     *,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
 ) -> str:
     inferred = _inference_engine(profile, symbols).infer_type(call)
     if inferred != "unknown":
@@ -262,7 +262,7 @@ def _target_descriptor(
     expr: Any,
     symbols: dict[str, Any] | None,
     *,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
 ) -> dict[str, Any]:
     typ = _inference_engine(profile, symbols).infer_type(expr)
     return {
@@ -437,44 +437,6 @@ def _constructor_assignees(program: Program) -> dict[int, list[dict[str, Any]]]:
             )
     return result
 
-
-__all__ = [
-    "_literal_bool",
-    "_arg_by_name",
-    "_declaration_title",
-    "_declaration_dynamic_requests",
-    "_inference_engine",
-    "_iter_child_nodes",
-    "_iter_nodes",
-    "_bound_arguments",
-    "_parameter",
-    "_call_base_name",
-    "_generic_type_args",
-    "_collection_constructor_base",
-    "_collection_kind_from_type",
-    "_constructor_result_type",
-    "_collection_type_parts",
-    "_iter_var_declarations",
-    "_enum_type_names",
-    "_target_descriptor",
-    "_parameter_dict",
-    "_field_dict",
-    "_declared_arg_bindings",
-    "_literal_int_value",
-    "_for_range_static_iterations",
-    "_expr_descriptor",
-    "_build_type_maps",
-    "_constructor_assignees",
-    "_expr_summary",
-    "_iter_calls_with_context",
-    "_span_dict",
-    "Context",
-    "_REQUEST_CONTEXT_PARAMETER_NAMES",
-    "_ORDER_CALLS",
-    "_EXIT_CALLS",
-    "_MANAGEMENT_CALLS",
-    "_RISK_CALL_PREFIX",
-]
 
 __all__ = [
     "Context",

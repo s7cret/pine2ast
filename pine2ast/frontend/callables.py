@@ -1,22 +1,30 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
 from pine2ast.ast.nodes import MemberAccessExpr, Program
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.type_helpers import type_ref_name
-from pine2ast.frontend.helpers import *
+from pine2ast.frontend.helpers import (
+    _build_type_maps,
+    _call_base_name,
+    _declared_arg_bindings,
+    _inference_engine,
+    _iter_calls_with_context,
+    _parameter_dict,
+    _span_dict,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 
 def extract_callable_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     engine = _inference_engine(profile, symbols)
     _type_map, _enum_map, function_map, method_map = _build_type_maps(program)
@@ -100,8 +108,8 @@ def extract_callable_contract(
             )
 
     return {
-        "contract": "openpine.callables.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["callables"],
+        "profile": f"pine_v{profile.pine_version}",
         "functions": functions,
         "methods": methods,
         "function_calls": function_calls,

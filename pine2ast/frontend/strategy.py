@@ -1,13 +1,23 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
 from pine2ast.ast.nodes import DeclarationStatement, Program
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.frontend.helpers import *
+from pine2ast.frontend.helpers import (
+    _EXIT_CALLS,
+    _MANAGEMENT_CALLS,
+    _ORDER_CALLS,
+    _RISK_CALL_PREFIX,
+    _bound_arguments,
+    _declaration_title,
+    _iter_calls_with_context,
+    _parameter,
+    _span_dict,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 
 def _strategy_call_bucket(name: str) -> str:
@@ -26,20 +36,20 @@ def extract_strategy_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     declaration = (
         program.declaration if isinstance(program.declaration, DeclarationStatement) else None
     )
     contract: dict[str, Any] = {
-        "contract": "openpine.strategy.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["strategy"],
+        "profile": f"pine_v{profile.pine_version}",
         "script": {
             "type": declaration.script_type if declaration else None,
             "title": _declaration_title(declaration),
-            "pine_version": program.version or program.language_version,
+            "pine_version": program.version_context.pine_version,
         },
         "orders": [],
         "exits": [],

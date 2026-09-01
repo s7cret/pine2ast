@@ -1,99 +1,24 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
-
-from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
 from pine2ast.ast.nodes import (
-    BinaryExpr,
-    Block,
-    BreakStatement,
     CallExpr,
-    ConditionalExpr,
-    ContinueStatement,
-    DeclarationStatement,
-    EnumDeclaration,
-    ForInStructure,
-    ForRangeStructure,
-    FunctionDeclaration,
-    GenericInstantiationExpr,
-    HistoryRefExpr,
-    Identifier,
-    IfStructure,
-    ImportDeclaration,
-    Literal,
     MemberAccessExpr,
-    MethodDeclaration,
-    Program,
-    Reassignment,
-    SwitchStructure,
-    TupleDeclaration,
-    TupleExpr,
-    TypeDeclaration,
-    FieldDeclaration,
-    Parameter,
-    UnaryExpr,
-    VarDeclaration,
-    WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
+from pine2ast.catalog import (
     KNOWN_DEFERRED_NAMESPACE_MEMBERS,
     KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
+    load_catalog_readonly_view,
 )
-from pine2ast.semantic.model import SemanticModel
-from pine2ast.semantic.type_helpers import (
-    for_in_target_types,
-    generic_type_parts,
-    is_assignable_type,
-    is_valid_map_key_type,
-    split_type_args,
-    tuple_element_types,
-    type_ref_name,
-)
-from pine2ast.semantic.qualifier_infer import infer_qualifier
-from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
-from pine2ast.semantic.signatures import SignatureResolver
-from pine2ast.semantic.collection_signatures import (
-    generic_constructor_expected_arity,
-    is_collection_method,
-    resolve_collection_call,
-)
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
-from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
-from pine2ast.semantic.passes.loop_dos import (
-    _is_literal_true,
-    _static_int_bound,
-)
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.symbols import SymbolKind
+from pine2ast.semantic.type_infer import callee_name
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerBuiltinValidationMixin:
+class AnalyzerBuiltinValidationMixin(AnalyzerMixinHost):
     """Focused semantic validation mixin extracted for Pine2AST 4.0."""
 
     def _strategy_constant_members(self) -> set[str]:
@@ -233,7 +158,9 @@ class AnalyzerBuiltinValidationMixin:
         # the current (v5) one, emit a migration warning instead of an
         # unknown-builtin error. The script can still be parsed; the
         # v5→v6 migration would need to remove or replace the call.
-        if self.pine_version == 5 and self._exists_in_v6_registry(name, kind="function"):
+        if self.version_context.pine_version == 5 and self._exists_in_v6_registry(
+            name, kind="function"
+        ):
             self._diag(
                 Severity.WARNING,
                 codes.V6_ONLY_BUILTIN,
@@ -265,7 +192,9 @@ class AnalyzerBuiltinValidationMixin:
             return
         # v5→v6 migration: same logic as for function calls — if the
         # name is a v6-only constant/variable, emit a warning.
-        if self.pine_version == 5 and self._exists_in_v6_registry(name, kind="variable"):
+        if self.version_context.pine_version == 5 and self._exists_in_v6_registry(
+            name, kind="variable"
+        ):
             self._diag(
                 Severity.WARNING,
                 codes.V6_ONLY_BUILTIN,
@@ -304,7 +233,7 @@ class AnalyzerBuiltinValidationMixin:
         references a v6-only builtin, we want to emit V6_ONLY_BUILTIN
         (warning) instead of UNKNOWN_BUILTIN_MEMBER (error).
         """
-        v6 = load_builtin_registry(pine_version=6)
+        v6 = load_catalog_readonly_view(pine_version=6)
         sections = ("functions",) if kind == "function" else ("variables", "constants")
         return any(name in v6.get(section, {}) for section in sections)
 
@@ -318,9 +247,9 @@ class AnalyzerBuiltinValidationMixin:
         detection: we check the v6 registry for any function or variable
         whose name starts with ``root + "."``.
         """
-        if self.pine_version != 5:
+        if self.version_context.pine_version != 5:
             return False
-        v6 = load_builtin_registry(pine_version=6)
+        v6 = load_catalog_readonly_view(pine_version=6)
         prefix = root + "."
         for section in ("functions", "variables", "constants"):
             for name in v6.get(section, {}):

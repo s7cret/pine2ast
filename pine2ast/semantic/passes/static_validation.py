@@ -21,6 +21,6 @@ class StaticValidationPass:
         for issue in validate_static_semantics(
             program,
             semantic_model=self.analyzer.model,
-            profile=self.analyzer.language_profile,
+            profile=self.analyzer.version_context,
         ):
             self.analyzer._diag(issue.severity, issue.code, issue.message, issue.span)

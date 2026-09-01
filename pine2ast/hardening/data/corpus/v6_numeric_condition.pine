@@ -1,0 +1,5 @@
+//@version=6
+indicator("v6-numeric")
+x = 0
+if 1
+    x := 1

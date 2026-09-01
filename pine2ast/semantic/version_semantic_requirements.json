@@ -1,0 +1,1046 @@
+{
+  "schema_id": "pine2ast.version_semantic_requirements.v1",
+  "schema_version": "1.0.0",
+  "scope": "pine2ast static frontend plus explicit downstream ownership references",
+  "coverage_policy": {
+    "frontend_verified": "owner=pine2ast and automated test passes",
+    "downstream_not_counted": "requirements owned by other libraries are reported separately and never counted as Pine2AST failures",
+    "official_symbol_completeness": "not inferred from internal catalog size"
+  },
+  "requirements": [
+    {
+      "requirement_id": "PINE.VERSION.SINGLE_SOURCE",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "version",
+      "description": "Version is resolved once from compiler annotation or the TradingView v1 default.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.version.single_source"
+    },
+    {
+      "requirement_id": "PINE.VERSION.NO_NEAREST_FALLBACK",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "version",
+      "description": "Unknown and future versions fail closed; no neighbouring profile is substituted.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.version.no_fallback"
+    },
+    {
+      "requirement_id": "PINE.VERSION.CATALOG_HASH_BOUND",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "identity",
+      "description": "The selected version pack and AST share one sealed catalog identity.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.version.catalog_hash"
+    },
+    {
+      "requirement_id": "PINE.AST.NODE_SPANS",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "ast",
+      "description": "Every source-derived AST node carries a deterministic source span.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.ast.spans"
+    },
+    {
+      "requirement_id": "PINE.STATIC.SYMBOL_BINDING",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Identifiers bind to stable semantic symbol identities.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "test_id": "stage6.binding.symbol_ids"
+    },
+    {
+      "requirement_id": "PINE.STATIC.TYPE_FACTS",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Expression type facts are emitted for all expressions supported by the selected profile.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "test_id": "stage6.types.facts"
+    },
+    {
+      "requirement_id": "PINE.STATIC.QUALIFIER_FACTS",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "qualifiers",
+      "description": "Qualifier facts are emitted where the version defines qualifier semantics.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "test_id": "stage6.qualifiers.facts"
+    },
+    {
+      "requirement_id": "PINE.STATIC.OVERLOAD_IDENTITY",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "overloads",
+      "description": "Resolved calls have deterministic symbol and overload identities.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/type-system/",
+      "test_id": "stage6.overload.identity"
+    },
+    {
+      "requirement_id": "PINE.STATIC.UNAVAILABLE_FEATURE_FAILS",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "availability",
+      "description": "Features unavailable in a selected version are rejected instead of accepted by a modern parser fallback.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.availability.fail_closed"
+    },
+    {
+      "requirement_id": "PINE.STATIC.DECLARATION_CARDINALITY",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "A script has one valid version-appropriate declaration.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.declaration.cardinality"
+    },
+    {
+      "requirement_id": "PINE.V1.MISSING_ANNOTATION_DEFAULT",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "version",
+      "description": "A source without //@version resolves to Pine v1.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/language/script-structure/",
+      "test_id": "stage6.v1.default"
+    },
+    {
+      "requirement_id": "PINE.V1.STUDY_DECLARATION",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "Historical study()/strategy() declarations are accepted and indicator()/library() are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v1.declarations"
+    },
+    {
+      "requirement_id": "PINE.V1.NO_STATEMENT_CONTROL_FLOW",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "Statement if/for/while/switch constructs are unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v1.control_flow"
+    },
+    {
+      "requirement_id": "PINE.V1.NO_USER_FUNCTION_DECLARATIONS",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "User-defined function declaration syntax is unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v1.functions"
+    },
+    {
+      "requirement_id": "PINE.V1.NO_REASSIGNMENT",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "The := reassignment form is unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v1.reassignment"
+    },
+    {
+      "requirement_id": "PINE.V1.NO_TYPED_DECLARATIONS",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Typed, var and varip declarations are unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v1.typed_declarations"
+    },
+    {
+      "requirement_id": "PINE.V1.LEGACY_CALL_SPELLINGS",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Historical unnamespaced builtin spellings are used.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v1.spellings"
+    },
+    {
+      "requirement_id": "PINE.V1.SELF_REFERENCE_STATIC_POLICY",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Historical self-reference compatibility is represented explicitly.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v1.self_reference"
+    },
+    {
+      "requirement_id": "PINE.V1.FORWARD_REFERENCE_STATIC_POLICY",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Historical forward-reference compatibility is represented explicitly.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v1.forward_reference"
+    },
+    {
+      "requirement_id": "PINE.V1.BOOL_NUMERIC_COERCION",
+      "pine_versions": [
+        1
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Historical boolean-to-numeric coercion is represented in semantic facts.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v1.bool_numeric"
+    },
+    {
+      "requirement_id": "PINE.V1.SECURITY_LOOKAHEAD_POLICY",
+      "pine_versions": [
+        1
+      ],
+      "owner": "marketdata-provider",
+      "category": "request_runtime",
+      "description": "Historical security lookahead/alignment policy is carried downstream.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v1.security_contract"
+    },
+    {
+      "requirement_id": "PINE.V2.EXPLICIT_VERSION",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "version",
+      "description": "//@version=2 selects the Pine v2 pack.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v2.version"
+    },
+    {
+      "requirement_id": "PINE.V2.V1_BACKWARD_COMPATIBILITY",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "availability",
+      "description": "v1-valid static constructs remain recognized under v2.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v2.v1_compat"
+    },
+    {
+      "requirement_id": "PINE.V2.CONTROL_FLOW_DELTA",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "v2 control-flow forms in the pinned historical snapshot are version gated.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v2.control_flow"
+    },
+    {
+      "requirement_id": "PINE.V2.USER_FUNCTION_DELTA",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "v2 user-function forms in the pinned historical snapshot are version gated.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v2.functions"
+    },
+    {
+      "requirement_id": "PINE.V2.REASSIGNMENT_DELTA",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "v2 reassignment forms in the pinned historical snapshot are version gated.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+      "test_id": "stage6.v2.reassignment"
+    },
+    {
+      "requirement_id": "PINE.V2.SELF_REFERENCE_ALLOWED",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Self-referencing declarations remain representable under the historical v2 profile.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v2.self_reference"
+    },
+    {
+      "requirement_id": "PINE.V2.FORWARD_REFERENCE_ALLOWED",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Forward references remain representable under the historical v2 profile.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v2.forward_reference"
+    },
+    {
+      "requirement_id": "PINE.V2.BOOL_NUMERIC_ALLOWED",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Boolean arithmetic remains accepted in the historical v2 profile.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v2.bool_numeric"
+    },
+    {
+      "requirement_id": "PINE.V2.SECURITY_MUTABLE_EXPRESSION_RULE",
+      "pine_versions": [
+        2
+      ],
+      "owner": "pine2ast",
+      "category": "requests",
+      "description": "Mutable-expression restrictions for security() are statically surfaced.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v2.security_mutable"
+    },
+    {
+      "requirement_id": "PINE.V2.SECURITY_LOOKAHEAD_POLICY",
+      "pine_versions": [
+        2
+      ],
+      "owner": "marketdata-provider",
+      "category": "request_runtime",
+      "description": "Historical v2 security lookahead policy is carried downstream.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v2.security_contract"
+    },
+    {
+      "requirement_id": "PINE.V3.NO_SELF_REFERENCE",
+      "pine_versions": [
+        3
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Self-referencing declarations are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.self_reference"
+    },
+    {
+      "requirement_id": "PINE.V3.NO_FORWARD_REFERENCE",
+      "pine_versions": [
+        3
+      ],
+      "owner": "pine2ast",
+      "category": "binding",
+      "description": "Forward references are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.forward_reference"
+    },
+    {
+      "requirement_id": "PINE.V3.NO_BOOL_ARITHMETIC",
+      "pine_versions": [
+        3
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Boolean values are rejected in arithmetic expressions.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.bool_arithmetic"
+    },
+    {
+      "requirement_id": "PINE.V3.NUMERIC_CONDITIONS",
+      "pine_versions": [
+        3
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Numeric expressions remain valid condition operands under the historical profile.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.numeric_condition"
+    },
+    {
+      "requirement_id": "PINE.V3.TUPLE_DESTRUCTURING",
+      "pine_versions": [
+        3
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "Tuple destructuring is version gated and typed.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.tuples"
+    },
+    {
+      "requirement_id": "PINE.V3.SECURITY_LOOKAHEAD_POLICY",
+      "pine_versions": [
+        3
+      ],
+      "owner": "marketdata-provider",
+      "category": "request_runtime",
+      "description": "v3 security lookahead/alignment policy is carried downstream.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/",
+      "test_id": "stage6.v3.security_contract"
+    },
+    {
+      "requirement_id": "PINE.V4.STUDY_DECLARATION",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "study()/strategy() are valid declarations; indicator()/library() are unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.declarations"
+    },
+    {
+      "requirement_id": "PINE.V4.TYPED_DECLARATIONS",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Explicit types and v4 declaration syntax are supported.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.typed_declarations"
+    },
+    {
+      "requirement_id": "PINE.V4.NA_REQUIRES_EXPLICIT_TYPE",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "A declaration initialized with na requires a usable explicit type.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.na_type"
+    },
+    {
+      "requirement_id": "PINE.V4.VAR_DECLARATIONS",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "var persistence declarations are statically represented.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.var"
+    },
+    {
+      "requirement_id": "PINE.V4.ARRAYS",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "collections",
+      "description": "Historical v4 array APIs are available while map/matrix APIs are unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.arrays"
+    },
+    {
+      "requirement_id": "PINE.V4.COMPOUND_ASSIGNMENT",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "operators",
+      "description": "Compound assignment operators are available and type checked.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/",
+      "test_id": "stage6.v4.compound"
+    },
+    {
+      "requirement_id": "PINE.V4.UNIFIED_INPUT",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Historical input() overloads are available; typed input.* forms are unavailable.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v4.input"
+    },
+    {
+      "requirement_id": "PINE.V4.IFF_OFFSET",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Historical iff()/offset() spellings are available.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v4.iff_offset"
+    },
+    {
+      "requirement_id": "PINE.V4.HISTORICAL_RSI_OVERLOAD",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "overloads",
+      "description": "The historical rsi() overload set is represented.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v4.rsi"
+    },
+    {
+      "requirement_id": "PINE.V4.NO_V5_LANGUAGE_FORMS",
+      "pine_versions": [
+        4
+      ],
+      "owner": "pine2ast",
+      "category": "availability",
+      "description": "v5-only library, method, UDT, enum, switch, while, map and matrix forms fail closed.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v4.no_v5_forms"
+    },
+    {
+      "requirement_id": "PINE.V4.EAGER_LOGICAL_OPERATORS",
+      "pine_versions": [
+        4
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "and/or use the pre-v6 eager evaluation policy.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v4.logical_contract"
+    },
+    {
+      "requirement_id": "PINE.V5.MODERN_DECLARATIONS",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "indicator()/strategy()/library() declarations are recognized and study() is rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.declarations"
+    },
+    {
+      "requirement_id": "PINE.V5.NAMESPACED_BUILTINS",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Modern namespace spellings are bound to canonical symbol identities.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.namespaces"
+    },
+    {
+      "requirement_id": "PINE.V5.TYPED_INPUTS",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "input.int/input.float/input.bool and related typed inputs are resolved.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.inputs"
+    },
+    {
+      "requirement_id": "PINE.V5.UDT_METHOD_ENUM_LIBRARY",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "UDTs, methods, enums, libraries/imports and exports are statically represented.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.language_forms"
+    },
+    {
+      "requirement_id": "PINE.V5.SWITCH_WHILE",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "switch and while constructs are statically represented.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.control_flow"
+    },
+    {
+      "requirement_id": "PINE.V5.NAMED_CONSTANT_ARGUMENTS",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "calls",
+      "description": "Parameters requiring named constants reject raw equivalent values.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.named_constants"
+    },
+    {
+      "requirement_id": "PINE.V5.RESOLUTION_PARAMETER_RENAME",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "resolution/resolution_gaps are rejected in favor of timeframe/timeframe_gaps.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.timeframe_args"
+    },
+    {
+      "requirement_id": "PINE.V5.RSI_OVERLOAD_CHANGE",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "overloads",
+      "description": "Removed historical rsi() overloads are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+      "test_id": "stage6.v5.rsi"
+    },
+    {
+      "requirement_id": "PINE.V5.BOOL_NA",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "bool may carry na under v5 static semantics.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.bool_na"
+    },
+    {
+      "requirement_id": "PINE.V5.NUMERIC_CONDITION",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Numeric condition coercion remains available under v5.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.numeric_condition"
+    },
+    {
+      "requirement_id": "PINE.V5.EAGER_AND_OR",
+      "pine_versions": [
+        5
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "and/or evaluate both operands under v5.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.logical_contract"
+    },
+    {
+      "requirement_id": "PINE.V5.CONST_INT_DIVISION",
+      "pine_versions": [
+        5
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "const-int division follows the v5 integer-result policy.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.division_contract"
+    },
+    {
+      "requirement_id": "PINE.V5.STATIC_REQUEST_DEFAULT",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pinelib",
+      "category": "request_runtime",
+      "description": "request.* defaults to non-dynamic behavior.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.request_contract"
+    },
+    {
+      "requirement_id": "PINE.V5.FIXED_FOR_END",
+      "pine_versions": [
+        5
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "for to_num is evaluated once under v5.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.for_contract"
+    },
+    {
+      "requirement_id": "PINE.V5.STRATEGY_WHEN",
+      "pine_versions": [
+        5
+      ],
+      "owner": "pine2ast",
+      "category": "calls",
+      "description": "The strategy when parameter remains statically available.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v5.when"
+    },
+    {
+      "requirement_id": "PINE.V6.BOOL_TWO_STATE",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "bool is two-state and cannot be na.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.bool"
+    },
+    {
+      "requirement_id": "PINE.V6.NO_NUMERIC_CONDITION",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Numeric values do not implicitly convert to bool in conditions.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.numeric_condition"
+    },
+    {
+      "requirement_id": "PINE.V6.LAZY_AND_OR",
+      "pine_versions": [
+        6
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "and/or use lazy short-circuit evaluation.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.logical_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.FRACTIONAL_CONST_INT_DIVISION",
+      "pine_versions": [
+        6
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "const-int division produces a fractional result where required by v6.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.division_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.DYNAMIC_REQUEST_DEFAULT",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pinelib",
+      "category": "request_runtime",
+      "description": "request.* defaults to dynamic behavior.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.request_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.DYNAMIC_FOR_END",
+      "pine_versions": [
+        6
+      ],
+      "owner": "ast2python",
+      "category": "lowering",
+      "description": "for to_num is reevaluated before each iteration.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.for_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.NO_STRATEGY_WHEN",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "calls",
+      "description": "Removed strategy when parameters are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.when"
+    },
+    {
+      "requirement_id": "PINE.V6.NO_TRANSP_PARAMETER",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "calls",
+      "description": "Removed transp parameters are rejected.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.transp"
+    },
+    {
+      "requirement_id": "PINE.V6.UNIQUE_TYPES_NOT_NA",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "types",
+      "description": "Unique-type parameters cannot receive na.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.unique_types"
+    },
+    {
+      "requirement_id": "PINE.V6.NEGATIVE_COLLECTION_INDEX",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "collections",
+      "description": "Supported array operations accept negative indices in v6 and reject them in earlier versions.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.negative_index"
+    },
+    {
+      "requirement_id": "PINE.V6.HISTORY_EXPANSION",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "history",
+      "description": "v6 rejects history references on literals and UDT fields while accepting history on the UDT object.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.history"
+    },
+    {
+      "requirement_id": "PINE.V6.TIMEFRAME_PERIOD_FORMAT",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pinelib",
+      "category": "runtime",
+      "description": "timeframe.period follows v6 multiplier formatting.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.timeframe_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.STRATEGY_DEFAULT_MARGINS",
+      "pine_versions": [
+        6
+      ],
+      "owner": "backtest_engine",
+      "category": "broker",
+      "description": "Default margin_long/margin_short policy is v6-specific.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.margin_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.ORDER_LIMIT_POLICY",
+      "pine_versions": [
+        6
+      ],
+      "owner": "backtest_engine",
+      "category": "broker",
+      "description": "The over-9000-order policy is versioned.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.order_limit_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.STRATEGY_EXIT_PRECEDENCE",
+      "pine_versions": [
+        6
+      ],
+      "owner": "backtest_engine",
+      "category": "broker",
+      "description": "strategy.exit relative/absolute parameter precedence is versioned.",
+      "verification": "downstream_contract",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/",
+      "test_id": "stage6.v6.exit_contract"
+    },
+    {
+      "requirement_id": "PINE.V6.MULTILINE_STRINGS_2026",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "syntax",
+      "description": "Current v6 multiline strings are parsed and source mapped.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "test_id": "stage6.v6.multiline_strings"
+    },
+    {
+      "requirement_id": "PINE.V6.HISTORICAL_TICK_DECLARATION_2026",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "declarations",
+      "description": "calc_on_every_history_tick is catalogued as a current v6 declaration capability.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "test_id": "stage6.v6.historical_tick"
+    },
+    {
+      "requirement_id": "PINE.V6.UDT_BINARY_SEARCH_2026",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Current v6 UDT array binary-search sort_field signatures are catalogued.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "test_id": "stage6.v6.udt_binary_search"
+    },
+    {
+      "requirement_id": "PINE.V6.BID_ASK_CURRENT_CONTRACT",
+      "pine_versions": [
+        6
+      ],
+      "owner": "pine2ast",
+      "category": "builtins",
+      "description": "Current v6 bid/ask and current-contract metadata are catalogued.",
+      "verification": "automated",
+      "docs_ref": "https://www.tradingview.com/pine-script-docs/release-notes/",
+      "test_id": "stage6.v6.market_metadata"
+    }
+  ]
+}

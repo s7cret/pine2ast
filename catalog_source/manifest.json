@@ -1,0 +1,72 @@
+{
+  "content_hash": "sha256:cab70b522a3d3f720ac497c63a44aa76b5042a00df2a4771a0ce0b00a57ec458",
+  "input_identity": {
+    "historical_projection": {
+      "byte_length": 7255,
+      "path": "catalog_source/historical_projection.json",
+      "sha256": "sha256:2250cadb51ced68c1596f8a672839aa42450b58992b8a8f87d39a784ef4c689c"
+    },
+    "rc5_v5": {
+      "byte_length": 678438,
+      "path": "catalog_migration_inputs/rc5/builtins_v5.rc5.json",
+      "sha256": "sha256:017291cb971d827177609c7254813606d2ef19cb5bda5851374f409f204e2b7e"
+    },
+    "rc5_v6": {
+      "byte_length": 793968,
+      "path": "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+      "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+    },
+    "version_rules": {
+      "byte_length": 25225,
+      "path": "catalog_source/version_rules.json",
+      "sha256": "sha256:2e9f27cdbd8e44a2c54de500a5b9227c4c564986517ebd5e5dfade3b1cc55056"
+    }
+  },
+  "policy": {
+    "canonical_identity": "stable symbol_id across historical renames",
+    "delta_storage": "sequential real changes v1 through v6",
+    "legacy_registry_runtime_use": false,
+    "semantic_storage": "content-addressed definitions",
+    "unknown_version_fallback": false
+  },
+  "schema_id": "pine.catalog.source_manifest.v2",
+  "schema_version": "2.0.0",
+  "versions": {
+    "1": {
+      "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
+      "delta_path": "deltas/v1.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v1-historical-static-snapshot-2026-08-27",
+      "status": "HISTORICAL_STATIC_SNAPSHOT"
+    },
+    "2": {
+      "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
+      "delta_path": "deltas/v2.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v2-historical-static-snapshot-2026-08-27",
+      "status": "HISTORICAL_STATIC_SNAPSHOT"
+    },
+    "3": {
+      "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
+      "delta_path": "deltas/v3.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v3-historical-static-snapshot-2026-08-27",
+      "status": "HISTORICAL_STATIC_SNAPSHOT"
+    },
+    "4": {
+      "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
+      "delta_path": "deltas/v4.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v4-historical-static-snapshot-2026-08-27",
+      "status": "HISTORICAL_STATIC_SNAPSHOT"
+    },
+    "5": {
+      "coverage_basis": "pinned_reference_registry_static_snapshot",
+      "delta_path": "deltas/v5.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v5-reference-snapshot-2026-08-26",
+      "status": "STATIC_COMPLETE"
+    },
+    "6": {
+      "coverage_basis": "pinned_reference_registry_static_snapshot",
+      "delta_path": "deltas/v6.jsonl",
+      "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
+      "status": "STATIC_COMPLETE"
+    }
+  }
+}

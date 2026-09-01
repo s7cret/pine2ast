@@ -1,6 +1,0 @@
-//@version=6
-indicator("Strings")
-a = "hello"
-b = 'world'
-label.new(bar_index, high, a + b)
-plot(close)

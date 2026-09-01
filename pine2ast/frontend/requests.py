@@ -1,22 +1,29 @@
 from __future__ import annotations
 
-# ruff: noqa: F403,F405
 
 from typing import Any
 
 from pine2ast.ast.nodes import Program
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.type_infer import callee_name
-from pine2ast.frontend.helpers import *
+from pine2ast.frontend.helpers import (
+    _REQUEST_CONTEXT_PARAMETER_NAMES,
+    _bound_arguments,
+    _declaration_dynamic_requests,
+    _iter_calls_with_context,
+    _parameter,
+    _span_dict,
+)
+from pine2ast.frontend.ids import SECTION_CONTRACTS
 
 
 def extract_request_contract(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
-    profile = profile or pine_language_profile(program.version or program.language_version)
+    profile = profile or program.version_context
     symbols = getattr(semantic_model, "symbols", None)
     dynamic_requests = _declaration_dynamic_requests(program, profile)
     requests: list[dict[str, Any]] = []
@@ -71,8 +78,8 @@ def extract_request_contract(
             }
         )
     return {
-        "contract": "openpine.requests.v1",
-        "profile": f"pine_v{profile.version}",
+        "contract": SECTION_CONTRACTS["requests"],
+        "profile": f"pine_v{profile.pine_version}",
         "dynamic_requests": dynamic_requests,
         "requests": requests,
     }

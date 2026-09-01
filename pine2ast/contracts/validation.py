@@ -251,7 +251,7 @@ def _validate_ast(payload: Mapping[str, Any], path: str, issues: list[ContractIs
     _require_literal(payload, "kind", "Program", path, issues)
     _require_key(payload, "schema_version", str, path, issues)
     _require_key(payload, "language", str, path, issues)
-    _require_key(payload, "language_version", int, path, issues)
+    _require_key(payload, "version_context", dict, path, issues)
     _require_key(payload, "producer_metadata", dict, path, issues)
 
 

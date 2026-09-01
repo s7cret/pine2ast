@@ -1,6 +1,0 @@
-//@version=6
-indicator(
-    "Wrapped Declaration",
-    overlay = true
-)
-plot(close)

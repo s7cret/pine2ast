@@ -1,30 +1,14 @@
 __pycache__/
 *.py[cod]
+*$py.class
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
+.coverage.*
 htmlcov/
-.venv/
-venv/
 build/
 dist/
 *.egg-info/
-
-.release_gate_reports/
-
-# Release artifacts
-*.zip
-*.tar.gz
-*.tar
-
-# Release logs
-RELEASE_*.log
-*.log
-
-# Bulky external browser evidence; keep in private release archives, not git
-TV_ORACLE_EVIDENCE*/
-TV_ORACLE_EVIDENCE_*/
-
-# Node modules
-node_modules/
+.venv/
+stage6_reports/

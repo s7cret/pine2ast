@@ -13,7 +13,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_parse.add_argument("--no-semantic", action="store_true")
     p_parse.add_argument("--tokens", action="store_true")
     p_parse.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_parse.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_tokens = sub.add_parser("tokens")
     p_tokens.add_argument("path")
@@ -21,7 +20,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_validate = sub.add_parser("validate")
     p_validate.add_argument("path")
     p_validate.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_validate.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_symbols = sub.add_parser("dump-symbols")
     p_symbols.add_argument("path")
@@ -56,7 +54,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_inspect.add_argument("--json", dest="json_path")
     p_inspect.add_argument("--no-semantic", action="store_true")
     p_inspect.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_inspect.add_argument("--runtime-contract-v1-4", action="store_true")
     p_inspect.add_argument("--openpine-contract", action="store_true")
     p_inspect.add_argument("--semantic-snapshot", action="store_true")
 
@@ -64,7 +61,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_snapshot.add_argument("path")
     p_snapshot.add_argument("--json", dest="json_path")
     p_snapshot.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_snapshot.add_argument("--runtime-contract-v1-4", action="store_true")
     p_snapshot.add_argument("--no-semantic", action="store_true")
     p_snapshot.add_argument("--no-node-facts", action="store_true")
 
@@ -76,7 +72,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_contract.add_argument("--json", dest="json_path")
     p_contract.add_argument("--no-semantic", action="store_true")
     p_contract.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_contract.add_argument("--runtime-contract-v1-4", action="store_true")
     p_contract.add_argument("--no-openpine-contract", action="store_true")
 
     p_schema = sub.add_parser("schema-check")
@@ -84,14 +79,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_schema.add_argument("--json", dest="json_path")
     p_schema.add_argument("--no-semantic", action="store_true")
     p_schema.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_schema.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_diag_report = sub.add_parser("diagnostics-report")
     p_diag_report.add_argument("path")
     p_diag_report.add_argument("--json", dest="json_path")
     p_diag_report.add_argument("--no-semantic", action="store_true")
     p_diag_report.add_argument("--strict-builtin-namespaces", action="store_true")
-    p_diag_report.add_argument("--runtime-contract-v1-4", action="store_true")
 
     p_sarif = sub.add_parser("sarif")
     p_sarif.add_argument("path")
@@ -115,7 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_quality.add_argument("--no-semantic", action="store_true")
     p_quality.add_argument("--strict-builtin-namespaces", action="store_true")
 
-    p_builtin_coverage = sub.add_parser("builtin-coverage")
+    p_builtin_coverage = sub.add_parser("catalog-coverage")
     p_builtin_coverage.add_argument("--json", dest="json_path")
 
     p_release = sub.add_parser("release-report")

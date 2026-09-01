@@ -1,56 +1,15 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
-
-from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
+from pine2ast.ast.base import Expression
 from pine2ast.ast.nodes import (
     BinaryExpr,
-    Block,
-    BreakStatement,
-    CallExpr,
     ConditionalExpr,
-    ContinueStatement,
-    DeclarationStatement,
-    EnumDeclaration,
-    ForInStructure,
-    ForRangeStructure,
-    FunctionDeclaration,
-    GenericInstantiationExpr,
-    HistoryRefExpr,
-    Identifier,
-    IfStructure,
-    ImportDeclaration,
     Literal,
-    MemberAccessExpr,
-    MethodDeclaration,
-    Program,
-    Reassignment,
-    SwitchStructure,
-    TupleDeclaration,
-    TupleExpr,
-    TypeDeclaration,
-    FieldDeclaration,
-    Parameter,
-    UnaryExpr,
-    VarDeclaration,
-    WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
-    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
-)
-from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.type_helpers import (
     for_in_target_types,
     generic_type_parts,
@@ -60,40 +19,11 @@ from pine2ast.semantic.type_helpers import (
     tuple_element_types,
     type_ref_name,
 )
-from pine2ast.semantic.qualifier_infer import infer_qualifier
 from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
-from pine2ast.semantic.signatures import SignatureResolver
-from pine2ast.semantic.collection_signatures import (
-    generic_constructor_expected_arity,
-    is_collection_method,
-    resolve_collection_call,
-)
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
-from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
-from pine2ast.semantic.passes.loop_dos import (
-    _is_literal_true,
-    _static_int_bound,
-)
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerTypeValidationMixin:
+class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
     """Focused semantic validation mixin extracted for Pine2AST 4.0."""
 
     def _qualifier_rank(self, qualifier: str | None) -> int:
@@ -113,8 +43,26 @@ class AnalyzerTypeValidationMixin:
             )
 
     def _validate_binary_expr(self, expr: BinaryExpr) -> None:
-        left_type = infer_type(expr.left, self.model.symbols)
-        right_type = infer_type(expr.right, self.model.symbols)
+        left_type = self._infer_type(expr.left)
+        right_type = self._infer_type(expr.right)
+        arithmetic = {"+", "-", "*", "/", "%"}
+        has_bool_operand = left_type == "bool" or right_type == "bool"
+        if expr.op in arithmetic and has_bool_operand:
+            if self.policy.allows_bool_to_number:
+                # Pine v1/v2 implicitly coerce bool to 0/1 in arithmetic. The
+                # coercion itself is recorded in Semantic Facts by the binder.
+                return
+            self._diag(
+                Severity.ERROR,
+                codes.BOOL_TO_NUMBER_FORBIDDEN,
+                (
+                    f"Pine v{self.version_context.pine_version} does not allow "
+                    f"implicit bool-to-number conversion for operator {expr.op}."
+                ),
+                expr.span,
+            )
+            return
+
         numeric = {"int", "float", "unknown", "na"}
         if expr.op in {"-", "*", "/", "%"}:
             if left_type not in numeric or right_type not in numeric:
@@ -135,11 +83,14 @@ class AnalyzerTypeValidationMixin:
                     expr.span,
                 )
         elif expr.op in {"and", "or"}:
-            if left_type not in {"bool", "unknown"} or right_type not in {"bool", "unknown"}:
+            allowed = {"bool", "unknown"}
+            if self.policy.numeric_condition_allowed:
+                allowed.update({"int", "float"})
+            if left_type not in allowed or right_type not in allowed:
                 self._diag(
                     Severity.ERROR,
                     codes.TYPE_MISMATCH,
-                    f"Operator {expr.op} requires bool operands, got {left_type} and {right_type}.",
+                    f"Operator {expr.op} requires condition-compatible operands, got {left_type} and {right_type}.",
                     expr.span,
                 )
         elif expr.op in {"<", "<=", ">", ">="}:
@@ -197,7 +148,7 @@ class AnalyzerTypeValidationMixin:
         return is_assignable_type(expected, actual)
 
     def _uses_v6_bool_rules(self) -> bool:
-        return self.language_profile.uses_v6_bool_rules
+        return self.policy.uses_v6_bool_rules
 
     def _is_bool_target_type(self, typ: str | None) -> bool:
         if typ == "bool":
@@ -230,7 +181,7 @@ class AnalyzerTypeValidationMixin:
         expected = param.get("type")
         if not expected or expected in {"any", "array"}:
             return
-        actual = infer_type(arg.value, self.model.symbols)
+        actual = self._infer_type(arg.value)
         if callee == "line.new" and (param.get("name") in {"x1", "y1"}) and actual == "chart.point":
             # Pine v6 has an overload line.new(first_point, second_point, ...). The registry
             # remains a single signature snapshot, so accept chart.point for the first two

@@ -8,19 +8,19 @@ from pine2ast.ast.types import TypeRef
 from pine2ast.diagnostics.diagnostic import Diagnostic
 from pine2ast.lexer.annotations import Annotation
 from pine2ast.lexer.token import SourceSpan
+from pine2ast.versioning import PineVersionContext
 
 
 @dataclass(slots=True)
 class Program(ASTNode):
     span: SourceSpan
-    version: int | None
+    version_context: PineVersionContext
     annotations: list[Annotation]
     declaration: "DeclarationStatement | None"
     items: list[Statement]
     diagnostics: list[Diagnostic] = field(default_factory=list)
-    schema_version: str = "1.0"
+    schema_version: str = "2.0"
     language: str = "pine"
-    language_version: int = 6
     producer_metadata: dict[str, object] = field(default_factory=dict)
 
 

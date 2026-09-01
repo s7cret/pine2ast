@@ -8,6 +8,7 @@ from pine2ast.ast.nodes import Program
 PASS_PIPELINE = (
     "declaration_index",
     "scope_symbols",
+    "callable_inference",
     "type_inference",
     "qualifier_inference",
     "builtin_validation",
@@ -16,6 +17,7 @@ PASS_PIPELINE = (
     "strategy_context_validation",
     "unsupported_feature_extraction",
     "declaration_cardinality",
+    "semantic_facts",
 )
 
 

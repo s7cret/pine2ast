@@ -1,0 +1,180 @@
+{
+  "content_hash": "sha256:b856267ee993c210b3793dab8a6a7ad8c1a6bbb59d03232cd1883c34c56b2aba",
+  "policy": "Official URLs are pinned to tamper-evident local metadata records; copyrighted documentation bodies are not redistributed.",
+  "retrieved_at_utc": "2026-08-27T20:18:09Z",
+  "schema_id": "pine2ast.official_source_manifest.v2",
+  "schema_version": "2.0.0",
+  "sources": [
+    {
+      "content_digest": "sha256:d6ca81e4a1726f7d868b4f2b38165181dbfcc2d39febf0366e66b82064671ce4",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_language_script_structure.json",
+      "evidence_sha256": "sha256:ea491e0fa5b688dbf6d3f5a0ed76d10b7e935257484d7e79b1c1b4109a3ef884",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "version annotation",
+        "declaration statements",
+        "script structure"
+      ],
+      "source_id": "tv.pine.language.script_structure",
+      "source_kind": "USER_MANUAL",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/language/script-structure/"
+    },
+    {
+      "content_digest": "sha256:80584b3391f9aeb24e2d395da92da9e2f36649e1d16ebf41fbd2436dd144b059",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_language_type_system.json",
+      "evidence_sha256": "sha256:f5218dff98833003a99af0d2dbbc8532cccdbb9285b949d580614150cb4225fd",
+      "pine_versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "types",
+        "qualifiers",
+        "compatibility"
+      ],
+      "source_id": "tv.pine.language.type_system",
+      "source_kind": "USER_MANUAL",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/language/type-system/"
+    },
+    {
+      "content_digest": "sha256:42af70419d533beb6f21275447e3ced35be74f295ce83a97b91e020973afe98c",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_migration_to_v2.json",
+      "evidence_sha256": "sha256:52162cc8a728a85ac16ac54b645559de43a73d3b12556243a37d30d670f57880",
+      "pine_versions": [
+        1,
+        2
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "v1 to v2 static language delta"
+      ],
+      "source_id": "tv.pine.migration.to_v2",
+      "source_kind": "MIGRATION_GUIDE",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/"
+    },
+    {
+      "content_digest": "sha256:88cbf1e28bb4e8ff516ea84eb41b8cf483ff2c5eb778453763f5c2291f40b34f",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_migration_to_v3.json",
+      "evidence_sha256": "sha256:a023601cc3dc2637dfa270f83d6143bfedf98fe0aacdeb349bd12ea07b96d5fa",
+      "pine_versions": [
+        2,
+        3
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "v2 to v3 static language delta"
+      ],
+      "source_id": "tv.pine.migration.to_v3",
+      "source_kind": "MIGRATION_GUIDE",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-3/"
+    },
+    {
+      "content_digest": "sha256:674b5247a491bdbc618141311511a33dae251587b47d89b666fa5fc8c1827e21",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_migration_to_v4.json",
+      "evidence_sha256": "sha256:bd90849333310a4d7b663461d6bdd01178a21b6343d522f323d944d99d73c0f9",
+      "pine_versions": [
+        3,
+        4
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "v3 to v4 static language delta"
+      ],
+      "source_id": "tv.pine.migration.to_v4",
+      "source_kind": "MIGRATION_GUIDE",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-4/"
+    },
+    {
+      "content_digest": "sha256:ee3f004eb5b8302b0dd2d1abcc40b2aaa7d1586a39330b810515d4fc391338f7",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_migration_to_v5.json",
+      "evidence_sha256": "sha256:48b426d506bfef49c549035ab2dc40fc39193073344651ec0c50703ccc9e5918",
+      "pine_versions": [
+        4,
+        5
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "v4 to v5 static language delta"
+      ],
+      "source_id": "tv.pine.migration.to_v5",
+      "source_kind": "MIGRATION_GUIDE",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+    },
+    {
+      "content_digest": "sha256:60334d8a2f3ced721da5ccdf00e0ac77c86ba4043437bb6a15aceefb809b0af7",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_migration_to_v6.json",
+      "evidence_sha256": "sha256:f234e7f1ee94ca83eba704cca0651dec8e79d59cedb5f947d58c529746829cc9",
+      "pine_versions": [
+        5,
+        6
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "v5 to v6 static language delta"
+      ],
+      "source_id": "tv.pine.migration.to_v6",
+      "source_kind": "MIGRATION_GUIDE",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-6/"
+    },
+    {
+      "content_digest": "sha256:2dc63f279e7f2777037f0dc2d39c482f01027cae538306fe4e6cb7d989449431",
+      "content_digest_scope": "canonical URL, page title, and verified section headings",
+      "evidence_path": "pine2ast/catalog/sources/records/tv_pine_release_notes.json",
+      "evidence_sha256": "sha256:848680ad8c6bb433472928287f308c9255ef5ee7335f686a9ca3652cf68329e0",
+      "pine_versions": [
+        6
+      ],
+      "retrieved_at_utc": "2026-08-27T20:18:09Z",
+      "review_status": "VERIFIED",
+      "reviewed_by": "stage6-review-agent",
+      "scope": [
+        "rolling Pine v6 additions"
+      ],
+      "source_id": "tv.pine.release_notes",
+      "source_kind": "RELEASE_NOTES",
+      "status": "RETRIEVED",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/"
+    }
+  ]
+}

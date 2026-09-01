@@ -1,0 +1,27 @@
+{
+  "fingerprint_scope": "canonical URL, page title, and verified section headings",
+  "host": "www.tradingview.com",
+  "pine_versions": [
+    1,
+    2
+  ],
+  "raw_body_redistributed": false,
+  "retrieval_method": "official HTTPS page metadata and section-heading verification",
+  "retrieval_status": "SUCCESS",
+  "retrieved_at_utc": "2026-08-27T20:18:09Z",
+  "review_status": "VERIFIED",
+  "reviewed_by": "stage6-review-agent",
+  "schema_id": "pine2ast.official_source_record.v1",
+  "schema_version": "1.0.0",
+  "scope": [
+    "v1 to v2 static language delta"
+  ],
+  "source_fingerprint": "sha256:42af70419d533beb6f21275447e3ced35be74f295ce83a97b91e020973afe98c",
+  "source_id": "tv.pine.migration.to_v2",
+  "source_kind": "MIGRATION_GUIDE",
+  "title": "Migration guides / To Pine Script® version 2",
+  "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-2/",
+  "verified_headings": [
+    "To Pine Script® version 2"
+  ]
+}

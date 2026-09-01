@@ -162,6 +162,7 @@ class DeclarationsMixin(BaseParser):
     def parse_function_decl(
         self, *, exported: bool = False, pending_annotations: list | None = None
     ) -> FunctionDeclaration:
+        self._require_syntax("user_functions", self._peek().span)
         name = self._expect(TokenKind.IDENTIFIER)
         self._expect(TokenKind.LPAREN)
         params, _ = self.parse_params()
@@ -245,9 +246,11 @@ class DeclarationsMixin(BaseParser):
         while not self._at(TokenKind.RPAREN, TokenKind.EOF):
             qualifier = None
             if self._peek().kind in _TYPE_QUALIFIERS:
+                self._require_syntax("typed_declarations", self._peek().span)
                 qualifier = _TYPE_QUALIFIERS[self._advance().kind]
             type_ref = None
             if self._looks_like_type_annotation(self.i):
+                self._require_syntax("typed_declarations", self._peek().span)
                 type_ref = self.parse_type_ref()
             name = self._expect(TokenKind.IDENTIFIER)
             default = None
@@ -267,6 +270,7 @@ class DeclarationsMixin(BaseParser):
             name += "." + self._expect(TokenKind.IDENTIFIER).text
         args: list[TypeRef] = []
         if self._match(TokenKind.LT):
+            self._require_syntax("generic_types", self._previous().span)
             while not self._at(TokenKind.GT, TokenKind.EOF):
                 args.append(self.parse_type_ref())
                 if not self._match(TokenKind.COMMA):
@@ -278,6 +282,7 @@ class DeclarationsMixin(BaseParser):
         else:
             type_ref = TypeRef(name, args, start.span)
         if self._match(TokenKind.LBRACKET):
+            self._require_syntax("array_collections", self._previous().span)
             end = self._expect(TokenKind.RBRACKET)
             return TypeRef("array", [type_ref], join_span(type_ref.span, end.span))
         return type_ref

@@ -1,0 +1,3 @@
+//@version=4
+study('v4')
+x = na

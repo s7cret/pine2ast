@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Callable, Literal, Mapping
 
+from pine2ast.versioning import PineVersionContext
 from pine2ast.ast.nodes import Argument
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
 from pine2ast.semantic.type_helpers import is_assignable_type
-from pine2ast.semantic.type_model import generic_type_parts
+from pine2ast.semantic.type_model import ENUM_LIKE_BUILTIN_TYPES, generic_type_parts
 from pine2ast.semantic.values import (
     QUALIFIER_ORDER,
     expression_can_be_na,
@@ -16,7 +17,7 @@ from pine2ast.semantic.values import (
     is_bool_target_type,
 )
 
-ArgumentBindingKind = Literal["positional", "named", "unknown"]
+ArgumentBindingKind = Literal["positional", "named", "vararg", "defaulted", "unknown"]
 ArgResolver = Callable[[Argument], str | None]
 
 
@@ -32,13 +33,14 @@ class SignatureIssue:
 
 @dataclass(frozen=True, slots=True)
 class ResolvedArgument:
-    argument: Argument
+    argument: Argument | None
     parameter: dict[str, Any] | None
     parameter_index: int | None
     binding: ArgumentBindingKind
     actual_type: str | None = None
     actual_qualifier: str | None = None
     can_be_na: bool = False
+    vararg_index: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +51,7 @@ class SignatureResolution:
     active_parameters: tuple[dict[str, Any], ...]
     removed_parameters: dict[str, dict[str, Any]]
     resolved_arguments: tuple[ResolvedArgument, ...]
+    defaulted_parameters: tuple[dict[str, Any], ...] = field(default_factory=tuple)
     issues: tuple[SignatureIssue, ...] = field(default_factory=tuple)
     overload_index: int | None = None
     overload_id: str | None = None
@@ -84,8 +87,8 @@ class SignatureResolver:
     caller supplies symbol facts or explicit resolver callbacks.
     """
 
-    def __init__(self, *, pine_version: int = 6) -> None:
-        self.pine_version = 5 if pine_version == 5 else 6
+    def __init__(self, *, version_context: PineVersionContext) -> None:
+        self.version_context = version_context
 
     def resolve_builtin(
         self,
@@ -112,7 +115,7 @@ class SignatureResolver:
         )
 
         candidates = self._candidate_entries(entry)
-        best: tuple[tuple[int, int, int, int], SignatureResolution] | None = None
+        scored: list[tuple[tuple[int, int, int, int, int], SignatureResolution]] = []
         for candidate in candidates:
             resolution = self._bind_entry(
                 callee,
@@ -126,29 +129,93 @@ class SignatureResolver:
                 type_resolver=type_resolver,
                 qualifier_resolver=qualifier_resolver,
             )
-            score = self._resolution_score(resolution)
-            if best is None or score < best[0]:
-                best = (score, resolution)
-        assert best is not None
-        return best[1]
+            scored.append((self._resolution_score(resolution), resolution))
+        if not scored:
+            raise ValueError(f"catalog entry for {callee} has no signature candidates")
+        scored.sort(key=lambda item: (item[0], item[1].overload_id or ""))
+        viable = [(score, item) for score, item in scored if item.ok]
+        if not viable:
+            _, diagnostic_carrier = scored[0]
+            issue = SignatureIssue(
+                Severity.ERROR,
+                codes.INVALID_OVERLOAD_BINDING,
+                f"Call {callee} does not match any active overload in Pine v{self.version_context.pine_version}.",
+                call_span,
+            )
+            return replace(
+                diagnostic_carrier,
+                overload_index=None,
+                overload_id=None,
+                issues=diagnostic_carrier.issues + (issue,),
+            )
+        viable.sort(key=lambda item: (item[0], item[1].overload_id or ""))
+        best_score, best = viable[0]
+        tied = [item for score, item in viable[1:] if score == best_score]
+        if tied:
+            ids = [best.overload_id or "<canonical>"] + [
+                item.overload_id or "<canonical>" for item in tied
+            ]
+            issue = SignatureIssue(
+                Severity.ERROR,
+                codes.AMBIGUOUS_OVERLOAD,
+                f"Call {callee} matches multiple overloads equally: {', '.join(ids)}.",
+                call_span,
+            )
+            return replace(
+                best,
+                overload_index=None,
+                overload_id=None,
+                issues=best.issues + (issue,),
+            )
+        return best
 
     def _candidate_entries(self, entry: dict[str, Any]) -> list[dict[str, Any]]:
         overloads = entry.get("overloads") or entry.get("signatures") or []
+        base = {
+            key: value for key, value in entry.items() if key not in {"overloads", "signatures"}
+        }
+        symbol_id = str(entry.get("symbol_id") or entry.get("name") or "builtin")
         candidates: list[dict[str, Any]] = []
         if isinstance(overloads, list):
             for index, overload in enumerate(overloads):
                 if not isinstance(overload, dict):
                     continue
-                merged = {k: v for k, v in entry.items() if k not in {"overloads", "signatures"}}
+                merged = dict(base)
                 merged.update(overload)
                 merged["__overload_index"] = index
-                if "id" not in merged and "overload_id" in overload:
-                    merged["id"] = overload["overload_id"]
+                merged["__overload_id"] = str(
+                    overload.get("overload_id")
+                    or overload.get("id")
+                    or f"{symbol_id}#overload:{index}"
+                )
                 candidates.append(merged)
-        canonical = {k: v for k, v in entry.items() if k not in {"overloads", "signatures"}}
+        canonical = dict(base)
         canonical["__overload_index"] = None
+        canonical["__overload_id"] = f"{symbol_id}#canonical"
         candidates.append(canonical)
-        return candidates
+
+        # Registry sources may repeat the canonical signature as an overload.
+        # Deduplicate by complete callable shape before ambiguity analysis.
+        unique: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        import json
+
+        for candidate in candidates:
+            shape = json.dumps(
+                {
+                    "parameters": candidate.get("parameters") or [],
+                    "returns": candidate.get("returns"),
+                    "receiver_type": candidate.get("receiver_type"),
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+            if shape in seen:
+                continue
+            seen.add(shape)
+            unique.append(candidate)
+        return unique
 
     def _bind_entry(
         self,
@@ -191,7 +258,7 @@ class SignatureResolver:
                             removed_param.get("diagnostic_code") or codes.UNKNOWN_PARAMETER,
                             (
                                 f"Parameter {arg.name} was removed or is not valid for "
-                                f"{callee} in Pine v{self.pine_version}"
+                                f"{callee} in Pine v{self.version_context.pine_version}"
                                 f"{self._version_note(removed_param)}."
                             ),
                             arg.span,
@@ -217,7 +284,9 @@ class SignatureResolver:
                 resolved_arguments=tuple(resolved),
                 issues=tuple(issues),
                 overload_index=entry.get("__overload_index"),
-                overload_id=entry.get("id") or entry.get("overload_id"),
+                overload_id=entry.get("__overload_id")
+                or entry.get("id")
+                or entry.get("overload_id"),
                 return_type=specialized_return_type,
             )
 
@@ -226,8 +295,16 @@ class SignatureResolver:
         positional = [a for a in args if a.name is None]
         named_values = [a.name for a in args if a.name]
         named = {name for name in named_values if name}
+        variadic_index = next(
+            (index for index, parameter in enumerate(active) if parameter.get("variadic")),
+            None,
+        )
 
-        if len(positional) > len(active) and not entry.get("allow_extra_positional"):
+        if (
+            len(positional) > len(active)
+            and variadic_index is None
+            and not entry.get("allow_extra_positional")
+        ):
             issues.append(
                 SignatureIssue(
                     Severity.ERROR,
@@ -237,10 +314,12 @@ class SignatureResolver:
                 )
             )
 
-        positional_param_names = [p.get("name") for p in active[: len(positional)] if p.get("name")]
+        positional_param_names: list[str] = []
         seen_named: set[str] = set()
+        positional_cursor = 0
+        vararg_cursor = 0
 
-        for arg_index, arg in enumerate(args):
+        for arg in args:
             param: dict[str, Any] | None = None
             param_index: int | None = None
             binding: ArgumentBindingKind = "unknown"
@@ -264,7 +343,7 @@ class SignatureResolver:
                             removed_param.get("diagnostic_code") or codes.UNKNOWN_PARAMETER,
                             (
                                 f"Parameter {arg.name} was removed or is not valid for "
-                                f"{callee} in Pine v{self.pine_version}{self._version_note(removed_param)}."
+                                f"{callee} in Pine v{self.version_context.pine_version}{self._version_note(removed_param)}."
                             ),
                             arg.span,
                         )
@@ -284,10 +363,18 @@ class SignatureResolver:
                             param = candidate
                             param_index = idx
                             break
-            elif arg_index < len(active):
-                binding = "positional"
-                param = active[arg_index]
-                param_index = arg_index
+            elif positional_cursor < len(active):
+                param = active[positional_cursor]
+                param_index = positional_cursor
+                if param.get("variadic"):
+                    binding = "vararg"
+                else:
+                    binding = "positional"
+                    positional_cursor += 1
+            elif variadic_index is not None:
+                param = active[variadic_index]
+                param_index = variadic_index
+                binding = "vararg"
             else:
                 binding = "positional"
             resolved_arg = self._resolved_argument(
@@ -299,6 +386,11 @@ class SignatureResolver:
                 type_resolver=type_resolver,
                 qualifier_resolver=qualifier_resolver,
             )
+            if binding == "vararg":
+                resolved_arg = replace(resolved_arg, vararg_index=vararg_cursor)
+                vararg_cursor += 1
+            if binding in {"positional", "vararg"} and param and param.get("name"):
+                positional_param_names.append(str(param["name"]))
             resolved.append(resolved_arg)
             if param is not None:
                 issues.extend(
@@ -342,6 +434,13 @@ class SignatureResolver:
                 )
             )
 
+        defaulted_parameters: list[dict[str, Any]] = []
+        for parameter_index, parameter in enumerate(active):
+            parameter_name = parameter.get("name")
+            if parameter.get("required") or parameter.get("variadic") or parameter_name in supplied:
+                continue
+            defaulted_parameters.append({**parameter, "parameter_index": parameter_index})
+
         return SignatureResolution(
             callee=callee,
             kind=kind,
@@ -349,9 +448,10 @@ class SignatureResolver:
             active_parameters=active,
             removed_parameters=removed,
             resolved_arguments=tuple(resolved),
+            defaulted_parameters=tuple(defaulted_parameters),
             issues=tuple(issues),
             overload_index=entry.get("__overload_index"),
-            overload_id=entry.get("id") or entry.get("overload_id"),
+            overload_id=entry.get("__overload_id") or entry.get("id") or entry.get("overload_id"),
             return_type=specialized_return_type,
         )
 
@@ -475,6 +575,9 @@ class SignatureResolver:
         validate_types: bool,
         validate_qualifiers: bool,
     ) -> list[SignatureIssue]:
+        argument = resolved.argument
+        if argument is None:
+            raise RuntimeError("source argument resolution is missing its AST argument")
         issues: list[SignatureIssue] = []
         pname = param.get("name") or "<positional>"
         expected_type = param.get("type") or param.get("value_type")
@@ -488,12 +591,12 @@ class SignatureResolver:
                     Severity.ERROR,
                     codes.ARGUMENT_TYPE,
                     f"Argument {pname} for {callee} expects {expected_type}, got {resolved.actual_type}.",
-                    resolved.argument.span,
+                    argument.span,
                 )
             )
         if (
             validate_types
-            and self.pine_version >= 6
+            and self.version_context.pine_version >= 6
             and is_bool_target_type(expected_type)
             and resolved.can_be_na
         ):
@@ -502,7 +605,21 @@ class SignatureResolver:
                     Severity.ERROR,
                     codes.BOOL_CANNOT_BE_NA,
                     f"Argument {pname} for {callee} expects bool, but Pine v6 bool cannot be na.",
-                    resolved.argument.span,
+                    argument.span,
+                )
+            )
+        if (
+            validate_types
+            and self.version_context.pine_version >= 6
+            and expected_type in ENUM_LIKE_BUILTIN_TYPES
+            and resolved.can_be_na
+        ):
+            issues.append(
+                SignatureIssue(
+                    Severity.ERROR,
+                    codes.ARGUMENT_TYPE,
+                    f"Argument {pname} for {callee} expects unique type {expected_type}, which cannot be na in Pine v6.",
+                    argument.span,
                 )
             )
         max_q = param.get("qualifier_max")
@@ -515,12 +632,12 @@ class SignatureResolver:
                         Severity.ERROR,
                         codes.ARGUMENT_QUALIFIER,
                         f"Argument {pname} for {callee} requires {max_q} or weaker qualifier, got {resolved.actual_qualifier}.",
-                        resolved.argument.span,
+                        argument.span,
                     )
                 )
         return issues
 
-    def _resolution_score(self, resolution: SignatureResolution) -> tuple[int, int, int, int]:
+    def _resolution_score(self, resolution: SignatureResolution) -> tuple[int, int, int, int, int]:
         error_weight = 0
         type_weight = 0
         qualifier_weight = 0
@@ -533,17 +650,64 @@ class SignatureResolver:
                 qualifier_weight += 1
             else:
                 error_weight += 1
+        conversion_cost = sum(
+            self._argument_conversion_cost(arg) for arg in resolution.resolved_arguments
+        )
         unresolved = sum(1 for arg in resolution.resolved_arguments if arg.parameter is None)
-        # Prefer fewer structural errors, then fewer type mismatches, then fewer
-        # qualifier mismatches, then the candidate that binds more arguments.
-        return (error_weight, type_weight, qualifier_weight, unresolved)
+        # Prefer fewer structural errors, then rejected types/qualifiers, then
+        # the most specific viable conversion, then the candidate that binds
+        # more arguments. This is essential for historical overloads such as
+        # rsi(series, int) versus rsi(series, series): both are assignable after
+        # numeric widening, but only one is an exact match for an int length.
+        return (error_weight, type_weight, qualifier_weight, conversion_cost, unresolved)
+
+    @staticmethod
+    def _argument_conversion_cost(resolved: ResolvedArgument) -> int:
+        parameter = resolved.parameter
+        if parameter is None:
+            return 8
+        expected = parameter.get("type") or parameter.get("value_type")
+        actual = resolved.actual_type
+        if (
+            not isinstance(expected, str)
+            or not expected
+            or not isinstance(actual, str)
+            or not actual
+        ):
+            return 4
+
+        def alternatives(value: str) -> tuple[str, ...]:
+            return tuple(part.strip() for part in value.split("|") if part.strip()) or (value,)
+
+        def unwrap(value: str) -> tuple[str, bool]:
+            value = value.strip()
+            if value.startswith("series<") and value.endswith(">"):
+                return value[7:-1].strip(), True
+            if value.startswith("series "):
+                return value[7:].strip(), True
+            return value, False
+
+        costs: list[int] = []
+        for candidate in alternatives(expected):
+            expected_base, expected_series = unwrap(candidate)
+            actual_base, actual_series = unwrap(actual)
+            actual_is_series = actual_series or resolved.actual_qualifier == "series"
+            if expected_base == actual_base and (not expected_series or actual_is_series):
+                costs.append(0)
+            elif expected_base == "float" and actual_base == "int":
+                costs.append(1 if not expected_series or actual_is_series else 2)
+            elif expected_base in {"any", "unknown"}:
+                costs.append(3)
+            elif is_assignable_type(candidate, actual):
+                costs.append(2)
+        return min(costs) if costs else 16
 
     def _param_active(self, param: dict[str, Any]) -> bool:
         removed_in = param.get("removed_in")
-        if removed_in and self.pine_version >= int(removed_in):
+        if removed_in and self.version_context.pine_version >= int(removed_in):
             return False
         added_in = param.get("added_in")
-        if added_in and self.pine_version < int(added_in):
+        if added_in and self.version_context.pine_version < int(added_in):
             return False
         return True
 

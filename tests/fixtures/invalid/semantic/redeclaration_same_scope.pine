@@ -1,4 +1,0 @@
-//@version=6
-indicator("Bad")
-x = 1
-x = 2

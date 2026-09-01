@@ -1,0 +1,18 @@
+{
+  "baseline": "stage3-delivery",
+  "coordinated_gate": "PENDING_COORDINATED_CONSUMER",
+  "package_version": "5.0.0rc6",
+  "producer_gates": [
+    "catalog",
+    "hygiene",
+    "corpus",
+    "differential",
+    "fuzz",
+    "consumer-producer",
+    "contract-mutation",
+    "performance"
+  ],
+  "schema_id": "pine2ast.stage4.implementation.v1",
+  "temporary_bridges": [],
+  "unsafe_fallbacks": []
+}

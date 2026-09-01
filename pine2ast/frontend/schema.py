@@ -13,7 +13,6 @@ from pine2ast.frontend.ids import (
     FRONTEND_CONTRACT,
     SECTION_CONTRACTS,
     TOP_LEVEL_REQUIRED,
-    get_schema,
 )
 
 
@@ -27,17 +26,51 @@ class ContractSchemaIssue:
 
 
 def openpine_contract_schema() -> dict[str, Any]:
-    """Return the catalog frontend schema plus extractor section inventory."""
+    """Return the owned envelope schema plus extractor section inventory.
 
-    catalog = dict(get_schema(FRONTEND_CONTRACT))
-    required = catalog.get("required", [])
-    if not isinstance(required, list):
-        raise ValueError("frontend schema required must be a list")
+    The frontend envelope is intentionally additive: downstream consumers may
+    ignore sections they do not understand, while the producer-owned identity,
+    source, diagnostics, and version context remain mandatory.  Keeping this
+    schema beside the validator avoids an undeclared dependency on a global
+    schema registry and makes the CLI output deterministic from the installed
+    wheel alone.
+    """
+
+    catalog: dict[str, Any] = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": FRONTEND_CONTRACT,
+        "title": "Pine2AST frontend contract envelope",
+        "type": "object",
+        "required": list(TOP_LEVEL_REQUIRED),
+        "properties": {
+            "schema_version": {"const": 1},
+            "contract": {"const": FRONTEND_CONTRACT},
+            "producer": {
+                "type": "object",
+                "required": ["name", "version"],
+                "properties": {
+                    "name": {"const": "pine2ast"},
+                    "version": {"type": "string", "minLength": 1},
+                },
+                "additionalProperties": True,
+            },
+            "source": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {"name": {"type": "string", "minLength": 1}},
+                "additionalProperties": True,
+            },
+            "ok": {"type": "boolean"},
+            "diagnostics": {"type": "array"},
+            "version_context": {"type": "object"},
+        },
+        "additionalProperties": True,
+    }
     return {
         "schema_id": FRONTEND_CONTRACT,
         "frontend_contract": FRONTEND_CONTRACT,
         "catalog_schema": catalog,
-        "top_level_required": list(required),
+        "top_level_required": list(TOP_LEVEL_REQUIRED),
         "section_contracts": dict(SECTION_CONTRACTS),
         "compatibility": {
             "additive_sections_allowed": True,

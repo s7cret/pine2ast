@@ -1,16 +1,28 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Protocol
 
 from pine2ast.ast.base import ASTNode
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-
-if TYPE_CHECKING:
-    from pine2ast.semantic.analyzer import SemanticAnalyzer
+from pine2ast.lexer.token import SourceSpan
 
 
-def validate_export_policy(analyzer: SemanticAnalyzer, node: ASTNode) -> None:
+class ExportPolicyAnalyzer(Protocol):
+    """Minimal analyzer surface needed by the export-policy pass."""
+
+    _script_type: str | None
+
+    def _diag(
+        self,
+        severity: Severity,
+        code: str,
+        message: str,
+        span: SourceSpan,
+    ) -> None: ...
+
+
+def validate_export_policy(analyzer: ExportPolicyAnalyzer, node: ASTNode) -> None:
     """Validate that exported declarations only appear in library scripts."""
     if getattr(node, "is_exported", False) and analyzer._script_type != "library":
         analyzer._diag(

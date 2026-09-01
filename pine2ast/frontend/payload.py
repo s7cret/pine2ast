@@ -5,7 +5,7 @@ from typing import Any
 
 from pine2ast._version import __version__
 from pine2ast.api import ParseOptions, ParseResult, parse_file
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.frontend.callables import extract_callable_contract
 from pine2ast.frontend.collections import extract_collection_contract
 from pine2ast.frontend.control_flow import extract_control_flow_contract
@@ -17,18 +17,16 @@ from pine2ast.frontend.validation import extract_validation_contract
 from pine2ast.semantic.facts import extract_method_contract
 
 
-def build_openpine_contract_payload(
+def build_frontend_contract_payload(
     result: ParseResult,
     *,
     source_path: str | Path = "<memory>",
     source_name: str | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> dict[str, Any]:
     path = Path(source_path)
     program = result.ast
-    actual_profile = profile or pine_language_profile(
-        (program.version if program else None) or 6,
-    )
+    actual_profile = profile or (program.version_context if program else None)
     return {
         "schema_version": 1,
         "contract": FRONTEND_CONTRACT,
@@ -37,6 +35,7 @@ def build_openpine_contract_payload(
             "sections": dict(SECTION_CONTRACTS),
         },
         "producer": {"name": "pine2ast", "version": __version__},
+        "version_context": program.version_context.to_dict() if program else None,
         "source": {"path": str(source_path), "name": source_name or path.name},
         "ok": result.ok,
         "diagnostics": [d.to_dict() for d in result.diagnostics],
@@ -99,11 +98,63 @@ def build_openpine_contract_payload(
     }
 
 
-def openpine_contract_file_payload(
+def build_openpine_contract_payload(
+    result: ParseResult,
+    *,
+    source_path: str | Path = "<memory>",
+    source_name: str | None = None,
+    profile: PineVersionContext | None = None,
+) -> dict[str, Any]:
+    """Compatibility spelling for the current Pine2AST frontend envelope."""
+
+    return build_frontend_contract_payload(
+        result,
+        source_path=source_path,
+        source_name=source_name,
+        profile=profile,
+    )
+
+
+def build_frontend_v2_payload(
+    result: ParseResult,
+    *,
+    source_path: str | Path = "<memory>",
+    source_name: str | None = None,
+    profile: PineVersionContext | None = None,
+) -> dict[str, Any]:
+    """Retained v2 API name mapped to the versioned current envelope contract."""
+
+    return build_frontend_contract_payload(
+        result,
+        source_path=source_path,
+        source_name=source_name,
+        profile=profile,
+    )
+
+
+def frontend_contract_file_payload(
     path: str | Path,
     options: ParseOptions | None = None,
 ) -> dict[str, Any]:
     result = parse_file(str(path), options or ParseOptions(source_name=str(path)))
-    return build_openpine_contract_payload(
+    return build_frontend_contract_payload(
         result, source_path=str(path), source_name=Path(path).name
     )
+
+
+def openpine_contract_file_payload(
+    path: str | Path,
+    options: ParseOptions | None = None,
+) -> dict[str, Any]:
+    """Compatibility spelling for :func:`frontend_contract_file_payload`."""
+
+    return frontend_contract_file_payload(path, options)
+
+
+__all__ = [
+    "build_frontend_contract_payload",
+    "build_frontend_v2_payload",
+    "build_openpine_contract_payload",
+    "frontend_contract_file_payload",
+    "openpine_contract_file_payload",
+]

@@ -1,7 +1,0 @@
-//@version=6
-indicator("For in tuple")
-var array<float> values = array.new<float>()
-sum = 0.0
-for [i, item] in values
-    sum += item
-plot(sum)

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal, cast
 
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
+from pine2ast.policy import SyntaxPolicy
 
 from pine2ast.ast.nodes import (
     CallExpr,
@@ -14,10 +15,13 @@ from pine2ast.ast.nodes import (
 )
 from pine2ast.diagnostics import Diagnostic, Severity
 from pine2ast.diagnostics import codes
-from pine2ast.lexer.annotations import Annotation, AnnotationKind
+from pine2ast.lexer.annotations import Annotation
 from pine2ast.lexer.token import SourceSpan, Token, TokenKind
 
-_ASSIGN_KINDS = {
+AssignmentOperator = Literal[":=", "+=", "-=", "*=", "/=", "%="]
+ScriptType = Literal["indicator", "strategy", "library"]
+
+_ASSIGN_KINDS: dict[TokenKind, AssignmentOperator] = {
     TokenKind.COLONEQ: ":=",
     TokenKind.PLUSEQ: "+=",
     TokenKind.MINUSEQ: "-=",
@@ -71,7 +75,11 @@ class BaseParser:
             self, *, exported: bool = False, pending_annotations: list | None = None
         ) -> Any: ...
         def parse_var_decl(
-            self, *, is_exported: bool = False, pending_annotations: list | None = None
+            self,
+            *,
+            is_exported: bool = False,
+            pending_annotations: list | None = None,
+            consume_separator: bool = True,
         ) -> Any: ...
         def parse_statement(self, *, pending_annotations: list | None = None) -> Any: ...
 
@@ -79,78 +87,38 @@ class BaseParser:
         self,
         tokens: list[Token],
         *,
-        strict_v6: bool = True,
+        version_context: PineVersionContext,
+        syntax_policy: SyntaxPolicy,
         max_diagnostics: int = 200,
-        target_version: int = 6,
-        compatibility_mode: bool = False,
-        language_profile: PineLanguageProfile | None = None,
     ) -> None:
+        syntax_policy.validate_context(version_context)
         self.tokens = tokens
         self.i = 0
-        self.strict_v6 = strict_v6
+        self.version_context = version_context
+        self.syntax_policy = syntax_policy
         self.max_diagnostics = max_diagnostics
-        self.language_profile = language_profile or pine_language_profile(
-            target_version, strict=strict_v6, compatibility_mode=compatibility_mode
-        )
-        self.target_version = self.language_profile.version
-        self.compatibility_mode = self.language_profile.compatibility_mode
         self.diagnostics: list[Diagnostic] = []
 
     def parse(self) -> ParserResult:
-        # Consume ONLY the version annotation. Other annotations stay
-        # in the token stream so the main loop can attach them to
-        # their corresponding top-level declarations.
+        # The version was resolved before lexing. Parser only consumes the exact
+        # annotation token so it can remain in the AST for provenance.
         leading = self._consume_version_annotation()
         annotations = [leading] if leading is not None else []
-        version = self._extract_version(annotations)
-        if version is None:
-            span = annotations[0].span if annotations else self._peek().span
-            if self.target_version == 6:
-                self._diag(
-                    Severity.ERROR if self.strict_v6 else Severity.WARNING,
-                    codes.MISSING_VERSION_6 if self.strict_v6 else codes.VERSION_ASSUMED,
-                    "Missing //@version=6 annotation.",
-                    span,
-                )
-                if not self.strict_v6:
-                    version = 6
-            else:
-                self._diag(
-                    Severity.WARNING,
-                    codes.VERSION_ASSUMED,
-                    "Missing //@version=5 annotation; assuming Pine v5 profile.",
-                    span,
-                )
-                version = 5
-        elif version not in {5, 6}:
-            span = annotations[0].span if annotations else self._peek().span
-            self._diag(
-                Severity.ERROR if self.strict_v6 else Severity.WARNING,
-                codes.UNSUPPORTED_VERSION,
-                f"Unsupported Pine version {version}; this parser supports Pine v5/v6 profiles.",
-                span,
-            )
-        elif version != self.target_version:
-            span = annotations[0].span if annotations else self._peek().span
-            if version == 5 and self.target_version == 6:
-                self._diag(
-                    Severity.ERROR if self.strict_v6 else Severity.WARNING,
-                    codes.UNSUPPORTED_VERSION,
-                    "Pine version 5 is parsed in v6 compatibility mode.",
-                    span,
-                )
-            elif version == 6 and self.target_version == 5:
-                self._diag(
-                    Severity.WARNING if self.compatibility_mode else Severity.ERROR,
-                    codes.UNSUPPORTED_VERSION,
-                    "Pine version 6 source is not valid for a strict Pine v5 profile.",
-                    span,
-                )
+        if leading is not None:
+            try:
+                annotated = int(leading.value) if leading.value is not None else None
+            except ValueError:
+                annotated = None
+            if annotated != self.version_context.pine_version:
+                raise RuntimeError("resolved Pine version and parser annotation diverged")
         self._skip_newlines()
         declaration = None
         items = []
-        # Consume leading imports before looking for the declaration.
+        # Consume leading imports before looking for the declaration. The
+        # parser keeps recovery deterministic even for a version where imports
+        # are unavailable, but the syntax-policy diagnostic remains blocking.
         while self._at(TokenKind.IMPORT):
+            self._require_syntax("imports", self._peek().span)
             imported = self.parse_import()
             if imported is not None:
                 items.append(imported)
@@ -159,8 +127,10 @@ class BaseParser:
             expr = self.parse_expression()
             if isinstance(expr, CallExpr):
                 name = self._callee_name(expr.callee)
-                declaration = DeclarationStatement(expr.span, name, expr)  # type: ignore[arg-type]
-            self._consume_optional_newline()
+                declaration = DeclarationStatement(
+                    expr.span, self._declaration_script_type(name), expr
+                )
+            self._consume_statement_separator()
         while not self._at(TokenKind.EOF):
             self._skip_newlines()
             pending_annotations = self._consume_annotations()
@@ -176,7 +146,12 @@ class BaseParser:
             annotations[0].span if annotations else (declaration.span if declaration else end_span)
         )
         program = Program(
-            join_span(start_span, end_span), version, annotations, declaration, items, []
+            join_span(start_span, end_span),
+            self.version_context,
+            annotations,
+            declaration,
+            items,
+            [],
         )
         return ParserResult(program, self.diagnostics)
 
@@ -184,28 +159,63 @@ class BaseParser:
         pending = pending_annotations or []
         exported = self._match(TokenKind.EXPORT)
         if self._at(TokenKind.IMPORT):
+            if not self._require_syntax("imports", self._peek().span):
+                return None
             return self.parse_import(exported=exported)
         if self._at(TokenKind.TYPE):
+            if not self._require_syntax("udt_declarations", self._peek().span):
+                return None
             return self.parse_type_decl(exported=exported, pending_annotations=pending)
         if self._at(TokenKind.ENUM):
+            if not self._require_syntax("enum_declarations", self._peek().span):
+                return None
             return self.parse_enum_decl(exported=exported, pending_annotations=pending)
         if self._at(TokenKind.METHOD):
+            if not self._require_syntax("method_declarations", self._peek().span):
+                return None
             return self.parse_method_decl(exported=exported, pending_annotations=pending)
         if self._looks_like_declaration_statement():
             expr = self.parse_expression()
-            self._consume_optional_newline()
+            self._consume_statement_separator()
             if isinstance(expr, CallExpr):
-                return DeclarationStatement(expr.span, self._callee_name(expr.callee), expr)  # type: ignore[arg-type]
+                name = self._callee_name(expr.callee)
+                return DeclarationStatement(expr.span, self._declaration_script_type(name), expr)
         if self._looks_like_function_decl():
+            self._require_syntax("user_functions", self._peek().span)
             return self.parse_function_decl(exported=exported, pending_annotations=pending)
         if exported:
             return self.parse_var_decl(is_exported=True, pending_annotations=pending)
         return self.parse_statement(pending_annotations=pending)
 
+    def _require_syntax(self, capability: str, span: SourceSpan) -> bool:
+        if self.syntax_policy.capability(capability):
+            return True
+        self._diag(
+            Severity.ERROR,
+            codes.SYNTAX_POLICY_VIOLATION,
+            (
+                f"Syntax capability {capability} is not available in Pine v"
+                f"{self.version_context.pine_version}; rule="
+                f"{self.syntax_policy.rule_id(capability)}."
+            ),
+            span,
+        )
+        return False
+
+    @staticmethod
+    def _declaration_script_type(spelling: str) -> ScriptType:
+        # ``study`` is the historical indicator declaration spelling through
+        # Pine v4. The AST exposes the semantic script kind while the CallExpr
+        # retains the exact source spelling for provenance and migration tools.
+        normalized = "indicator" if spelling == "study" else spelling
+        if normalized not in {"indicator", "strategy", "library"}:
+            raise RuntimeError(f"unsupported declaration spelling: {spelling!r}")
+        return cast(ScriptType, normalized)
+
     def _looks_like_declaration_statement(self) -> bool:
         if not self._at(TokenKind.IDENTIFIER) or self._peek(1).kind is not TokenKind.LPAREN:
             return False
-        return self._peek().text in {"indicator", "strategy", "library"}
+        return self._peek().text in self.syntax_policy.declaration_spellings
 
     def _looks_like_function_decl(self) -> bool:
         if not (self._at(TokenKind.IDENTIFIER) and self._peek(1).kind is TokenKind.LPAREN):
@@ -318,15 +328,6 @@ class BaseParser:
             return self._callee_name(expr.object) + "." + expr.member
         return "<expr>"
 
-    def _extract_version(self, annotations: list[Annotation]) -> int | None:
-        for ann in annotations:
-            if ann.kind is AnnotationKind.VERSION and ann.value is not None:
-                try:
-                    return int(ann.value)
-                except ValueError:
-                    return None
-        return None
-
     def _consume_annotations(self) -> list[Annotation]:
         annotations: list[Annotation] = []
         while self._at(TokenKind.VERSION_ANNOTATION, TokenKind.ANNOTATION, TokenKind.NEWLINE):
@@ -361,10 +362,19 @@ class BaseParser:
         if self._at(TokenKind.NEWLINE):
             self._advance()
 
-    def _recover_to_line_end(self) -> None:
-        while not self._at(TokenKind.NEWLINE, TokenKind.DEDENT, TokenKind.EOF):
+    def _consume_statement_separator(self) -> None:
+        if self._at(TokenKind.COMMA) and self.syntax_policy.capability("comma_statement_separator"):
             self._advance()
-        self._consume_optional_newline()
+        if self._at(TokenKind.NEWLINE):
+            self._advance()
+
+    def _recover_to_line_end(self) -> None:
+        boundaries = {TokenKind.NEWLINE, TokenKind.DEDENT, TokenKind.EOF}
+        if self.syntax_policy.capability("comma_statement_separator"):
+            boundaries.add(TokenKind.COMMA)
+        while self._peek().kind not in boundaries:
+            self._advance()
+        self._consume_statement_separator()
 
     def _match(self, *kinds: TokenKind) -> bool:
         if self._at(*kinds):

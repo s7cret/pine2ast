@@ -1,0 +1,4 @@
+//@version=3
+study('v3')
+if 1
+    x = 2

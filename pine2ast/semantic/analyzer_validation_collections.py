@@ -1,99 +1,28 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
-
-from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
+from pine2ast.ast.base import Expression
 from pine2ast.ast.nodes import (
-    BinaryExpr,
-    Block,
-    BreakStatement,
     CallExpr,
-    ConditionalExpr,
-    ContinueStatement,
-    DeclarationStatement,
-    EnumDeclaration,
-    ForInStructure,
-    ForRangeStructure,
-    FunctionDeclaration,
     GenericInstantiationExpr,
-    HistoryRefExpr,
-    Identifier,
-    IfStructure,
-    ImportDeclaration,
     Literal,
-    MemberAccessExpr,
-    MethodDeclaration,
-    Program,
-    Reassignment,
-    SwitchStructure,
-    TupleDeclaration,
-    TupleExpr,
-    TypeDeclaration,
-    FieldDeclaration,
-    Parameter,
     UnaryExpr,
-    VarDeclaration,
-    WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
-    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
-)
-from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.type_helpers import (
-    for_in_target_types,
-    generic_type_parts,
-    is_assignable_type,
     is_valid_map_key_type,
-    split_type_args,
-    tuple_element_types,
-    type_ref_name,
 )
-from pine2ast.semantic.qualifier_infer import infer_qualifier
-from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
-from pine2ast.semantic.signatures import SignatureResolver
+from pine2ast.semantic.type_infer import callee_name
 from pine2ast.semantic.collection_signatures import (
     generic_constructor_expected_arity,
-    is_collection_method,
     resolve_collection_call,
 )
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
-from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
-from pine2ast.semantic.passes.loop_dos import (
-    _is_literal_true,
-    _static_int_bound,
-)
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerCollectionValidationMixin:
+class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
     """Focused semantic validation mixin extracted for Pine2AST 4.0."""
 
     def _collection_value_type(
@@ -139,6 +68,24 @@ class AnalyzerCollectionValidationMixin:
                 self._validate_bool_cannot_be_na(
                     binding.parameter.type_name, binding.argument.value
                 )
+            value = binding.argument.value
+            if (
+                self.version_context.pine_version < 6
+                and resolution.collection_kind == "array"
+                and resolution.operation in {"get", "insert", "remove", "set"}
+                and binding.parameter is not None
+                and binding.parameter.role == "index"
+                and isinstance(value, UnaryExpr)
+                and value.op == "-"
+                and isinstance(value.operand, Literal)
+                and value.operand.literal_type == "int"
+            ):
+                self._diag(
+                    Severity.ERROR,
+                    codes.VERSION_SEMANTIC_RULE_VIOLATION,
+                    "Negative array indices are available only in Pine v6.",
+                    value.span,
+                )
 
     def _validate_generic_constructor_call(self, name: str, expr: CallExpr) -> None:
         # array.new<float>(size, initial), matrix.new<float>(rows, cols, initial), map.new<string,float>()
@@ -156,7 +103,7 @@ class AnalyzerCollectionValidationMixin:
             )
         if base == "array.new" and len(expr.arguments) >= 2 and len(type_args) >= 1:
             expected = type_args[0]
-            actual = infer_type(expr.arguments[1].value, self.model.symbols)
+            actual = self._infer_type(expr.arguments[1].value)
             self._diag_collection_value(
                 name,
                 expected,
@@ -166,7 +113,7 @@ class AnalyzerCollectionValidationMixin:
             )
         elif base == "matrix.new" and len(expr.arguments) >= 3 and len(type_args) >= 1:
             expected = type_args[0]
-            actual = infer_type(expr.arguments[2].value, self.model.symbols)
+            actual = self._infer_type(expr.arguments[2].value)
             self._diag_collection_value(
                 name,
                 expected,

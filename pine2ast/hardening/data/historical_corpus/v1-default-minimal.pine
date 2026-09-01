@@ -1,0 +1,2 @@
+study('v1 default')
+x = close

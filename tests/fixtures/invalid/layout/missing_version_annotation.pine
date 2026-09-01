@@ -1,2 +1,0 @@
-indicator("x")
-plot(close)

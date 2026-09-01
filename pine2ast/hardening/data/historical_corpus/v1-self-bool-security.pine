@@ -1,0 +1,4 @@
+study('v1')
+x = nz(x[1])
+y = true + 1
+z = security(tickerid, 'D', close)

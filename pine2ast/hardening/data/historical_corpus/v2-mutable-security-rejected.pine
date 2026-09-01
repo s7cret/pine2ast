@@ -1,0 +1,5 @@
+//@version=2
+study('v2')
+x = 1
+x := x + 1
+y = security(tickerid, 'D', x)

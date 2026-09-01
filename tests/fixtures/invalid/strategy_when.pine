@@ -1,3 +1,0 @@
-//@version=6
-strategy("Bad")
-strategy.entry("L", strategy.long, when = close > open)

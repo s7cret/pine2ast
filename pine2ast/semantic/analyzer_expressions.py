@@ -1,99 +1,39 @@
 from __future__ import annotations
 
-# mypy: ignore-errors
 
-# ruff: noqa: F401,F403,F405
-
-from collections.abc import Callable
-from typing import Any, Optional, TypeAlias
+from typing import Optional
 
 from pine2ast.ast.base import ASTNode, Expression, Statement
-from pine2ast.ast.types import TypeRef
 from pine2ast.ast.nodes import (
     BinaryExpr,
-    Block,
-    BreakStatement,
     CallExpr,
     ConditionalExpr,
-    ContinueStatement,
-    DeclarationStatement,
-    EnumDeclaration,
     ForInStructure,
     ForRangeStructure,
-    FunctionDeclaration,
     GenericInstantiationExpr,
     HistoryRefExpr,
     Identifier,
     IfStructure,
-    ImportDeclaration,
     Literal,
     MemberAccessExpr,
-    MethodDeclaration,
-    Program,
-    Reassignment,
     SwitchStructure,
-    TupleDeclaration,
     TupleExpr,
-    TypeDeclaration,
-    FieldDeclaration,
-    Parameter,
     UnaryExpr,
-    VarDeclaration,
     WhileStructure,
 )
-from pine2ast.diagnostics import Diagnostic, Severity
+from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-from pine2ast.lexer.token import SourceSpan
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
-from pine2ast.semantic.builtin_registry import (
-    KNOWN_DEFERRED_NAMESPACE_MEMBERS,
-    KNOWN_UNSUPPORTED_NAMESPACE_MEMBERS,
-    load_builtin_registry,
-)
-from pine2ast.semantic.model import SemanticModel
-from pine2ast.semantic.type_helpers import (
-    for_in_target_types,
-    generic_type_parts,
-    is_assignable_type,
-    is_valid_map_key_type,
-    split_type_args,
-    tuple_element_types,
-    type_ref_name,
-)
-from pine2ast.semantic.qualifier_infer import infer_qualifier
-from pine2ast.semantic.qualifier_validation import qualifier_rank
-from pine2ast.semantic.scopes import Scope, ScopeKind
-from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_infer import callee_name, infer_type
-from pine2ast.semantic.signatures import SignatureResolver
-from pine2ast.semantic.collection_signatures import (
-    generic_constructor_expected_arity,
-    is_collection_method,
-    resolve_collection_call,
-)
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
-from pine2ast.semantic.passes import (
-    BuiltinValidationPass,
-    CollectionValidationPass,
-    DeclarationCardinalityPass,
-    DeclarationIndexPass,
-    QualifierInferencePass,
-    ScopeSymbolPass,
-    StaticValidationPass,
-    StrategyContextValidationPass,
-    TypeInferencePass,
-    UnsupportedFeatureExtractionPass,
-)
-from pine2ast.semantic.passes.export_policy import validate_export_policy
-from pine2ast.semantic.passes.loop_control import validate_loop_control_statement
+from pine2ast.semantic.scopes import ScopeKind
+from pine2ast.semantic.symbols import SymbolKind
+from pine2ast.semantic.type_infer import callee_name
 from pine2ast.semantic.passes.loop_dos import (
     _is_literal_true,
     _static_int_bound,
 )
-from pine2ast.semantic.pipeline import AnalyzerPassPipeline, PassResult
+from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
-class AnalyzerExpressionMixin:
+class AnalyzerExpressionMixin(AnalyzerMixinHost):
     """Implementation mixin split out of :mod:`pine2ast.semantic.analyzer`."""
 
     def _expr_path(self, expr: Expression) -> str | None:
@@ -207,7 +147,7 @@ class AnalyzerExpressionMixin:
                 self._visit_expr(node.step)
             for label, expr in (("start", node.start), ("end", node.end), ("step", node.step)):
                 if expr is not None:
-                    typ = infer_type(expr, self.model.symbols)
+                    typ = self._infer_type(expr)
                     if typ not in {"int", "unknown"}:
                         self._diag(
                             Severity.ERROR,
@@ -295,7 +235,7 @@ class AnalyzerExpressionMixin:
         elif isinstance(node, ForInStructure):
             self._validate_for_in_target(node)
             self._visit_expr(node.iterable)
-            iterable_type = infer_type(node.iterable, self.model.symbols)
+            iterable_type = self._infer_type(node.iterable)
             target_types = self._for_in_target_types(iterable_type, len(node.target.names))
             self.loop_depth += 1
             self.local_depth += 1
@@ -314,14 +254,14 @@ class AnalyzerExpressionMixin:
             switch_type = None
             if node.expression:
                 self._visit_expr(node.expression)
-                switch_type = infer_type(node.expression, self.model.symbols)
+                switch_type = self._infer_type(node.expression)
             for case in node.cases:
                 if case.condition:
                     if node.expression is None:
                         self._check_bool(case.condition)
                     else:
                         self._visit_expr(case.condition)
-                        case_type = infer_type(case.condition, self.model.symbols)
+                        case_type = self._infer_type(case.condition)
                         if not (
                             self._is_assignable_type(switch_type, case_type)
                             or self._is_assignable_type(case_type, switch_type)
@@ -353,7 +293,7 @@ class AnalyzerExpressionMixin:
     def _e_unary_expr(self, expr: UnaryExpr) -> None:
         self._visit_expr(expr.operand)
         if expr.op == "not":
-            operand_type = infer_type(expr.operand, self.model.symbols)
+            operand_type = self._infer_type(expr.operand)
             if operand_type not in {"bool", "unknown"}:
                 self._diag(
                     Severity.ERROR,
@@ -372,8 +312,8 @@ class AnalyzerExpressionMixin:
         self._validate_narrowing_condition(expr.condition)
         self._visit_expr(expr.if_true)
         self._visit_expr(expr.if_false)
-        true_type = infer_type(expr.if_true, self.model.symbols)
-        false_type = infer_type(expr.if_false, self.model.symbols)
+        true_type = self._infer_type(expr.if_true)
+        false_type = self._infer_type(expr.if_false)
         if not (
             true_type in {None, "unknown", "na"}
             or false_type in {None, "unknown", "na"}
@@ -414,6 +354,44 @@ class AnalyzerExpressionMixin:
     def _e_generic_instantiation_expr(self, expr: GenericInstantiationExpr) -> None:
         self._visit_expr(expr.base)
 
+    def _identifier_names(self, expr: Expression) -> set[str]:
+        names: set[str] = set()
+
+        def visit(node: ASTNode) -> None:
+            if isinstance(node, Identifier):
+                names.add(node.name)
+            for field_name in getattr(node, "__dataclass_fields__", ()):  # stable AST walk
+                value = getattr(node, field_name)
+                if isinstance(value, ASTNode):
+                    visit(value)
+                elif isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, ASTNode):
+                            visit(item)
+
+        visit(expr)
+        return names
+
+    def _validate_security_expression(self, name: str, expr: CallExpr) -> None:
+        if name not in {"security", "request.security"}:
+            return
+        if len(expr.arguments) < 3:
+            return
+        if not self.policy.forbids_mutable_security_expression:
+            return
+        expression = expr.arguments[2].value
+        mutable = sorted(self._identifier_names(expression) & self._reassigned_names)
+        if mutable:
+            self._diag(
+                Severity.ERROR,
+                codes.MUTABLE_SECURITY_ARGUMENT,
+                (
+                    f"Pine v{self.version_context.pine_version} forbids mutable "
+                    f"variables in security() expressions: {', '.join(mutable)}."
+                ),
+                expression.span,
+            )
+
     def _e_call_expr(self, expr: CallExpr) -> None:
         name = callee_name(expr.callee)
         lookup_name, entry = self._registry_entry_for_call(expr.callee)
@@ -441,6 +419,7 @@ class AnalyzerExpressionMixin:
                 expr.span,
             )
         self._validate_builtin_call(lookup_name if entry is not None else name, entry, expr)
+        self._validate_security_expression(name, expr)
         self._validate_generic_constructor_call(name, expr)
         if entry is None:
             self._validate_udt_constructor_call(expr)
@@ -464,7 +443,7 @@ class AnalyzerExpressionMixin:
                     name.startswith("strategy.")
                     and arg.name == "when"
                     and entry is None
-                    and self.pine_version >= 6
+                    and self.version_context.pine_version >= 6
                 ):
                     self._diag(
                         Severity.ERROR,
@@ -482,11 +461,22 @@ class AnalyzerExpressionMixin:
             self._visit_expr(arg.value)
 
     def _e_history_ref_expr(self, expr: HistoryRefExpr) -> None:
-        if isinstance(expr.base, Literal):
+        if self.version_context.pine_version >= 6 and isinstance(expr.base, Literal):
             self._diag(
                 Severity.ERROR,
                 codes.HISTORY_ON_LITERAL,
                 "History reference cannot be applied to a literal.",
+                expr.span,
+            )
+        if (
+            self.version_context.pine_version >= 6
+            and isinstance(expr.base, MemberAccessExpr)
+            and self._infer_type(expr.base.object) in self._udt_fields
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.HISTORY_ON_UDT_FIELD,
+                "In Pine v6, reference the UDT object's history before accessing its field.",
                 expr.span,
             )
         if isinstance(expr.base, HistoryRefExpr):
@@ -508,7 +498,7 @@ class AnalyzerExpressionMixin:
                     "History reference to a value declared in a local scope can be unsafe in Pine.",
                     expr.span,
                 )
-        offset_type = infer_type(expr.offset, self.model.symbols)
+        offset_type = self._infer_type(expr.offset)
         if offset_type not in {"int", "unknown"}:
             self._diag(
                 Severity.ERROR,
@@ -528,21 +518,24 @@ class AnalyzerExpressionMixin:
 
     def _check_bool(self, expr: Expression) -> None:
         self._visit_expr(expr)
-        if not self._uses_v6_bool_rules():
+        typ = self._infer_type(expr)
+        if self.policy.numeric_condition_allowed:
             return
-        typ = infer_type(expr, self.model.symbols)
         if isinstance(expr, Literal) and expr.literal_type == "na":
             self._diag(
                 Severity.ERROR,
                 codes.NA_IN_BOOL_CONTEXT,
-                "na is not allowed in bool context in Pine v6.",
+                (f"na is not allowed in a condition in Pine v{self.version_context.pine_version}."),
                 expr.span,
             )
-        elif typ != "bool" and typ != "unknown":
+        elif typ not in {"bool", "unknown"}:
             self._diag(
                 Severity.ERROR,
                 codes.NON_BOOL_CONDITION,
-                "Non-bool expression used as condition in Pine v6.",
+                (
+                    f"Non-bool expression used as a condition in Pine v"
+                    f"{self.version_context.pine_version}."
+                ),
                 expr.span,
             )
 

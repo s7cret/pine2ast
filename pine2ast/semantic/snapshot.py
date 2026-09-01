@@ -15,7 +15,7 @@ from pine2ast._version import __version__
 from pine2ast.ast.base import ASTNode
 from pine2ast.ast.walk import iter_nodes
 from pine2ast.diagnostics import Severity
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.semantic.pipeline import PASS_PIPELINE
 
 SEMANTIC_SNAPSHOT_CONTRACT = "pine2ast.semantic_snapshot.v1"
@@ -49,20 +49,8 @@ def _diagnostic_summary(diagnostics: list[Any]) -> dict[str, int]:
     return counts
 
 
-def _profile_dict(profile: PineLanguageProfile) -> dict[str, Any]:
-    return {
-        "version": profile.version,
-        "strict": profile.strict,
-        "compatibility_mode": profile.compatibility_mode,
-        "supports_dynamic_requests_default": profile.supports_dynamic_requests_default,
-        "bool_allows_na": profile.bool_allows_na,
-        "numeric_condition_allowed": profile.numeric_condition_allowed,
-        "const_int_division_fractional": profile.const_int_division_fractional,
-        "supports_multiline_strings": profile.supports_multiline_strings,
-        "supports_exported_const": profile.supports_exported_const,
-        "supports_bid_ask": profile.supports_bid_ask,
-        "supports_current_contract": profile.supports_current_contract,
-    }
+def _profile_dict(profile: PineVersionContext | None) -> dict[str, Any] | None:
+    return profile.to_dict() if profile is not None else None
 
 
 def symbol_rows(semantic_model: Any | None) -> list[dict[str, Any]]:
@@ -150,12 +138,12 @@ def build_semantic_snapshot_payload(
     *,
     source_path: str | Path = "<memory>",
     source_name: str | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
     include_node_facts: bool = True,
 ) -> dict[str, Any]:
     program = getattr(result, "ast", None)
     semantic_model = getattr(result, "semantic_model", None)
-    actual_profile = profile or pine_language_profile((getattr(program, "version", None) or 6))
+    actual_profile = profile or (program.version_context if program is not None else None)
     diagnostics = list(getattr(result, "diagnostics", []) or [])
     path = Path(source_path)
     symbols = symbol_rows(semantic_model)

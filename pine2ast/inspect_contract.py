@@ -70,7 +70,7 @@ def script_dict(ast: Any) -> dict[str, Any]:
     return {
         "type": ast.declaration.script_type,
         "title": title,
-        "pine_version": ast.version or ast.language_version,
+        "pine_version": ast.version_context.pine_version,
     }
 
 

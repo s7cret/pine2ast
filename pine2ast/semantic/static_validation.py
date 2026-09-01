@@ -39,9 +39,9 @@ from pine2ast.semantic._static_validation_walk import (
 )
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
-from pine2ast.language_profiles import PineLanguageProfile, pine_language_profile
+from pine2ast.versioning import PineVersionContext
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.semantic.builtin_registry import load_builtin_registry
+from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.semantic.collection_signatures import (
     generic_constructor_expected_arity,
     resolve_collection_call,
@@ -138,9 +138,9 @@ class StaticValidationReport:
 
 
 def _profile_for_program(
-    program: Program, profile: PineLanguageProfile | None
-) -> PineLanguageProfile:
-    return profile or pine_language_profile(program.version or program.language_version)
+    program: Program, profile: PineVersionContext | None
+) -> PineVersionContext:
+    return profile or program.version_context
 
 
 def _symbols(semantic_model: Any | None) -> Mapping[str, Any] | None:
@@ -194,7 +194,7 @@ def _validate_generic_constructor_arity(
     )
 
 
-def _declaration_dynamic_requests(program: Program, profile: PineLanguageProfile) -> dict[str, Any]:
+def _declaration_dynamic_requests(program: Program, profile: PineVersionContext) -> dict[str, Any]:
     default = profile.dynamic_requests_default
     explicit: bool | None = None
     if isinstance(program.declaration, DeclarationStatement):
@@ -213,9 +213,11 @@ def _declaration_dynamic_requests(program: Program, profile: PineLanguageProfile
     }
 
 
-def _active_parameter_names(function_name: str, profile: PineLanguageProfile) -> list[str]:
+def _active_parameter_names(function_name: str, profile: PineVersionContext) -> list[str]:
     entry = (
-        load_builtin_registry(pine_version=profile.version).get("functions", {}).get(function_name)
+        load_catalog_readonly_view(pine_version=profile.pine_version)
+        .get("functions", {})
+        .get(function_name)
         or {}
     )
     names: list[str] = []
@@ -223,10 +225,10 @@ def _active_parameter_names(function_name: str, profile: PineLanguageProfile) ->
         if not isinstance(param, dict):
             continue
         removed_in = param.get("removed_in")
-        if removed_in and profile.version >= int(removed_in):
+        if removed_in and profile.pine_version >= int(removed_in):
             continue
         added_in = param.get("added_in")
-        if added_in and profile.version < int(added_in):
+        if added_in and profile.pine_version < int(added_in):
             continue
         name = param.get("name")
         if name:
@@ -235,7 +237,7 @@ def _active_parameter_names(function_name: str, profile: PineLanguageProfile) ->
 
 
 def _bind_argument_names(
-    function_name: str, args: list[Argument], profile: PineLanguageProfile
+    function_name: str, args: list[Argument], profile: PineVersionContext
 ) -> list[tuple[Argument, str | None]]:
     params = _active_parameter_names(function_name, profile)
     result: list[tuple[Argument, str | None]] = []
@@ -254,11 +256,11 @@ def _dynamic_request_issues(
     calls: list,
     *,
     program: Program,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     semantic_model: Any | None,
 ) -> Iterable[StaticValidationIssue]:
     dynamic = _declaration_dynamic_requests(program, profile)
-    engine = PineInferenceEngine(symbols=_symbols(semantic_model), pine_version=profile.version)
+    engine = PineInferenceEngine(version_context=profile, symbols=_symbols(semantic_model))
     for call, context in calls:
         name = callee_name(call.callee)
         if not name.startswith("request."):
@@ -300,7 +302,7 @@ def _dynamic_request_issues(
 
 
 def _strategy_exit_issues(
-    calls: list, *, profile: PineLanguageProfile
+    calls: list, *, profile: PineVersionContext
 ) -> Iterable[StaticValidationIssue]:
     del profile
     for call, _context in calls:
@@ -340,7 +342,7 @@ def _script_type(program: Program) -> str | None:
 
 
 def _library_export_issues(
-    program: Program, *, profile: PineLanguageProfile
+    program: Program, *, profile: PineVersionContext
 ) -> Iterable[StaticValidationIssue]:
     if _script_type(program) != "library":
         return
@@ -390,10 +392,10 @@ def _library_export_issues(
                 yield StaticValidationIssue(
                     Severity.ERROR,
                     codes.UNSUPPORTED_FEATURE,
-                    f"Exported const variables are not available in Pine v{profile.version}.",
+                    f"Exported const variables are not available in Pine v{profile.pine_version}.",
                     node.span,
                     "exported_const_requires_v6",
-                    {"variable": node.name, "profile": f"pine_v{profile.version}"},
+                    {"variable": node.name, "profile": f"pine_v{profile.pine_version}"},
                 )
 
 
@@ -464,12 +466,13 @@ def _sort_field_issues(
     calls: list,
     *,
     program: Program,
-    profile: PineLanguageProfile,
+    profile: PineVersionContext,
     semantic_model: Any | None,
 ) -> Iterable[StaticValidationIssue]:
     fields_by_type = _type_fields(program)
     engine = PineInferenceEngine(
-        symbols=_symbols(semantic_model), pine_version=profile.version if profile else 6
+        version_context=profile or program.version_context,
+        symbols=_symbols(semantic_model),
     )
     for call, _context in calls:
         resolution = resolve_collection_call(call, engine=engine)
@@ -602,18 +605,27 @@ def build_static_validation_report(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> StaticValidationReport:
     actual_profile = _profile_for_program(program, profile)
     issues: list[StaticValidationIssue] = []
     type_refs = list(_iter_type_refs(program))
     generic_instantiations = list(_iter_generic_instantiations(program))
+    for type_ref in type_refs:
+        issue = _validate_type_ref_arity(type_ref)
+        if issue is not None:
+            issues.append(issue)
+    for expression in generic_instantiations:
+        issue = _validate_generic_constructor_arity(expression)
+        if issue is not None:
+            issues.append(issue)
     dynamic_request_count = 0
     exported_declaration_count = 0
     strategy_exit_count = 0
     udt_sort_field_count = 0
     sort_field_engine = PineInferenceEngine(
-        symbols=_symbols(semantic_model), pine_version=actual_profile.version
+        version_context=actual_profile,
+        symbols=_symbols(semantic_model),
     )
 
     # Walk the program once and collect every (call, context) pair. The shared
@@ -679,7 +691,7 @@ def validate_static_semantics(
     program: Program,
     *,
     semantic_model: Any | None = None,
-    profile: PineLanguageProfile | None = None,
+    profile: PineVersionContext | None = None,
 ) -> tuple[StaticValidationIssue, ...]:
     return build_static_validation_report(
         program, semantic_model=semantic_model, profile=profile

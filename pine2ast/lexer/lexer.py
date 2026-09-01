@@ -7,6 +7,8 @@ from pine2ast.diagnostics import Diagnostic, Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.annotations import parse_annotation
 from pine2ast.lexer.token import KEYWORDS, SourceSpan, Token, TokenKind
+from pine2ast.policy import SyntaxPolicy
+from pine2ast.versioning import PineVersionContext
 
 _LONG_OPS: list[tuple[str, TokenKind]] = [
     ("=>", TokenKind.FAT_ARROW),
@@ -52,9 +54,19 @@ class LexerResult:
 
 
 class Lexer:
-    def __init__(self, text: str, *, source_name: str = "<memory>") -> None:
+    def __init__(
+        self,
+        text: str,
+        *,
+        version_context: PineVersionContext,
+        syntax_policy: SyntaxPolicy,
+        source_name: str = "<memory>",
+    ) -> None:
+        syntax_policy.validate_context(version_context)
         self.text = text
         self.source_name = source_name
+        self.version_context = version_context
+        self.syntax_policy = syntax_policy
         self.i = 0
         self.line = 1
         self.col = 1
@@ -95,6 +107,8 @@ class Lexer:
             matched = False
             for raw, kind in _LONG_OPS:
                 if self.text.startswith(raw, self.i):
+                    if raw not in self.syntax_policy.operator_spellings:
+                        self._unavailable_operator(raw, self._span_here(len(raw)))
                     tokens.append(self._token(kind, raw, None))
                     self._advance_text(raw)
                     matched = True
@@ -102,6 +116,10 @@ class Lexer:
             if matched:
                 continue
             if ch in _SINGLE_OPS:
+                semantic_spelling = "?:" if ch in {"?", ":"} else ch
+                gated = ch in {"+", "-", "*", "/", "%", "<", ">"}
+                if gated and semantic_spelling not in self.syntax_policy.operator_spellings:
+                    self._unavailable_operator(semantic_spelling, self._span_here(1))
                 tokens.append(self._simple_token(_SINGLE_OPS[ch], ch, None))
                 self._advance()
                 continue
@@ -172,12 +190,46 @@ class Lexer:
             return Token(TokenKind.BOOL, raw, False, span)
         if raw == "na":
             return Token(TokenKind.NA, raw, None, span)
-        return Token(KEYWORDS.get(raw, TokenKind.IDENTIFIER), raw, None, span)
+        keyword_kind = KEYWORDS.get(raw)
+        if keyword_kind is None:
+            return Token(TokenKind.IDENTIFIER, raw, None, span)
+        if raw not in self.syntax_policy.keyword_spellings:
+            # Pine keywords are versioned. A word introduced in a later version
+            # remains a normal identifier in older source versions; classifying it
+            # as the newer keyword would silently change the old grammar.
+            return Token(TokenKind.IDENTIFIER, raw, None, span)
+        return Token(keyword_kind, raw, None, span)
+
+    def _unavailable_operator(self, spelling: str, span: SourceSpan) -> None:
+        self.diagnostics.append(
+            Diagnostic(
+                Severity.ERROR,
+                codes.UNAVAILABLE_OPERATOR,
+                (
+                    f"Operator {spelling!r} is not available in Pine v"
+                    f"{self.version_context.pine_version}."
+                ),
+                span,
+            )
+        )
 
     def _lex_string(self) -> Token:
         quote = self._peek()
         start_i, start_line, start_col = self.i, self.line, self.col
         triple = self.text.startswith(quote * 3, self.i)
+        if triple and not self.syntax_policy.capability("multiline_strings"):
+            self.diagnostics.append(
+                Diagnostic(
+                    Severity.ERROR,
+                    codes.SYNTAX_POLICY_VIOLATION,
+                    (
+                        f"Multiline strings are not available in Pine v"
+                        f"{self.version_context.pine_version}; rule="
+                        f"{self.syntax_policy.rule_id('multiline_strings')}."
+                    ),
+                    self._span_here(3),
+                )
+            )
         delim = quote * (3 if triple else 1)
         self._advance_text(delim)
         value_chars: list[str] = []

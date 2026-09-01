@@ -1,0 +1,2 @@
+//@version=not_a_number
+indicator("malformed")

@@ -1,0 +1,3 @@
+//@version=3
+study('v3')
+x = true ? 1 : 2

@@ -1,5 +1,0 @@
-//@version=6
-indicator("x")
-f() =>
-    g() => 1
-    2
