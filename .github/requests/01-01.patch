@@ -1,0 +1,57 @@
+diff --git a/pine2ast/semantic/signatures.py b/pine2ast/semantic/signatures.py
+index d26a6883ad909770345bd2a7568482c410fd0180..2c1f27f9b0c248885374a16ccf4ae63e214261bd 100644
+--- a/pine2ast/semantic/signatures.py
++++ b/pine2ast/semantic/signatures.py
+@@ -580,6 +580,10 @@ class SignatureResolver:
+             raise RuntimeError("source argument resolution is missing its AST argument")
+         issues: list[SignatureIssue] = []
+         pname = param.get("name") or "<positional>"
++        if (validate_types and self.version_context.pine_version >= 6
++                and callee in {"na", "nz", "fixnan"} and resolved.actual_type == "bool"):
++            issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
++                f"{callee} does not accept bool arguments in Pine v6.", argument.span))
+         expected_type = param.get("type") or param.get("value_type")
+         if (
+             validate_types
+diff --git a/tests/stage5/test_request_na_evidence.py b/tests/stage5/test_request_na_evidence.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..71273ece437bb6110ec9f5d34704a5dc6697bec5
+--- /dev/null
++++ b/tests/stage5/test_request_na_evidence.py
+@@ -0,0 +1,24 @@
++"""Type evidence for compiled request consumers and version-aware na()."""
++
++import pytest
++from pine2ast import parse_code
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++def test_na_named_required_argument_all_versions(version):
++    decl = "indicator" if version >= 5 else "study"
++    result = parse_code(f'//@version={version}\n{decl}("na")\nx=na(close)\n')
++    assert result.ok, result.diagnostics
++    assert any(
++        f.kind == "CallExpr" and f.resolved_type.base == "bool"
++        for f in result.semantic_model.semantic_facts.facts
++    )
++
++
++@pytest.mark.parametrize("function", ["na", "nz", "fixnan"])
++def test_v6_missing_value_functions_reject_bool(function):
++    result = parse_code(f'//@version=6\nindicator("bool")\nx={function}(true)\n')
++    assert not result.ok
++    assert any(d.is_error and "bool" in d.message for d in result.diagnostics)
++
++
+diff --git a/tools/catalog/build_catalog.py b/tools/catalog/build_catalog.py
+index b72c73f7ec0e0d4603a45adf935b72ccddeba9b1..6be18edfb2454d857a208d05c1b088b2a666f285 100644
+--- a/tools/catalog/build_catalog.py
++++ b/tools/catalog/build_catalog.py
+@@ -109,6 +109,7 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
+ 
+ # The pinned RC5 registry contained name-only entries for these admitted calls.
+ SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
++    "na": [{"name": "x", "required": True, "type": "any"}],
+     "ta.supertrend": [
+         {"name": "factor", "required": True, "type": "float"},
+         {"name": "atrPeriod", "required": True, "type": "int"},

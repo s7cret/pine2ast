@@ -1,0 +1,101 @@
+diff --git a/pine2ast/semantic/analyzer_expressions.py b/pine2ast/semantic/analyzer_expressions.py
+index cd84be55ecef4797e90f1f91aada043ecfd82194..a72b76f1fa6adc95d898f11f85f699a9c5d051e7 100644
+--- a/pine2ast/semantic/analyzer_expressions.py
++++ b/pine2ast/semantic/analyzer_expressions.py
+@@ -25,7 +25,7 @@ from pine2ast.diagnostics import Severity
+ from pine2ast.diagnostics import codes
+ from pine2ast.semantic.scopes import ScopeKind
+ from pine2ast.semantic.symbols import SymbolKind
+-from pine2ast.semantic.type_infer import callee_name
++from pine2ast.semantic.type_infer import callee_name, request_expression_argument
+ from pine2ast.semantic.passes.loop_dos import (
+     _is_literal_true,
+     _static_int_bound,
+@@ -375,11 +375,9 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
+     def _validate_security_expression(self, name: str, expr: CallExpr) -> None:
+         if name not in {"security", "request.security"}:
+             return
+-        if len(expr.arguments) < 3:
++        expression = request_expression_argument(expr)
++        if expression is None or not self.policy.forbids_mutable_security_expression:
+             return
+-        if not self.policy.forbids_mutable_security_expression:
+-            return
+-        expression = expr.arguments[2].value
+         mutable = sorted(self._identifier_names(expression) & self._reassigned_names)
+         if mutable:
+             self._diag(
+diff --git a/pine2ast/semantic/type_infer.py b/pine2ast/semantic/type_infer.py
+index 93672a44930be36680111668c3a2b6ef9012ce04..522ba462ff60bac323967b038fff5027e4c13aeb 100644
+--- a/pine2ast/semantic/type_infer.py
++++ b/pine2ast/semantic/type_infer.py
+@@ -170,19 +170,29 @@ def _generic_collection_constructor_return(expr: CallExpr) -> str | None:
+     return None
+ 
+ 
+-def _request_return(
+-    expr: CallExpr,
+-    symbols: Mapping[str, object] | None,
+-    registry: Registry | None,
+-) -> str | None:
++def request_expression_argument(expr: CallExpr) -> Any | None:
++    """Resolve the expression by source binding, not incidental argument order."""
++    named = [arg.value for arg in expr.arguments if arg.name == "expression"]
++    positional = [arg.value for arg in expr.arguments if arg.name is None]
++    if named:
++        return named[0] if len(named) == 1 else None
++    return positional[2] if len(positional) >= 3 else None
++
++
++def _request_return(expr: CallExpr, symbols: Mapping[str, object] | None,
++                    registry: Registry | None) -> str | None:
+     name = callee_name(expr.callee)
+-    if (
+-        name not in {"security", "request.security", "request.security_lower_tf"}
+-        or len(expr.arguments) < 3
+-    ):
++    if name not in {"security", "request.security", "request.security_lower_tf"}:
++        return None
++    expression = request_expression_argument(expr)
++    if expression is None:
+         return None
+-    requested = infer_type(expr.arguments[2].value, symbols, registry=registry)
+-    return f"array<{requested}>" if name == "request.security_lower_tf" else requested
++    requested = infer_type(expression, symbols, registry=registry)
++    if name != "request.security_lower_tf":
++        return requested
++    if requested.startswith("tuple<") and requested.endswith(">"):
++        return "tuple<" + ",".join(f"array<{item}>" for item in split_type_args(requested[6:-1])) + ">"
++    return f"array<{requested}>"
+ 
+ 
+ def _merge_types(types: list[str]) -> str:
+diff --git a/tests/stage5/test_request_return_evidence.py b/tests/stage5/test_request_return_evidence.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..8e3adcaa9aa6363ea6ede61d2953d39c8e3e8629
+--- /dev/null
++++ b/tests/stage5/test_request_return_evidence.py
+@@ -0,0 +1,23 @@
++"""Request return types and exact source-expression binding."""
++import pytest
++from pine2ast import parse_code
++
++@pytest.mark.parametrize(
++    "arguments", ['"EX:S","1",[close,open]', 'expression=[close,open],symbol="EX:S",timeframe="1"']
++)
++def test_lower_tuple_provides_independent_array_element_types(arguments):
++    result = parse_code(
++        f'//@version=6\nindicator("tuple")\n[a,b]=request.security_lower_tf({arguments})\nx=array.get(a,0)\n'
++    )
++    assert result.ok, result.diagnostics
++    assert any(
++        f.kind == "CallExpr" and f.resolved_type.base == "float"
++        for f in result.semantic_model.semantic_facts.facts
++    )
++
++
++def test_named_order_cannot_bypass_mutable_expression_rule():
++    result = parse_code(
++        '//@version=6\nindicator("mutable")\nx=close\nx:=close+1\ny=request.security(expression=x,timeframe="5",symbol="EX:S")\n'
++    )
++    assert not result.ok
