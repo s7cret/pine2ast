@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:51e8a1cd1733bd905f902ac074e51f4d143f56ae916d63e65ce808c4d86990cf",
-  "content_hash": "sha256:87af0c6705e8239f5153c9f5686afe27d3154e715bf164819df4a089f91f50e0",
+  "catalog_hash": "sha256:fb80461b94cbe68921bfe31e56b431b87ffb0a9bfd5ec29ee74123894a847588",
+  "content_hash": "sha256:9be7919c5a0d2993da279fd943c84ebc1a9445b2034509129742f688f1c618de",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 5,
@@ -8935,7 +8935,14 @@
         "docs_url": null,
         "kind": "builtin",
         "name": "na",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "x",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "any"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "bool",

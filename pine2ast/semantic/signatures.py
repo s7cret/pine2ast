@@ -580,6 +580,10 @@ class SignatureResolver:
             raise RuntimeError("source argument resolution is missing its AST argument")
         issues: list[SignatureIssue] = []
         pname = param.get("name") or "<positional>"
+        if (validate_types and self.version_context.pine_version >= 6
+                and callee in {"na", "nz", "fixnan"} and resolved.actual_type == "bool"):
+            issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                f"{callee} does not accept bool arguments in Pine v6.", argument.span))
         expected_type = param.get("type") or param.get("value_type")
         if (
             validate_types

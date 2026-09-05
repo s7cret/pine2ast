@@ -109,6 +109,7 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
 
 # The pinned RC5 registry contained name-only entries for these admitted calls.
 SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
+    "na": [{"name": "x", "required": True, "type": "any"}],
     "ta.supertrend": [
         {"name": "factor", "required": True, "type": "float"},
         {"name": "atrPeriod", "required": True, "type": "int"},

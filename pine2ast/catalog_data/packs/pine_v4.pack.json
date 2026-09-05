@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:452cc84c8406604c8631de91249ea373ffcf48645ed2612db304ee6405ad6a77",
-  "content_hash": "sha256:f2030f4adb2fe1a7991fc2dbdeea4c28aa00cddfdf82ca6df1f9518920c9dc0e",
+  "catalog_hash": "sha256:1a3570d5fe6da5f4be8808cd333b41f2275ce3c43afd24cb5346e7f770c5a431",
+  "content_hash": "sha256:986b21b3de7c3d35787b2d7c0040eeb18e5f6db0ef31e9ffe55cdd059c56239b",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 4,
@@ -7366,7 +7366,14 @@
         "docs_url": null,
         "kind": "builtin",
         "name": "na",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "x",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "any"
+          }
+        ],
         "pine_version": "4",
         "return_qualifier": "series",
         "returns": "bool",
