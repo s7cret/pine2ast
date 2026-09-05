@@ -170,19 +170,29 @@ def _generic_collection_constructor_return(expr: CallExpr) -> str | None:
     return None
 
 
-def _request_return(
-    expr: CallExpr,
-    symbols: Mapping[str, object] | None,
-    registry: Registry | None,
-) -> str | None:
+def request_expression_argument(expr: CallExpr) -> Any | None:
+    """Resolve the expression by source binding, not incidental argument order."""
+    named = [arg.value for arg in expr.arguments if arg.name == "expression"]
+    positional = [arg.value for arg in expr.arguments if arg.name is None]
+    if named:
+        return named[0] if len(named) == 1 else None
+    return positional[2] if len(positional) >= 3 else None
+
+
+def _request_return(expr: CallExpr, symbols: Mapping[str, object] | None,
+                    registry: Registry | None) -> str | None:
     name = callee_name(expr.callee)
-    if (
-        name not in {"security", "request.security", "request.security_lower_tf"}
-        or len(expr.arguments) < 3
-    ):
+    if name not in {"security", "request.security", "request.security_lower_tf"}:
         return None
-    requested = infer_type(expr.arguments[2].value, symbols, registry=registry)
-    return f"array<{requested}>" if name == "request.security_lower_tf" else requested
+    expression = request_expression_argument(expr)
+    if expression is None:
+        return None
+    requested = infer_type(expression, symbols, registry=registry)
+    if name != "request.security_lower_tf":
+        return requested
+    if requested.startswith("tuple<") and requested.endswith(">"):
+        return "tuple<" + ",".join(f"array<{item}>" for item in split_type_args(requested[6:-1])) + ">"
+    return f"array<{requested}>"
 
 
 def _merge_types(types: list[str]) -> str:

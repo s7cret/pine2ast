@@ -25,7 +25,7 @@ from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.semantic.scopes import ScopeKind
 from pine2ast.semantic.symbols import SymbolKind
-from pine2ast.semantic.type_infer import callee_name
+from pine2ast.semantic.type_infer import callee_name, request_expression_argument
 from pine2ast.semantic.passes.loop_dos import (
     _is_literal_true,
     _static_int_bound,
@@ -375,11 +375,9 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
     def _validate_security_expression(self, name: str, expr: CallExpr) -> None:
         if name not in {"security", "request.security"}:
             return
-        if len(expr.arguments) < 3:
+        expression = request_expression_argument(expr)
+        if expression is None or not self.policy.forbids_mutable_security_expression:
             return
-        if not self.policy.forbids_mutable_security_expression:
-            return
-        expression = expr.arguments[2].value
         mutable = sorted(self._identifier_names(expression) & self._reassigned_names)
         if mutable:
             self._diag(
