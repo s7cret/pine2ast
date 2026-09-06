@@ -304,11 +304,10 @@ def _dynamic_request_issues(
 def _strategy_exit_issues(
     calls: list, *, profile: PineVersionContext
 ) -> Iterable[StaticValidationIssue]:
-    del profile
     for call, _context in calls:
         if callee_name(call.callee) != "strategy.exit":
             continue
-        named = {arg.name for arg in call.arguments if arg.name}
+        named = {name for _, name in _bind_argument_names("strategy.exit", call.arguments, profile) if name}
         has_direct_action = bool(named & _STRATEGY_EXIT_ACTION_PARAMETERS)
         has_trailing_action = (
             bool(named & _STRATEGY_EXIT_TRAIL_PRICE_PARAMETERS)
