@@ -1,0 +1,50 @@
+diff --git a/pine2ast/semantic/static_validation.py b/pine2ast/semantic/static_validation.py
+index 5a0c6da0dfef7da0855957aa30485648b35ab0d5..915dfb2dd5810945604d1c0814ff22faa718de1d 100644
+--- a/pine2ast/semantic/static_validation.py
++++ b/pine2ast/semantic/static_validation.py
+@@ -304,11 +304,10 @@ def _dynamic_request_issues(
+ def _strategy_exit_issues(
+     calls: list, *, profile: PineVersionContext
+ ) -> Iterable[StaticValidationIssue]:
+-    del profile
+     for call, _context in calls:
+         if callee_name(call.callee) != "strategy.exit":
+             continue
+-        named = {arg.name for arg in call.arguments if arg.name}
++        named = {name for _, name in _bind_argument_names("strategy.exit", call.arguments, profile) if name}
+         has_direct_action = bool(named & _STRATEGY_EXIT_ACTION_PARAMETERS)
+         has_trailing_action = (
+             bool(named & _STRATEGY_EXIT_TRAIL_PRICE_PARAMETERS)
+diff --git a/tests/stage5/test_exit_argument_binding.py b/tests/stage5/test_exit_argument_binding.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..0eaa841fccea36727a4ea6c8b7add2504a8f34f1
+--- /dev/null
++++ b/tests/stage5/test_exit_argument_binding.py
+@@ -0,0 +1,27 @@
++"""Static exit action validation uses catalog-bound positions, not only keywords."""
++
++import pytest
++from pine2ast import parse_code
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++@pytest.mark.parametrize(
++    "arguments",
++    [
++        '"X", "A", na, na, 5',
++        '"X", "A", na, na, na, 105',
++        '"X", "A", na, na, na, na, 5',
++        '"X", "A", na, na, na, na, na, 95',
++        '"X", "A", na, na, na, na, na, na, 105, na, 2',
++    ],
++)
++def test_positional_exit_actions_follow_the_version_catalog(version, arguments):
++    result = parse_code(f'//@version={version}\nstrategy("binding")\nstrategy.exit({arguments})\n')
++    assert result.ok, result.diagnostics
++
++
++@pytest.mark.parametrize("arguments", ['"X"', '"X", "A", 2', '"X", "A", 2, 50'])
++def test_quantities_alone_do_not_turn_an_exit_into_an_action(arguments):
++    result = parse_code(f'//@version=6\nstrategy("binding")\nstrategy.exit({arguments})\n')
++    assert not result.ok
++    assert any(d.code == "P2A1404" for d in result.diagnostics)
