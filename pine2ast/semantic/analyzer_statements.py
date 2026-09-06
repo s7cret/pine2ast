@@ -61,6 +61,13 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
     def _s_var_declaration(self, node: VarDeclaration) -> None:
         validate_export_policy(self, node)
         init_type = self._infer_type(node.initializer)
+        if init_type == "void":
+            self._diag(
+                Severity.ERROR,
+                codes.TYPE_MISMATCH,
+                "A void statement or function cannot initialize a variable.",
+                node.initializer.span,
+            )
         explicit_type = self._type_ref_name(node.type_ref) if node.type_ref else init_type
         if (
             node.type_ref is None
@@ -453,6 +460,8 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             if not body.statements:
                 return "void"
             last = body.statements[-1]
+            if isinstance(last, (IfStructure, SwitchStructure)):
+                return self._infer_type(last)
             if hasattr(last, "expression"):
                 return self._infer_type(last.expression)
             if hasattr(last, "initializer"):
@@ -479,6 +488,8 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             if not body.statements:
                 return None
             last = body.statements[-1]
+            if isinstance(last, (IfStructure, SwitchStructure)):
+                return last
             return (
                 getattr(last, "expression", None)
                 or getattr(last, "initializer", None)

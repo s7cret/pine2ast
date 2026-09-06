@@ -18,6 +18,7 @@ from pine2ast.ast.nodes import (
     FunctionDeclaration,
     Identifier,
     IfStructure,
+    OnceStructure,
     Literal,
     MemberAccessExpr,
     MethodDeclaration,
@@ -349,9 +350,7 @@ class SemanticFactBuilder:
         call_form = "USER_FUNCTION"
         if declaration is None and isinstance(call.callee, MemberAccessExpr):
             receiver_base, _ = generic_type_parts(receiver_type or "")
-            method_key = (
-                f"{receiver_base}.{call.callee.member}" if receiver_base else ""
-            )
+            method_key = f"{receiver_base}.{call.callee.member}" if receiver_base else ""
             declaration = self._declarations.get(method_key) or self._declarations.get(
                 call.callee.member
             )
@@ -480,7 +479,15 @@ class SemanticFactBuilder:
             for item in self._declarations.values()
             if isinstance(item, (FunctionDeclaration, MethodDeclaration))
         }
-        stateful_names: set[str] = set()
+        stateful_names = {
+            name
+            for name, declaration in declaration_for_call.items()
+            if any(
+                isinstance(node, OnceStructure)
+                or (isinstance(node, VarDeclaration) and node.mode in {"var", "varip"})
+                for node in self._descendants(declaration.body)
+            )
+        }
         changed = True
         while changed:
             changed = False
@@ -707,6 +714,8 @@ class SemanticFactBuilder:
         elif isinstance(node, ConditionalExpr):
             rules.append(f"control.condition.v{version}")
             rules.append(self.policy.rule_id("ternary"))
+        elif isinstance(node, OnceStructure):
+            rules.append(f"control.once.v{version}")
         elif isinstance(node, (IfStructure, WhileStructure)):
             rules.append(f"control.condition.v{version}")
         elif isinstance(node, ForRangeStructure):

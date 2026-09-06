@@ -179,6 +179,15 @@ class IfStructure(Expression, Statement):
 
 
 @dataclass(slots=True)
+class OnceStructure(Statement):
+    """Pine v6 one-time conditional statement, never a value expression."""
+
+    span: SourceSpan
+    condition: Expression
+    body: Block
+
+
+@dataclass(slots=True)
 class SwitchCase(ASTNode):
     span: SourceSpan
     condition: Expression | None

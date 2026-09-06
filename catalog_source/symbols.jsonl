@@ -776,6 +776,7 @@
 {"canonical_name":"in","first_observed_version":5,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:in"}
 {"canonical_name":"method","first_observed_version":5,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:method"}
 {"canonical_name":"not","first_observed_version":1,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:not"}
+{"canonical_name":"once","first_observed_version":6,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:once"}
 {"canonical_name":"or","first_observed_version":1,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:or"}
 {"canonical_name":"switch","first_observed_version":5,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:switch"}
 {"canonical_name":"to","first_observed_version":2,"kind":"keyword","last_observed_version":6,"section":"keywords","symbol_id":"pine:keyword:to"}

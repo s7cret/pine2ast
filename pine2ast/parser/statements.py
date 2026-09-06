@@ -14,6 +14,8 @@ from pine2ast.ast.nodes import (
     ForInTarget,
     ForRangeStructure,
     IfStructure,
+    OnceStructure,
+    Literal,
     Reassignment,
     SwitchCase,
     SwitchStructure,
@@ -95,6 +97,8 @@ class StatementsMixin(BaseParser):
 
     def parse_statement(self, *, pending_annotations: list | None = None):
         self._skip_newlines()
+        if self._at(TokenKind.ONCE):
+            return self.parse_once()
         if self._at(TokenKind.IF):
             self._require_syntax("conditional_structures", self._peek().span)
             return self.parse_if()
@@ -257,6 +261,17 @@ class StatementsMixin(BaseParser):
             return Block(join_span(newline.span, newline.span), [])
         self._advance()
         return self.parse_block_after_indent()
+
+    def parse_once(self) -> OnceStructure:
+        start = self._expect(TokenKind.ONCE)
+        self._require_syntax("once_structures", start.span)
+        condition = (
+            Literal(start.span, True, "bool")
+            if self._at(TokenKind.NEWLINE)
+            else self.parse_expression()
+        )
+        body = self.parse_required_block()
+        return OnceStructure(join_span(start.span, body.span), condition, body)
 
     def parse_switch(self) -> SwitchStructure:
         self._require_syntax("switch_structures", self._peek().span)

@@ -44,6 +44,7 @@ class TokenKind(str, Enum):
     VERSION_ANNOTATION = "VERSION_ANNOTATION"
     ANNOTATION = "ANNOTATION"
 
+    ONCE = "ONCE"
     IF = "IF"
     ELSE = "ELSE"
     FOR = "FOR"
@@ -99,6 +100,7 @@ class TokenKind(str, Enum):
 
 
 KEYWORDS: dict[str, TokenKind] = {
+    "once": TokenKind.ONCE,
     "if": TokenKind.IF,
     "else": TokenKind.ELSE,
     "for": TokenKind.FOR,

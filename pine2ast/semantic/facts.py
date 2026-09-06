@@ -25,6 +25,7 @@ from pine2ast.ast.nodes import (
     GenericInstantiationExpr,
     Identifier,
     IfStructure,
+    OnceStructure,
     Literal,
     MemberAccessExpr,
     MethodDeclaration,
@@ -122,6 +123,8 @@ def node_context_marker(node: ASTNode) -> str | None:
         return "function"
     if isinstance(node, MethodDeclaration):
         return "method"
+    if isinstance(node, OnceStructure):
+        return "once"
     if isinstance(node, IfStructure):
         return "if"
     if isinstance(node, SwitchStructure):

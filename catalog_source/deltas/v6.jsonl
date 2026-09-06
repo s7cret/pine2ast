@@ -94,6 +94,7 @@
 {"name":"volume_row.sell_volume","op":"ADD","section":"functions","semantic_id":"sha256:7f85dd17eb24911c442a4f4f311920a88edf758e915423645598d48af63a53e3","symbol_id":"pine:function:volume_row.sell_volume"}
 {"name":"volume_row.total_volume","op":"ADD","section":"functions","semantic_id":"sha256:f0c578a1f36b91ffcf3051400c9906ed6ca140886658643411147bcdc526644c","symbol_id":"pine:function:volume_row.total_volume"}
 {"name":"volume_row.up_price","op":"ADD","section":"functions","semantic_id":"sha256:574c93f3ae8d7a608249aa084218d3efc07b3c206e03966a6298ca00824ff20a","symbol_id":"pine:function:volume_row.up_price"}
+{"name":"once","op":"ADD","section":"keywords","semantic_id":"sha256:87d24437189b1e442e6aa8f4bb282f9736b833813b986b28c26be63b807f9b50","symbol_id":"pine:keyword:once"}
 {"op":"PATCH","semantic_id":"sha256:6201dff21f5fcf0d3f5fa5a64572ef51b0f778615d345a0640d1e72b61f04fe5","symbol_id":"pine:method:array.binary_search"}
 {"op":"PATCH","semantic_id":"sha256:43455762f563a64e85d93dfab6d9b8a5f976d51f24707816d76e80ea85f8c7d3","symbol_id":"pine:method:array.binary_search_leftmost"}
 {"op":"PATCH","semantic_id":"sha256:6bc6ad363cd9881e51b4c9bc5900a97704dc60782bfeefaa48b48bea6945432e","symbol_id":"pine:method:array.binary_search_rightmost"}

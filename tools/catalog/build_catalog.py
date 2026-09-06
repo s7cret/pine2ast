@@ -919,6 +919,19 @@ def main() -> int:
     if set(version_rules.get("versions", {})) != {str(v) for v in range(1, 7)}:
         raise SystemExit("version_rules.json must define exactly Pine v1 through v6")
 
+    # Explicit additive syntax updates extend the frozen migration inputs;
+    # never rewrite an archived reference file or project new keywords backwards.
+    for version in (5, 6):
+        additions = version_rules["versions"][str(version)]["syntax"].get("keyword_additions", {})
+        for name, row in additions.items():
+            if (
+                name in registries[version]["keywords"]
+                or row.get("name") != name
+                or not row.get("source")
+            ):
+                raise SystemExit("invalid or overlapping syntax addition")
+            registries[version]["keywords"][name] = copy.deepcopy(row)
+
     modern5 = flatten_modern(registries[5], 5)
     modern6 = flatten_modern(registries[6], 6)
     version_items: dict[int, dict[str, dict[str, Any]]] = {}

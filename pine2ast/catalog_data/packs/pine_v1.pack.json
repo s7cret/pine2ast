@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:80f4030de29b23be5229b5ac07d2af7ed6612427bb988af9ae3a7b7189292479",
-  "content_hash": "sha256:0caf0783448eaa48a97b79d1966f83b42b022641fdb5c3fc3fd1f0c9a08f0caf",
+  "catalog_hash": "sha256:57f4c95cf75d06c7fcee16ff97e1d40ed664053b35a3aa0a239c15dcdf6d1f3f",
+  "content_hash": "sha256:6bbc4d981900823a9e43c7c1920eca071b99178e8f530c48b56648ec8720b518",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 1,
@@ -89,6 +89,7 @@
         "matrix_collections": false,
         "method_declarations": false,
         "multiline_strings": false,
+        "once_structures": false,
         "reassignment": false,
         "switch_structures": false,
         "tuple_declarations": false,
@@ -115,6 +116,7 @@
         "matrix_collections": "syntax.matrix_collections.v1",
         "method_declarations": "syntax.method_declarations.v1",
         "multiline_strings": "syntax.multiline_strings.v1",
+        "once_structures": "syntax.once_structures.v1",
         "reassignment": "syntax.reassignment.v1",
         "switch_structures": "syntax.switch_structures.v1",
         "tuple_declarations": "syntax.tuple_declarations.v1",
@@ -9548,7 +9550,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:cab70b522a3d3f720ac497c63a44aa76b5042a00df2a4771a0ce0b00a57ec458",
+  "source_manifest_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
   "spec_snapshot_ref": "tradingview-pine-v1-historical-static-snapshot-2026-08-27",
   "status": "HISTORICAL_STATIC_SNAPSHOT"
 }

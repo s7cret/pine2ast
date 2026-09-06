@@ -1,12 +1,12 @@
 {
-  "canonical_symbol_count": 1537,
+  "canonical_symbol_count": 1538,
   "delta_counts": {
     "1": 780,
     "2": 9,
     "3": 1,
     "4": 290,
     "5": 571,
-    "6": 199
+    "6": 200
   },
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "input_identity": {
@@ -26,9 +26,9 @@
       "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
     },
     "version_rules": {
-      "byte_length": 25225,
+      "byte_length": 26044,
       "path": "catalog_source/version_rules.json",
-      "sha256": "sha256:2e9f27cdbd8e44a2c54de500a5b9227c4c564986517ebd5e5dfade3b1cc55056"
+      "sha256": "sha256:957df4ce9acc1d9a145f66852bf04aa7d9ed73b7f8f52e885865ec42f6731c6f"
     }
   },
   "invariants": {
@@ -43,12 +43,12 @@
   "migration_loss_count": 0,
   "ok": true,
   "pack_hashes": {
-    "1": "sha256:80f4030de29b23be5229b5ac07d2af7ed6612427bb988af9ae3a7b7189292479",
-    "2": "sha256:9a38caeb9645daa8b638496d1a0049c564fb792e4a49b5ccb205ef44e90aadcf",
-    "3": "sha256:7f73386a4ef82567994039455db82e66467bd28816419fedfc92ca384bbf41d8",
-    "4": "sha256:7280a7ddd55702968ccb9ca0372679487793f5e9e43e6c1426c436866fbe1b55",
-    "5": "sha256:f9efbbd2f5bda21fcd8acd721e7811f9e977cc42f2831fea74761f05b9b9ba64",
-    "6": "sha256:97b2bb471100273ade3aefff65240c166c865384172405488bb0950b5c7a705f"
+    "1": "sha256:57f4c95cf75d06c7fcee16ff97e1d40ed664053b35a3aa0a239c15dcdf6d1f3f",
+    "2": "sha256:b93a7539e1026face82941267ccc30ce25eec7180495aded3db310012cf4adbd",
+    "3": "sha256:4b6d43fc7ea8942b8f8e002349e2a1687734da20aefbd3057af1ac4dcf267a80",
+    "4": "sha256:b2a615d6ff6edcfbcfdd7f369c2c5af95e0518c8d546c3934cb23e5a0f208bc8",
+    "5": "sha256:10fef4b355a6a8a990a32e81939419594ad3d9544cc7af40f35702383703c50a",
+    "6": "sha256:b65870cad03e84e9bc1da2b43649bcaef9d3367d2e464c71ce506730196775b3"
   },
   "schema_id": "pine.catalog.migration_report.v2",
   "section_counts": {
@@ -123,7 +123,7 @@
       "declarations": 0,
       "enum_values": 0,
       "functions": 500,
-      "keywords": 22,
+      "keywords": 23,
       "methods": 213,
       "namespaces": 55,
       "operators": 21,
@@ -131,5 +131,5 @@
       "variables": 403
     }
   },
-  "semantic_definition_count": 1633
+  "semantic_definition_count": 1634
 }

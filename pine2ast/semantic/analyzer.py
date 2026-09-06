@@ -20,6 +20,7 @@ from pine2ast.ast.nodes import (
     HistoryRefExpr,
     Identifier,
     IfStructure,
+    OnceStructure,
     ImportDeclaration,
     Literal,
     MemberAccessExpr,
@@ -356,7 +357,15 @@ class SemanticAnalyzer(
             return
         # Slightly slower path: structural check for mixed-type groups.
         if isinstance(
-            node, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+            node,
+            (
+                IfStructure,
+                OnceStructure,
+                SwitchStructure,
+                ForRangeStructure,
+                ForInStructure,
+                WhileStructure,
+            ),
         ):
             self._visit_structure(node)
             return

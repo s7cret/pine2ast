@@ -14,6 +14,7 @@ from pine2ast.ast.nodes import (
     HistoryRefExpr,
     Identifier,
     IfStructure,
+    OnceStructure,
     Literal,
     MemberAccessExpr,
     SwitchStructure,
@@ -115,7 +116,10 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
                 )
 
     def _visit_structure(self, node: Statement) -> None:
-        if isinstance(node, IfStructure):
+        if isinstance(node, OnceStructure):
+            self._check_bool(node.condition)
+            self._visit_block(node.body)
+        elif isinstance(node, IfStructure):
             self._check_bool(node.condition)
             self._validate_narrowing_condition(node.condition)
             then_paths = self._non_na_paths_from_condition(node.condition, truthy=True)

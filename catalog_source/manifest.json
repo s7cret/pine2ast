@@ -1,5 +1,5 @@
 {
-  "content_hash": "sha256:cab70b522a3d3f720ac497c63a44aa76b5042a00df2a4771a0ce0b00a57ec458",
+  "content_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
   "input_identity": {
     "historical_projection": {
       "byte_length": 7255,
@@ -17,9 +17,9 @@
       "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
     },
     "version_rules": {
-      "byte_length": 25225,
+      "byte_length": 26044,
       "path": "catalog_source/version_rules.json",
-      "sha256": "sha256:2e9f27cdbd8e44a2c54de500a5b9227c4c564986517ebd5e5dfade3b1cc55056"
+      "sha256": "sha256:957df4ce9acc1d9a145f66852bf04aa7d9ed73b7f8f52e885865ec42f6731c6f"
     }
   },
   "policy": {

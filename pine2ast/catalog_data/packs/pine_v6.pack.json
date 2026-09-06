@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:97b2bb471100273ade3aefff65240c166c865384172405488bb0950b5c7a705f",
-  "content_hash": "sha256:f35482d07d30124cce69d7d57d34d4a47e9dfc7275211e0f7f769903ef2e607d",
+  "catalog_hash": "sha256:b65870cad03e84e9bc1da2b43649bcaef9d3367d2e464c71ce506730196775b3",
+  "content_hash": "sha256:61ca336331c16d6d9e73beddb1e6f21552c23b15651728816f3005f93a051a6e",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 6,
@@ -72,6 +72,7 @@
         "matrix_collections": true,
         "method_declarations": true,
         "multiline_strings": true,
+        "once_structures": true,
         "reassignment": true,
         "switch_structures": true,
         "tuple_declarations": true,
@@ -81,6 +82,13 @@
         "var_declarations": true,
         "varip_declarations": true,
         "while_loops": true
+      },
+      "keyword_additions": {
+        "once": {
+          "introduced": "2026-08",
+          "name": "once",
+          "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure"
+        }
       },
       "rule_ids": {
         "array_collections": "syntax.array_collections.v6",
@@ -98,6 +106,7 @@
         "matrix_collections": "syntax.matrix_collections.v6",
         "method_declarations": "syntax.method_declarations.v6",
         "multiline_strings": "syntax.multiline_strings.v6",
+        "once_structures": "syntax.once_structures.v6",
         "reassignment": "syntax.reassignment.v6",
         "switch_structures": "syntax.switch_structures.v6",
         "tuple_declarations": "syntax.tuple_declarations.v6",
@@ -15332,6 +15341,12 @@
         "source": "official_reference_index_snapshot",
         "symbol_id": "pine:keyword:not"
       },
+      "once": {
+        "introduced": "2026-08",
+        "name": "once",
+        "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure",
+        "symbol_id": "pine:keyword:once"
+      },
       "or": {
         "name": "or",
         "source": "official_reference_index_snapshot",
@@ -22119,7 +22134,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:cab70b522a3d3f720ac497c63a44aa76b5042a00df2a4771a0ce0b00a57ec458",
+  "source_manifest_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
   "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
   "status": "STATIC_COMPLETE"
 }
