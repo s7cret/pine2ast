@@ -1,0 +1,73 @@
+name: Stage 2 language-core verified publication
+'on':
+  push:
+    branches: ['ops/rc6-stage2-language-20260907']
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: stage2-language-publication
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install explicit verification tools
+        run: python -m pip install setuptools==84.0.0 wheel==0.48.0 hatchling==1.32.0 build==1.6.0 pytest==9.1.1 ruff==0.12.10 tzdata==2026.2 jsonschema
+      - name: Restore reviewed source and regenerate checked artifacts
+        run: |
+          cp -r .github/stage2 "$RUNNER_TEMP/submission"
+          python "$RUNNER_TEMP/submission/restore.py" restore "$RUNNER_TEMP/submission" "$RUNNER_TEMP/evidence"
+          cp "$RUNNER_TEMP/submission/restore.py" "$RUNNER_TEMP/evidence/restore.py"
+      - name: Complete functional suite without test skips
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+        run: python -m pytest -q --junitxml="$RUNNER_TEMP/evidence/tests.xml"
+      - name: Validate expected inventory lint and distributions
+        run: |
+          python "$RUNNER_TEMP/evidence/restore.py" validate "$RUNNER_TEMP/evidence"
+          python -m build --no-isolation --outdir "$RUNNER_TEMP/evidence/dist" "$RUNNER_TEMP/build-source"
+          python -m pip freeze > "$RUNNER_TEMP/evidence/environment.txt"
+          test -z "$(git status --porcelain --untracked-files=no)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: language-${{ matrix.python }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/evidence/
+          if-no-files-found: error
+          retention-days: 30
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: language-3.13-${{ github.run_id }}
+          path: evidence
+      - name: Fast-forward verified RC6 and preserve staging history
+        run: python evidence/restore.py publish evidence
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: language-publication-${{ github.run_id }}
+          path: evidence/
+          retention-days: 30
