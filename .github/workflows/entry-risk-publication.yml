@@ -1,0 +1,78 @@
+name: Verify entry risk namespace and qualifier contracts
+'on':
+  push:
+    branches: ['ops/rc6-entry-risk-20260906']
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: rc6-entry-risk-publication
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Restore exact source and regenerate catalog
+        run: |
+          cp .github/entry-risk/restore.py "$RUNNER_TEMP/restore.py"
+          python "$RUNNER_TEMP/restore.py" restore .github/entry-risk/plan.json "$RUNNER_TEMP/evidence"
+          cp "$RUNNER_TEMP/restore.py" "$RUNNER_TEMP/evidence/restore.py"
+      - name: Install clean source
+        run: |
+          python -m pip install setuptools==84.0.0 wheel==0.48.0 build==1.6.0
+          mkdir -p "$RUNNER_TEMP/build-source"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/build-source"
+          python -m pip install "$RUNNER_TEMP/build-source[dev]"
+      - name: Full parser suite without exclusions
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+        run: python -m pytest -q --junitxml="$RUNNER_TEMP/evidence/pine2ast.xml"
+      - name: Lint compile and build
+        run: |
+          python -m ruff check pine2ast/semantic/binder.py pine2ast/semantic/qualifier_infer.py tools/catalog/build_catalog.py tests/stage5/test_risk_namespace_evidence.py
+          python -m compileall -q pine2ast
+          python -m build --no-isolation --outdir "$RUNNER_TEMP/evidence/dist" "$RUNNER_TEMP/build-source"
+          python -m pip freeze > "$RUNNER_TEMP/evidence/environment.txt"
+          test -z "$(git status --porcelain --untracked-files=no)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: entry-risk-${{ matrix.python }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/evidence/
+          retention-days: 30
+          if-no-files-found: error
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: entry-risk-3.13-${{ github.run_id }}
+          path: evidence
+      - name: Fast-forward verified RC6 and archive only the temporary branch
+        run: python evidence/restore.py publish evidence
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: entry-risk-publication-${{ github.run_id }}
+          path: evidence/
+          retention-days: 30

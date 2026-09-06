@@ -1,0 +1,152 @@
+diff --git a/pine2ast/semantic/binder.py b/pine2ast/semantic/binder.py
+index 8b9f0903b0b3d4d3c016e0ccf1448e75917c6376..1efc3a3b4f9bcd85ef9feb2c89299b667e156b8d 100644
+--- a/pine2ast/semantic/binder.py
++++ b/pine2ast/semantic/binder.py
+@@ -74,6 +74,16 @@ class SemanticFactBuilder:
+         self.version_context = version_context
+         policy.validate_context(version_context)
+         self.catalog = catalog
++        # Structural parents of active qualified names need type evidence even
++        # when a pinned catalog omits the intermediate namespace (v5 direction).
++        # This does not import names from another version or overwrite a symbol.
++        self._namespace_prefixes = {
++            ".".join(parts[:i])
++            for section in ("variables", "constants", "functions", "methods")
++            for name in catalog.get(section, {})
++            for parts in [name.split(".")]
++            for i in range(1, len(parts))
++        }
+         self.policy = policy
+         self.model = model
+         self.engine = PineInferenceEngine(
+@@ -593,6 +603,8 @@ class SemanticFactBuilder:
+                 return kind
+             if symbol.type:
+                 return str(symbol.type)
++        if name in self._namespace_prefixes:
++            return "namespace"
+         return None
+ 
+     def _symbol_id(self, node: ASTNode) -> str | None:
+@@ -613,6 +625,8 @@ class SemanticFactBuilder:
+             symbol = self.model.symbols.get(name)
+             if symbol is not None:
+                 return f"user:{str(getattr(symbol.kind, 'value', symbol.kind)).lower()}:{name}:scope:{symbol.scope_id}"
++            if name in self._namespace_prefixes:
++                return f"pine:namespace:{name}"
+         if isinstance(node, FunctionDeclaration):
+             return f"user:function:{node.name}:{self.index.id_for(node)}"
+         if isinstance(node, MethodDeclaration):
+diff --git a/pine2ast/semantic/qualifier_infer.py b/pine2ast/semantic/qualifier_infer.py
+index e99cd3a1693e6d15ce30ca34a71c3de3041d1f8c..6c2e31377fa495d603142e4d93978865049183e3 100644
+--- a/pine2ast/semantic/qualifier_infer.py
++++ b/pine2ast/semantic/qualifier_infer.py
+@@ -95,7 +95,21 @@ def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
+         return _join_qualifiers(*values) if values else "series"
+     if isinstance(expr, CallExpr):
+         name = callee_name(expr.callee)
+-        if name.startswith("input."):
++        if name == "input" or name.startswith("input."):
++            # Source selectors are series; scalar legacy input() is input just
++            # like its namespaced successors. Never let input.source launder a
++            # price series into a simple-only risk/length argument.
++            if name == "input.source":
++                return "series"
++            if name == "input":
++                named = {a.name: a.value for a in expr.arguments if a.name is not None}
++                positional = [a.value for a in expr.arguments if a.name is None]
++                source_type = named.get("type", positional[2] if len(positional) > 2 else None)
++                default = named.get("defval", positional[0] if positional else None)
++                if callee_name(source_type) == "input.source" or (
++                    default is not None and infer_qualifier(default, symbols) == "series"
++                ):
++                    return "series"
+             return "input"
+         if name in {"na", "array.from"} and expr.arguments:
+             return _join_qualifiers(*(infer_qualifier(a.value, symbols) for a in expr.arguments))
+diff --git a/tests/stage5/test_risk_namespace_evidence.py b/tests/stage5/test_risk_namespace_evidence.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..86629dcc30b7e8e7a8c848f71dd9d3bc1f588ac9
+--- /dev/null
++++ b/tests/stage5/test_risk_namespace_evidence.py
+@@ -0,0 +1,54 @@
++"""Intermediate enum namespaces must have typed identity in every admitted version."""
++
++import pytest
++from pine2ast.hardening.consumer_bundle import build_consumer_bundle
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++@pytest.mark.parametrize("direction", ["long", "short", "all"])
++def test_risk_direction_namespace_is_not_unknown(version, direction):
++    bundle = build_consumer_bundle(
++        f'//@version={version}\nstrategy("risk")\nstrategy.risk.allow_entry_in(strategy.direction.{direction})\n'
++    )
++    assert bundle["release_axes"]["bundle_fact_coverage_complete"]["status"] == "PASS"
++    facts = bundle["semantic_facts"]["facts"]
++    namespace = [f for f in facts if f.get("symbol_id") == "pine:namespace:strategy.direction"]
++    if version == 5:
++        assert namespace and all(f["resolved_type"]["base"] == "namespace" for f in namespace)
++    assert bundle["semantic_facts"]["coverage"]["ok"]
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++def test_unknown_direction_member_still_fails_closed(version):
++    from pine2ast.hardening.consumer_bundle import ConsumerBundleError
++
++    with pytest.raises(ConsumerBundleError):
++        build_consumer_bundle(
++            f'//@version={version}\nstrategy("unknown")\nstrategy.risk.allow_entry_in(strategy.direction.sideways)\n'
++        )
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++@pytest.mark.parametrize("kind", ["input", "series"])
++def test_entry_risk_parameter_qualifiers_are_version_bound(version, kind):
++    from pine2ast.hardening.consumer_bundle import ConsumerBundleError
++
++    declaration = "n=input.int(3)" if version >= 5 else "n=input(3)"
++    value = "n" if kind == "input" else "close"
++    source = f'//@version={version}\nstrategy("types")\n{declaration}\nstrategy.risk.max_position_size({value})\n'
++    if kind == "series":
++        with pytest.raises(ConsumerBundleError):
++            build_consumer_bundle(source)
++    else:
++        assert build_consumer_bundle(source)["semantic_facts"]["coverage"]["ok"]
++
++
++@pytest.mark.parametrize("version", range(1, 7))
++def test_source_input_cannot_disguise_a_series_as_a_simple_risk_value(version):
++    from pine2ast.hardening.consumer_bundle import ConsumerBundleError
++
++    call = "input.source(close)" if version >= 5 else "input(close)"
++    with pytest.raises(ConsumerBundleError):
++        build_consumer_bundle(
++            f'//@version={version}\nstrategy("source")\nn={call}\nstrategy.risk.max_position_size(n)\n'
++        )
+diff --git a/tools/catalog/build_catalog.py b/tools/catalog/build_catalog.py
+index 6be18edfb2454d857a208d05c1b088b2a666f285..31b3086381cc635e70022880de32f01e7f386cf6 100644
+--- a/tools/catalog/build_catalog.py
++++ b/tools/catalog/build_catalog.py
+@@ -136,9 +136,18 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
+         for parameter in candidate.get("parameters", []):
+             if not isinstance(parameter, dict):
+                 continue
+-            parameter.setdefault(
+-                "qualifier_max", overrides.get(str(parameter.get("name")), "series")
+-            )
++            # The frozen source mislabeled these rule inputs as const. They
++            # accept fixed-for-run (simple) values, including user inputs, not series.
++            risk_parameter = {
++                "strategy.risk.max_position_size": "contracts",
++                "strategy.risk.allow_entry_in": "value",
++            }.get(name)
++            if risk_parameter is not None and parameter.get("name") == risk_parameter:
++                parameter["qualifier_max"] = "simple"
++            else:
++                parameter.setdefault(
++                    "qualifier_max", overrides.get(str(parameter.get("name")), "series")
++                )
+         candidate.setdefault("return_qualifier", "series")
+     if name == "array.from" and isinstance(definition.get("parameters"), list):
+         for parameter in definition["parameters"]:
