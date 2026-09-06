@@ -74,6 +74,16 @@ class SemanticFactBuilder:
         self.version_context = version_context
         policy.validate_context(version_context)
         self.catalog = catalog
+        # Structural parents of active qualified names need type evidence even
+        # when a pinned catalog omits the intermediate namespace (v5 direction).
+        # This does not import names from another version or overwrite a symbol.
+        self._namespace_prefixes = {
+            ".".join(parts[:i])
+            for section in ("variables", "constants", "functions", "methods")
+            for name in catalog.get(section, {})
+            for parts in [name.split(".")]
+            for i in range(1, len(parts))
+        }
         self.policy = policy
         self.model = model
         self.engine = PineInferenceEngine(
@@ -593,6 +603,8 @@ class SemanticFactBuilder:
                 return kind
             if symbol.type:
                 return str(symbol.type)
+        if name in self._namespace_prefixes:
+            return "namespace"
         return None
 
     def _symbol_id(self, node: ASTNode) -> str | None:
@@ -613,6 +625,8 @@ class SemanticFactBuilder:
             symbol = self.model.symbols.get(name)
             if symbol is not None:
                 return f"user:{str(getattr(symbol.kind, 'value', symbol.kind)).lower()}:{name}:scope:{symbol.scope_id}"
+            if name in self._namespace_prefixes:
+                return f"pine:namespace:{name}"
         if isinstance(node, FunctionDeclaration):
             return f"user:function:{node.name}:{self.index.id_for(node)}"
         if isinstance(node, MethodDeclaration):

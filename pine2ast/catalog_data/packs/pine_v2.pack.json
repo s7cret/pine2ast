@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:247cd3c5473c5d9878738bd1dfd2b500e8cb3eceb90e13dbebd8e503994c9b1b",
-  "content_hash": "sha256:65db75461e0382868e6b1917df6fc8385b00961d11159615dbc0bd75e6557edb",
+  "catalog_hash": "sha256:9a38caeb9645daa8b638496d1a0049c564fb792e4a49b5ccb205ef44e90aadcf",
+  "content_hash": "sha256:ef8e311441e1f9b029edc6a2378110787a4385275526b2ff288261db0ed4d05d",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 2,
@@ -6600,7 +6600,7 @@
         "parameters": [
           {
             "name": "value",
-            "qualifier_max": "const",
+            "qualifier_max": "simple",
             "required": true,
             "type": "strategy.direction"
           }
@@ -6727,7 +6727,7 @@
         "parameters": [
           {
             "name": "contracts",
-            "qualifier_max": "const",
+            "qualifier_max": "simple",
             "required": true,
             "type": "float"
           }

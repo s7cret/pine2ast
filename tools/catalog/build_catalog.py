@@ -136,9 +136,18 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
         for parameter in candidate.get("parameters", []):
             if not isinstance(parameter, dict):
                 continue
-            parameter.setdefault(
-                "qualifier_max", overrides.get(str(parameter.get("name")), "series")
-            )
+            # The frozen source mislabeled these rule inputs as const. They
+            # accept fixed-for-run (simple) values, including user inputs, not series.
+            risk_parameter = {
+                "strategy.risk.max_position_size": "contracts",
+                "strategy.risk.allow_entry_in": "value",
+            }.get(name)
+            if risk_parameter is not None and parameter.get("name") == risk_parameter:
+                parameter["qualifier_max"] = "simple"
+            else:
+                parameter.setdefault(
+                    "qualifier_max", overrides.get(str(parameter.get("name")), "series")
+                )
         candidate.setdefault("return_qualifier", "series")
     if name == "array.from" and isinstance(definition.get("parameters"), list):
         for parameter in definition["parameters"]:

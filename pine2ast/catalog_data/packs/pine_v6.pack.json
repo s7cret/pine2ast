@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:8515e92a476dacdcda89c6e23592ffd5f0d0320eb1cb58f327995fbd503704e7",
-  "content_hash": "sha256:9bd642fc9bf68fb1ed766dfa9a1dd28f3d4e1358fb5f9e969d7ca4242a6e9c40",
+  "catalog_hash": "sha256:97b2bb471100273ade3aefff65240c166c865384172405488bb0950b5c7a705f",
+  "content_hash": "sha256:f35482d07d30124cce69d7d57d34d4a47e9dfc7275211e0f7f769903ef2e607d",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 6,
@@ -12807,7 +12807,7 @@
         "parameters": [
           {
             "name": "value",
-            "qualifier_max": "const",
+            "qualifier_max": "simple",
             "required": true,
             "type": "strategy.direction"
           }
@@ -12934,7 +12934,7 @@
         "parameters": [
           {
             "name": "contracts",
-            "qualifier_max": "const",
+            "qualifier_max": "simple",
             "required": true,
             "type": "float"
           }

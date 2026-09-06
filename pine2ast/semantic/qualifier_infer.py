@@ -95,7 +95,21 @@ def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
         return _join_qualifiers(*values) if values else "series"
     if isinstance(expr, CallExpr):
         name = callee_name(expr.callee)
-        if name.startswith("input."):
+        if name == "input" or name.startswith("input."):
+            # Source selectors are series; scalar legacy input() is input just
+            # like its namespaced successors. Never let input.source launder a
+            # price series into a simple-only risk/length argument.
+            if name == "input.source":
+                return "series"
+            if name == "input":
+                named = {a.name: a.value for a in expr.arguments if a.name is not None}
+                positional = [a.value for a in expr.arguments if a.name is None]
+                source_type = named.get("type", positional[2] if len(positional) > 2 else None)
+                default = named.get("defval", positional[0] if positional else None)
+                if callee_name(source_type) == "input.source" or (
+                    default is not None and infer_qualifier(default, symbols) == "series"
+                ):
+                    return "series"
             return "input"
         if name in {"na", "array.from"} and expr.arguments:
             return _join_qualifiers(*(infer_qualifier(a.value, symbols) for a in expr.arguments))
