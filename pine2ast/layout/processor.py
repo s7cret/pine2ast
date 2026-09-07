@@ -214,4 +214,16 @@ class LayoutProcessor:
         return None
 
     def _layout_token(self, kind: TokenKind, span: SourceSpan) -> Token:
+        if kind is TokenKind.DEDENT:
+            # Dedent is a zero-width boundary before the next token, not that
+            # token itself. Otherwise function/type/switch spans consume the
+            # next sibling's first identifier or export modifier.
+            span = SourceSpan(
+                span.start_offset,
+                span.start_offset,
+                span.start_line,
+                span.start_col,
+                span.start_line,
+                span.start_col,
+            )
         return Token(kind, "", None, span)
