@@ -280,6 +280,22 @@ def _parametric_return_rule(
             if expr.arguments
             else "unknown"
         )
+    if rule == "return.na.source_or_numeric_promotion.v1":
+        # Named arguments need not be in parameter order. Missing replacement
+        # preserves the source type; a numeric replacement may promote int to
+        # float. Existing validation still owns illegal/version-specific inputs.
+        bound = {}
+        for position, argument in enumerate(expr.arguments):
+            name = argument.name or ("source" if position == 0 else "replacement")
+            bound[name] = infer_type(argument.value, symbols, registry=registry)
+        source = bound.get("source", "unknown")
+        replacement = bound.get("replacement", source)
+        known = {source, replacement}.difference({"na", "unknown"})
+        if known and known.issubset({"int", "float"}):
+            return "float" if "float" in known else "int"
+        if source in {"bool", "color"} and replacement in {source, "na"}:
+            return source
+        return None
     if rule == "return.array.explicit_element_type.v1":
         raw = callee_name(expr.callee)
         if "<" in raw and raw.endswith(">"):

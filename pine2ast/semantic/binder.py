@@ -16,6 +16,7 @@ from pine2ast.ast.nodes import (
     ForInStructure,
     ForRangeStructure,
     FunctionDeclaration,
+    GenericInstantiationExpr,
     Identifier,
     IfStructure,
     OnceStructure,
@@ -93,6 +94,7 @@ class SemanticFactBuilder:
             registry=catalog,
             policy=policy,
         )
+        self.engine.bind_model(model)
         self.signatures = SignatureResolver(version_context=version_context)
         self.index: NodeIndex | None = None
         self._scopes: dict[int, str] = {}
@@ -540,6 +542,14 @@ class SemanticFactBuilder:
             if isinstance(parent, CallExpr) and parent.callee is node:
                 call = self._call_bindings.get(id(parent))
                 is_callee = call is not None
+            elif isinstance(parent, GenericInstantiationExpr) and parent.base is node:
+                outer = self.index.parent_for(parent)
+                if isinstance(outer, CallExpr) and outer.callee is parent:
+                    # The syntactic base of a checked generic callee is a function,
+                    # not an unresolved value. Reuse the resolved call identity;
+                    # unknown constructors still have no callable evidence.
+                    call = self._call_bindings.get(id(outer))
+                    is_callee = call is not None
         if call is not None:
             symbol_id = call.symbol_id
             if is_callee and type_fact is not None and type_fact.base == "unknown":

@@ -43,7 +43,8 @@ def for_in_target_types(iterable_type: str, target_count: int) -> list[str]:
         return ["int", element] if target_count == 2 else [element]
     if iterable_type.startswith("matrix<") and iterable_type.endswith(">"):
         element = iterable_type[len("matrix<") : -1].strip() or "unknown"
-        return ["int", element] if target_count == 2 else [element]
+        row = f"array<{element}>"
+        return ["int", row] if target_count == 2 else [row]
     if iterable_type.startswith("map<") and iterable_type.endswith(">"):
         parts = split_type_args(iterable_type[len("map<") : -1])
         if target_count == 2 and len(parts) >= 2:

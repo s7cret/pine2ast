@@ -85,6 +85,7 @@ RETURN_RULE_IDS = {
     "map.get": "return.map.value.v1",
     "map.remove": "return.map.value.v1",
     "matrix.get": "return.matrix.element.v1",
+    "nz": "return.na.source_or_numeric_promotion.v1",
 }
 
 # Pine permits a ``series`` value at ordinary expression parameters unless the
@@ -230,6 +231,10 @@ def normalized_definition(
                 if not isinstance(overload, dict):
                     raise ValueError(f"{section}.{name} overload {index} must be an object")
                 overload.setdefault("overload_id", f"{active_sid}#overload:{index}")
+        if name == "nz":
+            # Legacy snapshots summarized the float overload only. The actual
+            # return is input-dependent; use one explicit deterministic rule.
+            definition["return_rule_id"] = RETURN_RULE_IDS[name]
         if definition.get("returns") in {None, "unknown", "any"}:
             rule_id = RETURN_RULE_IDS.get(name)
             if rule_id is None and name.startswith("array.new<") and name.endswith(">"):

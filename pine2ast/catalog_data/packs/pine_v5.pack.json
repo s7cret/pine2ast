@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:10fef4b355a6a8a990a32e81939419594ad3d9544cc7af40f35702383703c50a",
-  "content_hash": "sha256:d1c23e6628469995d5ced2f8a59d58e5068d16f854051bf921a02dd0f43e4808",
+  "catalog_hash": "sha256:74438b4b2d4337e09498d28caa3ca76c04fbea3d366d9d3df86b27122e42f11c",
+  "content_hash": "sha256:72bda247a45b88f3c6babdc5835f674b654074c52cf0560e7cbd62a0ef0da898",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 5,
@@ -8971,6 +8971,7 @@
         ],
         "pine_version": "5",
         "return_qualifier": "series",
+        "return_rule_id": "return.na.source_or_numeric_promotion.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:nz"

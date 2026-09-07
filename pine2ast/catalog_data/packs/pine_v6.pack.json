@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:b65870cad03e84e9bc1da2b43649bcaef9d3367d2e464c71ce506730196775b3",
-  "content_hash": "sha256:61ca336331c16d6d9e73beddb1e6f21552c23b15651728816f3005f93a051a6e",
+  "catalog_hash": "sha256:731887e1fbb14c03182f1b0d4736ae705b19a42e3a70c58394d1f0631b458b3a",
+  "content_hash": "sha256:cd56e6563e39fb1ec58708224bce4260d33f5da72994af4c9046cefea3118347",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 6,
@@ -9941,6 +9941,7 @@
         ],
         "pine_version": "6",
         "return_qualifier": "series",
+        "return_rule_id": "return.na.source_or_numeric_promotion.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:nz"

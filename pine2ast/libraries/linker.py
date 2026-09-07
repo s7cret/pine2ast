@@ -4,7 +4,7 @@ Only resolved identifier occurrences are edited, never arbitrary source strings.
 The linked virtual source is parsed and type-checked again by the normal frontend.
 Original inputs and projection ranges remain available in the linkage receipt.
 
-This revision admits scalar and array-of-scalar functions, helpers and constant globals.
+This revision admits scalar and fundamental-collection functions, helpers and constant globals.
 Mixed Pine versions, exported user-defined types/methods and request expressions in
 libraries are rejected explicitly, not silently executed with importer semantics.
 """
@@ -74,6 +74,7 @@ class LinkedSource:
         if value.get("schema_id") != LINK_SCHEMA or value.get("profile") not in {
             "same_version_scalar_v1",
             "same_version_arrays_v2",
+            "same_version_collections_v3",
         }:
             raise LibraryError("P2A_LIBRARY_PROJECTION", "unsupported linkage profile")
         root_name = value.get("root_source_name")
@@ -249,6 +250,11 @@ class _Linker:
         }
         self.namespaces = {name.split(".")[0] for name in self.builtins if "." in name}
 
+    def promote_profile(self, profile: str) -> None:
+        profiles = ("same_version_scalar_v1", "same_version_arrays_v2", "same_version_collections_v3")
+        if profiles.index(profile) > profiles.index(self.profile):
+            self.profile = profile
+
     def fail(self, unit: _Unit, node: ASTNode, code: str, message: str):
         raise LibraryError(code, message, source=unit.ref, line=node.span.start_line)
 
@@ -304,10 +310,9 @@ class _Linker:
                     or not (
                         parameter.type_ref.name in SCALARS
                         or (
-                            parameter.type_ref.name == "array"
-                            and len(parameter.type_ref.template_args) == 1
-                            and parameter.type_ref.template_args[0].name in SCALARS
-                            and not parameter.type_ref.template_args[0].template_args
+                            parameter.type_ref.name in {"array", "matrix", "map"}
+                            and len(parameter.type_ref.template_args) == (2 if parameter.type_ref.name == "map" else 1)
+                            and all(t.name in SCALARS and not t.template_args for t in parameter.type_ref.template_args)
                             and parameter.explicit_qualifier != "simple"
                         )
                     )
@@ -317,10 +322,12 @@ class _Linker:
                         unit,
                         parameter,
                         "P2A_LIBRARY_PARAMETER",
-                        "export requires a declared scalar or series array-of-scalar parameter",
+                        "export requires a declared scalar or series fundamental-collection parameter",
                     )
                 if parameter.type_ref.name == "array":
-                    self.profile = "same_version_arrays_v2"
+                    self.promote_profile("same_version_arrays_v2")
+                elif parameter.type_ref.name in {"map", "matrix"}:
+                    self.promote_profile("same_version_collections_v3")
         unit.renamed = {
             name: PREFIX + source_hash((ref + "\0" + text))[7:27] + "_" + name
             for name in unit.functions | unit.constants
@@ -478,7 +485,9 @@ class _Linker:
 
             name = callee_name(node.callee) or ""
             if name.startswith("array."):
-                self.profile = "same_version_arrays_v2"
+                self.promote_profile("same_version_arrays_v2")
+            elif name.startswith(("map.", "matrix.")):
+                self.promote_profile("same_version_collections_v3")
             if (
                 name == "input"
                 or name.startswith(("input.", "request.", "strategy."))
@@ -529,7 +538,7 @@ class _Linker:
             return
         if isinstance(node, ForInStructure):
             if unit is not self.root:
-                self.profile = "same_version_arrays_v2"
+                self.promote_profile("same_version_arrays_v2")
             self.visit(unit, node.iterable, scopes)
             self.visit(unit, node.body, [*scopes, set(node.target.names)])
             return
