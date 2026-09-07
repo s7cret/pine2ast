@@ -21,6 +21,7 @@ from pine2ast.ast.walk import iter_nodes
 from pine2ast.semantic.type_helpers import type_ref_name
 from pine2ast.semantic.type_model import merge_type_names
 from pine2ast.semantic.type_infer import callee_name
+from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,7 +117,7 @@ class CallableInferenceEngine:
                     for argument in [self._argument_for(call, parameter, index)]
                     if argument is not None
                 )
-                qualifier = parameter.explicit_qualifier or self._merge_qualifiers(
+                qualifier = parameter_qualifier(parameter, self.model) or self._merge_qualifiers(
                     self.engine.infer_qualifier(argument.value)
                     for call in calls
                     for argument in [self._argument_for(call, parameter, index)]

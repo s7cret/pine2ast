@@ -28,6 +28,7 @@ from pine2ast.diagnostics import codes
 from pine2ast.semantic.scopes import ScopeKind
 from pine2ast.semantic.symbols import SymbolKind
 from pine2ast.semantic.passes.export_policy import validate_export_policy
+from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
 
 
@@ -264,6 +265,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         self.function_depth += 1
         self._push_scope(ScopeKind.FUNCTION)
         for p in node.parameters:
+            qualifier = parameter_qualifier(p, self.model)
             if p.type_ref is not None:
                 self._validate_type_ref(p.type_ref)
             if p.default_value is not None:
@@ -278,9 +280,9 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                         p.default_value.span,
                     )
                 self._validate_bool_cannot_be_na(expected, p.default_value)
-                if p.explicit_qualifier is not None:
+                if qualifier is not None:
                     self._validate_qualifier_assignment(
-                        p.explicit_qualifier,
+                        qualifier,
                         self._infer_qualifier(p.default_value),
                         p.default_value.span,
                         f"Default value for parameter {p.name}",
@@ -290,7 +292,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 SymbolKind.VARIABLE,
                 p.span,
                 self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
-                p.explicit_qualifier,
+                qualifier,
             )
         self._visit_body(node.body)
         sym = self._resolve(node.name)
