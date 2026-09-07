@@ -9,6 +9,9 @@ from pine2ast.ast.nodes import (
     EnumDeclaration,
     FunctionDeclaration,
     IfStructure,
+    ForRangeStructure,
+    ForInStructure,
+    WhileStructure,
     ImportDeclaration,
     Literal,
     MemberAccessExpr,
@@ -460,7 +463,10 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             if not body.statements:
                 return "void"
             last = body.statements[-1]
-            if isinstance(last, (IfStructure, SwitchStructure)):
+            if isinstance(
+                last,
+                (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure),
+            ):
                 return self._infer_type(last)
             if hasattr(last, "expression"):
                 return self._infer_type(last.expression)
@@ -488,7 +494,10 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             if not body.statements:
                 return None
             last = body.statements[-1]
-            if isinstance(last, (IfStructure, SwitchStructure)):
+            if isinstance(
+                last,
+                (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure),
+            ):
                 return last
             return (
                 getattr(last, "expression", None)
@@ -510,29 +519,14 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             left = self._static_return_shape(expr.if_true)
             right = self._static_return_shape(expr.if_false)
             return self._merge_return_shapes([left, right])
-        if isinstance(expr, IfStructure):
-            shapes: list[str | None] = []
-            target = self._body_return_expr(expr.then_block)
-            if target is not None:
-                shapes.append(self._static_return_shape(target))
-            for br in expr.else_if_branches:
-                target = self._body_return_expr(br.block)
-                if target is not None:
-                    shapes.append(self._static_return_shape(target))
-            if expr.else_block is not None:
-                target = self._body_return_expr(expr.else_block)
-                if target is not None:
-                    shapes.append(self._static_return_shape(target))
-            return self._merge_return_shapes(shapes)
-        if isinstance(expr, SwitchStructure):
-            switch_shapes: list[str | None] = []
-            for case in expr.cases:
-                target = (
-                    self._body_return_expr(case.body) if isinstance(case.body, Block) else case.body
-                )
-                if target is not None:
-                    switch_shapes.append(self._static_return_shape(target))
-            return self._merge_return_shapes(switch_shapes)
+        if isinstance(
+            expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
+            from pine2ast.semantic.control_values import returned_expressions
+
+            return self._merge_return_shapes(
+                [self._static_return_shape(value) for value in returned_expressions(expr)]
+            )
         return None
 
     def _merge_return_shapes(self, shapes: list[str | None]) -> str | None:

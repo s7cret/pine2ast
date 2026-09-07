@@ -4,8 +4,8 @@ Only resolved identifier occurrences are edited, never arbitrary source strings.
 The linked virtual source is parsed and type-checked again by the normal frontend.
 Original inputs and projection ranges remain available in the linkage receipt.
 
-This revision admits scalar function exports, private helpers and constant globals.
-Mixed Pine versions, exported reference/types/methods and request expressions in
+This revision admits scalar and array-of-scalar functions, helpers and constant globals.
+Mixed Pine versions, exported user-defined types/methods and request expressions in
 libraries are rejected explicitly, not silently executed with importer semantics.
 """
 
@@ -71,10 +71,10 @@ class LinkedSource:
     def verify(self) -> None:
         """Reproduce the complete projection; a self-rehashed receipt is not proof."""
         value = self.receipt()
-        if (
-            value.get("schema_id") != LINK_SCHEMA
-            or value.get("profile") != "same_version_scalar_v1"
-        ):
+        if value.get("schema_id") != LINK_SCHEMA or value.get("profile") not in {
+            "same_version_scalar_v1",
+            "same_version_arrays_v2",
+        }:
             raise LibraryError("P2A_LIBRARY_PROJECTION", "unsupported linkage profile")
         root_name = value.get("root_source_name")
         try:
@@ -231,6 +231,7 @@ class _Linker:
     def __init__(self, root: str, store: LibraryStore, source_name: str):
         self.root = _parse(source_name, root)
         self.root_raw = root
+        self.profile = "same_version_scalar_v1"
         self.store = store
         self.units: dict[str, _Unit] = {}
         self.version = self.root.program.version_context.pine_version
@@ -300,15 +301,26 @@ class _Linker:
             for parameter in function.parameters:
                 if (
                     parameter.type_ref is None
-                    or parameter.type_ref.name not in SCALARS
+                    or not (
+                        parameter.type_ref.name in SCALARS
+                        or (
+                            parameter.type_ref.name == "array"
+                            and len(parameter.type_ref.template_args) == 1
+                            and parameter.type_ref.template_args[0].name in SCALARS
+                            and not parameter.type_ref.template_args[0].template_args
+                            and parameter.explicit_qualifier != "simple"
+                        )
+                    )
                     or parameter.explicit_qualifier not in {None, "simple", "series"}
                 ):
                     self.fail(
                         unit,
                         parameter,
                         "P2A_LIBRARY_PARAMETER",
-                        "export requires a declared scalar simple/series parameter",
+                        "export requires a declared scalar or series array-of-scalar parameter",
                     )
+                if parameter.type_ref.name == "array":
+                    self.profile = "same_version_arrays_v2"
         unit.renamed = {
             name: PREFIX + source_hash((ref + "\0" + text))[7:27] + "_" + name
             for name in unit.functions | unit.constants
@@ -465,6 +477,8 @@ class _Linker:
             from pine2ast.semantic.type_infer import callee_name
 
             name = callee_name(node.callee) or ""
+            if name.startswith("array."):
+                self.profile = "same_version_arrays_v2"
             if (
                 name == "input"
                 or name.startswith(("input.", "request.", "strategy."))
@@ -515,12 +529,7 @@ class _Linker:
             return
         if isinstance(node, ForInStructure):
             if unit is not self.root:
-                self.fail(
-                    unit,
-                    node,
-                    "P2A_LIBRARY_CONTROL_PROFILE",
-                    "for-in in library functions awaits reference-type acceptance",
-                )
+                self.profile = "same_version_arrays_v2"
             self.visit(unit, node.iterable, scopes)
             self.visit(unit, node.body, [*scopes, set(node.target.names)])
             return
@@ -566,7 +575,7 @@ class _Linker:
         identity = source_hash(
             canonical(
                 {
-                    "profile": "same_version_scalar_v1",
+                    "profile": self.profile,
                     "root": source_hash(self.root_raw),
                     "libraries": closure,
                 }
@@ -630,7 +639,7 @@ class _Linker:
         }
         receipt = {
             "schema_id": LINK_SCHEMA,
-            "profile": "same_version_scalar_v1",
+            "profile": self.profile,
             "pine_version": self.version,
             "root_source_name": self.root.ref,
             "root_source_hash": source_hash(self.root_raw),

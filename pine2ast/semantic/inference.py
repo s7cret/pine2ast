@@ -25,6 +25,9 @@ from pine2ast.ast.nodes import (
     ConditionalExpr,
     GenericInstantiationExpr,
     IfStructure,
+    ForRangeStructure,
+    ForInStructure,
+    WhileStructure,
     MemberAccessExpr,
     SwitchStructure,
 )
@@ -172,25 +175,21 @@ class PineInferenceEngine:
                 return specialized
         if isinstance(expr, ConditionalExpr):
             return merge_type_names([self.infer_type(expr.if_true), self.infer_type(expr.if_false)])
-        if isinstance(expr, IfStructure):
-            values: list[str] = []
-            if expr.then_block.statements:
-                values.append(self._statement_value_type(expr.then_block.statements[-1]))
-            for branch in expr.else_if_branches:
-                if branch.block.statements:
-                    values.append(self._statement_value_type(branch.block.statements[-1]))
-            if expr.else_block and expr.else_block.statements:
-                values.append(self._statement_value_type(expr.else_block.statements[-1]))
-            return merge_type_names(values)
-        if isinstance(expr, SwitchStructure):
-            values = []
-            for case in expr.cases:
-                body = case.body
-                if hasattr(body, "statements") and body.statements:
-                    values.append(self._statement_value_type(body.statements[-1]))
-                elif isinstance(body, Expression):
-                    values.append(self.infer_type(body))
-            return merge_type_names(values)
+        if isinstance(
+            expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+        ):
+            from pine2ast.semantic.control_values import returned_expressions
+
+            values = [self.infer_type(value) for value in returned_expressions(expr)]
+            return (
+                merge_type_names(values)
+                if values
+                else (
+                    "unknown"
+                    if isinstance(expr, (ForRangeStructure, ForInStructure, WhileStructure))
+                    else "void"
+                )
+            )
         legacy = legacy_infer_type(expr, self.symbols, registry=self.registry)
         if isinstance(expr, CallExpr):
             specialized = self._call_return_type(expr, legacy)

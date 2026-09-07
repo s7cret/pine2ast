@@ -463,6 +463,15 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
             self._visit_expr(arg.value)
 
     def _e_history_ref_expr(self, expr: HistoryRefExpr) -> None:
+        if self.version_context.pine_version < 5 and self._infer_type(expr.base).startswith(
+            "array<"
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.VERSION_FEATURE_UNAVAILABLE,
+                "Array instance history requires Pine v5 or later; scalar element-result history remains available.",
+                expr.span,
+            )
         if self.version_context.pine_version >= 6 and isinstance(expr.base, Literal):
             self._diag(
                 Severity.ERROR,

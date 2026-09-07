@@ -11,6 +11,9 @@ from pine2ast.ast.nodes import (
     HistoryRefExpr,
     Identifier,
     IfStructure,
+    ForRangeStructure,
+    ForInStructure,
+    WhileStructure,
     Literal,
     MemberAccessExpr,
     SwitchStructure,
@@ -179,8 +182,9 @@ def request_expression_argument(expr: CallExpr) -> Any | None:
     return positional[2] if len(positional) >= 3 else None
 
 
-def _request_return(expr: CallExpr, symbols: Mapping[str, object] | None,
-                    registry: Registry | None) -> str | None:
+def _request_return(
+    expr: CallExpr, symbols: Mapping[str, object] | None, registry: Registry | None
+) -> str | None:
     name = callee_name(expr.callee)
     if name not in {"security", "request.security", "request.security_lower_tf"}:
         return None
@@ -191,7 +195,9 @@ def _request_return(expr: CallExpr, symbols: Mapping[str, object] | None,
     if name != "request.security_lower_tf":
         return requested
     if requested.startswith("tuple<") and requested.endswith(">"):
-        return "tuple<" + ",".join(f"array<{item}>" for item in split_type_args(requested[6:-1])) + ">"
+        return (
+            "tuple<" + ",".join(f"array<{item}>" for item in split_type_args(requested[6:-1])) + ">"
+        )
     return f"array<{requested}>"
 
 
@@ -331,24 +337,23 @@ def infer_type(
         return _merge_types([recur(expr.if_true), recur(expr.if_false)])
     if isinstance(expr, HistoryRefExpr):
         return recur(expr.base)
-    if isinstance(expr, IfStructure):
-        branch_types: list[str] = []
-        if expr.then_block.statements:
-            branch_types.append(
-                _last_statement_type(expr.then_block.statements[-1], symbols, registry)
+    if isinstance(
+        expr, (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure)
+    ):
+        from pine2ast.semantic.control_values import returned_expressions
+
+        values = [
+            infer_type(value, symbols, registry=registry) for value in returned_expressions(expr)
+        ]
+        return (
+            _merge_types(values)
+            if values
+            else (
+                "unknown"
+                if isinstance(expr, (ForRangeStructure, ForInStructure, WhileStructure))
+                else "void"
             )
-        for branch in expr.else_if_branches:
-            if branch.block.statements:
-                branch_types.append(
-                    _last_statement_type(branch.block.statements[-1], symbols, registry)
-                )
-        if expr.else_block and expr.else_block.statements:
-            branch_types.append(
-                _last_statement_type(expr.else_block.statements[-1], symbols, registry)
-            )
-        return _merge_types(branch_types)
-    if isinstance(expr, SwitchStructure):
-        return _merge_types([_case_body_type(case.body, symbols, registry) for case in expr.cases])
+        )
     if isinstance(expr, CallExpr):
         inferred = _generic_collection_constructor_return(expr)
         if inferred:

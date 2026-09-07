@@ -186,7 +186,7 @@ def test_symlinks_are_never_followed(tmp_path, what):
         ("g(float x)=>input.float(2)+x\nexport f(float x)=>g(x)", "CALL_PROFILE"),
         ('export f(float x)=>request.security("S","1",x)', "CALL_PROFILE"),
         ("export f(x)=>x", "PARAMETER"),
-        ("export f(array<float> x)=>array.size(x)", "PARAMETER"),
+        ("export f(array<array<float>> x)=>array.size(x)", "PARAMETER"),
         ("helper(float x)=>helper(x)\nexport f(float x)=>helper(x)", "RECURSION"),
         ("a(float x)=>b(x)\nb(float x)=>a(x)\nexport f(float x)=>a(x)", "RECURSION"),
     ],
