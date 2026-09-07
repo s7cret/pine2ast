@@ -194,6 +194,17 @@ def test_scalar_qualifier_facts_follow_argument_lattice(version, expression, exp
 @pytest.mark.parametrize("version", range(1, 7))
 @pytest.mark.parametrize("args", ["na", "1", "1.5", "x=na"])
 def test_float_cast_has_complete_numeric_and_na_argument_evidence(version, args):
+    # Reviewed correction to the old fixture: the official v4 type-system
+    # manual explicitly dates casting functions to v4. Keep all nodeids;
+    # pre-v4 successful bundling was an implementation assumption, not an oracle.
+    if version < 4:
+        text = source(version, f"float({args})")
+        result = parse_code(text)
+        assert not result.ok
+        assert any(d.code == "P2A2102" for d in result.diagnostics)
+        with pytest.raises(ConsumerBundleError):
+            build_consumer_bundle(text)
+        return
     fact = call(version, f"float({args})")
     assert fact["return_type"] == "float"
     assert fact["overload_id"] == "pine:function:float#canonical"
