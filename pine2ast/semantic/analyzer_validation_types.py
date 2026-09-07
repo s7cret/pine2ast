@@ -46,6 +46,17 @@ class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
         left_type = self._infer_type(expr.left)
         right_type = self._infer_type(expr.right)
         arithmetic = {"+", "-", "*", "/", "%"}
+        if expr.op in {"==", "!="} and (
+            left_type in self._enum_members or right_type in self._enum_members
+        ):
+            if left_type != right_type and not {left_type, right_type} & {"unknown", "na"}:
+                self._diag(
+                    Severity.ERROR,
+                    codes.TYPE_MISMATCH,
+                    f"Enum comparison requires the same enum type, got {left_type} and {right_type}.",
+                    expr.span,
+                )
+            return
         has_bool_operand = left_type == "bool" or right_type == "bool"
         if expr.op in arithmetic and has_bool_operand:
             if self.policy.allows_bool_to_number:

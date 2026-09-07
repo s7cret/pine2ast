@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal as TypingLiteral
+
 from typing import TYPE_CHECKING, Any
 
 from pine2ast.ast.nodes import (
@@ -103,6 +105,9 @@ class DeclarationsMixin(BaseParser):
             for a in field_pending:
                 if a.kind == AnnotationKind.FIELD:
                     field_ann_by_name.setdefault(a.name, []).append(a)
+            field_mode: TypingLiteral["varip"] | None = (
+                "varip" if self._match(TokenKind.VARIP) else None
+            )
             type_ref = self.parse_type_ref()
             field_name = self._expect(TokenKind.IDENTIFIER)
             default = None
@@ -117,6 +122,7 @@ class DeclarationsMixin(BaseParser):
                     type_ref,
                     default,
                     list(field_doc),
+                    mode=field_mode,
                 )
             )
         end = self._expect(TokenKind.DEDENT)
@@ -146,7 +152,9 @@ class DeclarationsMixin(BaseParser):
                 break
             member = self._expect(TokenKind.IDENTIFIER)
             title = None
-            if self._at(TokenKind.STRING):
+            if self._match(TokenKind.EQ):
+                title = self._expect(TokenKind.STRING).value
+            elif self._at(TokenKind.STRING):
                 title = self._advance().value
             self._consume_optional_newline()
             members.append(EnumMember(member.span, member.text, title))
@@ -280,7 +288,7 @@ class DeclarationsMixin(BaseParser):
             end = self._expect(TokenKind.GT)
             type_ref = TypeRef(name, args, join_span(start.span, end.span))
         else:
-            type_ref = TypeRef(name, args, start.span)
+            type_ref = TypeRef(name, args, join_span(start.span, self._previous().span))
         if self._match(TokenKind.LBRACKET):
             self._require_syntax("array_collections", self._previous().span)
             end = self._expect(TokenKind.RBRACKET)

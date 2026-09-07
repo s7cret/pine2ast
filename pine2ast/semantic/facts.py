@@ -345,7 +345,8 @@ def _udt_constructor_fact(
                 engine=engine,
             )
         )
-    required = [field.name for field in fields if getattr(field, "default_value", None) is None]
+    # UDT fields always have a Pine default, including an implicit na/false.
+    required: list[str] = []
     return {
         "type": type_name,
         "kind": f"{type_name}.new",
@@ -505,7 +506,12 @@ def extract_type_contract(
 
 def _method_return_type(method: MethodDeclaration, semantic_model: Any | None) -> str | None:
     symbols = _symbols(semantic_model) or {}
-    sym = symbols.get(method.name)
+    key = (
+        f"{type_ref_name(method.receiver_type)}.{method.name}"
+        if method.receiver_type
+        else method.name
+    )
+    sym = symbols.get(key) or symbols.get(method.name)
     typ = getattr(sym, "type", None)
     if typ and typ not in {"method", "function", "unknown"}:
         return typ

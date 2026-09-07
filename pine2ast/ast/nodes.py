@@ -54,6 +54,7 @@ class FieldDeclaration(ASTNode):
     type_ref: TypeRef
     default_value: Expression | None = None
     documentation: list[Annotation] = field(default_factory=list)
+    mode: TypingLiteral["varip"] | None = field(default=None, metadata={"omit_none": True})
 
 
 @dataclass(slots=True)

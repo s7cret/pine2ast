@@ -185,7 +185,7 @@ def jsonl_write(path: Path, rows: Iterable[dict[str, Any]]) -> None:
         json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
         for row in rows
     )
-    path.write_text(text, encoding="utf-8")
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 def normalize(value: Any) -> Any:
@@ -1040,6 +1040,7 @@ def main() -> int:
     (temp / "source" / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     projection_hash = digest(projection_doc)
@@ -1074,6 +1075,7 @@ def main() -> int:
         (temp / "packs" / f"pine_v{version}.pack.json").write_text(
             json.dumps(pack, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
 
     losses = compare_lossless_modern(registries[5], packs[5], version=5)
@@ -1109,6 +1111,7 @@ def main() -> int:
     (temp / "migration_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     generated = {

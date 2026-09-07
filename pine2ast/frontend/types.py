@@ -80,7 +80,7 @@ def extract_type_contract(
             positional = [arg for arg in call.arguments if arg.name is None]
             named = {arg.name for arg in call.arguments if arg.name}
             supplied = set(field_names[: len(positional)]) | (named & set(field_names))
-            required = [field.name for field in fields if field.default_value is None]
+            required: list[str] = []
             bindings = _declared_arg_bindings(fields, call.arguments, engine=engine)
             constructors.append(
                 {
@@ -114,7 +114,7 @@ def extract_type_contract(
                     if method.receiver_type is not None
                     and type_ref_name(method.receiver_type) == receiver_type
                 ),
-                candidates[0] if candidates else None,
+                None,
             )
             if user_candidate is not None or receiver_type not in {"unknown", "external", None}:
                 params = user_candidate.parameters if user_candidate is not None else []

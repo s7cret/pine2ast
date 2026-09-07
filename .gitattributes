@@ -1,0 +1,5 @@
+# Catalog provenance hashes refer to exact LF bytes on every supported host.
+catalog_migration_inputs/** text eol=lf
+catalog_source/** text eol=lf
+catalog_reports/** text eol=lf
+pine2ast/catalog_data/packs/** text eol=lf

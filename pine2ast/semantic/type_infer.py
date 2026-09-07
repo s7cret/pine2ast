@@ -77,15 +77,21 @@ def _member_field_type(
     return _symbol_type(f"{owner_type}.{expr.member}", symbols) if owner_type else None
 
 
-def _udt_constructor_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
+def _udt_constructor_return(
+    expr: CallExpr, symbols: Mapping[str, object] | None, registry: Registry | None
+) -> str | None:
     callee = expr.callee
     if (
         isinstance(callee, MemberAccessExpr)
-        and callee.member == "new"
+        and callee.member in {"new", "copy"}
         and isinstance(callee.object, Identifier)
         and _symbol_kind(callee.object.name, symbols) in {"TYPE", "type"}
     ):
         return callee.object.name
+    if isinstance(callee, MemberAccessExpr) and callee.member == "copy":
+        owner = infer_type(callee.object, symbols, registry=registry)
+        if _symbol_kind(owner, symbols) in {"TYPE", "type"}:
+            return owner
     return None
 
 
@@ -149,10 +155,13 @@ def _collection_call_return(
     return None
 
 
-def _user_method_call_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
+def _user_method_call_return(
+    expr: CallExpr, symbols: Mapping[str, object] | None, registry: Registry | None
+) -> str | None:
     if not isinstance(expr.callee, MemberAccessExpr):
         return None
-    name = expr.callee.member
+    receiver = infer_type(expr.callee.object, symbols, registry=registry)
+    name = f"{receiver}.{expr.callee.member}"
     if _symbol_kind(name, symbols) not in {"METHOD", "method"}:
         return None
     result = _symbol_type(name, symbols)
@@ -374,7 +383,7 @@ def infer_type(
         inferred = _generic_collection_constructor_return(expr)
         if inferred:
             return inferred
-        inferred = _udt_constructor_return(expr, symbols)
+        inferred = _udt_constructor_return(expr, symbols, registry)
         if inferred:
             return inferred
         inferred = _array_from_return(expr, symbols, registry)
@@ -383,7 +392,7 @@ def infer_type(
         inferred = _collection_call_return(expr, symbols, registry)
         if inferred:
             return inferred
-        inferred = _user_method_call_return(expr, symbols)
+        inferred = _user_method_call_return(expr, symbols, registry)
         if inferred:
             return inferred
         inferred = _request_return(expr, symbols, registry)

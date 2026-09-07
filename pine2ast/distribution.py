@@ -113,7 +113,9 @@ def iter_release_files(root: str | Path = ".") -> tuple[Path, ...]:
     if not root_path.exists():
         return ()
     files: list[Path] = []
-    for path in sorted(root_path.rglob("*")):
+    for path in sorted(
+        root_path.rglob("*"), key=lambda item: item.relative_to(root_path).as_posix()
+    ):
         if not path.is_file():
             continue
         if _is_excluded(path, root_path):

@@ -434,6 +434,26 @@ class SignatureResolver:
                 )
             )
 
+        if validate_types and entry.get("return_rule_id") in {
+            "return.na.source_or_numeric_promotion.v1",
+            "return.nz.argument_types.v1",
+        }:
+            known_types = {item.actual_type for item in resolved}.difference(
+                {None, "na", "unknown"}
+            )
+            valid_types = known_types <= {"int", "float"} or (
+                len(known_types) == 1 and known_types <= {"color", "bool"}
+            )
+            if not valid_types:
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "nz arguments must share a supported scalar overload",
+                        span,
+                    )
+                )
+
         defaulted_parameters: list[dict[str, Any]] = []
         for parameter_index, parameter in enumerate(active):
             parameter_name = parameter.get("name")
@@ -580,10 +600,20 @@ class SignatureResolver:
             raise RuntimeError("source argument resolution is missing its AST argument")
         issues: list[SignatureIssue] = []
         pname = param.get("name") or "<positional>"
-        if (validate_types and self.version_context.pine_version >= 6
-                and callee in {"na", "nz", "fixnan"} and resolved.actual_type == "bool"):
-            issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                f"{callee} does not accept bool arguments in Pine v6.", argument.span))
+        if (
+            validate_types
+            and self.version_context.pine_version >= 6
+            and callee in {"na", "nz", "fixnan"}
+            and resolved.actual_type == "bool"
+        ):
+            issues.append(
+                SignatureIssue(
+                    Severity.ERROR,
+                    codes.ARGUMENT_TYPE,
+                    f"{callee} does not accept bool arguments in Pine v6.",
+                    argument.span,
+                )
+            )
         expected_type = param.get("type") or param.get("value_type")
         if (
             validate_types

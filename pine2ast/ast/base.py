@@ -34,6 +34,8 @@ def _to_plain(value: Any) -> Any:
     if isinstance(value, ASTNode):
         result: dict[str, Any] = {"kind": value.kind}
         for f in fields(cast(Any, value)):
+            if f.metadata.get("omit_none") and getattr(value, f.name) is None:
+                continue
             result[f.name] = _to_plain(getattr(value, f.name))
         return result
     if isinstance(value, SourceSpan):
