@@ -1,8 +1,8 @@
 {
-  "catalog_hash": "sha256:3c52a48e74dbb90e8f47d6fa142d43e8c414b03b0caca05d8ea68688bc351069",
-  "content_hash": "sha256:7c5d2dd75831d59225dc92966dab9f90bb8cfac95906af2dc7ae79cdbc23f7be",
+  "catalog_hash": "sha256:07bdfa58416067ed2c66f5a2273bdc4f797c0f62ebb5bdcde8131ea97a9000e9",
+  "content_hash": "sha256:62424dee4f9a466ff76809bb8b327a845d68af1c9ceb31b1d9db59b31f51d88b",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
-  "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
+  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 1,
   "provenance_sources": [
     {
@@ -29,6 +29,22 @@
       ],
       "id": "tv.v3.expressions",
       "url": "https://www.tradingview.com/pine-script-docs/v3/language/expressions-declarations-and-statements/"
+    },
+    {
+      "applies_to": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "assertions": [
+        "explicit_float_callable_introduced_in_v4",
+        "historical_float_input_type_constant_is_not_a_cast"
+      ],
+      "id": "tv.v4.explicit_casts",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
     }
   ],
   "rules": {
@@ -3187,6 +3203,7 @@
         "symbol_id": "pine:function:fixnan"
       },
       "float": {
+        "added_in": 4,
         "docs_url": null,
         "kind": "builtin",
         "name": "float",
@@ -9580,7 +9597,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
+  "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
   "spec_snapshot_ref": "tradingview-pine-v1-historical-static-snapshot-2026-08-27",
   "status": "HISTORICAL_STATIC_SNAPSHOT"
 }

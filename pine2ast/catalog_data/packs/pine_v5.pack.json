@@ -1,8 +1,8 @@
 {
-  "catalog_hash": "sha256:b15641bbda538008bf2b777971f33e89fd641666e7da1fd0691ce691ace43b90",
-  "content_hash": "sha256:e381f025bb04e3973d09a46891e5cca0e840bad8fab82f2685e6431fb0aa89cb",
+  "catalog_hash": "sha256:0f6478787126f7f7c525f3dbf53ac8bb8a382a7ea2880f582c7e6d3a98696ee9",
+  "content_hash": "sha256:4b46c0d7c202a4094521259fa5b8d6235bdf14585b9effd60e17d90828efb950",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
-  "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
+  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 5,
   "provenance_sources": [
     {
@@ -20,6 +20,22 @@
       ],
       "id": "tv.migration.v5",
       "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+    },
+    {
+      "applies_to": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "assertions": [
+        "explicit_float_callable_introduced_in_v4",
+        "historical_float_input_type_constant_is_not_a_cast"
+      ],
+      "id": "tv.v4.explicit_casts",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
     },
     {
       "assertions": [
@@ -4799,6 +4815,7 @@
         "symbol_id": "pine:function:fixnan"
       },
       "float": {
+        "added_in": 4,
         "docs_url": null,
         "kind": "builtin",
         "name": "float",
@@ -20227,7 +20244,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
+  "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
   "spec_snapshot_ref": "tradingview-pine-v5-reference-snapshot-2026-08-26",
   "status": "STATIC_COMPLETE"
 }

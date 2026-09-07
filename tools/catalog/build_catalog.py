@@ -130,6 +130,12 @@ SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
 def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
     """Complete callable qualifier metadata before catalog sealing."""
 
+    # Explicit casting functions were introduced in Pine v4. Keep the earlier
+    # signature rows for version/coverage audits, but do not backport the call.
+    # This metadata belongs to the function, never the historical input constant.
+    if name == "float":
+        definition["added_in"] = 4
+
     # Audited source correction; RC5 input bytes remain immutable. See
     # docs/STAGE2_SCALAR_SIGNATURE_REVIEW.md for independent/versioned sources.
     if name in {"math.abs", "math.ceil", "math.floor", "math.exp", "math.round", "math.sqrt"}:

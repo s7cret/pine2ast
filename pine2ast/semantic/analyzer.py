@@ -43,6 +43,7 @@ from pine2ast.versioning import PineVersionContext
 from pine2ast.policy import SemanticPolicy
 from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.scopes import Scope, ScopeKind
+from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.semantic.symbols import Symbol, SymbolKind
 from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
 from pine2ast.semantic.passes import (
@@ -305,7 +306,13 @@ class SemanticAnalyzer(
                     meta.get("qualifier", "const" if section == "constants" else None),
                     allow_existing=True,
                 )
-        for name in self.registry.get("functions", {}):
+        signatures = SignatureResolver(version_context=self.version_context)
+        for name, entry in self.registry.get("functions", {}).items():
+            if not signatures.candidate_is_active(entry) and not any(
+                signatures.candidate_is_active(candidate)
+                for candidate in signatures.candidate_entries(entry)
+            ):
+                continue
             root = name.split(".", 1)[0]
             self._define(root, SymbolKind.BUILTIN, zero, None, None, allow_existing=True)
         # Register builtin methods from the methods section

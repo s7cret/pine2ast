@@ -120,6 +120,22 @@
       ],
       "id": "tv.v4.structure",
       "url": "https://www.tradingview.com/pine-script-docs/v4/language/structure-of-the-script/"
+    },
+    {
+      "applies_to": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "assertions": [
+        "explicit_float_callable_introduced_in_v4",
+        "historical_float_input_type_constant_is_not_a_cast"
+      ],
+      "id": "tv.v4.explicit_casts",
+      "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
     }
   ],
   "v1": {

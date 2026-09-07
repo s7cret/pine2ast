@@ -208,7 +208,7 @@
 {"name":"dayofweek","op":"ADD","section":"functions","semantic_id":"sha256:27144029f10b52eaf323683bbf2b36f9ab436fd2700fecfdc88f7d5ed87046d0","symbol_id":"pine:function:dayofweek"}
 {"name":"fill","op":"ADD","section":"functions","semantic_id":"sha256:dec5a971f457313eb2f8703836b51de9ed313315827e90ba1117ebe9ece5b01f","symbol_id":"pine:function:fill"}
 {"name":"fixnan","op":"ADD","section":"functions","semantic_id":"sha256:a7e8721123cdb159010eed91f88f42875832f1c34dc1eabe6b7f0112e8d6799d","symbol_id":"pine:function:fixnan"}
-{"name":"float","op":"ADD","section":"functions","semantic_id":"sha256:23a4f938dab6d7ef0504f80dd9ff3f68129b1b28a10e3a58c26fbb75d0ffad27","symbol_id":"pine:function:float"}
+{"name":"float","op":"ADD","section":"functions","semantic_id":"sha256:173db87624838a05236c26f9376f2ad926cfe7c55cab89a0e247208a6ca8c810","symbol_id":"pine:function:float"}
 {"name":"hline","op":"ADD","section":"functions","semantic_id":"sha256:c7a0e3c90a494813ed0e16c9609474ff5e8d1887cc9d204bf66cd3aaf05248f3","symbol_id":"pine:function:hline"}
 {"name":"hour","op":"ADD","section":"functions","semantic_id":"sha256:ceb1723d240005f6c84908a1cc65156340fb3bedb6eebe652a40d5597c31b323","symbol_id":"pine:function:hour"}
 {"name":"study","op":"ADD","section":"functions","semantic_id":"sha256:948d01d56f258220d9968bcfad75e030fbcc925d7eb5b17b744090ee32d6844d","symbol_id":"pine:function:indicator"}
