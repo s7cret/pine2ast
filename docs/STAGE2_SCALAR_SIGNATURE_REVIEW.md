@@ -82,3 +82,71 @@ Two old test-input assumptions must be reviewed separately:
 used modern named NZ parameters in v1-v4. Their input spelling now follows the
 official migration table; expected types and collected node IDs are unchanged.
 The latter now asserts successful parsing before inspecting type evidence.
+
+## Reviewed float availability correction, 2026-09-08
+
+This separate candidate starts from
+`61c503259744d1faa88959809776f4512d48c516` on
+`stage2/scalar-oracles-20260908`. The preceding results describe the earlier
+signature correction; they did not independently establish pre-v4 cast support.
+
+The [official v4 type-system manual](https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting)
+explicitly says casting functions were introduced in Pine v4 and lists `float`.
+The [June 2019 release notes](https://www.tradingview.com/pine-script-docs/v4/release-notes/#june-2019)
+and [official v4 launch announcement of June 25, 2019](https://www.tradingview.com/blog/en/introducing-pine-script-4-12626/)
+corroborate this introduction. Sources were reviewed on 2026-09-08. The local
+baseline's admission of `float(na)` in v1-v3 was implementation behavior, not a
+historical oracle. No current TradingView-server backport has been verified.
+
+The retained `pine:function:float#canonical` row now has `added_in: 4` in all
+six catalog packs. The exact parameter remains required numeric/NA `x`, returning
+float. `SignatureResolver.candidate_entries()` still exposes unavailable rows;
+the public `candidate_is_active()` checks their version interval. Resolution
+rejects an unavailable candidate with `P2A2102` and cannot publish a selected
+overload for that call. Version intervals participate in candidate deduplication
+so same-shape, disjoint-version signatures remain distinct.
+
+The scope registrar does not replace the historical `float` input-type constant
+with an unavailable function. `input(defval=1.5, type=float)` therefore retains
+its const string argument in v1-v3. Decimal/exponential literals, implicit numeric
+promotion, user variables named `float`, and user parameters named `float` remain
+admitted. This correction does not change the existing policy that rejects a
+user function with the same name as a builtin constant. Other explicit casts
+are outside this bounded correction.
+
+All section memberships, symbol IDs and overload IDs are retained. Comparing
+each generated pack with the baseline gives exactly one changed definition:
+`functions.float`, with only `added_in: 4` added. Provenance and content hashes
+are regenerated. Frozen RC5 inputs are unchanged. An audit must check candidate
+availability before claiming a retained signature is executable; inclusion in
+the denominator does not assert support.
+
+Review splits:
+
+- Functional: catalog generator, signature version filtering, builtin scope registration.
+- Provenance/generated: historical source record and deterministic catalog outputs.
+- New tests: 71 cases in `tests/test_float_version_authority.py`, including
+  positive/negative versions, implicit v1, const input type, literals/promotion,
+  user names, exact numeric signature and isolated versioned overload selection.
+- Existing expectation correction: all 372 nodeids in
+  `tests/test_scalar_signature_contract.py` are retained. Exactly 12 pre-v4
+  positive cast cases now require the documented version rejection. The v4-v6
+  positive checks and all 18 existing negative cast cases keep their assertions.
+
+The initial 63 new tests produced 22 failures and 41 passes before the fix.
+After the correction and eight additional resolver cases, the combined 443
+tests passed on both Python 3.11 and 3.13. Ruff, Black and catalog `--check`
+passed; migration losses remain zero.
+Targeted mypy passes for both changed semantic modules. The catalog generator
+reports six existing mypy errors; the exact baseline source reproduces all six.
+
+The full Windows run is not green. Both interpreters reported 1165 passed,
+10 failed and one collection error when continuing after collection errors.
+The failures are four symlink-privilege cases, two no-follow directory/CLI cases,
+one executable-mode case, one release-gate subprocess-directory case, and two
+existing source-record hash checks caused by CRLF checkout bytes (all eight
+records match the expected hash after read-only LF normalization). Collection
+also fails on the POSIX-only `resource` module. These limitations are retained
+without stubs, skips or assertion changes; Linux remains required for the full
+gate. This report does not claim completed Stage 2 acceptance or behavioral edge
+coverage from a signature-availability correction.
