@@ -47,7 +47,7 @@ from pine2ast.semantic.fact_model import (
     TypeFact,
 )
 from pine2ast.semantic.collection_signatures import resolve_collection_call
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
+from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call, generic_constructor_entry
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.policy import SemanticPolicy
@@ -629,6 +629,10 @@ class SemanticFactBuilder:
                 entry = self.catalog.get(section, {}).get(name)
                 if isinstance(entry, Mapping) and entry.get("symbol_id"):
                     return str(entry["symbol_id"])
+            if isinstance(node, MemberAccessExpr):
+                template = generic_constructor_entry(name, self.catalog)
+                if template is not None and template.get("symbol_id"):
+                    return str(template["symbol_id"])
             symbol = self.model.symbols.get(name)
             if symbol is not None:
                 return f"user:{str(getattr(symbol.kind, 'value', symbol.kind)).lower()}:{name}:scope:{symbol.scope_id}"

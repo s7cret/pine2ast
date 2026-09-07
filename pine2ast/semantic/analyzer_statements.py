@@ -9,6 +9,7 @@ from pine2ast.ast.nodes import (
     EnumDeclaration,
     FunctionDeclaration,
     IfStructure,
+    Identifier,
     ImportDeclaration,
     Literal,
     MemberAccessExpr,
@@ -217,6 +218,10 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 f"Reassignment to undeclared variable {target_name}.",
                 node.span,
             )
+        elif (self.function_depth > 0 and isinstance(node.target, Identifier)
+              and self._scope_kind(sym.scope_id) == ScopeKind.GLOBAL):
+            self._diag(Severity.ERROR, codes.TYPE_MISMATCH,
+                       f"Cannot reassign global variable {sym.name} inside a function.", node.target.span)
         elif sym.qualifier == "const":
             self._diag(
                 Severity.ERROR,

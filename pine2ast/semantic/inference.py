@@ -98,6 +98,16 @@ def call_lookup_name(callee: Expression, registry: Mapping[str, Any] | None = No
     return raw
 
 
+def generic_constructor_entry(name: str, registry: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    """Resolve a structural generic base only through the active version catalog."""
+    functions = registry.get("functions", {})
+    for template in _GENERIC_REGISTRY_PLACEHOLDERS.get(name, ()):
+        entry = functions.get(template)
+        if isinstance(entry, Mapping):
+            return entry
+    return None
+
+
 def registry_entry_for_call(
     callee: Expression,
     registry: Mapping[str, Any],
@@ -166,6 +176,8 @@ class PineInferenceEngine:
             symbol_type = self._symbol_type(callee_name(expr))
             if symbol_type:
                 return symbol_type
+            if generic_constructor_entry(callee_name(expr), self.registry) is not None:
+                return "function"
         if isinstance(expr, BinaryExpr):
             specialized = self._binary_return_type(expr)
             if specialized:
