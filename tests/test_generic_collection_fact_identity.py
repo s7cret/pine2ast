@@ -64,6 +64,9 @@ def test_matrix_for_in_produces_array_type_not_scalar(count):
 )
 def test_nz_result_follows_the_selected_numeric_overload(version, args, expected):
     declaration = "indicator" if version >= 5 else "study"
+    if version <= 4:
+        # The v5 migration renamed nz(x, y) to nz(source, replacement).
+        args = args.replace("source=", "x=").replace("replacement=", "y=")
     source = f'//@version={version}\n{declaration}("nz")\nx=nz({args})\n'
     call = next(
         c for c in semantic_facts_payload(parse_source(source))["calls"] if c["callee"] == "nz"
