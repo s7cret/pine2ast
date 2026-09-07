@@ -1,0 +1,30 @@
+name: Preserve exact local intrabar collection commit
+'on':
+  push:
+    branches: ['ops/publish-intrabar-20260907']
+permissions:
+  contents: write
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Publish original source and archive temporary upload ref
+        env:
+          SOURCE_REPOSITORY: s7cret/pine2ast
+          SOURCE_HEAD: 5adfc88952057fd255e6423219536d1f47c0b81d
+          SOURCE_TREE: 2d8bd6b738b9bbe6a4d663efe855753b679dc943
+          SOURCE_BASE: b5ea24f143100fd7af166e654536a83bab973b06
+          SOURCE_PARTS: '13'
+          SOURCE_BUNDLE_SHA256: ccbd7f464035106bff35fdf69c232c7ca2e7764a2f3daa988b72c27fa8264519
+        run: python .github/intrabar-upload/publish.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: intrabar-source-publication-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication/
+          if-no-files-found: error
+          retention-days: 30
