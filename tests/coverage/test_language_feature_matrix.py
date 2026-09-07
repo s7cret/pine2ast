@@ -85,6 +85,7 @@ method move(Point this, float delta) =>
 p0 = Point.new()
 p1 = Point.new("bad", unknown = 1)
 p2 = Point.new(1.0, x = 2.0)
+p3 = Point.new(1.0, true, 3.0)
 a = p2.unknown()
 b = p2.x()
 c = p2.move("bad", extra = 1)
