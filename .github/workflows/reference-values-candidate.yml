@@ -1,0 +1,31 @@
+name: Materialize exact reference-value candidate for joint verification
+'on':
+  push:
+    branches: ['ops/stage2-reference-values-20260907']
+permissions:
+  contents: write
+concurrency:
+  group: stage2-reference-materialize
+  cancel-in-progress: false
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Reconstruct source and publish only the candidate ref
+        run: |
+          cp .github/reference-values/restore.py "$RUNNER_TEMP/restore.py"
+          python "$RUNNER_TEMP/restore.py" .github/reference-values "$RUNNER_TEMP/candidate-evidence"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reference-source-${{ github.run_id }}
+          path: ${{ runner.temp }}/candidate-evidence/
+          if-no-files-found: error
+          retention-days: 30
