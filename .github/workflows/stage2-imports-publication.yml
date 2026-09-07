@@ -1,0 +1,84 @@
+name: Verify and publish archived locked library imports
+'on':
+  push:
+    branches: ['ops/stage2-imports-20260907']
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Restore unchanged archived source history
+        run: |
+          mkdir -p "$RUNNER_TEMP/evidence"
+          python - <<'PY'
+          import base64, hashlib, os, pathlib, subprocess
+          folder=pathlib.Path('.github/stage2-imports')
+          data=base64.b64decode(''.join((folder/f'{i:02}.b64').read_text() for i in range(1,8)),validate=True)
+          assert hashlib.sha256(data).hexdigest()=='6b7ccada42b8a541dc0d0d5f84618e9c470f6a4ed4c41574d9e9447ce9914edc', 'bundle checksum mismatch'
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'evidence/source.bundle'; p.write_bytes(data)
+          subprocess.run(['git','bundle','verify',str(p)],check=True)
+          subprocess.run(['git','fetch',str(p),'refs/heads/stage2/locked-library-imports-20260907'],check=True)
+          subprocess.run(['git','checkout','--detach','5f88741c6a642675d6852d507a5451376f284e81'],check=True)
+          assert subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()=='18f1d2f8cf49a179b86ecb134a11122ee28669f7'
+          PY
+      - name: Install clean reviewed source and run the full suite
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+        run: |
+          python -m pip install setuptools==84.0.0 wheel==0.48.0 build==1.6.0
+          mkdir -p "$RUNNER_TEMP/source"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/source"
+          python -m pip install "$RUNNER_TEMP/source[dev]"
+          python -m pytest -q --junitxml="$RUNNER_TEMP/evidence/pine2ast.xml"
+          python - <<'PY'
+          import os,xml.etree.ElementTree as ET
+          r=ET.parse(os.environ['RUNNER_TEMP']+'/evidence/pine2ast.xml')
+          cases=list(r.iter('testcase'))
+          assert len(cases)==515
+          assert not any(c.find(x) is not None for c in cases for x in ('failure','error','skipped'))
+          PY
+          python -m compileall -q pine2ast
+          python -m build --no-isolation --outdir "$RUNNER_TEMP/evidence/dist" "$RUNNER_TEMP/source"
+          git rev-parse HEAD > "$RUNNER_TEMP/evidence/source-head.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: locked-imports-${{ matrix.python }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/evidence/
+          if-no-files-found: error
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: locked-imports-3.13-${{ github.run_id }}
+          path: evidence
+      - name: Fast-forward only the checked RC6 source; preserve staging history
+        run: |
+          git fetch evidence/source.bundle refs/heads/stage2/locked-library-imports-20260907
+          actual=$(git ls-remote origin refs/heads/release/5.0.0rc6 | cut -f1)
+          test "$actual" = e84931f80fb9e9077ede3d71bce37c1fb22b601a || test "$actual" = 5f88741c6a642675d6852d507a5451376f284e81
+          git push origin 5f88741c6a642675d6852d507a5451376f284e81:refs/heads/release/5.0.0rc6
+          git push --atomic --force-with-lease=refs/heads/ops/stage2-imports-20260907:${{ github.sha }} --force-with-lease=refs/tags/ops/stage2-imports-20260907: origin ${{ github.sha }}:refs/tags/ops/stage2-imports-20260907 :refs/heads/ops/stage2-imports-20260907
