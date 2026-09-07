@@ -1,10 +1,10 @@
 {
-  "content_hash": "sha256:5415e4a5d0b0d8ac4fd75c4ec045c189235d34bf15c122c05741490277dd1627",
+  "content_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
   "input_identity": {
     "historical_projection": {
-      "byte_length": 7255,
+      "byte_length": 7642,
       "path": "catalog_source/historical_projection.json",
-      "sha256": "sha256:2250cadb51ced68c1596f8a672839aa42450b58992b8a8f87d39a784ef4c689c"
+      "sha256": "sha256:ac51737621e7a11c083fb415ec342e920b6659d941afba0c8fe6dabaa98dddb3"
     },
     "rc5_v5": {
       "byte_length": 678438,

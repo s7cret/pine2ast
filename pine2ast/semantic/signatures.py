@@ -129,6 +129,21 @@ class SignatureResolver:
                 type_resolver=type_resolver,
                 qualifier_resolver=qualifier_resolver,
             )
+            if not self.candidate_is_active(candidate):
+                resolution = replace(
+                    resolution,
+                    issues=resolution.issues
+                    + (
+                        SignatureIssue(
+                            Severity.ERROR,
+                            codes.VERSION_CALL_UNAVAILABLE,
+                            f"Call {callee} is not available in Pine "
+                            f"v{self.version_context.pine_version}"
+                            f"{self._version_note(candidate)}.",
+                            call_span,
+                        ),
+                    ),
+                )
             scored.append((self._resolution_score(resolution), resolution))
         if not scored:
             raise ValueError(f"catalog entry for {callee} has no signature candidates")
@@ -211,6 +226,8 @@ class SignatureResolver:
                     "return_qualifier": candidate.get("return_qualifier"),
                     "return_rule_id": candidate.get("return_rule_id"),
                     "return_qualifier_rule_id": candidate.get("return_qualifier_rule_id"),
+                    "added_in": candidate.get("added_in"),
+                    "removed_in": candidate.get("removed_in"),
                 },
                 ensure_ascii=False,
                 sort_keys=True,
@@ -235,6 +252,15 @@ class SignatureResolver:
         return tuple(
             json.loads(json.dumps(candidate)) for candidate in self._candidate_entries(entry)
         )
+
+    def candidate_is_active(self, candidate: Mapping[str, Any]) -> bool:
+        """Check a retained candidate's documented version interval.
+
+        Candidate inventory includes unavailable rows so versioned denominators
+        and stable symbol/overload identities survive historical corrections.
+        Availability alone does not establish argument validity or runtime support.
+        """
+        return self._param_active(candidate)
 
     def _bind_entry(
         self,
@@ -755,7 +781,7 @@ class SignatureResolver:
                 costs.append(2)
         return min(costs) if costs else 16
 
-    def _param_active(self, param: dict[str, Any]) -> bool:
+    def _param_active(self, param: Mapping[str, Any]) -> bool:
         removed_in = param.get("removed_in")
         if removed_in and self.version_context.pine_version >= int(removed_in):
             return False
