@@ -244,6 +244,19 @@ class PineInferenceEngine:
         if _type_is_reference_like(typ):
             return "series"
         if isinstance(expr, CallExpr):
+            _, entry = registry_entry_for_call(expr.callee, self.registry)
+            if entry and entry.get("return_qualifier_rule_id") in {
+                "qualifier.scalar.argument_join.v1",
+                "qualifier.scalar.argument_join_simple_floor.v1",
+            }:
+                order = {"const": 0, "input": 1, "simple": 2, "series": 3}
+                qualifiers = [self.infer_qualifier(a.value) for a in expr.arguments]
+                if (
+                    entry["return_qualifier_rule_id"]
+                    == "qualifier.scalar.argument_join_simple_floor.v1"
+                ):
+                    qualifiers.append("simple")
+                return max(qualifiers, key=lambda q: order.get(q, 3), default="series")
             ret = self._registry_return(expr)
             if ret and _type_is_reference_like(ret):
                 return "series"

@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:5734eb653a4f5ed49a4a36948b5c25060467dc65d061ad286822c216a97161e1",
-  "content_hash": "sha256:7c9a97da1356c848d193c487cb4895c2872b5e12cbcc0d358dcc4407847ccfa2",
+  "catalog_hash": "sha256:3c52a48e74dbb90e8f47d6fa142d43e8c414b03b0caca05d8ea68688bc351069",
+  "content_hash": "sha256:7c5d2dd75831d59225dc92966dab9f90bb8cfac95906af2dc7ae79cdbc23f7be",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 1,
@@ -1993,9 +1993,24 @@
       "abs": {
         "kind": "builtin",
         "name": "abs",
+        "overloads": [
+          {
+            "overload_id": "pine:function:math.abs#overload:0",
+            "parameters": [
+              {
+                "name": "x",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "int"
+              }
+            ],
+            "return_qualifier": "series",
+            "returns": "int"
+          }
+        ],
         "parameters": [
           {
-            "name": "value",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "float"
@@ -2003,6 +2018,8 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
+        "return_rule_id": "return.scalar.numeric_identity.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:math.abs"
@@ -2366,7 +2383,7 @@
         "name": "ceil",
         "parameters": [
           {
-            "name": "value",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "float"
@@ -2374,7 +2391,8 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
-        "returns": "float",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
+        "returns": "int",
         "scope": "any",
         "symbol_id": "pine:function:math.ceil"
       },
@@ -3001,15 +3019,16 @@
         "name": "exp",
         "parameters": [
           {
-            "name": "source",
+            "name": "x",
             "qualifier_max": "series",
-            "required": false,
-            "type": "series<any>"
+            "required": true,
+            "type": "float"
           }
         ],
         "pine_version": "1",
         "return_qualifier": "series",
-        "returns": "series<float>",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
+        "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:math.exp"
       },
@@ -3171,7 +3190,14 @@
         "docs_url": null,
         "kind": "builtin",
         "name": "float",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "x",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "float"
+          }
+        ],
         "pine_version": "1",
         "return_qualifier": "series",
         "returns": "float",
@@ -3183,7 +3209,7 @@
         "name": "floor",
         "parameters": [
           {
-            "name": "value",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "float"
@@ -3191,7 +3217,8 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
-        "returns": "float",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
+        "returns": "int",
         "scope": "any",
         "symbol_id": "pine:function:math.floor"
       },
@@ -3923,6 +3950,7 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join_simple_floor.v1",
         "returns": "bool",
         "scope": "any",
         "symbol_id": "pine:function:na"
@@ -3933,13 +3961,13 @@
         "name": "nz",
         "parameters": [
           {
-            "name": "source",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "any"
           },
           {
-            "name": "replacement",
+            "name": "y",
             "qualifier_max": "series",
             "required": false,
             "type": "any"
@@ -3947,6 +3975,7 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join_simple_floor.v1",
         "return_rule_id": "return.na.source_or_numeric_promotion.v1",
         "returns": "float",
         "scope": "any",
@@ -4771,6 +4800,7 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:math.pow"
@@ -4930,21 +4960,17 @@
         "name": "round",
         "parameters": [
           {
-            "name": "value",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "float"
-          },
-          {
-            "name": "precision",
-            "qualifier_max": "series",
-            "required": false,
-            "type": "int"
           }
         ],
         "pine_version": "1",
         "return_qualifier": "series",
-        "returns": "float",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
+        "return_rule_id": "return.round.argument_arity.v1",
+        "returns": "int",
         "scope": "any",
         "symbol_id": "pine:function:math.round"
       },
@@ -4973,20 +4999,21 @@
             "overload_id": "pine:function:ta.rsi#overload:0",
             "parameters": [
               {
-                "name": "source",
+                "name": "x",
                 "qualifier_max": "series",
                 "required": true,
                 "type": "float"
               },
               {
-                "name": "length",
-                "qualifier_max": "series",
+                "name": "y",
+                "qualifier_max": "simple",
                 "required": true,
                 "type": "int"
               }
             ],
             "return_qualifier": "series",
-            "returns": "series<float>"
+            "returns": "series<float>",
+            "stateful": true
           },
           {
             "historical_semantics": "100 - 100 / (1 + x / y)",
@@ -5006,7 +5033,8 @@
               }
             ],
             "return_qualifier": "series",
-            "returns": "series<float>"
+            "returns": "series<float>",
+            "stateful": false
           }
         ],
         "pine_version": "1",
@@ -5187,7 +5215,7 @@
         "name": "sqrt",
         "parameters": [
           {
-            "name": "value",
+            "name": "x",
             "qualifier_max": "series",
             "required": true,
             "type": "float"
@@ -5195,6 +5223,7 @@
         ],
         "pine_version": "1",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.scalar.argument_join.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:math.sqrt"
