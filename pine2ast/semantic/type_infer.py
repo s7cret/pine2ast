@@ -283,6 +283,15 @@ def _parametric_return_rule(
         return "line"
     if rule == "return.reference.linefill.v1":
         return "linefill"
+    if rule == "return.round.argument_arity.v1":
+        return (
+            "float"
+            if len(expr.arguments) > 1 or any(a.name == "precision" for a in expr.arguments)
+            else "int"
+        )
+    if rule == "return.scalar.numeric_identity.v1" and expr.arguments:
+        actual = infer_type(expr.arguments[0].value, symbols, registry=registry)
+        return "int" if actual == "int" else "float"
     if rule in {"return.input.defval_type.v1", "return.input.enum_type.v1"}:
         return (
             infer_type(expr.arguments[0].value, symbols, registry=registry)
@@ -295,15 +304,22 @@ def _parametric_return_rule(
         # float. Existing validation still owns illegal/version-specific inputs.
         bound = {}
         for position, argument in enumerate(expr.arguments):
-            name = argument.name or ("source" if position == 0 else "replacement")
-            bound[name] = infer_type(argument.value, symbols, registry=registry)
+            parameters = entry.get("parameters") or []
+            positional_name = (
+                parameters[position].get("name") if position < len(parameters) else None
+            )
+            parameter_name = argument.name or positional_name
+            if not isinstance(parameter_name, str):
+                continue
+            parameter_name = {"x": "source", "y": "replacement"}.get(parameter_name, parameter_name)
+            bound[parameter_name] = infer_type(argument.value, symbols, registry=registry)
         source = bound.get("source", "unknown")
         replacement = bound.get("replacement", source)
         known = {source, replacement}.difference({"na", "unknown"})
         if known and known.issubset({"int", "float"}):
             return "float" if "float" in known else "int"
-        if source in {"bool", "color"} and replacement in {source, "na"}:
-            return source
+        if len(known) == 1 and known.issubset({"bool", "color"}):
+            return next(iter(known))
         return None
     if rule == "return.array.explicit_element_type.v1":
         raw = callee_name(expr.callee)

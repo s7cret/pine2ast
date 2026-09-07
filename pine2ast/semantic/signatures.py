@@ -192,7 +192,9 @@ class SignatureResolver:
         canonical = dict(base)
         canonical["__overload_index"] = None
         canonical["__overload_id"] = f"{symbol_id}#canonical"
-        candidates.append(canonical)
+        # An overload-only group has no implicit zero-argument signature.
+        if "parameters" in base or not candidates:
+            candidates.append(canonical)
 
         # Registry sources may repeat the canonical signature as an overload.
         # Deduplicate by complete callable shape before ambiguity analysis.
@@ -206,6 +208,9 @@ class SignatureResolver:
                     "parameters": candidate.get("parameters") or [],
                     "returns": candidate.get("returns"),
                     "receiver_type": candidate.get("receiver_type"),
+                    "return_qualifier": candidate.get("return_qualifier"),
+                    "return_rule_id": candidate.get("return_rule_id"),
+                    "return_qualifier_rule_id": candidate.get("return_qualifier_rule_id"),
                 },
                 ensure_ascii=False,
                 sort_keys=True,
@@ -216,6 +221,20 @@ class SignatureResolver:
             seen.add(shape)
             unique.append(candidate)
         return unique
+
+    def candidate_entries(self, entry: dict[str, Any]) -> tuple[dict[str, Any], ...]:
+        """Return detached, deduplicated callable contracts for audit consumers.
+
+        Parameter type, qualifier, default and arity metadata participate in the
+        shape identity, as do receiver and return rules. Identities are retained;
+        this projection neither invents aliases nor claims runtime availability.
+        Mutating a returned row cannot change the source catalog.
+        """
+        import json
+
+        return tuple(
+            json.loads(json.dumps(candidate)) for candidate in self._candidate_entries(entry)
+        )
 
     def _bind_entry(
         self,

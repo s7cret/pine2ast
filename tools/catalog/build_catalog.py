@@ -86,6 +86,8 @@ RETURN_RULE_IDS = {
     "map.remove": "return.map.value.v1",
     "matrix.get": "return.matrix.element.v1",
     "nz": "return.na.source_or_numeric_promotion.v1",
+    "math.abs": "return.scalar.numeric_identity.v1",
+    "math.round": "return.round.argument_arity.v1",
 }
 
 # Pine permits a ``series`` value at ordinary expression parameters unless the
@@ -104,6 +106,7 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
     },
     "ta.ema": {"length": "simple"},
     "ta.rma": {"length": "simple"},
+    "ta.rsi": {"length": "simple"},
     "ta.supertrend": {"atrPeriod": "simple"},
     "ta.dmi": {"diLength": "simple", "adxSmoothing": "simple"},
 }
@@ -120,14 +123,45 @@ SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
         {"name": "adxSmoothing", "required": True, "type": "int"},
     ],
     "int": [{"name": "value", "required": True, "type": "any"}],
+    "float": [{"name": "x", "required": True, "type": "float"}],
 }
 
 
 def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
     """Complete callable qualifier metadata before catalog sealing."""
 
+    # Audited source correction; RC5 input bytes remain immutable. See
+    # docs/STAGE2_SCALAR_SIGNATURE_REVIEW.md for independent/versioned sources.
+    if name in {"math.abs", "math.ceil", "math.floor", "math.exp", "math.round", "math.sqrt"}:
+        number = {"name": "number", "required": True, "type": "float"}
+        definition["parameters"] = [number]
+        definition["returns"] = (
+            "int" if name in {"math.ceil", "math.floor", "math.round"} else "float"
+        )
+        definition["return_qualifier_rule_id"] = "qualifier.scalar.argument_join.v1"
+        if name == "math.abs":
+            definition["overloads"] = [
+                {"parameters": [{**number, "type": "int"}], "returns": "int"}
+            ]
+            definition["return_rule_id"] = RETURN_RULE_IDS[name]
+        elif name == "math.round":
+            definition["overloads"] = [
+                {
+                    "parameters": [
+                        number.copy(),
+                        {"name": "precision", "required": True, "type": "int"},
+                    ],
+                    "returns": "float",
+                }
+            ]
+            definition["return_rule_id"] = RETURN_RULE_IDS[name]
+
     if not definition.get("parameters") and name in SIGNATURE_OVERRIDES:
         definition["parameters"] = copy.deepcopy(SIGNATURE_OVERRIDES[name])
+    if name in {"na", "nz"}:
+        definition["return_qualifier_rule_id"] = "qualifier.scalar.argument_join_simple_floor.v1"
+    if name == "math.pow":
+        definition["return_qualifier_rule_id"] = "qualifier.scalar.argument_join.v1"
     candidates = [definition]
     overloads = definition.get("overloads")
     if isinstance(overloads, list):
@@ -145,6 +179,8 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
             }.get(name)
             if risk_parameter is not None and parameter.get("name") == risk_parameter:
                 parameter["qualifier_max"] = "simple"
+            elif parameter.get("name") in overrides:
+                parameter["qualifier_max"] = overrides[str(parameter["name"])]
             else:
                 parameter.setdefault(
                     "qualifier_max", overrides.get(str(parameter.get("name")), "series")
@@ -476,6 +512,17 @@ def project_v4(
                 definition = legacy_security_definition(definition, version=4)
             elif name in {"time", "time_close"}:
                 definition = rename_parameters(definition, {"timeframe": "resolution"})
+            elif name in {
+                "math.abs",
+                "math.ceil",
+                "math.floor",
+                "math.exp",
+                "math.round",
+                "math.sqrt",
+            }:
+                definition = rename_parameters(definition, {"number": "x"})
+            elif name == "nz":
+                definition = rename_parameters(definition, {"source": "x", "replacement": "y"})
             add_active(target, clone_record(item, name=new_name, definition=definition))
             continue
         if section in {"variables", "constants"}:
@@ -591,9 +638,13 @@ def project_v4(
     if rsi is not None:
         definition = copy.deepcopy(rsi["definition"])
         primary = {
-            "parameters": copy.deepcopy(definition.get("parameters", [])),
+            "parameters": [
+                {"name": "x", "required": True, "type": "float", "qualifier_max": "series"},
+                {"name": "y", "required": True, "type": "int", "qualifier_max": "simple"},
+            ],
             "returns": definition.get("returns", "series<float>"),
             "overload_id": f"{rsi['symbol_id']}#overload:0",
+            "stateful": True,
         }
         legacy = {
             "parameters": [
@@ -603,6 +654,7 @@ def project_v4(
             "returns": "series<float>",
             "overload_id": f"{rsi['symbol_id']}#overload:1",
             "historical_semantics": "100 - 100 / (1 + x / y)",
+            "stateful": False,
         }
         definition["overloads"] = [primary, legacy]
         definition.pop("parameters", None)
@@ -633,9 +685,13 @@ def project_v3(
             if name.startswith(function_remove):
                 continue
             new_name = function_exact.get(name, name)
+            definition = definition_with_name(item, new_name)
+            if name == "round":
+                # The v3 reference has only round(x); precision was added in v4.
+                definition.pop("overloads", None)
             add_active(
                 target,
-                clone_record(item, name=new_name, definition=definition_with_name(item, new_name)),
+                clone_record(item, name=new_name, definition=definition),
             )
             continue
         if section in {"variables", "constants"}:

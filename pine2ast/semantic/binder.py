@@ -314,7 +314,7 @@ class SemanticFactBuilder:
             if inferred_return not in {"unknown", "any"}
             else (resolution.return_type or entry.get("returns") or "unknown")
         )
-        stateful = self._is_intrinsically_stateful(lookup_name, entry)
+        stateful = self._is_intrinsically_stateful(lookup_name, resolution.entry)
         return CallBindingFact(
             node_id=self.index.id_for(call),
             callee=lookup_name,
@@ -478,9 +478,12 @@ class SemanticFactBuilder:
 
     @staticmethod
     def _is_intrinsically_stateful(name: str, entry: Mapping[str, Any]) -> bool:
-        if bool(entry.get("stateful")) or bool(entry.get("side_effect")):
+        if bool(entry.get("side_effect")):
             return True
-        return name.startswith(("ta.", "request.", "strategy.", "alert"))
+        if isinstance(entry.get("stateful"), bool):
+            return bool(entry["stateful"])
+        canonical = str(entry.get("symbol_id") or "").removeprefix("pine:function:")
+        return (canonical or name).startswith(("ta.", "request.", "strategy.", "alert"))
 
     def _collect_version_coercions(self, program: Program) -> None:
         if not self.policy.allows_bool_to_number:

@@ -199,7 +199,8 @@
 {"name":"line.set_xy2","op":"ADD","section":"functions","semantic_id":"sha256:49f7471dc0e3c0eb313744b910e391ff5affee76b71324b8b30910a057c5c0da","symbol_id":"pine:function:line.set_xy2"}
 {"name":"line.set_y1","op":"ADD","section":"functions","semantic_id":"sha256:8fbec32d5d66e575f555b311bf8c06a42f78bac6406bef8525365d0de8a84c75","symbol_id":"pine:function:line.set_y1"}
 {"name":"line.set_y2","op":"ADD","section":"functions","semantic_id":"sha256:5c6343298f0c4c43fc3bb8b1c3f266d991f99538a2374089fc07f52e27c016fd","symbol_id":"pine:function:line.set_y2"}
-{"op":"PATCH","semantic_id":"sha256:bcd032312ad86b47c2db696b671d0f4ef924086fd028a50882ed8e9e2259f6b3","symbol_id":"pine:function:ta.rsi"}
+{"op":"PATCH","semantic_id":"sha256:76e6665c9d9c8905217722216b1459df47f1c1d6a57273b9e675ef807c23de26","symbol_id":"pine:function:math.round"}
+{"op":"PATCH","semantic_id":"sha256:545b00df9ebb049a3eaef96b04bc08f84770331da4619d999560bc7e26534b8c","symbol_id":"pine:function:ta.rsi"}
 {"name":"table.cell","op":"ADD","section":"functions","semantic_id":"sha256:999ad31731b646dc5482a78cb13906f019e8b3522438d8e3148e405d69c33538","symbol_id":"pine:function:table.cell"}
 {"name":"table.cell_set_bgcolor","op":"ADD","section":"functions","semantic_id":"sha256:7c551ae250529616ab2051679b0749a6e4a534bd91f40d8b6da0d4dac86d519f","symbol_id":"pine:function:table.cell_set_bgcolor"}
 {"name":"table.cell_set_height","op":"ADD","section":"functions","semantic_id":"sha256:689173d8ae4bf302d68e531b18c4f704da621d576a8e94955ce1a6d6bc2f4b3c","symbol_id":"pine:function:table.cell_set_height"}

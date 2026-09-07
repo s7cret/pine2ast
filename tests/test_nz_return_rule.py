@@ -19,8 +19,12 @@ from pine2ast.hardening.introspection import parse_source, semantic_facts_payloa
 )
 def test_catalog_numeric_return_facts(version, expression, dtype):
     header = "indicator" if version >= 5 else "study"
+    if version <= 4:
+        # Official v5 migration preserves values but renames the parameters.
+        expression = expression.replace("source=", "x=").replace("replacement=", "y=")
     source = f'//@version={version}\n{header}("nz")\nx={expression}\n'
     p = parse_source(source, source_name="nz.pine")
+    assert p.ok, p.diagnostics
     rows = semantic_facts_payload(p, ast_payload(p))["facts"]
     call = next(
         r for r in rows if r.get("kind") == "CallExpr" and r.get("symbol_id") == "pine:function:nz"
