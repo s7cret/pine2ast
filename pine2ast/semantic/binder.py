@@ -94,6 +94,7 @@ class SemanticFactBuilder:
             registry=catalog,
             policy=policy,
         )
+        self.engine.bind_model(model)
         self.signatures = SignatureResolver(version_context=version_context)
         self.index: NodeIndex | None = None
         self._scopes: dict[int, str] = {}
@@ -261,7 +262,7 @@ class SemanticFactBuilder:
             )
         )
         overload_id = (
-            str(resolution.overload_id or f"{symbol_id}#canonical")
+            str(entry.get("overload_id") or resolution.overload_id or f"{symbol_id}#canonical")
             if status == "RESOLVED"
             else None
         )
@@ -350,11 +351,8 @@ class SemanticFactBuilder:
         declaration = self._declarations.get(raw_name)
         call_form = "USER_FUNCTION"
         if declaration is None and isinstance(call.callee, MemberAccessExpr):
-            receiver_base, _ = generic_type_parts(receiver_type or "")
-            method_key = f"{receiver_base}.{call.callee.member}" if receiver_base else ""
-            declaration = self._declarations.get(method_key) or self._declarations.get(
-                call.callee.member
-            )
+            method_key = f"{receiver_type}.{call.callee.member}" if receiver_type else ""
+            declaration = self._declarations.get(method_key)
             if isinstance(declaration, MethodDeclaration):
                 call_form = "USER_METHOD"
                 raw_name = declaration.name
@@ -369,6 +367,19 @@ class SemanticFactBuilder:
                 if isinstance(declaration, TypeDeclaration):
                     call_form = "UDT_CONSTRUCTOR"
                     raw_name = f"{declaration.name}.new"
+        if (
+            declaration is None
+            and isinstance(call.callee, MemberAccessExpr)
+            and call.callee.member == "copy"
+        ):
+            object_name = callee_name(call.callee.object)
+            candidate = self._declarations.get(object_name) or self._declarations.get(
+                receiver_type or ""
+            )
+            if isinstance(candidate, TypeDeclaration):
+                declaration = candidate
+                call_form = "UDT_COPY"
+                raw_name = f"{declaration.name}.copy"
         if declaration is None:
             symbol = self.model.symbols.get(raw_name)
             if symbol is None:
@@ -393,7 +404,8 @@ class SemanticFactBuilder:
             parameters = [self._parameter_entry(item) for item in declaration.parameters]
             symbol_kind = "method" if isinstance(declaration, MethodDeclaration) else "function"
             return_type = (
-                getattr(self.model.symbols.get(declaration.name), "type", None) or "unknown"
+                getattr(self.model.symbols.get(self._declaration_key(declaration)), "type", None)
+                or "unknown"
             )
             return (
                 raw_name,
@@ -417,10 +429,25 @@ class SemanticFactBuilder:
                 {
                     "name": field.name,
                     "type": type_ref_name(field.type_ref),
-                    "required": field.default_value is None,
+                    "required": False,
+                    "qualifier_max": "series",
                 }
                 for field in declaration.fields
             ]
+            operation = "constructor"
+            if call_form == "UDT_COPY":
+                assert isinstance(call.callee, MemberAccessExpr)
+                operation = "copy"
+                parameters = []
+                if callee_name(call.callee.object) == declaration.name:
+                    parameters = [
+                        {
+                            "name": "object",
+                            "type": declaration.name,
+                            "required": True,
+                            "qualifier_max": "series",
+                        }
+                    ]
             return (
                 raw_name,
                 {
@@ -428,7 +455,8 @@ class SemanticFactBuilder:
                     "symbol_id": f"user:type:{declaration.name}:{self.index.id_for(declaration)}",
                     "parameters": parameters,
                     "returns": declaration.name,
-                    "overload_id": f"user:type:{declaration.name}:{self.index.id_for(declaration)}#constructor",
+                    "overload_id": f"user:type:{declaration.name}:{self.index.id_for(declaration)}#{operation}",
+                    "stateful": True,
                 },
                 call_form,
                 receiver_type,
@@ -476,7 +504,7 @@ class SemanticFactBuilder:
     def _propagate_user_statefulness(self, program: Program) -> None:
         assert self.index is not None
         declaration_for_call: dict[str, FunctionDeclaration | MethodDeclaration] = {
-            item.name: item
+            f"user:{'method' if isinstance(item, MethodDeclaration) else 'function'}:{item.name}:{self.index.id_for(item)}": item
             for item in self._declarations.values()
             if isinstance(item, (FunctionDeclaration, MethodDeclaration))
         }
@@ -499,12 +527,12 @@ class SemanticFactBuilder:
                 for call_id, binding in self._call_bindings.items():
                     if call_id not in descendant_ids:
                         continue
-                    if binding.stateful or binding.callee in stateful_names:
+                    if binding.stateful or binding.symbol_id in stateful_names:
                         stateful_names.add(name)
                         changed = True
                         break
         for object_id, binding in list(self._call_bindings.items()):
-            if binding.callee in stateful_names and not binding.stateful:
+            if binding.symbol_id in stateful_names and not binding.stateful:
                 self._call_bindings[object_id] = replace(binding, stateful=True)
 
     def _descendants(self, node: ASTNode) -> Iterable[ASTNode]:
@@ -537,17 +565,18 @@ class SemanticFactBuilder:
         call = self._call_bindings.get(id(node))
         is_callee = False
         if call is None and isinstance(node, Expression):
-            callee = node
-            parent = self.index.parent_for(callee)
-            # A generic callee has a syntactic base expression as well as the
-            # instantiated callable. Both derive identity from the resolved
-            # call, never from another version or a similarly named function.
-            if isinstance(parent, GenericInstantiationExpr) and parent.base is callee:
-                callee = parent
-                parent = self.index.parent_for(callee)
-            if isinstance(parent, CallExpr) and parent.callee is callee:
+            parent = self.index.parent_for(node)
+            if isinstance(parent, CallExpr) and parent.callee is node:
                 call = self._call_bindings.get(id(parent))
                 is_callee = call is not None
+            elif isinstance(parent, GenericInstantiationExpr) and parent.base is node:
+                outer = self.index.parent_for(parent)
+                if isinstance(outer, CallExpr) and outer.callee is parent:
+                    # The syntactic base of a checked generic callee is a function,
+                    # not an unresolved value. Reuse the resolved call identity;
+                    # unknown constructors still have no callable evidence.
+                    call = self._call_bindings.get(id(outer))
+                    is_callee = call is not None
         if call is not None:
             symbol_id = call.symbol_id
             if is_callee and type_fact is not None and type_fact.base == "unknown":

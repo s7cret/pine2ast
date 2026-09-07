@@ -332,7 +332,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 allow_existing=True,
             )
             if node.receiver_type is not None:
-                rt = node.receiver_type.name
+                rt = self._type_ref_name(node.receiver_type)
                 method_key = (rt, node.name)
                 self._user_method_params.setdefault(method_key, node.parameters)
                 existing = self._method_receivers.get(node.name)
@@ -381,7 +381,8 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 p.explicit_qualifier,
             )
         self._visit_body(node.body)
-        sym = self._resolve(node.name)
+        receiver_type = self._type_ref_name(node.receiver_type) if node.receiver_type else ""
+        sym = self._resolve(f"{receiver_type}.{node.name}")
         if sym is not None:
             sym.type = self._body_return_type(node.body)
         self._pop_scope()

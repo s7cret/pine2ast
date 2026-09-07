@@ -225,7 +225,11 @@ class SemanticAnalyzer(
                     self._function_params[item.name] = item.parameters
             elif isinstance(item, MethodDeclaration):
                 return_shape = self._body_return_shape(item.body) or "method"
-                receiver_name = item.receiver_type.name if item.receiver_type is not None else ""
+                receiver_name = (
+                    self._type_ref_name(item.receiver_type)
+                    if item.receiver_type is not None
+                    else ""
+                )
                 method_key = (receiver_name, item.name)
                 if method_key in self._user_method_params:
                     self._diag(
@@ -236,7 +240,7 @@ class SemanticAnalyzer(
                     )
                     self._predeclared_nodes.add(id(item))
                     continue
-                self._define(
+                method_symbol = self._define(
                     item.name,
                     SymbolKind.METHOD,
                     item.span,
@@ -244,6 +248,8 @@ class SemanticAnalyzer(
                     None,
                     allow_existing=True,
                 )
+                if method_symbol is not None:
+                    self.model.symbols[f"{receiver_name}.{item.name}"] = method_symbol
                 self._predeclared_nodes.add(id(item))
                 self._user_method_params[method_key] = item.parameters
                 if receiver_name:

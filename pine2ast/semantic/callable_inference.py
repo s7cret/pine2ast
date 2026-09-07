@@ -10,6 +10,7 @@ from pine2ast.ast.nodes import (
     ExpressionStatement,
     FunctionDeclaration,
     MethodDeclaration,
+    MemberAccessExpr,
     Parameter,
     Program,
     Reassignment,
@@ -67,8 +68,9 @@ class CallableInferenceEngine:
     def run(self, program: Program) -> CallableInferenceSummary:
         for node in iter_nodes(program):
             if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
-                self.declarations[node.name] = node
-            elif isinstance(node, CallExpr):
+                self.declarations[self._declaration_key(node)] = node
+        for node in iter_nodes(program):
+            if isinstance(node, CallExpr):
                 name = self._user_call_name(node)
                 if name is not None:
                     self.calls.setdefault(name, []).append(node)
@@ -155,11 +157,11 @@ class CallableInferenceEngine:
 
     def _infer_callable_returns(self) -> bool:
         changed = False
-        for declaration in self.declarations.values():
+        for name, declaration in self.declarations.items():
             inferred = self._return_type(declaration.body)
             if inferred == "unknown":
                 continue
-            symbol = self._symbol(declaration.name, declaration)
+            symbol = self._symbol(name, declaration)
             if symbol is not None:
                 changed |= self._update_type(symbol, inferred, "callable")
         return changed
@@ -192,13 +194,18 @@ class CallableInferenceEngine:
         name = callee_name(call.callee)
         if name in self.declarations:
             return name
-        if "." in name:
-            suffix = name.rsplit(".", 1)[-1]
-            if suffix in self.declarations and isinstance(
-                self.declarations[suffix], MethodDeclaration
-            ):
-                return suffix
+        if isinstance(call.callee, MemberAccessExpr):
+            receiver = self.engine.infer_type(call.callee.object)
+            key = f"{receiver}.{call.callee.member}"
+            if key in self.declarations and isinstance(self.declarations[key], MethodDeclaration):
+                return key
         return None
+
+    @staticmethod
+    def _declaration_key(declaration: FunctionDeclaration | MethodDeclaration) -> str:
+        if isinstance(declaration, MethodDeclaration) and declaration.receiver_type is not None:
+            return f"{type_ref_name(declaration.receiver_type)}.{declaration.name}"
+        return declaration.name
 
     def _symbol(self, name: str, declaration: ASTNode):
         candidates = []

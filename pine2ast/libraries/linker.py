@@ -4,16 +4,18 @@ Only resolved identifier occurrences are edited, never arbitrary source strings.
 The linked virtual source is parsed and type-checked again by the normal frontend.
 Original inputs and projection ranges remain available in the linkage receipt.
 
-This revision admits scalar and array-of-scalar functions, helpers and constant globals.
-Mixed Pine versions, exported user-defined types/methods and request expressions in
-libraries are rejected explicitly, not silently executed with importer semantics.
+This revision admits typed functions, UDTs, enums, helpers and constant globals.
+Nominal type names include the locked publication identity; type inference remains
+owned by the normal frontend. Mixed Pine versions, exported methods and request
+expressions still require separate execution profiles.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, is_dataclass
 import json
-from typing import Mapping
+import re
+from typing import Mapping, NoReturn
 
 from pine2ast.api import ParseOptions, ParsePipeline
 from pine2ast.ast.base import ASTNode
@@ -36,6 +38,7 @@ from pine2ast.ast.nodes import (
     VarDeclaration,
 )
 from pine2ast.ast.visitors import walk
+from pine2ast.ast.types import TypeRef
 from pine2ast.catalog import CatalogRepository
 from pine2ast.lexer.token import TokenKind
 from .store import (
@@ -74,9 +77,13 @@ class LinkedSource:
         if value.get("schema_id") != LINK_SCHEMA or value.get("profile") not in {
             "same_version_scalar_v1",
             "same_version_arrays_v2",
+            "same_version_collections_v3",
+            "same_version_reference_types_v4",
         }:
             raise LibraryError("P2A_LIBRARY_PROJECTION", "unsupported linkage profile")
         root_name = value.get("root_source_name")
+        if not isinstance(root_name, str):
+            raise LibraryError("P2A_LIBRARY_PROJECTION", "root source name must be text")
         try:
             root = value["sources"][root_name]["raw_text"]
             sources = {ref: value["sources"][ref]["raw_text"] for ref in value["dependencies"]}
@@ -127,6 +134,7 @@ class _Unit:
     imports: dict[str, str]
     functions: dict[str, FunctionDeclaration]
     constants: dict[str, VarDeclaration]
+    types: dict[str, TypeDeclaration | EnumDeclaration]
     globals: set[str]
     exports: set[str]
     renamed: dict[str, str]
@@ -144,6 +152,7 @@ def _parse(ref: str, text: str) -> _Unit:
         raise LibraryError("P2A_LIBRARY_SYNTAX", detail, source=ref, line=1)
     program = result.ast
     declarations, functions, constants, exports, imports = set(), {}, {}, set(), {}
+    types = {}
     for item in program.items:
         if isinstance(item, ImportDeclaration):
             path = valid_ref(item.path)
@@ -180,6 +189,8 @@ def _parse(ref: str, text: str) -> _Unit:
                 functions[item.name] = item
             elif isinstance(item, VarDeclaration):
                 constants[item.name] = item
+            elif isinstance(item, (TypeDeclaration, EnumDeclaration)):
+                types[item.name] = item
         elif isinstance(item, TupleDeclaration):
             for target in item.targets:
                 if target.name != "_":
@@ -221,6 +232,7 @@ def _parse(ref: str, text: str) -> _Unit:
         imports,
         functions,
         constants,
+        types,
         declarations,
         exports,
         {},
@@ -249,7 +261,12 @@ class _Linker:
         }
         self.namespaces = {name.split(".")[0] for name in self.builtins if "." in name}
 
-    def fail(self, unit: _Unit, node: ASTNode, code: str, message: str):
+    def promote_profile(self, profile: str) -> None:
+        profiles = ("same_version_scalar_v1", "same_version_arrays_v2", "same_version_collections_v3", "same_version_reference_types_v4")
+        if profiles.index(profile) > profiles.index(self.profile):
+            self.profile = profile
+
+    def fail(self, unit: _Unit, node: ASTNode, code: str, message: str) -> NoReturn:
         raise LibraryError(code, message, source=unit.ref, line=node.span.start_line)
 
     def load(self, ref: str, stack: tuple[str, ...] = ()) -> None:
@@ -290,24 +307,31 @@ class _Linker:
             raise LibraryError(
                 "P2A_LIBRARY_EXPORT", "library must export at least one declaration", source=ref
             )
-        if unit.exports - set(unit.functions):
+        if unit.exports - (set(unit.functions) | set(unit.types)):
             raise LibraryError(
                 "P2A_LIBRARY_EXPORT_SHAPE",
-                "this link profile supports scalar function exports only",
+                "this link profile supports typed functions, UDTs and enums",
                 source=ref,
             )
-        for name in unit.exports:
+        unit.renamed = {
+            name: PREFIX + source_hash((ref + "\0" + text))[7:27] + "_" + name
+            for name in unit.functions | unit.constants | unit.types
+        }
+        # Resolve every declared edge, even when calls under it are not selected.
+        self.units[ref] = unit
+        for child in sorted(set(unit.imports.values())):
+            self.load(child, (*stack, ref))
+        for name in sorted(unit.exports & set(unit.functions)):
             function = unit.functions[name]
             for parameter in function.parameters:
                 if (
                     parameter.type_ref is None
                     or not (
-                        parameter.type_ref.name in SCALARS
+                        self.public_type_allowed(unit, parameter.type_ref)
                         or (
-                            parameter.type_ref.name == "array"
-                            and len(parameter.type_ref.template_args) == 1
-                            and parameter.type_ref.template_args[0].name in SCALARS
-                            and not parameter.type_ref.template_args[0].template_args
+                            parameter.type_ref.name in {"array", "matrix", "map"}
+                            and len(parameter.type_ref.template_args) == (2 if parameter.type_ref.name == "map" else 1)
+                            and all(self.public_type_allowed(unit, t) for t in parameter.type_ref.template_args)
                             and parameter.explicit_qualifier != "simple"
                         )
                     )
@@ -317,18 +341,66 @@ class _Linker:
                         unit,
                         parameter,
                         "P2A_LIBRARY_PARAMETER",
-                        "export requires a declared scalar or series array-of-scalar parameter",
+                        "export requires a declared public value or series collection parameter",
                     )
                 if parameter.type_ref.name == "array":
-                    self.profile = "same_version_arrays_v2"
-        unit.renamed = {
-            name: PREFIX + source_hash((ref + "\0" + text))[7:27] + "_" + name
-            for name in unit.functions | unit.constants
-        }
-        # Resolve every declared edge, even when calls under it are not selected.
-        self.units[ref] = unit
-        for child in sorted(set(unit.imports.values())):
-            self.load(child, (*stack, ref))
+                    self.promote_profile("same_version_arrays_v2")
+                elif parameter.type_ref.name in {"map", "matrix"}:
+                    self.promote_profile("same_version_collections_v3")
+        for name in sorted(unit.exports & set(unit.types)):
+            declaration = unit.types[name]
+            if isinstance(declaration, TypeDeclaration):
+                for field in declaration.fields:
+                    for node in walk(field.type_ref):
+                        if isinstance(node, TypeRef):
+                            resolved = self.resolve_type(unit, node.name)
+                            if resolved is not None and resolved[1] not in resolved[0].exports:
+                                self.fail(unit, field, "P2A_LIBRARY_PRIVATE_TYPE", "exported field exposes private type: " + node.name)
+
+    def resolve_type(self, unit: _Unit, name: str):
+        if name in unit.types:
+            return unit, name
+        alias, dot, member = name.partition(".")
+        if dot and alias in unit.imports:
+            target = self.units[unit.imports[alias]]
+            if member in target.types:
+                if member not in target.exports:
+                    raise LibraryError("P2A_LIBRARY_PRIVATE", "imported type is private: " + member, source=target.ref)
+                return target, member
+        return None
+
+    def public_type_allowed(self, unit: _Unit, type_ref: TypeRef) -> bool:
+        if type_ref.template_args:
+            return False
+        if type_ref.name in SCALARS:
+            return True
+        resolved = self.resolve_type(unit, type_ref.name)
+        if resolved is None:
+            return False
+        target, name = resolved
+        if name not in target.exports:
+            self.fail(unit, type_ref, "P2A_LIBRARY_PRIVATE_TYPE", "public signature exposes private type: " + name)
+        return True
+
+    def visit_type(self, unit: _Unit, type_ref: TypeRef, *, public: bool = False) -> None:
+        resolved = self.resolve_type(unit, type_ref.name)
+        if resolved is not None:
+            target, name = resolved
+            self.require(target.ref, name, public=public or target is not unit)
+            self.promote_profile("same_version_reference_types_v4")
+            # Type names are syntax nodes, not identifier expressions. Preserve
+            # generic brackets, member/parameter names and arbitrary whitespace.
+            tokens = [t for t in unit.tokens if type_ref.span.start_offset <= t.span.start_offset < type_ref.span.end_offset]
+            spelling = ""
+            for token in tokens:
+                spelling += token.text
+                if spelling == type_ref.name:
+                    self.edit(unit, tokens[0].span.start_offset, token.span.end_offset, target.renamed[name])
+                    break
+            else:
+                self.fail(unit, type_ref, "P2A_LIBRARY_PROJECTION", "type token not found")
+        for child in type_ref.template_args:
+            self.visit_type(unit, child, public=public)
 
     def edit(self, unit: _Unit, start: int, end: int, text: str) -> None:
         edits = self.edits.setdefault(unit.ref, {})
@@ -365,12 +437,14 @@ class _Linker:
             )
         key = (ref, name)
         if key in self.visiting:
+            if name in unit.types:
+                return  # Recursive reference fields do not recursively execute.
             raise LibraryError(
                 "P2A_LIBRARY_RECURSION", "recursive function/constant dependency", source=ref
             )
         if key in self.selected:
             return
-        declaration = unit.functions.get(name) or unit.constants.get(name)
+        declaration = unit.functions.get(name) or unit.constants.get(name) or unit.types.get(name)
         if declaration is None:
             raise LibraryError(
                 "P2A_LIBRARY_MEMBER", "unresolved library member: " + name, source=ref
@@ -403,6 +477,14 @@ class _Linker:
                     "global initializer is not a supported constant expression",
                 )
             self.visit(unit, declaration.initializer, [], constant_only=True)
+        elif isinstance(declaration, TypeDeclaration):
+            self.promote_profile("same_version_reference_types_v4")
+            for field in declaration.fields:
+                self.visit_type(unit, field.type_ref, public=declaration.is_exported)
+                if field.default_value is not None:
+                    self.visit(unit, field.default_value, [])
+        elif isinstance(declaration, EnumDeclaration):
+            self.promote_profile("same_version_reference_types_v4")
         else:
             self.visit_function(unit, declaration)
         self.name_edit(unit, declaration, name)
@@ -412,6 +494,8 @@ class _Linker:
 
     def visit_function(self, unit: _Unit, function: FunctionDeclaration) -> None:
         for parameter in function.parameters:
+            if parameter.type_ref is not None:
+                self.visit_type(unit, parameter.type_ref, public=function.is_exported)
             if parameter.default_value is not None:
                 self.visit(unit, parameter.default_value, [])
         self.visit(unit, function.body, [set(p.name for p in function.parameters)])
@@ -421,6 +505,13 @@ class _Linker:
     ) -> None:
         def local(name):
             return any(name in s for s in reversed(scopes))
+
+        type_ref = getattr(node, "type_ref", None)
+        if isinstance(type_ref, TypeRef):
+            self.visit_type(unit, type_ref)
+        if isinstance(node, TypeRef):
+            self.visit_type(unit, node)
+            return
 
         if isinstance(node, MemberAccessExpr):
             if isinstance(node.object, Identifier) and not local(node.object.name):
@@ -458,7 +549,7 @@ class _Linker:
                     unit,
                     node,
                     "P2A_LIBRARY_ALIAS_VALUE",
-                    "library alias must qualify an exported function",
+                        "library alias must qualify an exported declaration",
                 )
             if unit is not self.root:
                 if name in unit.globals:
@@ -478,7 +569,9 @@ class _Linker:
 
             name = callee_name(node.callee) or ""
             if name.startswith("array."):
-                self.profile = "same_version_arrays_v2"
+                self.promote_profile("same_version_arrays_v2")
+            elif name.startswith(("map.", "matrix.")):
+                self.promote_profile("same_version_collections_v3")
             if (
                 name == "input"
                 or name.startswith(("input.", "request.", "strategy."))
@@ -508,7 +601,7 @@ class _Linker:
                     "global-only call inside imported function",
                 )
         if isinstance(node, Block):
-            scope = set()
+            scope: set[str] = set()
             for statement in node.statements:
                 self.visit(unit, statement, [*scopes, scope], constant_only=constant_only)
                 if isinstance(statement, VarDeclaration):
@@ -529,7 +622,7 @@ class _Linker:
             return
         if isinstance(node, ForInStructure):
             if unit is not self.root:
-                self.profile = "same_version_arrays_v2"
+                self.promote_profile("same_version_arrays_v2")
             self.visit(unit, node.iterable, scopes)
             self.visit(unit, node.body, [*scopes, set(node.target.names)])
             return
@@ -541,6 +634,8 @@ class _Linker:
                     "P2A_LIBRARY_CAPTURE",
                     "cannot reassign a library global from a function",
                 )
+        if not is_dataclass(node):
+            self.fail(unit, node, "P2A_LIBRARY_PROJECTION", "invalid AST structure")
         for field in fields(node):
             if field.name in {
                 "span",
@@ -566,6 +661,14 @@ class _Linker:
             raise LibraryError("P2A_LIBRARY_DECLARATION", "consumer must have a script declaration")
         for ref in sorted(set(self.root.imports.values())):
             self.load(ref)
+        # A nominal library's public interface must be valid independently of
+        # which export this consumer calls. Include its exported functions in
+        # normal frontend inference so an unused private-type return cannot
+        # escape validation. Defining a function does not execute example code.
+        for ref, unit in sorted(self.units.items()):
+            if unit.types:
+                for name in sorted(unit.exports & unit.functions.keys()):
+                    self.require(ref, name, public=True)
         for item in self.root.program.items:
             if isinstance(item, ImportDeclaration):
                 self.edit(self.root, item.span.start_offset, item.span.end_offset, "")
@@ -622,13 +725,30 @@ class _Linker:
         literal("\n// openpine-library-link: " + identity + "\n")
         for ref, name in self.order:
             unit = self.units[ref]
-            item = unit.functions.get(name) or unit.constants[name]
+            item = unit.functions.get(name) or unit.constants.get(name) or unit.types[name]
             chunk(unit, item.span.start_offset, item.span.end_offset)
             literal("\n")
         chunk(self.root, end, len(self.root.text))
         joined = "".join(code)
         if len(joined.encode("utf-8")) > MAX_SOURCE_BYTES:
             raise LibraryError("P2A_LIBRARY_LIMIT", "linked source exceeds size limit")
+        if self.profile == "same_version_reference_types_v4":
+            # Use the existing semantic owner to infer public return types after
+            # projection; private helpers may use private types internally.
+            parsed = ParsePipeline(ParseOptions(created_at_utc_ms=0)).parse(joined)
+            symbols = getattr(parsed.semantic_model, "symbols", {})
+            private_types = {
+                unit.renamed[name]
+                for unit in self.units.values()
+                for name in unit.types.keys() - unit.exports
+            }
+            for ref, name in self.order:
+                unit = self.units[ref]
+                if name in unit.functions and name in unit.exports:
+                    symbol = symbols.get(unit.renamed[name])
+                    return_type = getattr(symbol, "type", "") or ""
+                    if private_types & set(re.findall(r"[A-Za-z_]\w*", return_type)):
+                        self.fail(unit, unit.functions[name], "P2A_LIBRARY_PRIVATE_TYPE", "exported return exposes a private type")
         sources = {
             u.ref: {
                 "text": u.text,

@@ -77,15 +77,21 @@ def _member_field_type(
     return _symbol_type(f"{owner_type}.{expr.member}", symbols) if owner_type else None
 
 
-def _udt_constructor_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
+def _udt_constructor_return(
+    expr: CallExpr, symbols: Mapping[str, object] | None, registry: Registry | None
+) -> str | None:
     callee = expr.callee
     if (
         isinstance(callee, MemberAccessExpr)
-        and callee.member == "new"
+        and callee.member in {"new", "copy"}
         and isinstance(callee.object, Identifier)
         and _symbol_kind(callee.object.name, symbols) in {"TYPE", "type"}
     ):
         return callee.object.name
+    if isinstance(callee, MemberAccessExpr) and callee.member == "copy":
+        owner = infer_type(callee.object, symbols, registry=registry)
+        if _symbol_kind(owner, symbols) in {"TYPE", "type"}:
+            return owner
     return None
 
 
@@ -149,10 +155,13 @@ def _collection_call_return(
     return None
 
 
-def _user_method_call_return(expr: CallExpr, symbols: Mapping[str, object] | None) -> str | None:
+def _user_method_call_return(
+    expr: CallExpr, symbols: Mapping[str, object] | None, registry: Registry | None
+) -> str | None:
     if not isinstance(expr.callee, MemberAccessExpr):
         return None
-    name = expr.callee.member
+    receiver = infer_type(expr.callee.object, symbols, registry=registry)
+    name = f"{receiver}.{expr.callee.member}"
     if _symbol_kind(name, symbols) not in {"METHOD", "method"}:
         return None
     result = _symbol_type(name, symbols)
@@ -264,14 +273,6 @@ def _parametric_return_rule(
     elif expr.arguments and name.startswith(("array.", "map.", "matrix.")):
         receiver_type = infer_type(expr.arguments[0].value, symbols, registry=registry)
 
-    if rule == "return.nz.argument_types.v1":
-        types = [infer_type(arg.value, symbols, registry=registry) for arg in expr.arguments]
-        known = [typ for typ in types if typ not in {"na", "unknown"}]
-        if known and set(known) <= {"int", "float"}:
-            return "float" if "float" in known else "int"
-        if known and all(typ == known[0] for typ in known) and known[0] in {"color", "bool"}:
-            return known[0]
-        return "unknown"
     if rule == "return.void.v1":
         return "void"
     if rule == "return.reference.box.v1":
@@ -288,6 +289,22 @@ def _parametric_return_rule(
             if expr.arguments
             else "unknown"
         )
+    if rule == "return.na.source_or_numeric_promotion.v1":
+        # Named arguments need not be in parameter order. Missing replacement
+        # preserves the source type; a numeric replacement may promote int to
+        # float. Existing validation still owns illegal/version-specific inputs.
+        bound = {}
+        for position, argument in enumerate(expr.arguments):
+            name = argument.name or ("source" if position == 0 else "replacement")
+            bound[name] = infer_type(argument.value, symbols, registry=registry)
+        source = bound.get("source", "unknown")
+        replacement = bound.get("replacement", source)
+        known = {source, replacement}.difference({"na", "unknown"})
+        if known and known.issubset({"int", "float"}):
+            return "float" if "float" in known else "int"
+        if source in {"bool", "color"} and replacement in {source, "na"}:
+            return source
+        return None
     if rule == "return.array.explicit_element_type.v1":
         raw = callee_name(expr.callee)
         if "<" in raw and raw.endswith(">"):
@@ -366,7 +383,7 @@ def infer_type(
         inferred = _generic_collection_constructor_return(expr)
         if inferred:
             return inferred
-        inferred = _udt_constructor_return(expr, symbols)
+        inferred = _udt_constructor_return(expr, symbols, registry)
         if inferred:
             return inferred
         inferred = _array_from_return(expr, symbols, registry)
@@ -375,7 +392,7 @@ def infer_type(
         inferred = _collection_call_return(expr, symbols, registry)
         if inferred:
             return inferred
-        inferred = _user_method_call_return(expr, symbols)
+        inferred = _user_method_call_return(expr, symbols, registry)
         if inferred:
             return inferred
         inferred = _request_return(expr, symbols, registry)

@@ -26,7 +26,7 @@ pine2ast-stage5 = "pine2ast.hardening.stage5_cli:main"
 [tool.setuptools.packages.find]
 include = ["pine2ast*"]
 [tool.setuptools.package-data]
-pine2ast = ["py.typed", "semantic/*.json", "catalog/**/*.json", "hardening/data/*.json", "hardening/data/corpus/*.pine", "hardening/data/historical_corpus/*.pine", "hardening/schemas/*.json", "catalog_data/packs/*.json"]
+pine2ast = ["py.typed", "semantic/*.json", "catalog/**/*.json", "reference_catalog/*.json", "hardening/data/*.json", "hardening/data/corpus/*.pine", "hardening/data/historical_corpus/*.pine", "hardening/schemas/*.json", "catalog_data/packs/*.json"]
 [tool.black]
 line-length = 100
 target-version = ["py311"]

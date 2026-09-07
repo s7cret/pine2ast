@@ -40,7 +40,7 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
                 if sym.kind is SymbolKind.FIELD and sym.name.startswith(f"{type_name}.")
             ]
         field_names = [f.name for f in fields]
-        required = [f.name for f in fields if getattr(f, "default_value", None) is None]
+        required: list[str] = []
         positional = [a for a in expr.arguments if a.name is None]
         named = {a.name for a in expr.arguments if a.name}
         for arg in expr.arguments:
@@ -141,7 +141,7 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
             return
         member = expr.callee.member
         receiver_expr = expr.callee.object
-        if isinstance(receiver_expr, Identifier) and member == "new":
+        if isinstance(receiver_expr, Identifier) and member in {"new", "copy"}:
             sym = self._resolve(receiver_expr.name)
             if sym is not None and sym.kind is SymbolKind.TYPE:
                 return
@@ -151,6 +151,10 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
             return
 
         receiver_type = self._infer_type(receiver_expr)
+        if member == "copy" and receiver_type in self._udt_fields:
+            return
+        if (receiver_type, member) in self._user_method_params:
+            return
         field_type = self._member_field_type(expr.callee)
         if field_type is not None:
             self._diag(
@@ -184,6 +188,17 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
         if not isinstance(expr.callee, MemberAccessExpr):
             return
         method_name = expr.callee.member
+        if method_name == "copy":
+            copy_receiver = expr.callee.object
+            receiver_symbol = (
+                self._resolve(copy_receiver.name) if isinstance(copy_receiver, Identifier) else None
+            )
+            if receiver_symbol is not None and receiver_symbol.kind is SymbolKind.TYPE:
+                # Namespace form's exact object type is validated by the binder.
+                return
+            if self._infer_type(copy_receiver) in self._udt_fields:
+                self._validate_param_call(method_name, [], expr.arguments, expr.span, kind="method")
+                return
         receiver_type = self._method_receivers.get(method_name)
         if receiver_type is None:
             return

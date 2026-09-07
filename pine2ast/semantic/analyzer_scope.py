@@ -35,6 +35,8 @@ class AnalyzerScopeMixin(AnalyzerMixinHost):
         if isinstance(expr, MemberAccessExpr):
             if isinstance(expr.object, Identifier):
                 root = expr.object.name
+                if self._resolve(root) is not None:
+                    self._visit_expr(expr.object)
                 if self._resolve(root) is None and root not in self._external_aliases:
                     if self._is_v6_only_namespace_root(root):
                         self._diag(

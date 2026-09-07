@@ -24,6 +24,7 @@ from pine2ast.ast.nodes import (
     CallExpr,
     ConditionalExpr,
     GenericInstantiationExpr,
+    Identifier,
     IfStructure,
     ForRangeStructure,
     ForInStructure,
@@ -84,6 +85,14 @@ def call_lookup_name(callee: Expression, registry: Mapping[str, Any] | None = No
 
     raw = callee_name(callee)
     functions = (registry or {}).get("functions", {}) if registry is not None else {}
+    if isinstance(callee, GenericInstantiationExpr):
+        # Constructor type arguments specialize the result, not the producer's
+        # overload identity. Prefer the active version's declared generic template
+        # even when a legacy catalog also contains a concrete primitive spelling.
+        base = callee_name(callee.base)
+        for placeholder in _GENERIC_REGISTRY_PLACEHOLDERS.get(base, ()):
+            if placeholder in functions:
+                return placeholder
     if raw in functions:
         return raw
     if isinstance(callee, GenericInstantiationExpr):
@@ -143,6 +152,8 @@ class PineInferenceEngine:
     ) -> None:
         self.version_context = version_context
         self.symbols = symbols
+        self._lexical_types: dict[int, str] = {}
+        self._lexical_qualifiers: dict[int, str] = {}
         self.registry = registry or load_catalog_readonly_view(version_context.pine_version)
         self.policy = policy or semantic_policy_from_catalog(version_context, self.registry)
         self.policy.validate_context(version_context)
@@ -161,14 +172,34 @@ class PineInferenceEngine:
 
     def bind_model(self, model: SemanticModel) -> None:
         self.symbols = model.symbols
+        # The completed walk saw each identifier in its lexical scope. Later
+        # collection/signature passes must not rebind a UDF local to a same-named
+        # global from the model's flattened public symbol view.
+        self._lexical_types = dict(model.node_types)
+        self._lexical_qualifiers = dict(model.node_qualifiers)
 
     def infer_type(self, expr: Expression | None) -> str:
         if expr is None:
             return "unknown"
+        if isinstance(expr, Identifier):
+            captured = self._lexical_types.get(id(expr))
+            if captured and captured != "unknown":
+                return captured
         if isinstance(expr, MemberAccessExpr):
             symbol_type = self._symbol_type(callee_name(expr))
             if symbol_type:
                 return symbol_type
+            owner_type = self.infer_type(expr.object)
+            field_type = self._symbol_type(f"{owner_type}.{expr.member}")
+            if field_type:
+                return field_type
+        if isinstance(expr, CallExpr) and isinstance(expr.callee, MemberAccessExpr):
+            owner_type = self.infer_type(expr.callee.object)
+            key = f"{owner_type}.{expr.callee.member}"
+            method_type = self._symbol_type(key)
+            symbol = self.symbols.get(key) if self.symbols else None
+            if _symbol_kind_value(symbol) in {"METHOD", "method"} and method_type:
+                return method_type
         if isinstance(expr, BinaryExpr):
             specialized = self._binary_return_type(expr)
             if specialized:
@@ -200,6 +231,10 @@ class PineInferenceEngine:
     def infer_qualifier(self, expr: Expression | None) -> str:
         if expr is None:
             return "series"
+        if isinstance(expr, Identifier):
+            captured = self._lexical_qualifiers.get(id(expr))
+            if captured:
+                return captured
         if isinstance(expr, MemberAccessExpr):
             qualifier = self._symbol_qualifier(callee_name(expr))
             if qualifier:

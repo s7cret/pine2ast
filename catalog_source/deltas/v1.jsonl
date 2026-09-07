@@ -247,7 +247,7 @@
 {"name":"minute","op":"ADD","section":"functions","semantic_id":"sha256:c188ed004d744e3e5be66c7b26189ce57cad708feff4d7b071026a4a2c5e1036","symbol_id":"pine:function:minute"}
 {"name":"month","op":"ADD","section":"functions","semantic_id":"sha256:53c6830b981cfd2d8a4a840ed6989171426e0de638db8a759f357d6b2f2aaadf","symbol_id":"pine:function:month"}
 {"name":"na","op":"ADD","section":"functions","semantic_id":"sha256:a4343f1c95d6d9c02e769fd4195604d3d2fde295dc2dcfd557bdde73c514d6c2","symbol_id":"pine:function:na"}
-{"name":"nz","op":"ADD","section":"functions","semantic_id":"sha256:c9e1f73fbbd960740d68840d700497081f5c1909633cfee0d2153106d15082a8","symbol_id":"pine:function:nz"}
+{"name":"nz","op":"ADD","section":"functions","semantic_id":"sha256:c1990e537737749cb7947765a2a63f9464ae3dfa1410d5bbf5ca037b3f46fef5","symbol_id":"pine:function:nz"}
 {"name":"plot","op":"ADD","section":"functions","semantic_id":"sha256:6be84baa5555d39ee39960d9d9cca8db6baeab45d05fe81c0e94ff3e14e35c76","symbol_id":"pine:function:plot"}
 {"name":"plotarrow","op":"ADD","section":"functions","semantic_id":"sha256:ce1c334fe0472db2b5c0f18621be2bf76171b47c975f468f03ddf304601b5cbd","symbol_id":"pine:function:plotarrow"}
 {"name":"plotbar","op":"ADD","section":"functions","semantic_id":"sha256:a5790052663cd678e9e107a52b7a4791f3767ab9d19d4279a14e48dd18fa41b7","symbol_id":"pine:function:plotbar"}

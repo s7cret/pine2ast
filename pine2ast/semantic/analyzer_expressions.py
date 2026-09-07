@@ -240,6 +240,13 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
             self._validate_for_in_target(node)
             self._visit_expr(node.iterable)
             iterable_type = self._infer_type(node.iterable)
+            if iterable_type.startswith("map<") and len(node.target.names) != 2:
+                self._diag(
+                    Severity.ERROR,
+                    codes.FOR_IN_TARGET_ARITY,
+                    "Map iteration requires [key, value] targets.",
+                    node.target.span,
+                )
             target_types = self._for_in_target_types(iterable_type, len(node.target.names))
             self.loop_depth += 1
             self.local_depth += 1
@@ -334,6 +341,8 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
     def _e_member_access_expr(self, expr: MemberAccessExpr) -> None:
         if isinstance(expr.object, Identifier):
             root = expr.object.name
+            if self._resolve(root) is not None:
+                self._visit_expr(expr.object)
             if self._resolve(root) is None and root not in self._external_aliases:
                 if self._is_v6_only_namespace_root(root):
                     self._diag(
@@ -357,6 +366,8 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
 
     def _e_generic_instantiation_expr(self, expr: GenericInstantiationExpr) -> None:
         self._visit_expr(expr.base)
+        for type_arg in expr.type_args:
+            self._validate_type_ref(type_arg)
 
     def _identifier_names(self, expr: Expression) -> set[str]:
         names: set[str] = set()

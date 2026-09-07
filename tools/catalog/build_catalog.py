@@ -85,6 +85,7 @@ RETURN_RULE_IDS = {
     "map.get": "return.map.value.v1",
     "map.remove": "return.map.value.v1",
     "matrix.get": "return.matrix.element.v1",
+    "nz": "return.na.source_or_numeric_promotion.v1",
 }
 
 # Pine permits a ``series`` value at ordinary expression parameters unless the
@@ -184,7 +185,7 @@ def jsonl_write(path: Path, rows: Iterable[dict[str, Any]]) -> None:
         json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
         for row in rows
     )
-    path.write_text(text, encoding="utf-8")
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 def normalize(value: Any) -> Any:
@@ -223,10 +224,6 @@ def normalized_definition(
     definition = normalize(definition)
     if section in {"functions", "methods"}:
         enrich_callable_contract(name, definition)
-        if name == "nz":
-            # nz is overloaded by source/replacement type, not always float.
-            definition["return_rule_id"] = "return.nz.argument_types.v1"
-
         active_sid = sid or symbol_id(section, name)
         overloads = definition.get("overloads")
         if isinstance(overloads, list):
@@ -234,6 +231,10 @@ def normalized_definition(
                 if not isinstance(overload, dict):
                     raise ValueError(f"{section}.{name} overload {index} must be an object")
                 overload.setdefault("overload_id", f"{active_sid}#overload:{index}")
+        if name == "nz":
+            # Legacy snapshots summarized the float overload only. The actual
+            # return is input-dependent; use one explicit deterministic rule.
+            definition["return_rule_id"] = RETURN_RULE_IDS[name]
         if definition.get("returns") in {None, "unknown", "any"}:
             rule_id = RETURN_RULE_IDS.get(name)
             if rule_id is None and name.startswith("array.new<") and name.endswith(">"):
@@ -1039,6 +1040,7 @@ def main() -> int:
     (temp / "source" / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     projection_hash = digest(projection_doc)
@@ -1073,6 +1075,7 @@ def main() -> int:
         (temp / "packs" / f"pine_v{version}.pack.json").write_text(
             json.dumps(pack, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
 
     losses = compare_lossless_modern(registries[5], packs[5], version=5)
@@ -1108,6 +1111,7 @@ def main() -> int:
     (temp / "migration_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     generated = {

@@ -92,6 +92,8 @@ class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
         if not isinstance(expr.callee, GenericInstantiationExpr) or not expr.callee.type_args:
             return
         base = callee_name(expr.callee.base)
+        for type_arg in expr.callee.type_args:
+            self._validate_type_ref(type_arg)
         type_args = [self._type_ref_name(t) for t in expr.callee.type_args]
         expected_arity = generic_constructor_expected_arity(base)
         if expected_arity is not None and len(type_args) != expected_arity:

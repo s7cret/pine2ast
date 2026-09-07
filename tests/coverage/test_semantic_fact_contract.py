@@ -227,7 +227,10 @@ def test_udt_constructor_fact_reports_missing_unknown_duplicate_and_extra_bindin
     )
     assert missing is not None
     assert missing["local_scope"] is True
-    assert missing["missing_required_fields"] == ["y"]
+    # Pine gives uninitialized UDT fields implicit defaults; y is not required.
+    # https://www.tradingview.com/pine-script-docs/language/type-system/
+    assert missing["missing_required_fields"] == []
+    assert missing["field_count"] == 2
 
     mutant = CallExpr(
         SPAN,

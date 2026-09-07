@@ -56,7 +56,13 @@ def extract_callable_contract(
             },
             "parameters": [_parameter_dict(param) for param in declaration.parameters],
             "return_type": (
-                getattr(symbols.get(declaration.name), "type", None) if symbols else None
+                getattr(
+                    symbols.get(f"{type_ref_name(declaration.receiver_type)}.{declaration.name}"),
+                    "type",
+                    None,
+                )
+                if symbols and declaration.receiver_type
+                else None
             ),
         }
         for declarations in method_map.values()
@@ -78,7 +84,7 @@ def extract_callable_contract(
                     if item.receiver_type is not None
                     and type_ref_name(item.receiver_type) == receiver_type
                 ),
-                declarations[0] if declarations else None,
+                None,
             )
             if declaration is not None:
                 method_calls.append(
