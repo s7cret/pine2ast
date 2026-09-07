@@ -12,7 +12,7 @@ expressions still require separate execution profiles.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, is_dataclass
 import json
 import re
 from typing import Mapping, NoReturn
@@ -634,6 +634,8 @@ class _Linker:
                     "P2A_LIBRARY_CAPTURE",
                     "cannot reassign a library global from a function",
                 )
+        if not is_dataclass(node):
+            self.fail(unit, node, "P2A_LIBRARY_PROJECTION", "invalid AST structure")
         for field in fields(node):
             if field.name in {
                 "span",

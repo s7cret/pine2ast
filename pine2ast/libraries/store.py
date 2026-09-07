@@ -103,8 +103,9 @@ class LibraryStore:
                 raise LibraryError("P2A_LIBRARY_LIMIT", "library source size limit exceeded")
             rows.append({"ref": ref, "sha256": source_hash(source), "path": ref + ".pine"})
         body = {"schema_id": SCHEMA, "libraries": rows}
-        lock = {**body, "content_hash": source_hash(canonical(body))}
-        return cls.admit(lock, sources, expected_hash=lock["content_hash"])
+        content_hash = source_hash(canonical(body))
+        lock = {**body, "content_hash": content_hash}
+        return cls.admit(lock, sources, expected_hash=content_hash)
 
     @classmethod
     def admit(
