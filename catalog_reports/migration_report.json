@@ -43,12 +43,12 @@
   "migration_loss_count": 0,
   "ok": true,
   "pack_hashes": {
-    "1": "sha256:57f4c95cf75d06c7fcee16ff97e1d40ed664053b35a3aa0a239c15dcdf6d1f3f",
-    "2": "sha256:b93a7539e1026face82941267ccc30ce25eec7180495aded3db310012cf4adbd",
-    "3": "sha256:4b6d43fc7ea8942b8f8e002349e2a1687734da20aefbd3057af1ac4dcf267a80",
-    "4": "sha256:b2a615d6ff6edcfbcfdd7f369c2c5af95e0518c8d546c3934cb23e5a0f208bc8",
-    "5": "sha256:10fef4b355a6a8a990a32e81939419594ad3d9544cc7af40f35702383703c50a",
-    "6": "sha256:b65870cad03e84e9bc1da2b43649bcaef9d3367d2e464c71ce506730196775b3"
+    "1": "sha256:4ba145c0cb075f12c3e933e5870d9bb9e47ef6a723152f32e97209310c1dd2c9",
+    "2": "sha256:27dcb1cb9438f623314dc866ede7778394a02258abbbd9b0f6d19496740eab3a",
+    "3": "sha256:a608e9cb7284f1db21262914879c48f50b5844cba6f0dcd84c61f060e1d44edd",
+    "4": "sha256:8ee38e9e6b5cd59c1c2b15ed2217c97c42560bd36c3fe7f3881414a38a21396b",
+    "5": "sha256:5a4fd30704807e718a20b22a0146b6b6c06990ccff2e8176e4aa769a683d7f29",
+    "6": "sha256:536ac4180659a0bf46ccf4b8d314dae6ab03f2f107c4fffbe9765265be8c756e"
   },
   "schema_id": "pine.catalog.migration_report.v2",
   "section_counts": {

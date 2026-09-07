@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:b93a7539e1026face82941267ccc30ce25eec7180495aded3db310012cf4adbd",
-  "content_hash": "sha256:64c1224d1b0cfc40d45f5b9317c95fec3ddc9293994f601a30f72c746f62e805",
+  "catalog_hash": "sha256:27dcb1cb9438f623314dc866ede7778394a02258abbbd9b0f6d19496740eab3a",
+  "content_hash": "sha256:5f15a43fa3c004fd6b35d59fab9923f4591ad10030c4ad5a7adeae07606e4629",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
   "historical_projection_hash": "sha256:c6865e0678b7782bf11d84fb6014a3390ae0d20a419db249f1fa05e3f748d559",
   "pine_version": 2,
@@ -3962,6 +3962,7 @@
         ],
         "pine_version": "2",
         "return_qualifier": "series",
+        "return_rule_id": "return.nz.argument_types.v1",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:nz"

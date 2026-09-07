@@ -16,6 +16,7 @@ from pine2ast.ast.nodes import (
     ForInStructure,
     ForRangeStructure,
     FunctionDeclaration,
+    GenericInstantiationExpr,
     Identifier,
     IfStructure,
     OnceStructure,
@@ -536,8 +537,15 @@ class SemanticFactBuilder:
         call = self._call_bindings.get(id(node))
         is_callee = False
         if call is None and isinstance(node, Expression):
-            parent = self.index.parent_for(node)
-            if isinstance(parent, CallExpr) and parent.callee is node:
+            callee = node
+            parent = self.index.parent_for(callee)
+            # A generic callee has a syntactic base expression as well as the
+            # instantiated callable. Both derive identity from the resolved
+            # call, never from another version or a similarly named function.
+            if isinstance(parent, GenericInstantiationExpr) and parent.base is callee:
+                callee = parent
+                parent = self.index.parent_for(callee)
+            if isinstance(parent, CallExpr) and parent.callee is callee:
                 call = self._call_bindings.get(id(parent))
                 is_callee = call is not None
         if call is not None:

@@ -434,6 +434,17 @@ class SignatureResolver:
                 )
             )
 
+        if validate_types and entry.get("return_rule_id") == "return.nz.argument_types.v1":
+            known_types = {r.actual_type for r in resolved}.difference({None, "na", "unknown"})
+            valid_types = known_types <= {"int", "float"} or (
+                len(known_types) == 1 and known_types <= {"color", "bool"}
+            )
+            if not valid_types:
+                issues.append(SignatureIssue(
+                    Severity.ERROR, codes.ARGUMENT_TYPE,
+                    "nz arguments must share a supported scalar overload", span,
+                ))
+
         defaulted_parameters: list[dict[str, Any]] = []
         for parameter_index, parameter in enumerate(active):
             parameter_name = parameter.get("name")

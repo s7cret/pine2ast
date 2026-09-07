@@ -264,6 +264,14 @@ def _parametric_return_rule(
     elif expr.arguments and name.startswith(("array.", "map.", "matrix.")):
         receiver_type = infer_type(expr.arguments[0].value, symbols, registry=registry)
 
+    if rule == "return.nz.argument_types.v1":
+        types = [infer_type(arg.value, symbols, registry=registry) for arg in expr.arguments]
+        known = [typ for typ in types if typ not in {"na", "unknown"}]
+        if known and set(known) <= {"int", "float"}:
+            return "float" if "float" in known else "int"
+        if known and all(typ == known[0] for typ in known) and known[0] in {"color", "bool"}:
+            return known[0]
+        return "unknown"
     if rule == "return.void.v1":
         return "void"
     if rule == "return.reference.box.v1":

@@ -173,7 +173,7 @@ def test_type_helpers_iterable_targets_tuple_and_type_refs() -> None:
     ]
     assert type_helpers.for_in_target_types("array<float>", 1) == ["float"]
     assert type_helpers.for_in_target_types("array<float>", 2) == ["int", "float"]
-    assert type_helpers.for_in_target_types("matrix<string>", 2) == ["int", "string"]
+    assert type_helpers.for_in_target_types("matrix<string>", 2) == ["int", "array<string>"]
     assert type_helpers.for_in_target_types("map<string,float>", 2) == ["string", "float"]
     assert type_helpers.for_in_target_types("map<string,float>", 1) == ["tuple<string,float>"]
     assert type_helpers.for_in_target_types("map<>", 1) == ["unknown"]

@@ -223,6 +223,10 @@ def normalized_definition(
     definition = normalize(definition)
     if section in {"functions", "methods"}:
         enrich_callable_contract(name, definition)
+        if name == "nz":
+            # nz is overloaded by source/replacement type, not always float.
+            definition["return_rule_id"] = "return.nz.argument_types.v1"
+
         active_sid = sid or symbol_id(section, name)
         overloads = definition.get("overloads")
         if isinstance(overloads, list):
