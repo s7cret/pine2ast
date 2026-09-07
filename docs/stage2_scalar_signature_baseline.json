@@ -1,0 +1,1122 @@
+{
+  "baseline_sha": "7107e797e32c360d2fce90a6416297ef2076351e",
+  "status": "pre_fix_observation_not_expected",
+  "rows": [
+    {
+      "version": 1,
+      "case": "round_int",
+      "source": "//@version=1\nstudy(\"probe\")\nx=round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "round_precision",
+      "source": "//@version=1\nstudy(\"probe\")\nx=round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "round_named",
+      "source": "//@version=1\nstudy(\"probe\")\nx=round(x=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for builtin round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call round does not match any active overload in Pine v1."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for function round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "ceil_int",
+      "source": "//@version=1\nstudy(\"probe\")\nx=ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "abs_int",
+      "source": "//@version=1\nstudy(\"probe\")\nx=abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "exp_missing",
+      "source": "//@version=1\nstudy(\"probe\")\nx=exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "exp_string",
+      "source": "//@version=1\nstudy(\"probe\")\nx=exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "rsi_missing",
+      "source": "//@version=1\nstudy(\"probe\")\nx=rsi()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "rsi_series_length",
+      "source": "//@version=1\nstudy(\"probe\")\nx=rsi(close,bar_index)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A2002",
+          "message": "Call rsi matches multiple overloads equally: pine:function:ta.rsi#overload:0, pine:function:ta.rsi#overload:1."
+        },
+        {
+          "code": "P2A1101",
+          "message": "Use of undeclared variable bar_index."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "case": "nz_bool_na",
+      "source": "//@version=1\nstudy(\"probe\")\nx=nz(na,false)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": "pine:function:nz#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "round_int",
+      "source": "//@version=2\nstudy(\"probe\")\nx=round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "round_precision",
+      "source": "//@version=2\nstudy(\"probe\")\nx=round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "round_named",
+      "source": "//@version=2\nstudy(\"probe\")\nx=round(x=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for builtin round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call round does not match any active overload in Pine v2."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for function round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "ceil_int",
+      "source": "//@version=2\nstudy(\"probe\")\nx=ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "abs_int",
+      "source": "//@version=2\nstudy(\"probe\")\nx=abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "exp_missing",
+      "source": "//@version=2\nstudy(\"probe\")\nx=exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "exp_string",
+      "source": "//@version=2\nstudy(\"probe\")\nx=exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "rsi_missing",
+      "source": "//@version=2\nstudy(\"probe\")\nx=rsi()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "rsi_series_length",
+      "source": "//@version=2\nstudy(\"probe\")\nx=rsi(close,bar_index)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A2002",
+          "message": "Call rsi matches multiple overloads equally: pine:function:ta.rsi#overload:0, pine:function:ta.rsi#overload:1."
+        },
+        {
+          "code": "P2A1101",
+          "message": "Use of undeclared variable bar_index."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "case": "nz_bool_na",
+      "source": "//@version=2\nstudy(\"probe\")\nx=nz(na,false)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": "pine:function:nz#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "round_int",
+      "source": "//@version=3\nstudy(\"probe\")\nx=round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "round_precision",
+      "source": "//@version=3\nstudy(\"probe\")\nx=round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "round_named",
+      "source": "//@version=3\nstudy(\"probe\")\nx=round(x=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for builtin round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call round does not match any active overload in Pine v3."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for function round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "ceil_int",
+      "source": "//@version=3\nstudy(\"probe\")\nx=ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "abs_int",
+      "source": "//@version=3\nstudy(\"probe\")\nx=abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "exp_missing",
+      "source": "//@version=3\nstudy(\"probe\")\nx=exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "exp_string",
+      "source": "//@version=3\nstudy(\"probe\")\nx=exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "rsi_missing",
+      "source": "//@version=3\nstudy(\"probe\")\nx=rsi()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "rsi_series_length",
+      "source": "//@version=3\nstudy(\"probe\")\nx=rsi(close,bar_index)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A2002",
+          "message": "Call rsi matches multiple overloads equally: pine:function:ta.rsi#overload:0, pine:function:ta.rsi#overload:1."
+        },
+        {
+          "code": "P2A1101",
+          "message": "Use of undeclared variable bar_index."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "case": "nz_bool_na",
+      "source": "//@version=3\nstudy(\"probe\")\nx=nz(na,false)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": "pine:function:nz#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "round_int",
+      "source": "//@version=4\nstudy(\"probe\")\nx=round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "round_precision",
+      "source": "//@version=4\nstudy(\"probe\")\nx=round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "round_named",
+      "source": "//@version=4\nstudy(\"probe\")\nx=round(x=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for builtin round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call round does not match any active overload in Pine v4."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter x for function round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "ceil_int",
+      "source": "//@version=4\nstudy(\"probe\")\nx=ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "abs_int",
+      "source": "//@version=4\nstudy(\"probe\")\nx=abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "exp_missing",
+      "source": "//@version=4\nstudy(\"probe\")\nx=exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "exp_string",
+      "source": "//@version=4\nstudy(\"probe\")\nx=exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "rsi_missing",
+      "source": "//@version=4\nstudy(\"probe\")\nx=rsi()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "rsi_series_length",
+      "source": "//@version=4\nstudy(\"probe\")\nx=rsi(close,bar_index)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#overload:0",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "case": "nz_bool_na",
+      "source": "//@version=4\nstudy(\"probe\")\nx=nz(na,false)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": "pine:function:nz#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "round_int",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "round_precision",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "round_named",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.round(number=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter number for builtin math.round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for math.round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call math.round does not match any active overload in Pine v5."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter number for namespace_function math.round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "ceil_int",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "abs_int",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "exp_missing",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "exp_string",
+      "source": "//@version=5\nindicator(\"probe\")\nx=math.exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "rsi_missing",
+      "source": "//@version=5\nindicator(\"probe\")\nx=ta.rsi()\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for ta.rsi: source, length."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call ta.rsi does not match any active overload in Pine v5."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "ta.rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": true
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "rsi_series_length",
+      "source": "//@version=5\nindicator(\"probe\")\nx=ta.rsi(close,bar_index)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ta.rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": true
+        }
+      ]
+    },
+    {
+      "version": 5,
+      "case": "nz_bool_na",
+      "source": "//@version=5\nindicator(\"probe\")\nx=nz(na,false)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": "pine:function:nz#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "round_int",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.round(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "round_precision",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.round(1.2,1)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": "pine:function:math.round#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "round_named",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.round(number=1.2)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter number for builtin math.round."
+        },
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for math.round: value."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call math.round does not match any active overload in Pine v6."
+        },
+        {
+          "code": "P2A1403",
+          "message": "Unknown parameter number for namespace_function math.round."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "math.round",
+          "symbol_id": "pine:function:math.round",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "ceil_int",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.ceil(1.2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.ceil",
+          "symbol_id": "pine:function:math.ceil",
+          "overload_id": "pine:function:math.ceil#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "abs_int",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.abs(-2)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.abs",
+          "symbol_id": "pine:function:math.abs",
+          "overload_id": "pine:function:math.abs#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "exp_missing",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.exp()\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "exp_string",
+      "source": "//@version=6\nindicator(\"probe\")\nx=math.exp(\"bad\")\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "math.exp",
+          "symbol_id": "pine:function:math.exp",
+          "overload_id": "pine:function:math.exp#canonical",
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "rsi_missing",
+      "source": "//@version=6\nindicator(\"probe\")\nx=ta.rsi()\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1404",
+          "message": "Missing required parameter(s) for ta.rsi: source, length."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call ta.rsi does not match any active overload in Pine v6."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "ta.rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": true
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "rsi_series_length",
+      "source": "//@version=6\nindicator(\"probe\")\nx=ta.rsi(close,bar_index)\n",
+      "ok": true,
+      "diagnostics": [],
+      "calls": [
+        {
+          "callee": "ta.rsi",
+          "symbol_id": "pine:function:ta.rsi",
+          "overload_id": "pine:function:ta.rsi#canonical",
+          "return_type": "float",
+          "stateful": true
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "case": "nz_bool_na",
+      "source": "//@version=6\nindicator(\"probe\")\nx=nz(na,false)\n",
+      "ok": false,
+      "diagnostics": [
+        {
+          "code": "P2A1406",
+          "message": "nz does not accept bool arguments in Pine v6."
+        },
+        {
+          "code": "P2A2008",
+          "message": "Call nz does not match any active overload in Pine v6."
+        }
+      ],
+      "calls": [
+        {
+          "callee": "nz",
+          "symbol_id": "pine:function:nz",
+          "overload_id": null,
+          "return_type": "float",
+          "stateful": false
+        }
+      ]
+    }
+  ]
+}
