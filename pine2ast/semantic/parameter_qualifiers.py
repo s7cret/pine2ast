@@ -30,7 +30,7 @@ from pine2ast.ast.nodes import (
     VarDeclaration,
 )
 from pine2ast.ast.walk import iter_child_nodes
-from pine2ast.semantic.control_values import returned_expressions
+from pine2ast.semantic.control_values import structural_qualifier_sources
 from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
 from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.semantic.symbols import Symbol, SymbolKind
@@ -167,17 +167,7 @@ class ParameterQualifierInference:
         if isinstance(node, Expression):
             children: list[ASTNode]
             if isinstance(node, (IfStructure, SwitchStructure)):
-                children = list(returned_expressions(node))
-                if isinstance(node, IfStructure):
-                    children += [node.condition] + [
-                        branch.condition for branch in node.else_if_branches
-                    ]
-                else:
-                    children += [
-                        case.condition for case in node.cases if case.condition is not None
-                    ]
-                    if node.expression is not None:
-                        children.append(node.expression)
+                children = list(structural_qualifier_sources(node))
             else:
                 children = list(iter_child_nodes(node))
             self.origins[id(node)] = frozenset().union(

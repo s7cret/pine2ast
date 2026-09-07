@@ -255,15 +255,9 @@ class PineInferenceEngine:
             elif isinstance(expr, TupleExpr):
                 children = expr.elements
             elif isinstance(expr, (IfStructure, SwitchStructure)):
-                from pine2ast.semantic.control_values import returned_expressions
+                from pine2ast.semantic.control_values import structural_qualifier_sources
 
-                children = list(returned_expressions(expr))
-                if isinstance(expr, IfStructure):
-                    children += [expr.condition] + [b.condition for b in expr.else_if_branches]
-                else:
-                    children += [c.condition for c in expr.cases if c.condition is not None]
-                    if expr.expression is not None:
-                        children.append(expr.expression)
+                children = list(structural_qualifier_sources(expr))
             if children is not None:
                 return max(
                     (self.infer_qualifier(child) for child in children),
