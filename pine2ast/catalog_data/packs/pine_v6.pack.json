@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:2dfa4590c4d3cca7d195875e89103295ed2b1c2b53fa4d8611ad900998e526cf",
-  "content_hash": "sha256:7308f8d846a08d46951bc1e0c2742986b65a7fd26cfb67270dcb8728dd1afce8",
+  "catalog_hash": "sha256:1a830150ad6d22cb9d32e853a90c19f7b63f9009c1f138e06fa7cacd02a79f5a",
+  "content_hash": "sha256:036c4f8f2e13676c93756ee1b92c3b9df7ad78ef9a9ab8bfaf89375bec2fe471",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 6,
@@ -6033,7 +6033,7 @@
         "parameters": [
           {
             "name": "defval",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": true,
             "type": "float"
           },
@@ -6118,7 +6118,7 @@
         "parameters": [
           {
             "name": "defval",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": true,
             "type": "int"
           },

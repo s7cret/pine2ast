@@ -104,6 +104,11 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
         "options": "const",
         "confirm": "const",
     },
+    # Specialized numeric inputs start in v5 and require const defaults. Source
+    # inputs and active have different contracts; never widen this by prefix.
+    # Primary v5/v6 authority: docs/STAGE2_INPUT_DEFVAL_QUALIFIERS.md.
+    "input.int": {"defval": "const"},
+    "input.float": {"defval": "const"},
     "ta.ema": {"length": "simple"},
     "ta.rma": {"length": "simple"},
     "ta.rsi": {"length": "simple"},
