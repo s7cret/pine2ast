@@ -1,0 +1,308 @@
+{
+  "cases": [
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-fastlen-const-v5",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-fastlen-input-v5",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-fastlen-series-v5",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-slowlen-const-v5",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-slowlen-input-v5",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-slowlen-series-v5",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-siglen-const-v5",
+      "parameter": "siglen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-siglen-input-v5",
+      "parameter": "siglen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-siglen-series-v5",
+      "parameter": "siglen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "a212479859a9917768a5e276cdbc24d5bb0dc8727ad2243756e26408446492a3",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "tsi",
+      "id": "tsi-short_length-const-v5",
+      "parameter": "short_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = 2\nplot(ta.tsi(close,length,3))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "tsi",
+      "id": "tsi-short_length-input-v5",
+      "parameter": "short_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = input.int(2)\nplot(ta.tsi(close,length,3))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "tsi",
+      "id": "tsi-short_length-series-v5",
+      "parameter": "short_length",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\nplot(ta.tsi(close,length,3))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "tsi",
+      "id": "tsi-long_length-const-v5",
+      "parameter": "long_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = 2\nplot(ta.tsi(close,2,length))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "tsi",
+      "id": "tsi-long_length-input-v5",
+      "parameter": "long_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = input.int(2)\nplot(ta.tsi(close,2,length))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "tsi",
+      "id": "tsi-long_length-series-v5",
+      "parameter": "long_length",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "8c53a330303917b28cbc095e17801f67cca7106c0648383e3c90c638e9f8905c",
+      "source": "//@version=5\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\nplot(ta.tsi(close,2,length))\n",
+      "version": 5
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-fastlen-const-v6",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-fastlen-input-v6",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-fastlen-series-v6",
+      "parameter": "fastlen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,length,3,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-slowlen-const-v6",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-slowlen-input-v6",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-slowlen-series-v6",
+      "parameter": "slowlen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,2,length,2)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "macd",
+      "id": "macd-siglen-const-v6",
+      "parameter": "siglen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = 2\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "macd",
+      "id": "macd-siglen-input-v6",
+      "parameter": "siglen",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = input.int(2)\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "macd",
+      "id": "macd-siglen-series-v6",
+      "parameter": "siglen",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "d26e91a4f2752a4d180efde5b3b349e3b8b64d2aa88802e6c187cec3fec71f49",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\n[a,b,c] = ta.macd(close,2,3,length)\nplot(a)\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "tsi",
+      "id": "tsi-short_length-const-v6",
+      "parameter": "short_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = 2\nplot(ta.tsi(close,length,3))\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "tsi",
+      "id": "tsi-short_length-input-v6",
+      "parameter": "short_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = input.int(2)\nplot(ta.tsi(close,length,3))\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "tsi",
+      "id": "tsi-short_length-series-v6",
+      "parameter": "short_length",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\nplot(ta.tsi(close,length,3))\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "const",
+      "function": "tsi",
+      "id": "tsi-long_length-const-v6",
+      "parameter": "long_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = 2\nplot(ta.tsi(close,2,length))\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "input",
+      "function": "tsi",
+      "id": "tsi-long_length-input-v6",
+      "parameter": "long_length",
+      "primary_source_admission_expected": true,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = input.int(2)\nplot(ta.tsi(close,2,length))\n",
+      "version": 6
+    },
+    {
+      "actual_qualifier_kind": "series",
+      "function": "tsi",
+      "id": "tsi-long_length-series-v6",
+      "parameter": "long_length",
+      "primary_source_admission_expected": false,
+      "reference_excerpt_sha256": "cac35b810ec38bd8bcfa9010ffd346d71a345ee462a7818570cf0664f67a5e08",
+      "source": "//@version=6\nindicator(\"Length contract\")\nint length = bar_index % 2 + 1\nplot(ta.tsi(close,2,length))\n",
+      "version": 6
+    }
+  ],
+  "legacy_versions_claimed": false,
+  "reference_sha256": "b85701201b9ca4b45b937aad1b8ce45914946341417948aac68738e3a39c78c5",
+  "schema_id": "openpine.recursive_length_primary_manual.v1",
+  "sut_executed_before_freeze": false
+}

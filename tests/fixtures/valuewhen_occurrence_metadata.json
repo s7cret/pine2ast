@@ -1,0 +1,304 @@
+{
+  "schema_id": "openpine.valuewhen_occurrence_literal_metadata.v1",
+  "provenance": "Frozen from exact baseline plus the literal sole change occurrence qualifier_max series to simple in modern v5/v6; no generator/builder imports.",
+  "authority_sha256": "044485bcb410b41697e15b1fdb7b64bf9dfc3044af3c81c45b7672a2e495f964",
+  "source_index_sha256": "b034104133fbf91a95e3dc253477395b9d28f580bcd66c278ccbfba78417a2c3",
+  "runtime_row_before": {
+    "abi_callable": "pinelib.abi.ta.valuewhen_v1",
+    "abi_parameters": [
+      {
+        "annotation": "RuntimeTransaction",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "tx",
+        "position": 0
+      },
+      {
+        "annotation": "str",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "state_id",
+        "position": 1
+      },
+      {
+        "annotation": "bool",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "condition",
+        "position": 2
+      },
+      {
+        "annotation": "object",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "source",
+        "position": 3
+      },
+      {
+        "annotation": "int",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "occurrence",
+        "position": 4
+      }
+    ],
+    "call_form": "namespace_function",
+    "capabilities": [
+      "state.ta",
+      "series.history"
+    ],
+    "category": "functions",
+    "delegation": null,
+    "diagnostic": null,
+    "disposition": "TARGET_DIRECT",
+    "dynamic_length_policy": {},
+    "evaluation_mode": "EAGER_ARGUMENTS",
+    "na_policy": {
+      "acceptance": "PARAMETER_SPECIFIC_RUNTIME_VALIDATION",
+      "propagation": "PINE_FUNCTION_SPECIFIC"
+    },
+    "name": "ta.valuewhen",
+    "overload_id": "pine:function:ta.valuewhen#v1",
+    "parameter_bindings": [
+      {
+        "abi_parameter": "tx",
+        "binding": "INJECTED",
+        "source": "RUNTIME_TRANSACTION"
+      },
+      {
+        "abi_parameter": "state_id",
+        "binding": "INJECTED",
+        "source": "SOURCE_LOCATION_STATE_ID"
+      },
+      {
+        "abi_parameter": "condition",
+        "binding": "SOURCE_PARAMETER",
+        "source": "condition"
+      },
+      {
+        "abi_parameter": "source",
+        "binding": "SOURCE_PARAMETER",
+        "source": "source"
+      },
+      {
+        "abi_parameter": "occurrence",
+        "binding": "SOURCE_PARAMETER",
+        "source": "occurrence"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "condition",
+        "qualifier_max": "series",
+        "required": true,
+        "type": "bool"
+      },
+      {
+        "name": "source",
+        "qualifier_max": "series",
+        "required": true,
+        "type": "float"
+      },
+      {
+        "name": "occurrence",
+        "qualifier_max": "series",
+        "required": true,
+        "type": "int"
+      }
+    ],
+    "producer_overload_ids": [
+      "pine:function:ta.valuewhen#canonical"
+    ],
+    "return": {
+      "identity": "VALUE",
+      "pine_type": "float",
+      "runtime_type": "object",
+      "tuple_arity": 0
+    },
+    "source_symbol_ids": [
+      "pine:function:ta.valuewhen",
+      "pine:function:ta.valuewhen#canonical"
+    ],
+    "state_identity_inputs": [
+      "state_id"
+    ],
+    "state_model": "TA_KERNEL_SLOT",
+    "symbol_id": "pine:function:ta.valuewhen",
+    "version_availability": [
+      5,
+      6
+    ]
+  },
+  "runtime_row_expected": {
+    "abi_callable": "pinelib.abi.ta.valuewhen_v1",
+    "abi_parameters": [
+      {
+        "annotation": "RuntimeTransaction",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "tx",
+        "position": 0
+      },
+      {
+        "annotation": "str",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "state_id",
+        "position": 1
+      },
+      {
+        "annotation": "bool",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "condition",
+        "position": 2
+      },
+      {
+        "annotation": "object",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "source",
+        "position": 3
+      },
+      {
+        "annotation": "int",
+        "has_default": false,
+        "kind": "POSITIONAL_OR_KEYWORD",
+        "name": "occurrence",
+        "position": 4
+      }
+    ],
+    "call_form": "namespace_function",
+    "capabilities": [
+      "state.ta",
+      "series.history"
+    ],
+    "category": "functions",
+    "delegation": null,
+    "diagnostic": null,
+    "disposition": "TARGET_DIRECT",
+    "dynamic_length_policy": {},
+    "evaluation_mode": "EAGER_ARGUMENTS",
+    "na_policy": {
+      "acceptance": "PARAMETER_SPECIFIC_RUNTIME_VALIDATION",
+      "propagation": "PINE_FUNCTION_SPECIFIC"
+    },
+    "name": "ta.valuewhen",
+    "overload_id": "pine:function:ta.valuewhen#v1",
+    "parameter_bindings": [
+      {
+        "abi_parameter": "tx",
+        "binding": "INJECTED",
+        "source": "RUNTIME_TRANSACTION"
+      },
+      {
+        "abi_parameter": "state_id",
+        "binding": "INJECTED",
+        "source": "SOURCE_LOCATION_STATE_ID"
+      },
+      {
+        "abi_parameter": "condition",
+        "binding": "SOURCE_PARAMETER",
+        "source": "condition"
+      },
+      {
+        "abi_parameter": "source",
+        "binding": "SOURCE_PARAMETER",
+        "source": "source"
+      },
+      {
+        "abi_parameter": "occurrence",
+        "binding": "SOURCE_PARAMETER",
+        "source": "occurrence"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "condition",
+        "qualifier_max": "series",
+        "required": true,
+        "type": "bool"
+      },
+      {
+        "name": "source",
+        "qualifier_max": "series",
+        "required": true,
+        "type": "float"
+      },
+      {
+        "name": "occurrence",
+        "qualifier_max": "simple",
+        "required": true,
+        "type": "int"
+      }
+    ],
+    "producer_overload_ids": [
+      "pine:function:ta.valuewhen#canonical"
+    ],
+    "return": {
+      "identity": "VALUE",
+      "pine_type": "float",
+      "runtime_type": "object",
+      "tuple_arity": 0
+    },
+    "source_symbol_ids": [
+      "pine:function:ta.valuewhen",
+      "pine:function:ta.valuewhen#canonical"
+    ],
+    "state_identity_inputs": [
+      "state_id"
+    ],
+    "state_model": "TA_KERNEL_SLOT",
+    "symbol_id": "pine:function:ta.valuewhen",
+    "version_availability": [
+      5,
+      6
+    ]
+  },
+  "runtime_remainder_without_content_hash": "355d13c18d33772c4e88685845d7bf53da0b294c41f39b44827f6ce7b2d92b3c",
+  "runtime_rows": 1108,
+  "changed_runtime_rows": 1,
+  "changed_runtime_version_tuples": 2,
+  "producer_packs": {
+    "1": {
+      "baseline_raw_sha256": "4ec944a6dab9bbf58bedef0d3aae9c44353e980a39b2df65eee6a13641740d21",
+      "expected_except_provenance_hash": "cfe3b67ac17fd0fcd456b2580aab1147ad1c748910b1b0342078f65e84e789bd",
+      "old_sections_hash": "87005ca81c82223a051ab56fde9bead09f3958e3b0742e3388ea40344b4c7dd5",
+      "old_rules_hash": "2a3bfb0952e17a1d0ffa6fc71910e6eeab3683fab2c9aa0a8646cb3b43c2b264"
+    },
+    "2": {
+      "baseline_raw_sha256": "72aa2ada7558f9d4245b09551c88aff748fe984ac50cb058a38fc72ba5a469c8",
+      "expected_except_provenance_hash": "811533e80635b6fe4f4e291146a21f0f888809922f3e117436708464c07d4e55",
+      "old_sections_hash": "57c87a051497a6df5f1335b016ebbafb6f3552a4e3b0e1080a08a4611be2dc58",
+      "old_rules_hash": "5d2e5ade57008a00bb3baa373fc61a18bba2e6fa5a56f7e1cfc17c99fbcc9a60"
+    },
+    "3": {
+      "baseline_raw_sha256": "de1dcee54f4373facadcc4aa59ee728f5bfd2ccfa0c597fd27bbbcc27a44d078",
+      "expected_except_provenance_hash": "c8aa51eae0ec72fae408905ba23129cdd6c987ef5ac74a820775dca2a76ec786",
+      "old_sections_hash": "d52e871b8e0a40f2072f8b91c4138ba5895b119ad023bd38fc12d97907d84c73",
+      "old_rules_hash": "4b657c39c775d4518ece0bbcba4bf7c8bd78e0bcd317691df17033ec53dbdcd7"
+    },
+    "4": {
+      "baseline_raw_sha256": "6c4f7fdc7e332541d47fc8d10dc704c7315e7e514627eeaaa687cc5df9e47b75",
+      "expected_except_provenance_hash": "25376aec2b45377029aee8b997f63becd539cf03d71b017e5d546b5728d7674f",
+      "old_sections_hash": "50c696fdd4eabc7aa3effea03f313d6fb7f3d2cb56ed063df21c0ec86c18cde2",
+      "old_rules_hash": "e4b7f41994330d49c724a23edd1e7ea350811070b7cacbea2e44a03650fac137"
+    },
+    "5": {
+      "baseline_raw_sha256": "54f972d1b741663f9a17c5c373d4439887992e597217e7e8e1616950412e8b23",
+      "expected_except_provenance_hash": "c36729bda1a63119316a5fb8432678a05b2244589de0f65cfd934c62cac59422",
+      "old_sections_hash": "2a9713ba5fd18cffa30e69d396f1a4091f5990a57b715264d3cfd8745ff59b7b",
+      "old_rules_hash": "7480a6654d97ebd541839ba101ae7295b96ec291dd7e7e14d312f1ba2fd4ea25"
+    },
+    "6": {
+      "baseline_raw_sha256": "c16da41230e2838de727fe16ad3cb799a82f54ed3a00b23fe1e2813171a5acdb",
+      "expected_except_provenance_hash": "5891f9f86e239b5abe99e842922486bd15ffacefefdfc0e7b9c73a816adcad2d",
+      "old_sections_hash": "d0b38f1cd4b29265a8b704548595bdf80cd9d2bade8daa07f2f140cbe66cea20",
+      "old_rules_hash": "76601f27cfd1a1340e8937390e9a1c2b661b18d14bd88bf129a9b8800727ac73"
+    }
+  },
+  "old_packs_semantics_preserved": true,
+  "old_pack_envelope_hash_regeneration_expected": true,
+  "function_completeness_claim": false,
+  "full_stage2_accepted": false
+}

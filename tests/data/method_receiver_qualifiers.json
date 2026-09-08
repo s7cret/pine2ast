@@ -1,0 +1,914 @@
+{
+  "schema_id": "openpine.independent_scenario_matrix.v1",
+  "wave": "method-receiver-qualifier-a2-before",
+  "authoring": "Literal scenarios authored before any A2 production/schema change or observation; values are arithmetic/qualifier-rule expectations, never SUT-derived. EMA scenarios test admission only. Exported rows exercise standalone library analysis, not imported/exported method projection.",
+  "scenarios": [
+    {
+      "id": "simple_literal",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_literal",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_input",
+      "body": "method plus(simple int self)=>self+1\na=input.int(2)\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=input.int(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_input",
+      "body": "method plus(simple int self)=>self+1\na=input.int(2)\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=input.int(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_local",
+      "body": "method plus(simple int self)=>self+1\nsimple int a=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nsimple int a=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_local",
+      "body": "method plus(simple int self)=>self+1\nsimple int a=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nsimple int a=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_rejected",
+      "body": "method plus(simple int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_rejected",
+      "body": "method plus(simple int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_constant_expression_rejected",
+      "body": "method plus(simple int self)=>self+1\na=bar_index*0+2\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=bar_index*0+2\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_constant_expression_rejected",
+      "body": "method plus(simple int self)=>self+1\na=bar_index*0+2\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=bar_index*0+2\nplot(a.plus())\n"
+    },
+    {
+      "id": "unused_simple_receiver_still_checks",
+      "body": "method fixed(simple int self)=>7\na=bar_index\nplot(a.fixed())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod fixed(simple int self)=>7\na=bar_index\nplot(a.fixed())\n"
+    },
+    {
+      "id": "unused_simple_receiver_still_checks",
+      "body": "method fixed(simple int self)=>7\na=bar_index\nplot(a.fixed())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod fixed(simple int self)=>7\na=bar_index\nplot(a.fixed())\n"
+    },
+    {
+      "id": "simple_string",
+      "body": "method match(simple string self)=>self==\"abc\" ? 1 : 0\na=input.string(\"abc\")\nplot(a.match())",
+      "expected_status": "accept",
+      "expected_value": 1,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod match(simple string self)=>self==\"abc\" ? 1 : 0\na=input.string(\"abc\")\nplot(a.match())\n"
+    },
+    {
+      "id": "simple_string",
+      "body": "method match(simple string self)=>self==\"abc\" ? 1 : 0\na=input.string(\"abc\")\nplot(a.match())",
+      "expected_status": "accept",
+      "expected_value": 1,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod match(simple string self)=>self==\"abc\" ? 1 : 0\na=input.string(\"abc\")\nplot(a.match())\n"
+    },
+    {
+      "id": "simple_bool",
+      "body": "method number(simple bool self)=>self ? 1 : 0\na=input.bool(false)\nplot(a.number())",
+      "expected_status": "accept",
+      "expected_value": 0,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod number(simple bool self)=>self ? 1 : 0\na=input.bool(false)\nplot(a.number())\n"
+    },
+    {
+      "id": "simple_bool",
+      "body": "method number(simple bool self)=>self ? 1 : 0\na=input.bool(false)\nplot(a.number())",
+      "expected_status": "accept",
+      "expected_value": 0,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod number(simple bool self)=>self ? 1 : 0\na=input.bool(false)\nplot(a.number())\n"
+    },
+    {
+      "id": "series_explicit",
+      "body": "method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        1,
+        2,
+        3
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(series int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_explicit",
+      "body": "method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        1,
+        2,
+        3
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(series int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "absent_receiver_control",
+      "body": "method plus(int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "old-path-control",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "absent_receiver_control",
+      "body": "method plus(int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 3,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "old-path-control",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "receiver_inside_simple_builtin",
+      "body": "method smooth(simple int self)=>ta.ema(close,self)\na=2\nplot(a.smooth())",
+      "expected_status": "accept",
+      "expected_value": null,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "admission-only-no-EMA-warmup-oracle",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod smooth(simple int self)=>ta.ema(close,self)\na=2\nplot(a.smooth())\n"
+    },
+    {
+      "id": "receiver_inside_simple_builtin",
+      "body": "method smooth(simple int self)=>ta.ema(close,self)\na=2\nplot(a.smooth())",
+      "expected_status": "accept",
+      "expected_value": null,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "admission-only-no-EMA-warmup-oracle",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod smooth(simple int self)=>ta.ema(close,self)\na=2\nplot(a.smooth())\n"
+    },
+    {
+      "id": "simple_result_outer_builtin",
+      "body": "method length(simple int self)=>self\na=2\nplot(ta.ema(close,a.length()))",
+      "expected_status": "accept",
+      "expected_value": null,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "admission-only-no-EMA-warmup-oracle",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod length(simple int self)=>self\na=2\nplot(ta.ema(close,a.length()))\n"
+    },
+    {
+      "id": "simple_result_outer_builtin",
+      "body": "method length(simple int self)=>self\na=2\nplot(ta.ema(close,a.length()))",
+      "expected_status": "accept",
+      "expected_value": null,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "admission-only-no-EMA-warmup-oracle",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod length(simple int self)=>self\na=2\nplot(ta.ema(close,a.length()))\n"
+    },
+    {
+      "id": "simple_result_not_const",
+      "body": "method length(simple int self)=>self\na=2\nx=input.int(a.length())\nplot(x)",
+      "expected_status": "reject-const-required",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod length(simple int self)=>self\na=2\nx=input.int(a.length())\nplot(x)\n"
+    },
+    {
+      "id": "simple_result_not_const",
+      "body": "method length(simple int self)=>self\na=2\nx=input.int(a.length())\nplot(x)",
+      "expected_status": "reject-const-required",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod length(simple int self)=>self\na=2\nx=input.int(a.length())\nplot(x)\n"
+    },
+    {
+      "id": "series_parameter_strengthens_result",
+      "body": "method plus(simple int self,int step)=>self+step\na=2\nplot(a.plus(bar_index))",
+      "expected_status": "accept",
+      "expected_value": [
+        2,
+        3,
+        4
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\na=2\nplot(a.plus(bar_index))\n"
+    },
+    {
+      "id": "series_parameter_strengthens_result",
+      "body": "method plus(simple int self,int step)=>self+step\na=2\nplot(a.plus(bar_index))",
+      "expected_status": "accept",
+      "expected_value": [
+        2,
+        3,
+        4
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\na=2\nplot(a.plus(bar_index))\n"
+    },
+    {
+      "id": "default_parameter_index_zero",
+      "body": "method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 5,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "default_parameter_index_zero",
+      "body": "method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 5,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "named_order_keeps_indices",
+      "body": "method plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(y=4,x=5))",
+      "expected_status": "accept",
+      "expected_value": 56,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(y=4,x=5))\n"
+    },
+    {
+      "id": "named_order_keeps_indices",
+      "body": "method plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(y=4,x=5))",
+      "expected_status": "accept",
+      "expected_value": 56,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(y=4,x=5))\n"
+    },
+    {
+      "id": "positional_order_keeps_indices",
+      "body": "method plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(5,4))",
+      "expected_status": "accept",
+      "expected_value": 56,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(5,4))\n"
+    },
+    {
+      "id": "positional_order_keeps_indices",
+      "body": "method plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(5,4))",
+      "expected_status": "accept",
+      "expected_value": 56,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int x,simple int y=3)=>self+x*10+y\na=2\nplot(a.plus(5,4))\n"
+    },
+    {
+      "id": "duplicate_argument",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(3,step=4))",
+      "expected_status": "reject-duplicate-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(3,step=4))\n"
+    },
+    {
+      "id": "duplicate_argument",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(3,step=4))",
+      "expected_status": "reject-duplicate-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(3,step=4))\n"
+    },
+    {
+      "id": "receiver_not_named_source_argument",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a.plus(self=4))",
+      "expected_status": "reject-unknown-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus(self=4))\n"
+    },
+    {
+      "id": "receiver_not_named_source_argument",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a.plus(self=4))",
+      "expected_status": "reject-unknown-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus(self=4))\n"
+    },
+    {
+      "id": "missing_regular_argument",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "reject-missing-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "missing_regular_argument",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "reject-missing-argument",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_regular_argument_series",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(bar_index))",
+      "expected_status": "reject-regular-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(bar_index))\n"
+    },
+    {
+      "id": "simple_regular_argument_series",
+      "body": "method plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(bar_index))",
+      "expected_status": "reject-regular-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,simple int step)=>self+step\na=2\nplot(a.plus(bar_index))\n"
+    },
+    {
+      "id": "receiver_viability_precedes_tie",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=bar_index\nplot(a.plus(2))",
+      "expected_status": "accept",
+      "expected_value": [
+        12,
+        13,
+        14
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=bar_index\nplot(a.plus(2))\n"
+    },
+    {
+      "id": "receiver_viability_precedes_tie",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=bar_index\nplot(a.plus(2))",
+      "expected_status": "accept",
+      "expected_value": [
+        12,
+        13,
+        14
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=bar_index\nplot(a.plus(2))\n"
+    },
+    {
+      "id": "receiver_tie_remains_unverified",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=2\nplot(a.plus(2))",
+      "expected_status": "profile-ambiguity-unverified",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "not-Pine-rejection-oracle",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=2\nplot(a.plus(2))\n"
+    },
+    {
+      "id": "receiver_tie_remains_unverified",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=2\nplot(a.plus(2))",
+      "expected_status": "profile-ambiguity-unverified",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "not-Pine-rejection-oracle",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(series int self,int step)=>self+step+10\na=2\nplot(a.plus(2))\n"
+    },
+    {
+      "id": "argument_overload_with_receiver",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(simple int self,string step)=>self+str.length(step)\na=2\nplot(a.plus(\"abcd\"))",
+      "expected_status": "accept",
+      "expected_value": 6,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(simple int self,string step)=>self+str.length(step)\na=2\nplot(a.plus(\"abcd\"))\n"
+    },
+    {
+      "id": "argument_overload_with_receiver",
+      "body": "method plus(simple int self,int step)=>self+step\nmethod plus(simple int self,string step)=>self+str.length(step)\na=2\nplot(a.plus(\"abcd\"))",
+      "expected_status": "accept",
+      "expected_value": 6,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self,int step)=>self+step\nmethod plus(simple int self,string step)=>self+str.length(step)\na=2\nplot(a.plus(\"abcd\"))\n"
+    },
+    {
+      "id": "simple_reference_rejected",
+      "body": "method sizeOf(simple array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())",
+      "expected_status": "UNVERIFIED-profile-reject",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "implementation-admission-profile-only",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod sizeOf(simple array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())\n",
+      "authority_scope": "v5 syntax and series reference IDs documented; ignored qualifier exception not established; rejection is NOT Pine parity"
+    },
+    {
+      "id": "simple_reference_rejected",
+      "body": "method sizeOf(simple array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())",
+      "expected_status": "accept",
+      "expected_value": 1,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod sizeOf(simple array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())\n",
+      "authority_scope": "v6 reference qualifier keyword ignored; original ID retained as immutable scenario identity"
+    },
+    {
+      "id": "series_reference",
+      "body": "method sizeOf(series array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())",
+      "expected_status": "accept",
+      "expected_value": 1,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod sizeOf(series array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())\n"
+    },
+    {
+      "id": "series_reference",
+      "body": "method sizeOf(series array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())",
+      "expected_status": "accept",
+      "expected_value": 1,
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod sizeOf(series array<int> self)=>self.size()\na=array.new<int>(1,2)\nplot(a.sizeOf())\n"
+    },
+    {
+      "id": "exported_simple",
+      "body": "export method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 5,
+      "expected_result_qualifier": "simple",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nlibrary(\"A2 before\")\nexport method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "exported_simple",
+      "body": "export method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 5,
+      "expected_result_qualifier": "simple",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nlibrary(\"A2 before\")\nexport method plus(simple int self,simple int step=3)=>self+step\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "exported_series",
+      "body": "export method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        1,
+        2,
+        3
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nlibrary(\"A2 before\")\nexport method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "exported_series",
+      "body": "export method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        1,
+        2,
+        3
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nlibrary(\"A2 before\")\nexport method plus(series int self)=>self+1\na=bar_index\nplot(a.plus())\n"
+    },
+    {
+      "id": "exported_fixed_floor",
+      "body": "export method fixed(simple int self)=>7\na=2\nplot(a.fixed())",
+      "expected_status": "accept",
+      "expected_value": 7,
+      "expected_result_qualifier": "simple",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nlibrary(\"A2 before\")\nexport method fixed(simple int self)=>7\na=2\nplot(a.fixed())\n"
+    },
+    {
+      "id": "exported_fixed_floor",
+      "body": "export method fixed(simple int self)=>7\na=2\nplot(a.fixed())",
+      "expected_status": "accept",
+      "expected_value": 7,
+      "expected_result_qualifier": "simple",
+      "kind": "exported",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nlibrary(\"A2 before\")\nexport method fixed(simple int self)=>7\na=2\nplot(a.fixed())\n"
+    },
+    {
+      "id": "const_receiver_outside_profile",
+      "body": "method plus(const int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "unsupported-scope",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "no-claim-of-Pine-invalidity",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(const int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "const_receiver_outside_profile",
+      "body": "method plus(const int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "unsupported-scope",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "no-claim-of-Pine-invalidity",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(const int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "input_receiver_outside_profile",
+      "body": "method plus(input int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "unsupported-scope",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "no-claim-of-Pine-invalidity",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(input int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "input_receiver_outside_profile",
+      "body": "method plus(input int self)=>self+1\na=2\nplot(a.plus())",
+      "expected_status": "unsupported-scope",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "no-claim-of-Pine-invalidity",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(input int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "receiver_expression_once",
+      "body": "method plus(series int self,int step=10)=>self+step\nnextValue()=>\n    var int count=0\n    count+=1\n    count\nplot(nextValue().plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        11,
+        12,
+        13
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(series int self,int step=10)=>self+step\nnextValue()=>\n    var int count=0\n    count+=1\n    count\nplot(nextValue().plus())\n"
+    },
+    {
+      "id": "receiver_expression_once",
+      "body": "method plus(series int self,int step=10)=>self+step\nnextValue()=>\n    var int count=0\n    count+=1\n    count\nplot(nextValue().plus())",
+      "expected_status": "accept",
+      "expected_value": [
+        11,
+        12,
+        13
+      ],
+      "expected_result_qualifier": "series",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(series int self,int step=10)=>self+step\nnextValue()=>\n    var int count=0\n    count+=1\n    count\nplot(nextValue().plus())\n"
+    },
+    {
+      "id": "simple_udf_receiver",
+      "body": "method plus(simple int self)=>self+1\nmake(simple int x)=>x+1\na=make(2)\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 4,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nmake(simple int x)=>x+1\na=make(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "simple_udf_receiver",
+      "body": "method plus(simple int self)=>self+1\nmake(simple int x)=>x+1\na=make(2)\nplot(a.plus())",
+      "expected_status": "accept",
+      "expected_value": 4,
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nmake(simple int x)=>x+1\na=make(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_udf_receiver_rejected",
+      "body": "method plus(simple int self)=>self+1\nmake(int x)=>x+1\na=make(2)\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nmake(int x)=>x+1\na=make(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "series_udf_receiver_rejected",
+      "body": "method plus(simple int self)=>self+1\nmake(int x)=>x+1\na=make(2)\nplot(a.plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\nmake(int x)=>x+1\na=make(2)\nplot(a.plus())\n"
+    },
+    {
+      "id": "history_receiver_rejected",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a[1].plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a[1].plus())\n"
+    },
+    {
+      "id": "history_receiver_rejected",
+      "body": "method plus(simple int self)=>self+1\na=2\nplot(a[1].plus())",
+      "expected_status": "reject-receiver-qualifier",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a[1].plus())\n"
+    },
+    {
+      "id": "series_guard_prevents_simple_result",
+      "body": "method length(simple int self)=>bar_index>0 ? self : self+1\na=2\nplot(ta.ema(close,a.length()))",
+      "expected_status": "reject-result-series",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod length(simple int self)=>bar_index>0 ? self : self+1\na=2\nplot(ta.ema(close,a.length()))\n"
+    },
+    {
+      "id": "series_guard_prevents_simple_result",
+      "body": "method length(simple int self)=>bar_index>0 ? self : self+1\na=2\nplot(ta.ema(close,a.length()))",
+      "expected_status": "reject-result-series",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod length(simple int self)=>bar_index>0 ? self : self+1\na=2\nplot(ta.ema(close,a.length()))\n"
+    },
+    {
+      "id": "tuple_result",
+      "body": "method pair(simple int self)=>[self,self+1]\na=2\n[x,y]=a.pair()\nplot(x)\nplot(y)",
+      "expected_status": "accept",
+      "expected_value": [
+        2,
+        3
+      ],
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 5,
+      "source": "//@version=5\nindicator(\"A2 before\")\nmethod pair(simple int self)=>[self,self+1]\na=2\n[x,y]=a.pair()\nplot(x)\nplot(y)\n"
+    },
+    {
+      "id": "tuple_result",
+      "body": "method pair(simple int self)=>[self,self+1]\na=2\n[x,y]=a.pair()\nplot(x)\nplot(y)",
+      "expected_status": "accept",
+      "expected_value": [
+        2,
+        3
+      ],
+      "expected_result_qualifier": "simple",
+      "kind": "ordinary",
+      "dimension": "value-and-admission",
+      "version": 6,
+      "source": "//@version=6\nindicator(\"A2 before\")\nmethod pair(simple int self)=>[self,self+1]\na=2\n[x,y]=a.pair()\nplot(x)\nplot(y)\n"
+    },
+    {
+      "id": "historical_not_backported",
+      "version": 1,
+      "kind": "ordinary",
+      "expected_status": "reject-version",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "dimension": "version-admission",
+      "source": "//@version=1\nstudy(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "historical_not_backported",
+      "version": 2,
+      "kind": "ordinary",
+      "expected_status": "reject-version",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "dimension": "version-admission",
+      "source": "//@version=2\nstudy(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "historical_not_backported",
+      "version": 3,
+      "kind": "ordinary",
+      "expected_status": "reject-version",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "dimension": "version-admission",
+      "source": "//@version=3\nstudy(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    },
+    {
+      "id": "historical_not_backported",
+      "version": 4,
+      "kind": "ordinary",
+      "expected_status": "reject-version",
+      "expected_value": null,
+      "expected_result_qualifier": null,
+      "dimension": "version-admission",
+      "source": "//@version=4\nstudy(\"A2 before\")\nmethod plus(simple int self)=>self+1\na=2\nplot(a.plus())\n"
+    }
+  ],
+  "reviewed_qualifier_labels": {
+    "count": 2,
+    "receipt": "method-a2-draft-qualifier-correction.json",
+    "original_matrix_sha256": "221ca224a125f37881f757ee349157c217bd73383918e6253770a267520326f4"
+  }
+}

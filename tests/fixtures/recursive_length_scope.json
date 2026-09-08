@@ -1,0 +1,31 @@
+{
+  "baseline_source_index_sha256": "0d44e74ae3472765ea0c836be11baa0c9c0985c09ce051a155343586091771a3",
+  "expected_derivation": "Baseline only plus five primary literal qualifier substitutions; no current builder output consulted.",
+  "producer_packs": {
+    "1": {
+      "before_raw_sha256": "4ec944a6dab9bbf58bedef0d3aae9c44353e980a39b2df65eee6a13641740d21",
+      "expected_except_provenance_sha256": "cfe3b67ac17fd0fcd456b2580aab1147ad1c748910b1b0342078f65e84e789bd"
+    },
+    "2": {
+      "before_raw_sha256": "72aa2ada7558f9d4245b09551c88aff748fe984ac50cb058a38fc72ba5a469c8",
+      "expected_except_provenance_sha256": "811533e80635b6fe4f4e291146a21f0f888809922f3e117436708464c07d4e55"
+    },
+    "3": {
+      "before_raw_sha256": "de1dcee54f4373facadcc4aa59ee728f5bfd2ccfa0c597fd27bbbcc27a44d078",
+      "expected_except_provenance_sha256": "c8aa51eae0ec72fae408905ba23129cdd6c987ef5ac74a820775dca2a76ec786"
+    },
+    "4": {
+      "before_raw_sha256": "6c4f7fdc7e332541d47fc8d10dc704c7315e7e514627eeaaa687cc5df9e47b75",
+      "expected_except_provenance_sha256": "25376aec2b45377029aee8b997f63becd539cf03d71b017e5d546b5728d7674f"
+    },
+    "5": {
+      "before_raw_sha256": "f6f596160ce2d58ddf1c9ae553c4953fac98db30b1ddc2ded5c949787531e582",
+      "expected_except_provenance_sha256": "c36729bda1a63119316a5fb8432678a05b2244589de0f65cfd934c62cac59422"
+    },
+    "6": {
+      "before_raw_sha256": "f669e09e66ed7a31230d030ac3d00626ec60b7195235aa5c28e2b88a60fe289f",
+      "expected_except_provenance_sha256": "5891f9f86e239b5abe99e842922486bd15ffacefefdfc0e7b9c73a816adcad2d"
+    }
+  },
+  "target_remainder_without_tsi_sha256": "717fdf2c97593fc2e15510d69fdbd9651029a7353362fdb67cc7e11f09276bff"
+}
