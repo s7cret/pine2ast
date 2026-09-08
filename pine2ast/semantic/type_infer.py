@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Any
 
 from pine2ast.ast.nodes import (
@@ -347,14 +347,19 @@ def infer_type(
     symbols: Mapping[str, object] | None = None,
     *,
     registry: Registry | None = None,
+    infer_child: Callable[[Any], str] | None = None,
 ) -> str:
     """Infer one Pine expression type without selecting a language version.
 
     Version selection is intentionally absent. Callers that need built-in return
     types must supply the catalog view already selected by PineVersionContext.
+    The optional producer-owned child callback preserves admitted contextual
+    facts while reusing these operator rules. It is never deserialized input.
     """
 
     def recur(item: Any) -> str:
+        if infer_child is not None:
+            return infer_child(item)
         return infer_type(item, symbols, registry=registry)
 
     if isinstance(expr, Literal):

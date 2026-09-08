@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:ebe0a885ddaf007deb4b66538e3c666ba6815b35fc3c0bc0cd912a017e8b3018",
-  "content_hash": "sha256:6ad76f3e882564ba7072283b4c626d111b174f40ce7a788b91df04a6a09d9e08",
+  "catalog_hash": "sha256:26a6a3c447a5feebbcffc5d4b1b833f0e047e221d7945deb87dadcc644855893",
+  "content_hash": "sha256:5722900c5fa9599e35d537b6814c35be3a4d166582c61d034c0c41325fd68574",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 5,
@@ -7355,18 +7355,18 @@
             "name": "key",
             "qualifier_max": "series",
             "required": true,
-            "type": "string"
+            "type": "K"
           },
           {
             "name": "value",
             "qualifier_max": "series",
             "required": true,
-            "type": "any"
+            "type": "V"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
-        "returns": "void",
+        "returns": "V",
         "scope": "any",
         "symbol_id": "pine:function:map.put"
       },
@@ -7381,7 +7381,7 @@
             "type": "map"
           },
           {
-            "name": "from",
+            "name": "id2",
             "qualifier_max": "series",
             "required": true,
             "type": "map"
@@ -10319,8 +10319,8 @@
           {
             "name": "source",
             "qualifier_max": "series",
-            "required": false,
-            "type": "series<any>"
+            "required": true,
+            "type": "string"
           }
         ],
         "pine_version": "5",
@@ -10475,7 +10475,7 @@
         "name": "str.tonumber",
         "parameters": [
           {
-            "name": "source",
+            "name": "string",
             "qualifier_max": "series",
             "required": true,
             "type": "string"
@@ -10522,8 +10522,8 @@
           {
             "name": "source",
             "qualifier_max": "series",
-            "required": false,
-            "type": "series<any>"
+            "required": true,
+            "type": "string"
           }
         ],
         "pine_version": "5",
@@ -16229,18 +16229,18 @@
             "name": "key",
             "qualifier_max": "series",
             "required": true,
-            "type": "string"
+            "type": "K"
           },
           {
             "name": "value",
             "qualifier_max": "series",
             "required": true,
-            "type": "any"
+            "type": "V"
           }
         ],
         "receiver_type": "map",
         "return_qualifier": "series",
-        "returns": "void",
+        "returns": "V",
         "scope": "any",
         "signature_source": "derived_from_function_form",
         "symbol_id": "pine:method:map.put"
@@ -16251,7 +16251,7 @@
         "name": "map.put_all",
         "parameters": [
           {
-            "name": "from",
+            "name": "id2",
             "qualifier_max": "series",
             "required": true,
             "type": "map"

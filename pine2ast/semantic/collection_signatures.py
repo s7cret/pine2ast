@@ -235,7 +235,7 @@ COLLECTION_METHOD_PARAMETER_TEMPLATES: dict[str, dict[str, list[CollectionParame
         "get": [("key", "K", "key")],
         "keys": [],
         "put": [("key", "K", "key"), ("value", "V", "value")],
-        "put_all": [("other", "map<K,V>", "other")],
+        "put_all": [("id2", "map<K,V>", "other")],
         "remove": [("key", "K", "key")],
         "size": [],
         "values": [],
@@ -451,7 +451,7 @@ def collection_return_type(receiver_type: str | None, operation: str) -> str | N
             return "unknown"
         return "void"
     if kind == "map":
-        if operation in {"get", "remove"}:
+        if operation in {"get", "put", "remove"}:
             return value_type
         if operation == "contains":
             return "bool"

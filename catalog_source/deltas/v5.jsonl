@@ -52,8 +52,8 @@
 {"name":"map.get","op":"ADD","section":"functions","semantic_id":"sha256:c62ace3d95a562c8d4f46655a2894be552cad04a6b3f9f68e0e32c0ca1c94547","symbol_id":"pine:function:map.get"}
 {"name":"map.keys","op":"ADD","section":"functions","semantic_id":"sha256:5f935b8478cbfc9c10ebd2a48aadf1d014cab423f6ce27c44d55a2e5c0fa8c45","symbol_id":"pine:function:map.keys"}
 {"name":"map.new<type,type>","op":"ADD","section":"functions","semantic_id":"sha256:cacea99c86e2ed063f56545cad32eaed3f0f34d836c9c587b68302b9bd8cf683","symbol_id":"pine:function:map.newu003ctypeu002ctypeu003e"}
-{"name":"map.put","op":"ADD","section":"functions","semantic_id":"sha256:de1c68a658913dbe8bc11d409a1e558f6c25c98c17e85457fd3d708e90a20d4a","symbol_id":"pine:function:map.put"}
-{"name":"map.put_all","op":"ADD","section":"functions","semantic_id":"sha256:4fa1001270f8f4d0894e37c3a0b1a7c11c1870643fe26b6a8b3a3dea209630f3","symbol_id":"pine:function:map.put_all"}
+{"name":"map.put","op":"ADD","section":"functions","semantic_id":"sha256:6c1b57d451d2337d6d2b5b102f74eb6aff7a95db0e80e5b1cf123097de78202c","symbol_id":"pine:function:map.put"}
+{"name":"map.put_all","op":"ADD","section":"functions","semantic_id":"sha256:688d08cf183fc3a2e9d476f07aa1360ac1e0a58da9190d1877b062fa525e0043","symbol_id":"pine:function:map.put_all"}
 {"name":"map.remove","op":"ADD","section":"functions","semantic_id":"sha256:c2e6f228d5cf8eccd1a059c5f043e41bb3623971f3e15dba0b260538ed5a04c2","symbol_id":"pine:function:map.remove"}
 {"name":"map.size","op":"ADD","section":"functions","semantic_id":"sha256:d1a80f720661a8ca4a122a47bf951f637e198f44ee9b33d7f122485143e6c324","symbol_id":"pine:function:map.size"}
 {"name":"map.values","op":"ADD","section":"functions","semantic_id":"sha256:bf08eb8f64fdd48e5a04814e0efd07bfe4ce00bbcba04e8ed10ead905edaed8c","symbol_id":"pine:function:map.values"}
@@ -159,6 +159,7 @@
 {"name":"str.format_time","op":"RENAME","section":"functions","symbol_id":"pine:function:str.format_time"}
 {"name":"str.length","op":"RENAME","section":"functions","symbol_id":"pine:function:str.length"}
 {"name":"str.lower","op":"RENAME","section":"functions","symbol_id":"pine:function:str.lower"}
+{"op":"PATCH","semantic_id":"sha256:12918b1a8e7c644e07d53e73df7f181b209ac3c7d4df1792500260db33c4a116","symbol_id":"pine:function:str.lower"}
 {"name":"str.match","op":"RENAME","section":"functions","symbol_id":"pine:function:str.match"}
 {"name":"str.pos","op":"RENAME","section":"functions","symbol_id":"pine:function:str.pos"}
 {"name":"str.repeat","op":"RENAME","section":"functions","symbol_id":"pine:function:str.repeat"}
@@ -168,9 +169,11 @@
 {"name":"str.startswith","op":"RENAME","section":"functions","symbol_id":"pine:function:str.startswith"}
 {"name":"str.substring","op":"RENAME","section":"functions","symbol_id":"pine:function:str.substring"}
 {"name":"str.tonumber","op":"RENAME","section":"functions","symbol_id":"pine:function:str.tonumber"}
+{"op":"PATCH","semantic_id":"sha256:0ba51dd10c9d25fd77c8617e7b2d2b39e08e4474ed765ced446e54b5869e39f5","symbol_id":"pine:function:str.tonumber"}
 {"name":"str.tostring","op":"RENAME","section":"functions","symbol_id":"pine:function:str.tostring"}
 {"name":"str.trim","op":"RENAME","section":"functions","symbol_id":"pine:function:str.trim"}
 {"name":"str.upper","op":"RENAME","section":"functions","symbol_id":"pine:function:str.upper"}
+{"op":"PATCH","semantic_id":"sha256:d95252b1f5d8c88111da6c5484a1001be073e58d46ada61526a7e0221be806be","symbol_id":"pine:function:str.upper"}
 {"name":"ta.alma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.alma"}
 {"name":"ta.atr","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.atr"}
 {"name":"ta.barssince","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.barssince"}
@@ -383,8 +386,8 @@
 {"name":"map.copy","op":"ADD","section":"methods","semantic_id":"sha256:14c8d5ef04642d64f7db64dccf49eea310eb8c1867c53c18a078cc75ad324698","symbol_id":"pine:method:map.copy"}
 {"name":"map.get","op":"ADD","section":"methods","semantic_id":"sha256:390691c171247b219e7ae7ef7696356dd1624e94f13c19268d494759d9f0e611","symbol_id":"pine:method:map.get"}
 {"name":"map.keys","op":"ADD","section":"methods","semantic_id":"sha256:7896035cebf9575a69fa64443e4422dbd43c048dd836e4f0a962f51590599261","symbol_id":"pine:method:map.keys"}
-{"name":"map.put","op":"ADD","section":"methods","semantic_id":"sha256:8dff490ba4ba85647773e3e511fefb78a8d194d5d32fe78b1272c7dc2083cc71","symbol_id":"pine:method:map.put"}
-{"name":"map.put_all","op":"ADD","section":"methods","semantic_id":"sha256:a3988f52a3d47e44ca1f3835d2b32d4dc7f7687cc0602b21dddb6ec1f545f7f4","symbol_id":"pine:method:map.put_all"}
+{"name":"map.put","op":"ADD","section":"methods","semantic_id":"sha256:31f8f5bd0b47cd8093f80eb9081165dbe2a828a3e841b9ea199c28ffb9156f45","symbol_id":"pine:method:map.put"}
+{"name":"map.put_all","op":"ADD","section":"methods","semantic_id":"sha256:65818ce796b364cd775ae3944f9d07fa123c8ba9fabab134c1b1bfeb32d5a14e","symbol_id":"pine:method:map.put_all"}
 {"name":"map.remove","op":"ADD","section":"methods","semantic_id":"sha256:b2cf14953bfa14f9d48bc3309e17c39d3f9b853509681f3790da72da1a844023","symbol_id":"pine:method:map.remove"}
 {"name":"map.size","op":"ADD","section":"methods","semantic_id":"sha256:895e95374977dbf2c631bb678001db9d5c2a1c463cde0fceed69192b5937bfdf","symbol_id":"pine:method:map.size"}
 {"name":"map.values","op":"ADD","section":"methods","semantic_id":"sha256:1171bc3c3243824fad97c6a399ab060c4114367aab24d658a55d467f128e73aa","symbol_id":"pine:method:map.values"}

@@ -187,6 +187,12 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
     def _validate_method_call(self, expr: CallExpr) -> None:
         if not isinstance(expr.callee, MemberAccessExpr):
             return
+        owner = self.model.method_candidates
+        selection = owner.resolve(expr, self.inference) if owner is not None else None
+        if selection is not None:
+            for issue in selection.resolution.issues:
+                self._diag(issue.severity, issue.code, issue.message, issue.span)
+            return
         method_name = expr.callee.member
         if method_name == "copy":
             copy_receiver = expr.callee.object
@@ -339,6 +345,16 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
             symbols=self.model.symbols,
             validate_types=True,
             validate_qualifiers=True,
+            infer_arg_type=(
+                (lambda argument: self._infer_type(argument.value))
+                if self.version_context.pine_version >= 5
+                else None
+            ),
+            infer_arg_qualifier=(
+                (lambda argument: self._infer_qualifier(argument.value))
+                if self.version_context.pine_version >= 5
+                else None
+            ),
         )
         for issue in resolution.issues:
             self._diag(issue.severity, issue.code, issue.message, issue.span)

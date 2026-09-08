@@ -384,7 +384,11 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             )
         self._visit_body(node.body)
         receiver_type = self._type_ref_name(node.receiver_type) if node.receiver_type else ""
-        sym = self._resolve(f"{receiver_type}.{node.name}")
+        owner = self.model.method_candidates
+        candidate = owner.by_node.get(id(node)) if owner is not None else None
+        sym = self._resolve(
+            candidate.symbol_key if candidate is not None else f"{receiver_type}.{node.name}"
+        )
         if sym is not None:
             sym.type = self._body_return_type(node.body)
         self._pop_scope()

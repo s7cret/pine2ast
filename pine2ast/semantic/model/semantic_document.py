@@ -28,3 +28,7 @@ class SemanticModel:
     pass_results: tuple[Any, ...] = ()
     callable_inference: Any | None = None
     semantic_facts: Any | None = None
+    # Rebuilt producer-only call specialization; never serialized as trusted input.
+    callable_context: Any | None = None
+    # Producer-owned source declaration inventory; not serialized authority.
+    method_candidates: Any | None = None

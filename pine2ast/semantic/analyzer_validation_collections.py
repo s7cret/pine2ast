@@ -58,6 +58,10 @@ class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
         the same type diagnostics as function forms.
         """
 
+        owner = self.model.method_candidates
+        selection = owner.resolve(expr, self.inference) if owner is not None else None
+        if selection is not None and (selection.user_selected or not selection.resolution.ok):
+            return
         resolution = resolve_collection_call(expr, engine=self.inference)
         if resolution is None:
             return
