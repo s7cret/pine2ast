@@ -26,7 +26,7 @@ from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_helpers import type_ref_name
+from pine2ast.semantic.type_helpers import for_in_target_types, type_ref_name
 from pine2ast.semantic.type_model import QUALIFIER_ORDER
 
 
@@ -125,8 +125,15 @@ class CallableResultQualifierInference:
         if isinstance(node, (ForRangeStructure, ForInStructure)):
             local = dict(symbols)
             names = [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
-            for name in names:
-                local[name] = Symbol(-1, name, SymbolKind.VARIABLE, node.span, "int", "series", -1)
+            types = (
+                ["int"]
+                if isinstance(node, ForRangeStructure)
+                else for_in_target_types(
+                    self._engine(symbols).infer_type(node.iterable), len(names)
+                )
+            )
+            for name, dtype in zip(names, types):
+                local[name] = Symbol(-1, name, SymbolKind.VARIABLE, node.span, dtype, "series", -1)
             for child in iter_child_nodes(node):
                 self._walk(child, local if child is node.body else symbols)
         else:
