@@ -43,3 +43,39 @@ def returned_expressions(node) -> tuple[Expression, ...]:
     if isinstance(node, Reassignment):
         return returned_expressions(node.value)
     return (node,) if isinstance(node, Expression) else ()
+
+
+def _return_roots(node) -> tuple[Expression, ...]:
+    """Unwrap a statement tail without erasing nested structures or loops."""
+    if isinstance(node, Block):
+        return _return_roots(node.statements[-1]) if node.statements else ()
+    if isinstance(node, ExpressionStatement):
+        return _return_roots(node.expression)
+    if isinstance(node, VarDeclaration):
+        return _return_roots(node.initializer)
+    if isinstance(node, Reassignment):
+        return _return_roots(node.value)
+    return (node,) if isinstance(node, Expression) else ()
+
+
+def structural_qualifier_sources(node: IfStructure | SwitchStructure) -> tuple[Expression, ...]:
+    """Immediate value roots and guards for recursive qualifier/dependency joins.
+
+    Type inference may merge flattened leaves. Qualifier inference must retain
+    every nested guard and each loop node's own qualifier; flattening those nodes
+    would turn changing control flow into a falsely simple result.
+    """
+    if isinstance(node, IfStructure):
+        blocks: list[Block | Expression] = [
+            node.then_block,
+            *(branch.block for branch in node.else_if_branches),
+        ]
+        if node.else_block is not None:
+            blocks.append(node.else_block)
+        guards = [node.condition, *(branch.condition for branch in node.else_if_branches)]
+    else:
+        blocks = [case.body for case in node.cases]
+        guards = [case.condition for case in node.cases if case.condition is not None]
+        if node.expression is not None:
+            guards.append(node.expression)
+    return (*guards, *(value for block in blocks for value in _return_roots(block)))

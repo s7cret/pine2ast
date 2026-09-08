@@ -17,6 +17,7 @@ def parse_source(
     source_name: str = "<stage4>",
     created_at_utc_ms: int | None = None,
     producer_commit: str | None = None,
+    library_context: Any = None,
 ) -> Any:
     from pine2ast import ParseOptions, parse_code
 
@@ -24,6 +25,7 @@ def parse_source(
         source_name=source_name,
         created_at_utc_ms=created_at_utc_ms,
         producer_commit=producer_commit,
+        library_context=library_context,
     )
     return parse_code(source, options)
 

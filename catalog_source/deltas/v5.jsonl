@@ -217,6 +217,7 @@
 {"name":"ta.sar","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.sar"}
 {"name":"ta.sma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.sma"}
 {"name":"ta.stdev","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.stdev"}
+{"op":"PATCH","semantic_id":"sha256:88585823614db46b8b9f8e12a94afbdf7d699e7697eafc04938e3cdb141ba9b4","symbol_id":"pine:function:ta.stdev"}
 {"name":"ta.stoch","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.stoch"}
 {"name":"ta.supertrend","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.supertrend"}
 {"name":"ta.swma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.swma"}
@@ -224,6 +225,7 @@
 {"name":"ta.tsi","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.tsi"}
 {"name":"ta.valuewhen","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.valuewhen"}
 {"name":"ta.variance","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.variance"}
+{"op":"PATCH","semantic_id":"sha256:caaeaf0d05508233e86a5aa9b884f763d6a4a8cb20b500aa4d5af641656c2b95","symbol_id":"pine:function:ta.variance"}
 {"name":"ta.vwap","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.vwap"}
 {"name":"ta.vwma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.vwma"}
 {"name":"ta.wma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.wma"}

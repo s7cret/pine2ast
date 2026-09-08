@@ -100,6 +100,12 @@ class LinkedSource:
     def dependency_hashes(self) -> dict[str, str]:
         return dict(self.receipt()["dependencies"])
 
+    def qualifier_context(self):
+        """Derive exported-result provenance from the verified locked projection."""
+        from .qualifier_context import LibraryQualifierContext
+
+        return LibraryQualifierContext.from_linked_source(self)
+
     def original_location(self, offset: int) -> dict | None:
         """Project a virtual character offset back to its original file and line."""
         if type(offset) is not int or offset < 0:

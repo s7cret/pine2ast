@@ -31,6 +31,8 @@ from pine2ast.ast.nodes import (
     WhileStructure,
     MemberAccessExpr,
     SwitchStructure,
+    TupleExpr,
+    UnaryExpr,
 )
 from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.semantic.model import SemanticModel
@@ -239,6 +241,29 @@ class PineInferenceEngine:
             qualifier = self._symbol_qualifier(callee_name(expr))
             if qualifier:
                 return qualifier
+        # Preserve lexical and callable facts recursively. The legacy helper
+        # recursively reads the flattened symbol table, which loses branch-local
+        # identifiers and the qualifier of a guard on structural return paths.
+        if self.version_context.pine_version >= 5:
+            children = None
+            if isinstance(expr, UnaryExpr):
+                children = [expr.operand]
+            elif isinstance(expr, BinaryExpr):
+                children = [expr.left, expr.right]
+            elif isinstance(expr, ConditionalExpr):
+                children = [expr.condition, expr.if_true, expr.if_false]
+            elif isinstance(expr, TupleExpr):
+                children = expr.elements
+            elif isinstance(expr, (IfStructure, SwitchStructure)):
+                from pine2ast.semantic.control_values import structural_qualifier_sources
+
+                children = list(structural_qualifier_sources(expr))
+            if children is not None:
+                return max(
+                    (self.infer_qualifier(child) for child in children),
+                    key=self.policy.qualifier_rank,
+                    default="series",
+                )
         qualifier = legacy_infer_qualifier(expr, self.symbols)
         typ = self.infer_type(expr)
         if _type_is_reference_like(typ):

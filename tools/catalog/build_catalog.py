@@ -141,6 +141,17 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
     if name == "float":
         definition["added_in"] = 4
 
+    # Both official modern reference payloads admit a per-call series bool.
+    # Preserve earlier projections separately until their exact signature is
+    # reviewed; the RC5 source snapshots themselves remain immutable.
+    if name in {"ta.variance", "ta.stdev"}:
+        parameters = definition.get("parameters", [])
+        if not any(parameter.get("name") == "biased" for parameter in parameters):
+            parameters.append(
+                {"name": "biased", "required": False, "type": "bool", "default": True}
+            )
+        definition["parameters"] = parameters
+
     # Audited source correction; RC5 input bytes remain immutable. See
     # docs/STAGE2_SCALAR_SIGNATURE_REVIEW.md for independent/versioned sources.
     if name in {"math.abs", "math.ceil", "math.floor", "math.exp", "math.round", "math.sqrt"}:
@@ -534,6 +545,10 @@ def project_v4(
                 definition = rename_parameters(definition, {"number": "x"})
             elif name == "nz":
                 definition = rename_parameters(definition, {"source": "x", "replacement": "y"})
+            elif name in {"ta.variance", "ta.stdev"}:
+                # This correction is sourced for v5/v6 only. Do not back-project
+                # its additional parameter into the retained historical surface.
+                definition = trim_parameters(definition, {"source", "length"})
             add_active(target, clone_record(item, name=new_name, definition=definition))
             continue
         if section in {"variables", "constants"}:

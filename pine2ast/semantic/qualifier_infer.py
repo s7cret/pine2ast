@@ -95,6 +95,11 @@ def infer_qualifier(expr, symbols: Mapping[str, object] | None = None) -> str:
         return _join_qualifiers(*values) if values else "series"
     if isinstance(expr, CallExpr):
         name = callee_name(expr.callee)
+        symbol = symbols.get(name) if symbols else None
+        kind = getattr(symbol, "kind", None)
+        bound = getattr(symbol, "qualifier", None)
+        if getattr(kind, "value", kind) in {"function", "FUNCTION"} and bound is not None:
+            return bound
         if name == "input" or name.startswith("input."):
             # Source selectors are series; scalar legacy input() is input just
             # like its namespaced successors. Never let input.source launder a

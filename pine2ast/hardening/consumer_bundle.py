@@ -26,6 +26,15 @@ from pine2ast.semantic.type_model import QUALIFIER_ORDER, qualifier_allows
 
 CONSUMER_BUNDLE_CONTRACT = "pine2ast.consumer_bundle.v1"
 CONSUMER_BUNDLE_SCHEMA_VERSION = "1.0.0"
+LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION = "1.1.0"
+_BASE_CONSUMER_CAPABILITIES = (
+    "pine_version_context_v1",
+    "pine_ast_v2",
+    "pine_semantic_facts_v1",
+    "resolved_symbol_identity",
+    "resolved_overload_identity",
+    "source_span_identity",
+)
 _PRODUCTION_BLOCKING_DIAGNOSTIC_CODES = frozenset({"P2A1702"})
 
 
@@ -130,12 +139,23 @@ def build_consumer_bundle(
     producer_commit: str | None = None,
     require_clean_frontend: bool = True,
     created_at_utc_ms: int = 0,
+    linked_source: Any = None,
 ) -> dict[str, Any]:
+    library_context = None
+    if linked_source is not None:
+        from pine2ast.libraries import LinkedSource
+
+        if not isinstance(linked_source, LinkedSource):
+            raise ConsumerBundleError("linked_source must be a verified LinkedSource")
+        library_context = linked_source.qualifier_context()
+        if source != library_context.code:
+            raise ConsumerBundleError("source differs from library projection")
     result = parse_source(
         source,
         source_name=source_name,
         created_at_utc_ms=created_at_utc_ms,
         producer_commit=producer_commit,
+        library_context=library_context,
     )
     diagnostics = diagnostics_payload(result)
     production_blockers = _production_diagnostic_codes(diagnostics)
@@ -198,16 +218,13 @@ def build_consumer_bundle(
         "consumer_contract": {
             "consumer": "ast2python",
             "minimum_consumer_version": "5.0.0rc6",
-            "required_capabilities": [
-                "pine_version_context_v1",
-                "pine_ast_v2",
-                "pine_semantic_facts_v1",
-                "resolved_symbol_identity",
-                "resolved_overload_identity",
-                "source_span_identity",
-            ],
+            "required_capabilities": list(_BASE_CONSUMER_CAPABILITIES),
         },
     }
+    if library_context is not None:
+        body["schema_version"] = LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
+        body["library_context"] = library_context.to_dict()
+        body["consumer_contract"]["required_capabilities"].append("library_qualifier_context_v1")
     body["content_hash"] = content_hash(body)
     verify_consumer_bundle(body, source=source, expected_producer_commit=producer_commit)
     return body
@@ -219,11 +236,91 @@ def verify_consumer_bundle(
     source: str | None = None,
     expected_producer_commit: str | None = None,
 ) -> None:
+    from pine2ast.libraries import LibraryError
+
     try:
         if bundle.get("schema_id") != CONSUMER_BUNDLE_CONTRACT:
             raise ConsumerBundleError("unsupported consumer bundle schema_id")
-        if bundle.get("schema_version") != CONSUMER_BUNDLE_SCHEMA_VERSION:
+        revision = bundle.get("schema_version")
+        if not isinstance(revision, str) or revision not in {
+            CONSUMER_BUNDLE_SCHEMA_VERSION,
+            LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION,
+        }:
             raise ConsumerBundleError("unsupported consumer bundle schema_version")
+        from pine2ast.libraries.qualifier_context import CONTEXT_CAPABILITY, LibraryQualifierContext
+
+        contract = bundle.get("consumer_contract")
+        capabilities = (
+            contract.get("required_capabilities", []) if isinstance(contract, Mapping) else []
+        )
+        has_context = "library_context" in bundle
+        has_capability = isinstance(capabilities, list) and CONTEXT_CAPABILITY in capabilities
+        needs_context = revision == LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
+        if has_context != needs_context or has_capability != needs_context:
+            raise ConsumerBundleError(
+                "consumer version, library context and capability must match exactly"
+            )
+        library_context = None
+        raw_ast = bundle.get("ast")
+        ast_metadata = raw_ast.get("producer_metadata", {}) if isinstance(raw_ast, Mapping) else {}
+        if not isinstance(ast_metadata, Mapping):
+            raise ConsumerBundleError("AST producer metadata must be an object")
+        marker = "library_qualifier_context_ref"
+        if not needs_context and marker in ast_metadata:
+            raise ConsumerBundleError(
+                "consumer 1.0 cannot contain a library context provenance marker"
+            )
+        if needs_context:
+            expected_caps = {*_BASE_CONSUMER_CAPABILITIES, CONTEXT_CAPABILITY}
+            if (
+                not isinstance(capabilities, list)
+                or len(capabilities) != len(expected_caps)
+                or not all(isinstance(cap, str) for cap in capabilities)
+                or set(capabilities) != expected_caps
+            ):
+                raise ConsumerBundleError(
+                    "library context consumer capability set must match exactly"
+                )
+            if (
+                not isinstance(contract, Mapping)
+                or contract.get("minimum_consumer_version") != "5.0.0rc6"
+            ):
+                raise ConsumerBundleError("library context requires consumer 5.0.0rc6")
+            if (
+                set(contract) != {"consumer", "minimum_consumer_version", "required_capabilities"}
+                or contract.get("consumer") != "ast2python"
+            ):
+                raise ConsumerBundleError("library context consumer contract must match exactly")
+            if set(bundle) != {
+                "schema_id",
+                "schema_version",
+                "producer",
+                "source",
+                "version_context",
+                "ast",
+                "semantic_facts",
+                "node_index",
+                "diagnostics",
+                "release_axes",
+                "artifacts",
+                "linked_artifacts",
+                "consumer_contract",
+                "content_hash",
+                "library_context",
+            }:
+                raise ConsumerBundleError("library context bundle fields must match exactly")
+            library_context = LibraryQualifierContext.admit(bundle["library_context"])
+            if ast_metadata.get(marker) != library_context.to_dict()["content_hash"]:
+                raise ConsumerBundleError("AST library context provenance reference mismatch")
+            if source is not None and source != library_context.code:
+                raise ConsumerBundleError("source differs from library context")
+            source = library_context.code
+            bundle_version = bundle.get("version_context")
+            if (
+                not isinstance(bundle_version, Mapping)
+                or bundle_version.get("pine_version") != library_context.to_dict()["pine_version"]
+            ):
+                raise ConsumerBundleError("library context Pine version mismatch")
         production_blockers = _production_diagnostic_codes(bundle.get("diagnostics"))
         if production_blockers:
             raise ConsumerBundleError(
@@ -294,13 +391,20 @@ def verify_consumer_bundle(
         linked = bundle.get("linked_artifacts")
         if not isinstance(linked, Mapping):
             raise ConsumerBundleError("linked artifacts are missing")
-        required_linked = {"source_manifest", "ast_artifact", "frontend_artifact", "support_profile"}
+        required_linked = {
+            "source_manifest",
+            "ast_artifact",
+            "frontend_artifact",
+            "support_profile",
+        }
         if producer_commit is not None and set(linked) != required_linked:
             raise ConsumerBundleError("linked artifact inventory mismatch")
         for name, payload in linked.items():
             if not isinstance(payload, Mapping):
                 raise ConsumerBundleError(f"linked artifact {name} is not an object")
-            payload_body = {key: deepcopy(value) for key, value in payload.items() if key != "content_hash"}
+            payload_body = {
+                key: deepcopy(value) for key, value in payload.items() if key != "content_hash"
+            }
             if payload.get("content_hash") != content_hash(payload_body):
                 raise ConsumerBundleError(f"linked artifact {name} content hash mismatch")
             if artifacts.get(f"{name}_hash") not in {None, content_hash(payload)}:
@@ -317,7 +421,6 @@ def verify_consumer_bundle(
         if required_linked <= set(linked):
             source_manifest = linked["source_manifest"]
             ast_artifact = linked["ast_artifact"]
-            frontend_artifact = linked["frontend_artifact"]
             support_profile = linked["support_profile"]
             expected_refs = {
                 "source_manifest_ref": source_manifest["content_hash"],
@@ -351,6 +454,7 @@ def verify_consumer_bundle(
                 source_name=str(source_name),
                 created_at_utc_ms=created_at_utc_ms,
                 producer_commit=producer_commit,
+                library_context=library_context,
             )
             parsed_diagnostics = diagnostics_payload(parsed_source)
             if not result_ok(parsed_source) or _production_diagnostic_codes(parsed_diagnostics):
@@ -361,7 +465,7 @@ def verify_consumer_bundle(
             reparsed_facts = semantic_facts_payload(parsed_source, reparsed_ast)
             if content_hash(reparsed_facts) != content_hash(facts):
                 raise ConsumerBundleError("source and semantic facts do not match")
-    except InvariantViolation as exc:
+    except (InvariantViolation, LibraryError) as exc:
         raise ConsumerBundleError(str(exc)) from exc
 
 

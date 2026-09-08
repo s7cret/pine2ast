@@ -5,7 +5,7 @@
     "2": 9,
     "3": 1,
     "4": 291,
-    "5": 578,
+    "5": 580,
     "6": 200
   },
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
@@ -47,8 +47,8 @@
     "2": "sha256:6db1b1d96d51a5b9ebd50fb215cb9acd00f84ad923b702afdabd48cdd9eff175",
     "3": "sha256:d13db13950094bc3d3b17d381b418bd60b06af242a501582064a00a89b5acfa7",
     "4": "sha256:3190464bd63192286f3f144fb62846d2a42563ae344bf238a10ffb4141080a23",
-    "5": "sha256:101b00fbbb6099a210a854ff92856c3881f95226e63409668e4e20742e1afdd4",
-    "6": "sha256:1a830150ad6d22cb9d32e853a90c19f7b63f9009c1f138e06fa7cacd02a79f5a"
+    "5": "sha256:201e39721ee0edf447f443a17b79d42d441ef24467ed7112711470d4da553590",
+    "6": "sha256:91a70d23b03e287a1754e50f7b96bb164dfa18da8e7a519dc291c2ba4499ef45"
   },
   "schema_id": "pine.catalog.migration_report.v2",
   "section_counts": {
@@ -131,5 +131,5 @@
       "variables": 403
     }
   },
-  "semantic_definition_count": 1642
+  "semantic_definition_count": 1644
 }

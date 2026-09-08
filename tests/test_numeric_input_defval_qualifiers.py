@@ -7,7 +7,7 @@ remain distinct values. Source inputs and v6 active parameters are controls.
 
 import pytest
 
-from pine2ast import parse_code
+from pine2ast import ParseOptions, parse_code
 from pine2ast.catalog import CatalogRepository
 from pine2ast.hardening.consumer_bundle import ConsumerBundleError, build_consumer_bundle
 from pine2ast.hardening.introspection import semantic_facts_payload
@@ -27,14 +27,19 @@ def valid(source):
     return semantic_facts_payload(result)
 
 
-def invalid_qualifier(source, parameter):
-    result = parse_code(source)
+def invalid_qualifier(source, parameter, *, linked_source=None):
+    options = (
+        ParseOptions(library_context=linked_source.qualifier_context())
+        if linked_source is not None
+        else None
+    )
+    result = parse_code(source, options)
     assert not result.ok
     assert any(
         d.code == "P2A1405" and f"Argument {parameter} " in d.message for d in result.diagnostics
     ), [(d.code, d.message) for d in result.diagnostics]
     with pytest.raises(ConsumerBundleError):
-        build_consumer_bundle(source)
+        build_consumer_bundle(source, linked_source=linked_source)
 
 
 @pytest.mark.parametrize("version", [5, 6])
@@ -77,7 +82,7 @@ def test_stronger_default_qualifier_is_rejected(version, kind, series, binding, 
         "series": ("", series),
         "input": (f"seed=input.{kind}(2)\n", "seed"),
         "simple": (f"simple {kind} seed=2\n", "seed"),
-        "udf_result": ("get()=>2\n", "get()"),
+        "udf_result": ("get()=>bar_index+2\n", "get()"),
         "udf_parameter": (f"get({kind} seed)=>\n    ", "seed"),
     }[origin]
     if binding == "named":
@@ -96,7 +101,7 @@ def test_imported_result_cannot_supply_numeric_input_default(version, kind):
         version, f"import qa/Defaults/1 as defaults\nn=input.{kind}(defaults.get())\nplot(n)"
     )
     linked = link_libraries(source, LibraryStore.create({"qa/Defaults/1": library}))
-    invalid_qualifier(linked.code, "defval")
+    invalid_qualifier(linked.code, "defval", linked_source=linked)
 
 
 @pytest.mark.parametrize("version", [5, 6])

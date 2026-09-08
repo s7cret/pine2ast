@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.semantic.parameter_qualifiers import infer_parameter_qualifiers
+from pine2ast.semantic.callable_qualifiers import infer_callable_result_qualifiers
 
 if TYPE_CHECKING:
     from pine2ast.ast.nodes import Program
@@ -34,3 +35,4 @@ class DeclarationIndexPass:
         self.analyzer.model.parameter_qualifiers = infer_parameter_qualifiers(
             self.analyzer, program
         )
+        infer_callable_result_qualifiers(self.analyzer, program)

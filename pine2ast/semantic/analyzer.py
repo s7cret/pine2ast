@@ -116,6 +116,7 @@ class SemanticAnalyzer(
         self.local_depth = 0
         self.function_depth = 0
         self._predeclared_nodes: set[int] = set()
+        self._projected_exported_functions: frozenset[int] = frozenset()
         self._function_params: dict[str, list[Parameter]] = {}
         self._user_method_params: dict[tuple[str, str], list[Parameter]] = {}
         self._method_receivers: dict[str, str | set[str]] = {}
