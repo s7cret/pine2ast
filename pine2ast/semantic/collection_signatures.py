@@ -115,7 +115,7 @@ COLLECTION_METHOD_PARAMETER_TEMPLATES: dict[str, dict[str, list[CollectionParame
             ("sort_field", "int|string", "sort_field", False),
         ],
         "clear": [],
-        "concat": [("array_id", "array<T>", "array_id")],
+        "concat": [("id2", "array<T>", "array_id")],
         "copy": [],
         "covariance": [("array_id", "array<T>", "array_id")],
         "every": [],
@@ -382,7 +382,8 @@ def function_parameter_specs(
     if kind is None or operation is None:
         return ()
     concrete_receiver_type = receiver_type or kind
-    id_spec = CollectionParameterSpec("id", concrete_receiver_type, "id")
+    receiver_name = "id1" if function_name == "array.concat" else "id"
+    id_spec = CollectionParameterSpec(receiver_name, concrete_receiver_type, "id")
     return (id_spec,) + method_parameter_specs(concrete_receiver_type, operation)
 
 
@@ -426,7 +427,7 @@ def collection_return_type(receiver_type: str | None, operation: str) -> str | N
             return "int"
         if operation in {"includes", "every", "some"}:
             return "bool"
-        if operation in {"copy", "slice", "abs", "standardize"}:
+        if operation in {"concat", "copy", "slice", "abs", "standardize"}:
             return receiver_type
         if operation == "sort_indices":
             return "array<int>"
@@ -630,7 +631,14 @@ def resolve_collection_call(expr: CallExpr, *, engine) -> CollectionCallResoluti
     if not kind or operation_opt is None:
         return None
     operation = operation_opt
-    receiver_type = engine.infer_type(expr.arguments[0].value) if expr.arguments else None
+    receiver_name = "id1" if name == "array.concat" else "id"
+    receiver_argument = next(
+        (argument for argument in expr.arguments if argument.name == receiver_name),
+        next((argument for argument in expr.arguments if argument.name is None), None),
+    )
+    receiver_type = (
+        engine.infer_type(receiver_argument.value) if receiver_argument is not None else None
+    )
     if collection_kind_from_type(receiver_type) != kind:
         # For incomplete calls, still validate arity using the kind as a broad
         # receiver; for non-collection first args, let type validation report it.
