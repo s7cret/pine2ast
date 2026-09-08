@@ -184,6 +184,12 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
         definition["return_qualifier_rule_id"] = "qualifier.scalar.argument_join_simple_floor.v1"
     if name == "math.pow":
         definition["return_qualifier_rule_id"] = "qualifier.scalar.argument_join.v1"
+    if name in {"math.min", "math.max"}:
+        # The reviewed modern positional sequence is one aggregate parameter.
+        # Retain its existing internal name; this adds no numbered named syntax.
+        for parameter in definition.get("parameters", []):
+            if parameter.get("name") == "values":
+                parameter["variadic"] = True
     candidates = [definition]
     overloads = definition.get("overloads")
     if isinstance(overloads, list):
@@ -549,6 +555,10 @@ def project_v4(
                 # This correction is sourced for v5/v6 only. Do not back-project
                 # its additional parameter into the retained historical surface.
                 definition = trim_parameters(definition, {"source", "length"})
+            elif name in {"math.min", "math.max"}:
+                # Positional variadic evidence is reviewed only for v5/v6 here.
+                for parameter in definition.get("parameters", []):
+                    parameter.pop("variadic", None)
             add_active(target, clone_record(item, name=new_name, definition=definition))
             continue
         if section in {"variables", "constants"}:

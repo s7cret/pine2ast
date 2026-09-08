@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import replace
-from typing import Any, Callable, Iterable, Mapping
+from typing import Any, Callable, Iterable, Mapping, cast
 
 from pine2ast.ast.base import ASTNode, Declaration, Expression, Statement
 from pine2ast.ast.nodes import (
@@ -48,6 +48,7 @@ from pine2ast.semantic.fact_model import (
     TypeFact,
 )
 from pine2ast.semantic.collection_signatures import resolve_collection_call
+from pine2ast.semantic.constant_numbers import round_constant
 from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.signatures import SignatureResolver
@@ -100,6 +101,7 @@ class SemanticFactBuilder:
         self.index: NodeIndex | None = None
         self._scopes: dict[int, str] = {}
         self._call_bindings: dict[int, CallBindingFact] = {}
+        self._constant_varargs: dict[int, tuple[str, str | None, frozenset[tuple[int, str]]]] = {}
         self._coercions: dict[int, list[CoercionFact]] = {}
         self._declarations: dict[str, ASTNode] = {}
 
@@ -266,6 +268,15 @@ class SemanticFactBuilder:
             str(entry.get("overload_id") or resolution.overload_id or f"{symbol_id}#canonical")
             if status == "RESOLVED"
             else None
+        )
+        self._constant_varargs[id(call)] = (
+            symbol_id,
+            overload_id,
+            frozenset(
+                (index, str(parameter["name"]))
+                for index, parameter in enumerate(resolution.active_parameters)
+                if parameter.get("variadic") is True and parameter.get("name")
+            ),
         )
         argument_facts: list[ArgumentBindingFact] = []
         for resolved in resolution.resolved_arguments:
@@ -841,36 +852,127 @@ class SemanticFactBuilder:
             if known:
                 return self._evaluate_const(node.if_true if condition else node.if_false)
         if isinstance(node, CallExpr):
-            name = callee_name(node.callee)
-            values: list[Any] = []
-            for argument in node.arguments:
-                known, value = self._evaluate_const(argument.value)
-                if not known:
-                    return False, None
-                values.append(value)
+            binding = self._call_bindings.get(id(node))
+            if (
+                binding is None
+                or binding.resolution_status != "RESOLVED"
+                or binding.stateful
+                or binding.call_form not in {"FUNCTION", "NAMESPACE_FUNCTION"}
+            ):
+                return False, None
+            symbol = binding.symbol_id
+            overloads = {f"{symbol}#canonical"}
+            if symbol in {"pine:function:math.abs", "pine:function:math.round"}:
+                overloads.add(f"{symbol}#overload:0")
+            if binding.overload_id not in overloads:
+                return False, None
+            # Legacy unqualified math calls were not folded before this wave.
+            # Exact producer resolution does not backport modern folding support.
+            if symbol.startswith("pine:function:math.") and (
+                self.version_context.pine_version not in (5, 6)
+                or binding.call_form != "NAMESPACE_FUNCTION"
+            ):
+                return False, None
+            values = self._bound_const_arguments(node, binding)
+            if values is None:
+                return False, None
             try:
-                if name == "int" and len(values) == 1:
+                if symbol == "pine:function:math.round":
+                    expected_names = (
+                        ("number",)
+                        if binding.overload_id == "pine:function:math.round#canonical"
+                        else ("number", "precision")
+                    )
+                    names = tuple(
+                        row.parameter_name
+                        for row in sorted(
+                            binding.arguments, key=lambda row: cast(int, row.parameter_index)
+                        )
+                    )
+                    if names != expected_names or binding.defaults_applied:
+                        return False, None
+                    value = round_constant(*values)
+                    return value is not None, value
+                if symbol == "pine:function:int" and len(values) == 1:
                     return True, int(values[0])
-                if name == "float" and len(values) == 1:
+                if symbol == "pine:function:float" and len(values) == 1:
                     return True, float(values[0])
-                if name == "bool" and len(values) == 1:
+                if symbol == "pine:function:bool" and len(values) == 1:
                     return True, bool(values[0])
-                if name == "string" and len(values) == 1:
+                if symbol == "pine:function:string" and len(values) == 1:
                     return True, str(values[0])
                 pure: dict[str, Callable[..., object]] = {
-                    "math.abs": abs,
-                    "math.ceil": math.ceil,
-                    "math.floor": math.floor,
-                    "math.sqrt": math.sqrt,
-                    "math.round": round,
-                    "math.min": min,
-                    "math.max": max,
+                    "pine:function:math.abs": abs,
+                    "pine:function:math.ceil": math.ceil,
+                    "pine:function:math.floor": math.floor,
+                    "pine:function:math.sqrt": math.sqrt,
+                    "pine:function:math.min": min,
+                    "pine:function:math.max": max,
                 }
-                if name in pure:
-                    return True, pure[name](*values)
+                if symbol in pure:
+                    return True, pure[symbol](*values)
             except (ArithmeticError, TypeError, ValueError, OverflowError):
                 return False, None
         return False, None
+
+    def _bound_const_arguments(self, node: CallExpr, binding: CallBindingFact) -> list[Any] | None:
+        """Consume the already resolved parameter identities, including named order."""
+        assert self.index is not None
+        source = {self.index.id_for(argument): argument for argument in node.arguments}
+        if tuple(source) != tuple(row.argument_node_id for row in binding.arguments):
+            return None
+        selected = self._constant_varargs.get(id(node))
+        variadic_parameters = (
+            selected[2]
+            if selected is not None and selected[:2] == (binding.symbol_id, binding.overload_id)
+            else frozenset()
+        )
+        values: dict[int, list[Any]] = {}
+        consumed: set[str] = set()
+        for row in binding.arguments:
+            argument = source.get(row.argument_node_id)
+            if (
+                argument is None
+                or row.argument_node_id in consumed
+                or type(row.parameter_index) is not int
+                or row.parameter_index < 0
+                or not row.parameter_name
+                or not row.expected_type
+                or row.actual_qualifier != "const"
+                or row.binding not in {"named", "positional", "vararg"}
+            ):
+                return None
+            declared_variadic = (row.parameter_index, row.parameter_name) in variadic_parameters
+            expected_binding = (
+                "named"
+                if argument.name is not None
+                else "vararg" if declared_variadic else "positional"
+            )
+            if row.binding != expected_binding or (
+                argument.name is not None and argument.name != row.parameter_name
+            ):
+                return None
+            if row.parameter_index in values and not (
+                declared_variadic and row.binding == "vararg"
+            ):
+                return None
+            known, value = self._evaluate_const(argument.value)
+            if not known:
+                return None
+            values.setdefault(row.parameter_index, []).append(value)
+            consumed.add(row.argument_node_id)
+        for default in binding.defaults_applied:
+            if (
+                not default.default_known
+                or type(default.parameter_index) is not int
+                or default.parameter_index in values
+                or default.parameter_index < 0
+            ):
+                return None
+            values[default.parameter_index] = [default.default_value]
+        if set(values) != set(range(len(values))):
+            return None
+        return [value for index in range(len(values)) for value in values[index]]
 
     def _diagnostic_rows(self) -> tuple[dict[str, Any], ...]:
         rows: list[dict[str, Any]] = []

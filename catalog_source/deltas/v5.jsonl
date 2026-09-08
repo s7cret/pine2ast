@@ -73,7 +73,9 @@
 {"name":"math.log","op":"RENAME","section":"functions","symbol_id":"pine:function:math.log"}
 {"name":"math.log10","op":"RENAME","section":"functions","symbol_id":"pine:function:math.log10"}
 {"name":"math.max","op":"RENAME","section":"functions","symbol_id":"pine:function:math.max"}
+{"op":"PATCH","semantic_id":"sha256:ce0a002ebc472c64fd11abf09bc829437cea0b3e7441b1102a25a8ef907c2c4c","symbol_id":"pine:function:math.max"}
 {"name":"math.min","op":"RENAME","section":"functions","symbol_id":"pine:function:math.min"}
+{"op":"PATCH","semantic_id":"sha256:f13d43b2d1da53ff4ea11ea8533405411212993dcb4ff7c961bf508ba0c0a61e","symbol_id":"pine:function:math.min"}
 {"name":"math.pow","op":"RENAME","section":"functions","symbol_id":"pine:function:math.pow"}
 {"name":"math.random","op":"RENAME","section":"functions","symbol_id":"pine:function:math.random"}
 {"name":"math.round","op":"RENAME","section":"functions","symbol_id":"pine:function:math.round"}
