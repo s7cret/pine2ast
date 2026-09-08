@@ -135,6 +135,29 @@ SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
 def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
     """Complete callable qualifier metadata before catalog sealing."""
 
+    # The v5/v6 reference requires one string argument for these functions.
+    if name in {"str.upper", "str.lower", "str.tonumber"}:
+        definition["parameters"] = [
+            {
+                "name": "string" if name == "str.tonumber" else "source",
+                "required": True,
+                "type": "string",
+            }
+        ]
+
+    # Audited v5/v6 map contracts; preserve the frozen RC5 source inputs.
+    if name == "map.put":
+        definition["returns"] = "V"
+        for parameter in definition.get("parameters", []):
+            if parameter.get("name") == "key":
+                parameter["type"] = "K"
+            elif parameter.get("name") == "value":
+                parameter["type"] = "V"
+    elif name == "map.put_all":
+        for parameter in definition.get("parameters", []):
+            if parameter.get("name") == "from":
+                parameter["name"] = "id2"
+
     # Explicit casting functions were introduced in Pine v4. Keep the earlier
     # signature rows for version/coverage audits, but do not backport the call.
     # This metadata belongs to the function, never the historical input constant.
@@ -559,6 +582,17 @@ def project_v4(
                 # Positional variadic evidence is reviewed only for v5/v6 here.
                 for parameter in definition.get("parameters", []):
                     parameter.pop("variadic", None)
+            elif name in {"str.upper", "str.lower", "str.tonumber"}:
+                # Preserve the historical projection until its exact reference
+                # is independently reviewed; this correction covers v5/v6.
+                definition["parameters"] = [
+                    {
+                        "name": "source",
+                        "qualifier_max": "series",
+                        "required": name == "str.tonumber",
+                        "type": "string" if name == "str.tonumber" else "series<any>",
+                    }
+                ]
             add_active(target, clone_record(item, name=new_name, definition=definition))
             continue
         if section in {"variables", "constants"}:

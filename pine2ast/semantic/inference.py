@@ -156,6 +156,8 @@ class PineInferenceEngine:
         self.symbols = symbols
         self._lexical_types: dict[int, str] = {}
         self._lexical_qualifiers: dict[int, str] = {}
+        self.callable_context: Any | None = None
+        self.method_candidates: Any | None = None
         self.registry = registry or load_catalog_readonly_view(version_context.pine_version)
         self.policy = policy or semantic_policy_from_catalog(version_context, self.registry)
         self.policy.validate_context(version_context)
@@ -179,10 +181,23 @@ class PineInferenceEngine:
         # global from the model's flattened public symbol view.
         self._lexical_types = dict(model.node_types)
         self._lexical_qualifiers = dict(model.node_qualifiers)
+        self.callable_context = model.callable_context
+        self.method_candidates = model.method_candidates
 
     def infer_type(self, expr: Expression | None) -> str:
+        if self.callable_context is not None:
+            self.callable_context.charge()
         if expr is None:
             return "unknown"
+        if isinstance(expr, CallExpr) and self.callable_context is not None:
+            proof = self.callable_context.infer_call(expr, self)
+            if proof is not None and proof.type_name not in {
+                "unknown",
+                "any",
+                "function",
+                "method",
+            }:
+                return proof.type_name
         if isinstance(expr, Identifier):
             captured = self._lexical_types.get(id(expr))
             if captured and captured != "unknown":
@@ -196,6 +211,17 @@ class PineInferenceEngine:
             if field_type:
                 return field_type
         if isinstance(expr, CallExpr) and isinstance(expr.callee, MemberAccessExpr):
+            selection = (
+                self.method_candidates.resolve(expr, self)
+                if self.method_candidates is not None
+                else None
+            )
+            if selection is not None:
+                return (
+                    normalize_return_type(selection.resolution.return_type)
+                    if selection.resolution.ok
+                    else "unknown"
+                )
             owner_type = self.infer_type(expr.callee.object)
             key = f"{owner_type}.{expr.callee.member}"
             method_type = self._symbol_type(key)
@@ -206,6 +232,15 @@ class PineInferenceEngine:
             specialized = self._binary_return_type(expr)
             if specialized:
                 return specialized
+        if self.version_context.pine_version >= 5 and isinstance(
+            expr, (BinaryExpr, UnaryExpr, TupleExpr)
+        ):
+            # Contextual UDF results and lexical child facts must survive the
+            # ordinary operator/tuple rule; aggregate symbol recursion loses them.
+            # Versioned integer division above remains authoritative.
+            return legacy_infer_type(
+                expr, self.symbols, registry=self.registry, infer_child=self.infer_type
+            )
         if isinstance(expr, ConditionalExpr):
             return merge_type_names([self.infer_type(expr.if_true), self.infer_type(expr.if_false)])
         if isinstance(
@@ -231,8 +266,14 @@ class PineInferenceEngine:
         return legacy
 
     def infer_qualifier(self, expr: Expression | None) -> str:
+        if self.callable_context is not None:
+            self.callable_context.charge()
         if expr is None:
             return "series"
+        if isinstance(expr, CallExpr) and self.callable_context is not None:
+            proof = self.callable_context.infer_call(expr, self)
+            if proof is not None:
+                return proof.qualifier
         if isinstance(expr, Identifier):
             captured = self._lexical_qualifiers.get(id(expr))
             if captured:
@@ -385,6 +426,13 @@ class PineInferenceEngine:
     def _collection_call_return(self, expr: CallExpr) -> str | None:
         from pine2ast.semantic.collection_signatures import resolve_collection_call
 
+        selection = (
+            self.method_candidates.resolve(expr, self)
+            if self.method_candidates is not None
+            else None
+        )
+        if selection is not None and (selection.user_selected or not selection.resolution.ok):
+            return None
         resolution = resolve_collection_call(expr, engine=self)
         return resolution.return_type if resolution is not None else None
 

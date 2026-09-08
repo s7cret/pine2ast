@@ -26,7 +26,7 @@ from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.semantic.symbols import Symbol, SymbolKind
-from pine2ast.semantic.type_helpers import type_ref_name
+from pine2ast.semantic.type_helpers import for_in_target_types, type_ref_name
 from pine2ast.semantic.type_model import QUALIFIER_ORDER
 
 
@@ -91,7 +91,13 @@ class CallableResultQualifierInference:
             policy=self.analyzer.policy,
         )
         engine.bind_model(
-            SemanticModel(symbols=symbols, node_qualifiers=self.values, node_types=self.types)
+            SemanticModel(
+                symbols=symbols,
+                node_qualifiers=self.values,
+                node_types=self.types,
+                callable_context=self.analyzer.model.callable_context,
+                method_candidates=self.analyzer.model.method_candidates,
+            )
         )
         return engine
 
@@ -110,7 +116,7 @@ class CallableResultQualifierInference:
                 else engine.infer_type(node.initializer)
             )
             qualifier = node.explicit_qualifier or engine.infer_qualifier(node.initializer)
-            if dtype in self.udts or node.name in self.analyzer._reassigned_names:
+            if dtype in self.udts or self._is_reassigned(node):
                 qualifier = "series"
             symbols[node.name] = Symbol(
                 -1, node.name, SymbolKind.VARIABLE, node.span, dtype, qualifier, -1
@@ -119,8 +125,15 @@ class CallableResultQualifierInference:
         if isinstance(node, (ForRangeStructure, ForInStructure)):
             local = dict(symbols)
             names = [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
-            for name in names:
-                local[name] = Symbol(-1, name, SymbolKind.VARIABLE, node.span, "int", "series", -1)
+            types = (
+                ["int"]
+                if isinstance(node, ForRangeStructure)
+                else for_in_target_types(
+                    self._engine(symbols).infer_type(node.iterable), len(names)
+                )
+            )
+            for name, dtype in zip(names, types):
+                local[name] = Symbol(-1, name, SymbolKind.VARIABLE, node.span, dtype, "series", -1)
             for child in iter_child_nodes(node):
                 self._walk(child, local if child is node.body else symbols)
         else:
@@ -131,6 +144,16 @@ class CallableResultQualifierInference:
             self.values[id(node)] = engine.infer_qualifier(node)
             self.types[id(node)] = engine.infer_type(node)
 
+    def _is_reassigned(self, node: VarDeclaration) -> bool:
+        return node.name in self.analyzer._reassigned_names
+
 
 def infer_callable_result_qualifiers(analyzer: Any, program: Program) -> None:
+    if analyzer.version_context.pine_version >= 5:
+        from pine2ast.semantic.callable_context import CallableContext
+
+        analyzer.model.callable_context = CallableContext(analyzer, program)
+        analyzer.inference.bind_model(analyzer.model)
     CallableResultQualifierInference(analyzer, program).run()
+    if analyzer.model.callable_context is not None:
+        analyzer.model.callable_context.publish_fixed_results()

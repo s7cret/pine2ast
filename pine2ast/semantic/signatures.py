@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
-from typing import Any, Callable, Literal, Mapping
+from typing import Any, Callable, Literal, Mapping, Sequence
 
 from pine2ast.versioning import PineVersionContext
 from pine2ast.ast.nodes import Argument
@@ -106,6 +106,37 @@ class SignatureResolver:
         argument_type_resolver: ArgResolver | None = None,
         argument_qualifier_resolver: ArgResolver | None = None,
     ) -> SignatureResolution:
+        return self.resolve_candidates(
+            callee,
+            self._candidate_entries(entry),
+            args,
+            span,
+            kind=kind,
+            symbols=symbols,
+            validate_types=validate_types,
+            validate_qualifiers=validate_qualifiers,
+            infer_arg_type=infer_arg_type,
+            infer_arg_qualifier=infer_arg_qualifier,
+            argument_type_resolver=argument_type_resolver,
+            argument_qualifier_resolver=argument_qualifier_resolver,
+        )
+
+    def resolve_candidates(
+        self,
+        callee: str,
+        candidates: Sequence[dict[str, Any]],
+        args: list[Argument],
+        span: SourceSpan | None,
+        *,
+        kind: str = "builtin",
+        symbols: Mapping[str, object] | None = None,
+        validate_types: bool = False,
+        validate_qualifiers: bool = False,
+        infer_arg_type: ArgResolver | None = None,
+        infer_arg_qualifier: ArgResolver | None = None,
+        argument_type_resolver: ArgResolver | None = None,
+        argument_qualifier_resolver: ArgResolver | None = None,
+    ) -> SignatureResolution:
         call_span = span or SourceSpan.zero()
         type_resolver = argument_type_resolver or infer_arg_type
         qualifier_resolver = argument_qualifier_resolver or infer_arg_qualifier
@@ -114,7 +145,6 @@ class SignatureResolver:
             validate_qualifiers or symbols is not None or qualifier_resolver is not None
         )
 
-        candidates = self._candidate_entries(entry)
         scored: list[tuple[tuple[int, int, int, int, int], SignatureResolution]] = []
         for candidate in candidates:
             resolution = self._bind_entry(
@@ -558,20 +588,26 @@ class SignatureResolver:
 
         The official Pine collection APIs are generic, but the bundled registry
         stores some entries with broad ``string``/``any`` placeholders. When the
-        first argument is ``map<K,V>``, ``array<T>``, or ``matrix<T>``, use that
+        receiver argument is ``map<K,V>``, ``array<T>``, or ``matrix<T>``, use that
         concrete shape for key/value/element parameters and result types.
         """
 
-        if not args:
+        if not args or not active:
             return active, return_type
-        collection_type = self._argument_type_for_specialization(args[0], symbols, type_resolver)
+        receiver = next(
+            (arg for arg in args if arg.name == active[0].get("name")),
+            next((arg for arg in args if arg.name is None), None),
+        )
+        if receiver is None:
+            return active, return_type
+        collection_type = self._argument_type_for_specialization(receiver, symbols, type_resolver)
         base, type_args = generic_type_parts(collection_type)
         if base == "map" and len(type_args) >= 2:
             key_type, value_type = type_args[0], type_args[1]
             if callee in {"map.put"}:
                 return (
                     self._replace_parameter_types(active, {"key": key_type, "value": value_type}),
-                    return_type,
+                    value_type,
                 )
             if callee in {"map.get", "map.contains", "map.remove"}:
                 replacement = {"key": key_type}

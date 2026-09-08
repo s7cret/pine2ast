@@ -12,6 +12,7 @@ from pine2ast.ast.nodes import (
     ConditionalExpr,
     EnumDeclaration,
     EnumMember,
+    ExpressionStatement,
     FieldDeclaration,
     ForInStructure,
     ForRangeStructure,
@@ -48,7 +49,8 @@ from pine2ast.semantic.fact_model import (
     TypeFact,
 )
 from pine2ast.semantic.collection_signatures import resolve_collection_call
-from pine2ast.semantic.constant_numbers import round_constant
+from pine2ast.semantic.constant_numbers import comparison_constant, round_constant
+from pine2ast.semantic import constant_functions as const_functions
 from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.signatures import SignatureResolver
@@ -104,6 +106,10 @@ class SemanticFactBuilder:
         self._constant_varargs: dict[int, tuple[str, str | None, frozenset[tuple[int, str]]]] = {}
         self._coercions: dict[int, list[CoercionFact]] = {}
         self._declarations: dict[str, ASTNode] = {}
+        self._constant_functions: dict[str, FunctionDeclaration] = {}
+        self._constant_roots: set[int] = set()
+        self._constant_work = const_functions.ConstantWork()
+        self._constant_global_scopes: dict[str, dict[str, VarDeclaration]] = {}
 
     def build(self, program: Program) -> SemanticFactsBundle:
         if program.version_context != self.version_context:
@@ -118,6 +124,7 @@ class SemanticFactBuilder:
         self._assign_scopes(program, "scope:global")
         self._resolve_calls(program)
         self._propagate_user_statefulness(program)
+        self._index_constant_functions()
         self._collect_version_coercions(program)
 
         diagnostic_rows = self._diagnostic_rows()
@@ -150,6 +157,10 @@ class SemanticFactBuilder:
 
     def _declaration_key(self, node: ASTNode) -> str:
         if isinstance(node, MethodDeclaration) and node.receiver_type is not None:
+            owner = self.model.method_candidates
+            candidate = owner.by_node.get(id(node)) if owner is not None else None
+            if candidate is not None:
+                return candidate.symbol_key
             return f"{type_ref_name(node.receiver_type)}.{node.name}"
         return getattr(node, "name", "")
 
@@ -194,8 +205,15 @@ class SemanticFactBuilder:
         lookup_name, entry = registry_entry_for_call(call.callee, self.catalog)
         call_form = "FUNCTION"
         receiver_type: str | None = None
+        owner = self.model.method_candidates
+        selection = owner.resolve(call, self.engine) if owner is not None else None
 
-        if entry is not None:
+        if selection is not None:
+            entry = selection.resolution.entry
+            receiver_type = selection.receiver_type
+            lookup_name = str(entry.get("name") or raw_name)
+            call_form = "USER_METHOD" if selection.candidate is not None else "METHOD"
+        elif entry is not None:
             call_form = "NAMESPACE_FUNCTION" if "." in lookup_name else "FUNCTION"
         elif isinstance(call.callee, MemberAccessExpr):
             receiver_type = self.engine.infer_type(call.callee.object)
@@ -222,7 +240,9 @@ class SemanticFactBuilder:
             )
             return None
 
-        collection_resolution = resolve_collection_call(call, engine=self.engine)
+        collection_resolution = (
+            resolve_collection_call(call, engine=self.engine) if selection is None else None
+        )
         if collection_resolution is not None:
             entry = dict(entry)
             entry["parameters"] = [
@@ -237,17 +257,21 @@ class SemanticFactBuilder:
             if collection_resolution.return_type:
                 entry["returns"] = collection_resolution.return_type
 
-        resolution = self.signatures.resolve_builtin(
-            lookup_name,
-            dict(entry),
-            call.arguments,
-            call.span,
-            kind=call_form.lower(),
-            symbols=self.model.symbols,
-            validate_types=True,
-            validate_qualifiers=True,
-            infer_arg_type=lambda argument: self.engine.infer_type(argument.value),
-            infer_arg_qualifier=lambda argument: self.engine.infer_qualifier(argument.value),
+        resolution = (
+            selection.resolution
+            if selection is not None
+            else self.signatures.resolve_builtin(
+                lookup_name,
+                dict(entry),
+                call.arguments,
+                call.span,
+                kind=call_form.lower(),
+                symbols=self.model.symbols,
+                validate_types=True,
+                validate_qualifiers=True,
+                infer_arg_type=lambda argument: self.engine.infer_type(argument.value),
+                infer_arg_qualifier=lambda argument: self.engine.infer_qualifier(argument.value),
+            )
         )
         for issue in resolution.issues:
             self._append_diagnostic(
@@ -783,16 +807,543 @@ class SemanticFactBuilder:
                 rules.append(f"strategy.static.{call.callee.removeprefix('strategy.')}.v{version}")
         return rules
 
+    def _index_constant_functions(self) -> None:
+        assert self.index is not None
+        if self.version_context.pine_version not in (5, 6):
+            return
+        owner = self.model.callable_context
+        reassigned = owner.reassigned_globals if owner is not None else None
+        visible: dict[str, VarDeclaration] = {}
+        program = self.index.nodes[0]
+        assert isinstance(program, Program)
+        for declaration in program.items:
+            if isinstance(declaration, (FunctionDeclaration, VarDeclaration)):
+                self._constant_global_scopes[self.index.id_for(declaration)] = dict(visible)
+            if isinstance(declaration, VarDeclaration):
+                if (
+                    declaration.mode is None
+                    and declaration.explicit_qualifier in (None, "const")
+                    and reassigned is not None
+                    and id(declaration) not in reassigned
+                    and self.model.node_qualifiers.get(id(declaration.initializer)) == "const"
+                    and self.model.node_types.get(id(declaration.initializer))
+                    in {"int", "float", "bool"}
+                ):
+                    visible[declaration.name] = declaration
+        for node in self.index.nodes:
+            if isinstance(node, FunctionDeclaration):
+                identity = f"user:function:{node.name}:{self.index.id_for(node)}"
+                self._constant_functions[identity] = node
+            binding = self._call_bindings.get(id(node))
+            if binding is not None and binding.call_form == "USER_FUNCTION":
+                current: ASTNode | None = node
+                while current is not None:
+                    if isinstance(current, Expression):
+                        self._constant_roots.add(id(current))
+                    current = self.index.parent_for(current)
+
+    def _constant_function_for_call(
+        self,
+        node: CallExpr,
+        binding: CallBindingFact,
+        context: const_functions.ConstantContext | None = None,
+    ) -> FunctionDeclaration | None:
+        assert self.index is not None
+        declaration = self._constant_functions.get(binding.symbol_id or "")
+        proof = self._constant_call_proof(node, context)
+        contextual = context is not None and (
+            bool(context.proof_stack)
+            or bool(context.frames and context.frames[-1].proof is not None)
+        )
+        qualifier = (
+            proof.qualifier
+            if contextual and proof is not None
+            else self.model.node_qualifiers.get(id(node))
+        )
+        dtype = (
+            proof.type_name
+            if contextual and proof is not None
+            else self.model.node_types.get(id(node))
+        )
+        if (
+            self.version_context.pine_version not in (5, 6)
+            or binding.resolution_status != "RESOLVED"
+            or binding.call_form != "USER_FUNCTION"
+            or binding.stateful
+            or declaration is None
+            or declaration.is_exported
+            or binding.overload_id != f"{binding.symbol_id}#signature"
+            or qualifier != "const"
+            or dtype not in {"int", "float", "bool"}
+            or proof is not None
+            and (
+                proof.symbol_id != binding.symbol_id
+                or proof.qualifier != "const"
+                or proof.call_id != self.index.id_for(node)
+            )
+        ):
+            return None
+        # This completed declaration fact is checked against its source span;
+        # it is not a global value lookup or a lexical-variable resolver.
+        symbol = self.model.symbols.get(declaration.name)
+        if symbol is None or symbol.declared_at != declaration.span:
+            return None
+        if any(p.type_ref is None for p in declaration.parameters):
+            if proof is None or proof.qualifier != "const":
+                return None
+        elif symbol.qualifier != "const":
+            return None
+        return declaration
+
+    def _constant_call_proof(self, node: CallExpr, context: const_functions.ConstantContext | None):
+        owner = self.model.callable_context
+        if owner is None:
+            return None
+        parent = None
+        if context is not None:
+            if context.proof_stack:
+                parent = context.proof_stack[-1]
+            elif context.frames:
+                parent = context.frames[-1].proof
+        return (
+            owner.from_parent(node, parent)
+            if parent is not None
+            else owner.infer_call(node, self.engine)
+        )
+
+    @staticmethod
+    def _constant_argument_qualifier(
+        node: Expression, original: str | None, context: const_functions.ConstantContext | None
+    ) -> str | None:
+        if context is None:
+            return original
+        proof = (
+            context.proof_stack[-1]
+            if context.proof_stack
+            else (context.frames[-1].proof if context.frames else None)
+        )
+        return proof.node_qualifiers.get(id(node), original) if proof is not None else original
+
+    def _constant_global_for(
+        self, name: str, context: const_functions.ConstantContext
+    ) -> VarDeclaration | None:
+        scope = (
+            context.scope_stack[-1]
+            if context.scope_stack
+            else (context.frames[-1].declaration_id if context.frames else None)
+        )
+        return self._constant_global_scopes.get(scope or "", {}).get(name)
+
+    def _constant_global_is_pure(
+        self, declaration: VarDeclaration, context: const_functions.ConstantContext
+    ) -> bool:
+        assert self.index is not None
+        identity = self.index.id_for(declaration)
+        if not context.charge() or identity in context.global_active:
+            return False
+        context.global_active.add(identity)
+        context.scope_stack.append(identity)
+        context.proof_stack.append(None)
+        try:
+            return self._constant_expression_is_pure(declaration.initializer, set(), context)
+        finally:
+            context.proof_stack.pop()
+            context.scope_stack.pop()
+            context.global_active.remove(identity)
+
+    def _evaluate_constant_global(
+        self, declaration: VarDeclaration, context: const_functions.ConstantContext
+    ) -> tuple[bool, Any]:
+        assert self.index is not None
+        identity = self.index.id_for(declaration)
+        if not context.charge() or identity in context.global_active:
+            return False, None
+        context.global_active.add(identity)
+        context.scope_stack.append(identity)
+        context.frames.append(const_functions.ConstantFrame(identity, {}))
+        context.proof_stack.append(None)
+        try:
+            return self._evaluate_const(declaration.initializer, context)
+        finally:
+            context.proof_stack.pop()
+            context.frames.pop()
+            context.scope_stack.pop()
+            context.global_active.remove(identity)
+
+    def _constant_builtin(self, binding: CallBindingFact) -> bool:
+        if binding.resolution_status != "RESOLVED" or binding.stateful:
+            return False
+        symbol = binding.symbol_id
+        if symbol in {"pine:function:int", "pine:function:float"}:
+            return binding.call_form == "FUNCTION" and binding.overload_id == f"{symbol}#canonical"
+        if (
+            symbol
+            not in {
+                "pine:function:math.round",
+                "pine:function:math.abs",
+                "pine:function:math.ceil",
+                "pine:function:math.floor",
+                "pine:function:math.sqrt",
+                "pine:function:math.min",
+                "pine:function:math.max",
+            }
+            or binding.call_form != "NAMESPACE_FUNCTION"
+            or self.version_context.pine_version not in (5, 6)
+        ):
+            return False
+        overloads = {f"{symbol}#canonical"}
+        if symbol in {"pine:function:math.round", "pine:function:math.abs"}:
+            overloads.add(f"{symbol}#overload:0")
+        return binding.overload_id in overloads
+
+    def _constant_expression_is_pure(
+        self, expression: Expression, names: set[str], context: const_functions.ConstantContext
+    ) -> bool:
+        pending = [expression]
+        while pending:
+            node = pending.pop()
+            if not context.charge():
+                return False
+            if isinstance(node, Literal):
+                if not const_functions.supported_scalar(node.value):
+                    return False
+            elif isinstance(node, Identifier):
+                if node.name not in names:
+                    global_declaration = self._constant_global_for(node.name, context)
+                    if global_declaration is None or not self._constant_global_is_pure(
+                        global_declaration, context
+                    ):
+                        return False
+            elif isinstance(node, UnaryExpr) and node.op in {"+", "-", "not"}:
+                pending.append(node.operand)
+            elif isinstance(node, BinaryExpr) and node.op in {
+                "+",
+                "-",
+                "*",
+                "/",
+                "==",
+                "!=",
+                "<",
+                "<=",
+                ">",
+                ">=",
+                "and",
+                "or",
+            }:
+                pending.extend((node.right, node.left))
+            elif isinstance(node, ConditionalExpr):
+                # Every guard and branch is inspected, including unselected code.
+                pending.extend((node.if_false, node.if_true, node.condition))
+            elif isinstance(node, CallExpr):
+                binding = self._call_bindings.get(id(node))
+                if binding is None:
+                    return False
+                if binding.call_form == "USER_FUNCTION":
+                    declaration = self._constant_function_for_call(node, binding, context)
+                    if declaration is None or not self._constant_function_is_pure(
+                        declaration, context, self._constant_call_proof(node, context)
+                    ):
+                        return False
+                elif not self._constant_builtin(binding):
+                    return False
+                for argument in node.arguments:
+                    if not context.charge():
+                        return False
+                    pending.append(argument.value)
+            else:
+                return False
+        return True
+
+    def _constant_function_is_pure(
+        self,
+        declaration: FunctionDeclaration,
+        context: const_functions.ConstantContext,
+        proof=None,
+    ) -> bool:
+        assert self.index is not None
+        identity = self.index.id_for(declaration)
+        cache_identity = identity if proof is None else repr(proof.context_key)
+        if not context.charge() or identity in context.purity_active:
+            return False
+        if cache_identity in context.work.purity:
+            return context.work.purity[cache_identity]
+        if (
+            len(context.purity_active) >= const_functions.MAX_FUNCTION_DEPTH
+            or not context.work.room()
+        ):
+            return False
+        context.purity_active.add(identity)
+        context.scope_stack.append(identity)
+        context.proof_stack.append(proof)
+        pure = False
+        try:
+            names: set[str] = set()
+            for parameter in declaration.parameters:
+                if not context.charge() or parameter.name in names:
+                    return False
+                names.add(parameter.name)
+                if parameter.default_value is not None and not self._constant_expression_is_pure(
+                    parameter.default_value, set(), context
+                ):
+                    return False
+            body = declaration.body
+            if isinstance(body, Expression):
+                pure = self._constant_expression_is_pure(body, names, context)
+                return pure
+            if (
+                not context.charge()
+                or not body.statements
+                or not isinstance(body.statements[-1], ExpressionStatement)
+            ):
+                return False
+            for statement in body.statements:
+                if not context.charge():
+                    return False
+                if isinstance(statement, VarDeclaration):
+                    if (
+                        statement.mode is not None
+                        or statement.explicit_qualifier not in (None, "const")
+                        or statement.name in names
+                    ):
+                        return False
+                    if not self._constant_expression_is_pure(statement.initializer, names, context):
+                        return False
+                    names.add(statement.name)
+                elif isinstance(statement, ExpressionStatement):
+                    if not self._constant_expression_is_pure(statement.expression, names, context):
+                        return False
+                else:
+                    return False
+            pure = True
+            return True
+        finally:
+            context.proof_stack.pop()
+            context.scope_stack.pop()
+            context.purity_active.remove(identity)
+            if context.work.room():
+                context.work.purity[cache_identity] = pure
+
+    def _constant_user_arguments(
+        self,
+        node: CallExpr,
+        binding: CallBindingFact,
+        declaration: FunctionDeclaration,
+        context: const_functions.ConstantContext,
+    ) -> list[Any] | None:
+        assert self.index is not None
+        source = {self.index.id_for(argument): argument for argument in node.arguments}
+        if tuple(source) != tuple(row.argument_node_id for row in binding.arguments):
+            return None
+        parameters = declaration.parameters
+        values: dict[int, Any] = {}
+        for row in binding.arguments:
+            if not context.charge() or type(row.parameter_index) is not int:
+                return None
+            index = row.parameter_index
+            if index < 0 or index >= len(parameters) or index in values:
+                return None
+            argument = source[row.argument_node_id]
+            parameter = parameters[index]
+            if (
+                row.parameter_name != parameter.name
+                or row.expected_type != self._parameter_entry(parameter)["type"]
+                or self._constant_argument_qualifier(argument.value, row.actual_qualifier, context)
+                != "const"
+                or row.binding != ("named" if argument.name is not None else "positional")
+                or argument.name is not None
+                and argument.name != parameter.name
+            ):
+                return None
+            known, value = self._evaluate_const(argument.value, context)
+            if not known:
+                return None
+            values[index] = value
+        for default in binding.defaults_applied:
+            if not context.charge() or type(default.parameter_index) is not int:
+                return None
+            index = default.parameter_index
+            if index < 0 or index >= len(parameters) or index in values:
+                return None
+            parameter = parameters[index]
+            if (
+                parameter.default_value is None
+                or default.parameter_name != parameter.name
+                or default.expected_type != self._parameter_entry(parameter)["type"]
+            ):
+                return None
+            # Defaults belong to the declaration and cannot see a caller's locals.
+            identity = self.index.id_for(declaration)
+            context.frames.append(const_functions.ConstantFrame(identity, {}))
+            context.scope_stack.append(identity)
+            context.proof_stack.append(None)
+            try:
+                known, value = self._evaluate_const(parameter.default_value, context)
+            finally:
+                context.proof_stack.pop()
+                context.scope_stack.pop()
+                context.frames.pop()
+            if (
+                not known
+                or default.default_known
+                and (
+                    type(default.default_value) is not type(value) or default.default_value != value
+                )
+            ):
+                return None
+            values[index] = value
+        if set(values) != set(range(len(parameters))):
+            return None
+        return [values[index] for index in range(len(parameters))]
+
+    def _evaluate_constant_function(
+        self, node: CallExpr, binding: CallBindingFact, context: const_functions.ConstantContext
+    ) -> tuple[bool, Any]:
+        assert self.index is not None
+        declaration = self._constant_function_for_call(node, binding, context)
+        proof = self._constant_call_proof(node, context)
+        if declaration is None or not self._constant_function_is_pure(declaration, context, proof):
+            return False, None
+        identity = self.index.id_for(declaration)
+        if len(context.frames) >= const_functions.MAX_FUNCTION_DEPTH or any(
+            frame.declaration_id == identity for frame in context.frames
+        ):
+            return False, None
+        arguments = self._constant_user_arguments(node, binding, declaration, context)
+        if arguments is None:
+            return False, None
+        key = (identity, tuple((type(value).__name__, value) for value in arguments))
+        if key in context.work.results:
+            return context.work.results[key]
+        if not context.work.room():
+            return False, None
+        frame = const_functions.ConstantFrame(
+            identity,
+            {
+                parameter.name: (self.index.id_for(parameter), value)
+                for parameter, value in zip(declaration.parameters, arguments)
+            },
+            proof,
+        )
+        context.frames.append(frame)
+        context.scope_stack.append(identity)
+        context.proof_stack.append(proof)
+        result: tuple[bool, Any] = (False, None)
+        try:
+            body = declaration.body
+            if isinstance(body, Expression):
+                result = self._evaluate_const(body, context)
+            elif context.charge():
+                for statement in body.statements:
+                    if not context.charge():
+                        result = False, None
+                        break
+                    if isinstance(statement, VarDeclaration):
+                        known, value = self._evaluate_const(statement.initializer, context)
+                        if not known:
+                            result = False, None
+                            break
+                        frame.bindings[statement.name] = self.index.id_for(statement), value
+                    elif isinstance(statement, ExpressionStatement):
+                        result = self._evaluate_const(statement.expression, context)
+                        if not result[0]:
+                            break
+                    else:
+                        result = False, None
+                        break
+        finally:
+            context.proof_stack.pop()
+            context.scope_stack.pop()
+            context.frames.pop()
+        if context.work.room():
+            context.work.results[key] = result
+        return result
+
     def _const_value(self, node: Expression) -> Any | None:
         known, value = self._evaluate_const(node)
         return value if known else None
 
-    def _evaluate_const(self, node: Expression) -> tuple[bool, Any]:
+    def _evaluate_const(
+        self, node: Expression, context: const_functions.ConstantContext | None = None
+    ) -> tuple[bool, Any]:
+        if context is None and id(node) in self._constant_roots:
+            context = const_functions.ConstantContext(self._constant_work)
+            if not self._constant_expression_is_pure(node, set(), context):
+                return False, None
+        if context is None:
+            return self._admitted_numeric_result(node, self._evaluate_const_node(node, None))
+        if not context.enter_expression():
+            return False, None
+        try:
+            known, value = self._admitted_numeric_result(
+                node, self._evaluate_const_node(node, context), context
+            )
+            return (
+                (True, value)
+                if known and const_functions.supported_scalar(value)
+                else (False, None)
+            )
+        finally:
+            context.expression_depth -= 1
+
+    def _admitted_numeric_result(
+        self,
+        node: Expression,
+        result: tuple[bool, Any],
+        context: const_functions.ConstantContext | None = None,
+    ) -> tuple[bool, Any]:
+        """Consume the shared type owner's modern expression result, without resolving types."""
+        known, value = result
+        proof = (
+            (
+                context.proof_stack[-1]
+                if context.proof_stack
+                else (context.frames[-1].proof if context.frames else None)
+            )
+            if context is not None
+            else None
+        )
+        dtype = (
+            proof.node_types.get(id(node))
+            if proof is not None
+            else self.model.node_types.get(id(node))
+        )
+        if (
+            self.version_context.pine_version in (5, 6)
+            and known
+            and type(value) is int
+            and dtype == "float"
+        ):
+            try:
+                value = float(value)
+            except OverflowError:
+                return False, None
+        return known, value
+
+    def _evaluate_const_node(
+        self, node: Expression, context: const_functions.ConstantContext | None
+    ) -> tuple[bool, Any]:
         if isinstance(node, Literal):
             return True, node.value
+        if isinstance(node, Identifier) and context is not None:
+            known, value = context.lookup(node.name)
+            if known:
+                return True, value
+            declaration = self._constant_global_for(node.name, context)
+            return (
+                self._evaluate_constant_global(declaration, context)
+                if declaration is not None
+                else (False, None)
+            )
         if isinstance(node, UnaryExpr):
-            known, value = self._evaluate_const(node.operand)
+            known, value = self._evaluate_const(node.operand, context)
             if not known:
+                return False, None
+            if context is not None and not (
+                node.op in {"+", "-"}
+                and const_functions.numeric(value)
+                or node.op == "not"
+                and type(value) is bool
+            ):
                 return False, None
             try:
                 if node.op == "+":
@@ -804,11 +1355,33 @@ class SemanticFactBuilder:
             except (TypeError, ValueError):
                 return False, None
         if isinstance(node, BinaryExpr):
-            lk, left = self._evaluate_const(node.left)
-            rk, right = self._evaluate_const(node.right)
+            lk, left = self._evaluate_const(node.left, context)
+            rk, right = self._evaluate_const(node.right, context)
             if not (lk and rk):
                 return False, None
+            if (
+                self.version_context.pine_version == 6
+                and node.op in {"==", "!=", "<", "<=", ">", ">="}
+                and (left is None or right is None)
+            ):
+                return True, False
+            if context is not None and not (
+                node.op in {"+", "-", "*", "/", "==", "!=", "<", "<=", ">", ">="}
+                and const_functions.numeric(left)
+                and const_functions.numeric(right)
+                or node.op in {"==", "!=", "and", "or"}
+                and type(left) is type(right) is bool
+            ):
+                return False, None
             try:
+                if (
+                    self.version_context.pine_version == 6
+                    and node.op in {"==", "!=", "<", "<=", ">", ">="}
+                    and const_functions.numeric(left)
+                    and const_functions.numeric(right)
+                ):
+                    comparison = comparison_constant(left, right, node.op)
+                    return (True, comparison) if comparison is not None else (False, None)
                 if node.op == "+":
                     return True, left + right
                 if node.op == "-":
@@ -848,11 +1421,13 @@ class SemanticFactBuilder:
             except (ArithmeticError, TypeError, ValueError, OverflowError):
                 return False, None
         if isinstance(node, ConditionalExpr):
-            known, condition = self._evaluate_const(node.condition)
-            if known:
-                return self._evaluate_const(node.if_true if condition else node.if_false)
+            known, condition = self._evaluate_const(node.condition, context)
+            if known and (context is None or type(condition) is bool):
+                return self._evaluate_const(node.if_true if condition else node.if_false, context)
         if isinstance(node, CallExpr):
             binding = self._call_bindings.get(id(node))
+            if context is not None and binding is not None and binding.call_form == "USER_FUNCTION":
+                return self._evaluate_constant_function(node, binding, context)
             if (
                 binding is None
                 or binding.resolution_status != "RESOLVED"
@@ -873,8 +1448,13 @@ class SemanticFactBuilder:
                 or binding.call_form != "NAMESPACE_FUNCTION"
             ):
                 return False, None
-            values = self._bound_const_arguments(node, binding)
+            values = self._bound_const_arguments(node, binding, context)
             if values is None:
+                return False, None
+            if context is not None and (
+                not self._constant_builtin(binding)
+                or not all(const_functions.numeric(value) for value in values)
+            ):
                 return False, None
             try:
                 if symbol == "pine:function:math.round":
@@ -915,7 +1495,12 @@ class SemanticFactBuilder:
                 return False, None
         return False, None
 
-    def _bound_const_arguments(self, node: CallExpr, binding: CallBindingFact) -> list[Any] | None:
+    def _bound_const_arguments(
+        self,
+        node: CallExpr,
+        binding: CallBindingFact,
+        context: const_functions.ConstantContext | None = None,
+    ) -> list[Any] | None:
         """Consume the already resolved parameter identities, including named order."""
         assert self.index is not None
         source = {self.index.id_for(argument): argument for argument in node.arguments}
@@ -930,6 +1515,8 @@ class SemanticFactBuilder:
         values: dict[int, list[Any]] = {}
         consumed: set[str] = set()
         for row in binding.arguments:
+            if context is not None and not context.charge():
+                return None
             argument = source.get(row.argument_node_id)
             if (
                 argument is None
@@ -938,7 +1525,8 @@ class SemanticFactBuilder:
                 or row.parameter_index < 0
                 or not row.parameter_name
                 or not row.expected_type
-                or row.actual_qualifier != "const"
+                or self._constant_argument_qualifier(argument.value, row.actual_qualifier, context)
+                != "const"
                 or row.binding not in {"named", "positional", "vararg"}
             ):
                 return None
@@ -956,12 +1544,14 @@ class SemanticFactBuilder:
                 declared_variadic and row.binding == "vararg"
             ):
                 return None
-            known, value = self._evaluate_const(argument.value)
+            known, value = self._evaluate_const(argument.value, context)
             if not known:
                 return None
             values.setdefault(row.parameter_index, []).append(value)
             consumed.add(row.argument_node_id)
         for default in binding.defaults_applied:
+            if context is not None and not context.charge():
+                return None
             if (
                 not default.default_known
                 or type(default.parameter_index) is not int

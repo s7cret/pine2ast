@@ -22,6 +22,21 @@ class DeclarationIndexPass:
 
     def run(self, program: Program) -> None:
         self.analyzer._register_builtins()
+        if self.analyzer.version_context.pine_version >= 5:
+            from pine2ast.ast.nodes import MethodDeclaration
+            from pine2ast.semantic.method_candidates import MethodCandidates
+
+            if any(isinstance(node, MethodDeclaration) for node in program.items):
+                owner = MethodCandidates(self.analyzer, program)
+                self.analyzer.model.method_candidates = owner
+                self.analyzer.inference.bind_model(self.analyzer.model)
+                for candidate in owner.duplicates:
+                    self.analyzer._diag(
+                        Severity.ERROR,
+                        codes.REDECLARATION,
+                        "Method overload repeats the same required qualified parameter types.",
+                        candidate.declaration.span,
+                    )
         if program.declaration is None:
             self.analyzer._diag(
                 Severity.ERROR,

@@ -233,7 +233,9 @@ class SemanticAnalyzer(
                     else ""
                 )
                 method_key = (receiver_name, item.name)
-                if method_key in self._user_method_params:
+                owner = self.model.method_candidates
+                candidate = owner.by_node.get(id(item)) if owner is not None else None
+                if candidate is None and method_key in self._user_method_params:
                     self._diag(
                         Severity.ERROR,
                         codes.REDECLARATION,
@@ -251,7 +253,12 @@ class SemanticAnalyzer(
                     allow_existing=True,
                 )
                 if method_symbol is not None:
-                    self.model.symbols[f"{receiver_name}.{item.name}"] = method_symbol
+                    symbol_key = (
+                        candidate.symbol_key
+                        if candidate is not None
+                        else f"{receiver_name}.{item.name}"
+                    )
+                    self.model.symbols[symbol_key] = method_symbol
                 self._predeclared_nodes.add(id(item))
                 self._user_method_params[method_key] = item.parameters
                 if receiver_name:

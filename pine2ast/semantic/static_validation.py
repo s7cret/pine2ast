@@ -307,7 +307,11 @@ def _strategy_exit_issues(
     for call, _context in calls:
         if callee_name(call.callee) != "strategy.exit":
             continue
-        named = {name for _, name in _bind_argument_names("strategy.exit", call.arguments, profile) if name}
+        named = {
+            name
+            for _, name in _bind_argument_names("strategy.exit", call.arguments, profile)
+            if name
+        }
         has_direct_action = bool(named & _STRATEGY_EXIT_ACTION_PARAMETERS)
         has_trailing_action = (
             bool(named & _STRATEGY_EXIT_TRAIL_PRICE_PARAMETERS)
@@ -461,6 +465,14 @@ def _sort_field_target_field(
     return None
 
 
+def _selected_collection_call(call: Any, engine: PineInferenceEngine):
+    owner = getattr(engine, "method_candidates", None)
+    selection = owner.resolve(call, engine) if owner is not None else None
+    if selection is not None and (selection.user_selected or not selection.resolution.ok):
+        return None
+    return resolve_collection_call(call, engine=engine)
+
+
 def _sort_field_issues(
     calls: list,
     *,
@@ -473,8 +485,13 @@ def _sort_field_issues(
         version_context=profile or program.version_context,
         symbols=_symbols(semantic_model),
     )
+    if (
+        semantic_model is not None
+        and getattr(semantic_model, "method_candidates", None) is not None
+    ):
+        engine.bind_model(semantic_model)
     for call, _context in calls:
-        resolution = resolve_collection_call(call, engine=engine)
+        resolution = _selected_collection_call(call, engine)
         if resolution is None:
             continue
         if (
@@ -626,6 +643,11 @@ def build_static_validation_report(
         version_context=actual_profile,
         symbols=_symbols(semantic_model),
     )
+    if (
+        semantic_model is not None
+        and getattr(semantic_model, "method_candidates", None) is not None
+    ):
+        sort_field_engine.bind_model(semantic_model)
 
     # Walk the program once and collect every (call, context) pair. The shared
     # ``iter_calls_with_context`` helper builds a context tuple at every AST
@@ -644,7 +666,7 @@ def build_static_validation_report(
             dynamic_request_count += 1
         elif name == _STRATEGY_EXIT:
             strategy_exit_count += 1
-        resolution = resolve_collection_call(call, engine=sort_field_engine)
+        resolution = _selected_collection_call(call, sort_field_engine)
         if (
             resolution is not None
             and (resolution.collection_kind, resolution.operation) in _SORT_FIELD_OPS

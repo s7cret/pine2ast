@@ -67,6 +67,11 @@ class CallableInferenceEngine:
         self.callable_updates = 0
 
     def run(self, program: Program) -> CallableInferenceSummary:
+        if self.model.method_candidates is not None:
+            # The scope walk has captured each overloaded method's locals.
+            # Bind them before the first monotonic return-inference iteration;
+            # a later bind cannot undo widening from another method's locals.
+            self.engine.bind_model(self.model)
         for node in iter_nodes(program):
             if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
                 self.declarations[self._declaration_key(node)] = node
@@ -109,19 +114,38 @@ class CallableInferenceEngine:
         changed = False
         for name, declaration in self.declarations.items():
             calls = self.calls.get(name, ())
+            defaults: dict[int, list[tuple[str, str]]] = {}
+            owner = self.model.callable_context
+            if owner is not None and isinstance(declaration, FunctionDeclaration):
+                for call in calls:
+                    proof = owner.infer_call(call, self.engine)
+                    if proof is None or proof.declaration_id != owner.index.id_for(declaration):
+                        continue
+                    for argument in proof.arguments:
+                        if argument.argument_id is None:
+                            defaults.setdefault(argument.parameter_index, []).append(
+                                (argument.type_name, argument.qualifier)
+                            )
             for index, parameter in enumerate(declaration.parameters):
                 explicit = type_ref_name(parameter.type_ref) if parameter.type_ref else None
-                inferred = explicit or self._merge(
+                actual_types = [
                     self.engine.infer_type(argument.value)
                     for call in calls
                     for argument in [self._argument_for(call, parameter, index)]
                     if argument is not None
-                )
-                qualifier = parameter_qualifier(parameter, self.model) or self._merge_qualifiers(
+                ]
+                actual_qualifiers = [
                     self.engine.infer_qualifier(argument.value)
                     for call in calls
                     for argument in [self._argument_for(call, parameter, index)]
                     if argument is not None
+                ]
+                selected_defaults = defaults.get(index, ())
+                inferred = explicit or self._merge(
+                    actual_types + [dtype for dtype, _ in selected_defaults]
+                )
+                qualifier = parameter_qualifier(parameter, self.model) or self._merge_qualifiers(
+                    actual_qualifiers + [qualifier for _, qualifier in selected_defaults]
                 )
                 symbol = self._symbol(parameter.name, parameter)
                 if symbol is not None:
@@ -192,6 +216,10 @@ class CallableInferenceEngine:
         return positional[index] if index < len(positional) else None
 
     def _user_call_name(self, call: CallExpr) -> str | None:
+        owner = self.model.method_candidates
+        selection = owner.resolve(call, self.engine) if owner is not None else None
+        if selection is not None:
+            return selection.candidate.symbol_key if selection.user_selected else None
         name = callee_name(call.callee)
         if name in self.declarations:
             return name
@@ -202,9 +230,12 @@ class CallableInferenceEngine:
                 return key
         return None
 
-    @staticmethod
-    def _declaration_key(declaration: FunctionDeclaration | MethodDeclaration) -> str:
+    def _declaration_key(self, declaration: FunctionDeclaration | MethodDeclaration) -> str:
         if isinstance(declaration, MethodDeclaration) and declaration.receiver_type is not None:
+            owner = self.model.method_candidates
+            candidate = owner.by_node.get(id(declaration)) if owner is not None else None
+            if candidate is not None:
+                return candidate.symbol_key
             return f"{type_ref_name(declaration.receiver_type)}.{declaration.name}"
         return declaration.name
 
