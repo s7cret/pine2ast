@@ -232,9 +232,11 @@ class PineInferenceEngine:
             specialized = self._binary_return_type(expr)
             if specialized:
                 return specialized
-        if self.version_context.pine_version >= 5 and isinstance(expr, (BinaryExpr, UnaryExpr)):
+        if self.version_context.pine_version >= 5 and isinstance(
+            expr, (BinaryExpr, UnaryExpr, TupleExpr)
+        ):
             # Contextual UDF results and lexical child facts must survive the
-            # ordinary operator rule; aggregate symbol recursion loses them.
+            # ordinary operator/tuple rule; aggregate symbol recursion loses them.
             # Versioned integer division above remains authoritative.
             return legacy_infer_type(
                 expr, self.symbols, registry=self.registry, infer_child=self.infer_type
