@@ -149,7 +149,7 @@ def test_collection_return_type_matrix_covers_all_shape_families() -> None:
         ("map<string,float>", "values"): "array<float>",
         ("map<string,float>", "size"): "int",
         ("map<string,float>", "copy"): "map<string,float>",
-        ("map<string,float>", "put"): "void",
+        ("map<string,float>", "put"): "float",
         ("float", "get"): None,
     }
     for (receiver, operation), return_type in expected.items():
