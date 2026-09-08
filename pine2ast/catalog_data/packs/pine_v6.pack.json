@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:1a830150ad6d22cb9d32e853a90c19f7b63f9009c1f138e06fa7cacd02a79f5a",
-  "content_hash": "sha256:036c4f8f2e13676c93756ee1b92c3b9df7ad78ef9a9ab8bfaf89375bec2fe471",
+  "catalog_hash": "sha256:91a70d23b03e287a1754e50f7b96bb164dfa18da8e7a519dc291c2ba4499ef45",
+  "content_hash": "sha256:9a57a2ebdeb88ec166ee1a0e97898d91520f5b5491123d774ddbe901795fb684",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 6,
@@ -13959,6 +13959,13 @@
             "qualifier_max": "series",
             "required": true,
             "type": "int"
+          },
+          {
+            "default": true,
+            "name": "biased",
+            "qualifier_max": "series",
+            "required": false,
+            "type": "bool"
           }
         ],
         "pine_version": "6",
@@ -14131,6 +14138,13 @@
             "qualifier_max": "series",
             "required": true,
             "type": "int"
+          },
+          {
+            "default": true,
+            "name": "biased",
+            "qualifier_max": "series",
+            "required": false,
+            "type": "bool"
           }
         ],
         "pine_version": "6",
