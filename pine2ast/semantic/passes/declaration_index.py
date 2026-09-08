@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
+from pine2ast.semantic.parameter_qualifiers import infer_parameter_qualifiers
 
 if TYPE_CHECKING:
     from pine2ast.ast.nodes import Program
@@ -30,3 +31,6 @@ class DeclarationIndexPass:
         else:
             self.analyzer._analyze_declaration_statement(program.declaration)
         self.analyzer._predeclare_globals(program.items)
+        self.analyzer.model.parameter_qualifiers = infer_parameter_qualifiers(
+            self.analyzer, program
+        )

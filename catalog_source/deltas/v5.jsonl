@@ -25,8 +25,8 @@
 {"name":"input.bool","op":"ADD","section":"functions","semantic_id":"sha256:cf90ec21cf9281fc20f41dada1717f60300947b0728c7047e952947b7e9322ac","symbol_id":"pine:function:input.bool"}
 {"name":"input.color","op":"ADD","section":"functions","semantic_id":"sha256:31b0b0e5881f885f325481d532b71b5d3cdad3b99485de9ced5f4013073e96cc","symbol_id":"pine:function:input.color"}
 {"name":"input.enum","op":"ADD","section":"functions","semantic_id":"sha256:a75401c0fda58efcb33ce8550f03e0cb8743ccf85bc794d4b1fdd9a346300f88","symbol_id":"pine:function:input.enum"}
-{"name":"input.float","op":"ADD","section":"functions","semantic_id":"sha256:59b53f20ce917ce4276a2d429fd0b5b041936ab29b4309df29ea0702a54ba0ed","symbol_id":"pine:function:input.float"}
-{"name":"input.int","op":"ADD","section":"functions","semantic_id":"sha256:51ff79af886eadf23f4c0211a81d981a8aad0782c951ddd7b8453d14ffee68b2","symbol_id":"pine:function:input.int"}
+{"name":"input.float","op":"ADD","section":"functions","semantic_id":"sha256:b5e6ba1142aeb9cec2cbc65d8a832af419d8a492301af310347e4f15173faa35","symbol_id":"pine:function:input.float"}
+{"name":"input.int","op":"ADD","section":"functions","semantic_id":"sha256:e389c6c05bcf71089fd29d95c28f7a4dd2d5dc1a8a7fd70aec4742e704f436f9","symbol_id":"pine:function:input.int"}
 {"name":"input.price","op":"ADD","section":"functions","semantic_id":"sha256:0015f722d2af8eec88808d5789b1b36c62a652935a309a7afe91184d6de01c21","symbol_id":"pine:function:input.price"}
 {"name":"input.session","op":"ADD","section":"functions","semantic_id":"sha256:318bcf6dfbb6163b7adbbf41301ea77693c3fd0acd0868c8cc375032499cf27f","symbol_id":"pine:function:input.session"}
 {"name":"input.source","op":"ADD","section":"functions","semantic_id":"sha256:3efef538e096ee973bf08e5a064a36f66ae3eee81f19e7de2cd46114ac5e4f9f","symbol_id":"pine:function:input.source"}

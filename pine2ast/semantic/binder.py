@@ -55,6 +55,7 @@ from pine2ast.policy import SemanticPolicy
 from pine2ast.semantic.type_helpers import generic_type_parts, is_assignable_type, type_ref_name
 from pine2ast.semantic.type_infer import callee_name
 from pine2ast.semantic.values import expression_can_be_na
+from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.versioning import PineVersionContext
 
 
@@ -463,12 +464,11 @@ class SemanticFactBuilder:
             )
         return None
 
-    @staticmethod
-    def _parameter_entry(parameter: Parameter) -> dict[str, Any]:
+    def _parameter_entry(self, parameter: Parameter) -> dict[str, Any]:
         return {
             "name": parameter.name,
             "type": type_ref_name(parameter.type_ref) if parameter.type_ref else "any",
-            "qualifier_max": parameter.explicit_qualifier or "series",
+            "qualifier_max": parameter_qualifier(parameter, self.model) or "series",
             "required": parameter.default_value is None,
         }
 

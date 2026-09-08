@@ -17,6 +17,9 @@ class SemanticModel:
     scopes: list[Scope] = field(default_factory=list)
     node_types: dict[int, str] = field(default_factory=dict)
     node_qualifiers: dict[int, str] = field(default_factory=dict)
+    # Declaration bounds inferred from typed v5/v6 function bodies. AST source
+    # qualifiers remain untouched; validation and consumer facts share this map.
+    parameter_qualifiers: dict[int, str] = field(default_factory=dict)
     non_na_scopes: dict[int, set[str]] = field(default_factory=dict)
     # Scope-local flow facts for `not na(x)`, `not na(obj.field)`, and `if na(x) ... else`.
     # Values are stable source-level paths, not object references, so reports remain JSON-safe.
