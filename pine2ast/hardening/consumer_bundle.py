@@ -23,6 +23,12 @@ from .invariants import (
 )
 from .model import canonical_json, content_hash, sha256_bytes
 from pine2ast.semantic.type_model import QUALIFIER_ORDER, qualifier_allows
+from pine2ast.ast.decode import ASTAdmissionBudget, ASTDecodeError, ASTReplayLimits
+from .method_receivers import (
+    METHOD_RECEIVER_CAPABILITY,
+    receiver_feature,
+    verify_method_receiver_semantics,
+)
 
 CONSUMER_BUNDLE_CONTRACT = "pine2ast.consumer_bundle.v1"
 CONSUMER_BUNDLE_SCHEMA_VERSION = "1.0.0"
@@ -225,6 +231,8 @@ def build_consumer_bundle(
         body["schema_version"] = LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
         body["library_context"] = library_context.to_dict()
         body["consumer_contract"]["required_capabilities"].append("library_qualifier_context_v1")
+    if ast.get("schema_version") == "2.1":
+        body["consumer_contract"]["required_capabilities"].append(METHOD_RECEIVER_CAPABILITY)
     body["content_hash"] = content_hash(body)
     verify_consumer_bundle(body, source=source, expected_producer_commit=producer_commit)
     return body
@@ -235,10 +243,35 @@ def verify_consumer_bundle(
     *,
     source: str | None = None,
     expected_producer_commit: str | None = None,
+    ast_replay_limits: ASTReplayLimits | None = None,
 ) -> None:
     from pine2ast.libraries import LibraryError
 
     try:
+        budget = ASTAdmissionBudget(ast_replay_limits)
+        if not isinstance(bundle, Mapping):
+            raise ConsumerBundleError("consumer bundle must be an object")
+        raw_ast = bundle.get("ast")
+        raw_context = bundle.get("version_context")
+        if not isinstance(raw_ast, Mapping) or not isinstance(raw_context, Mapping):
+            raise ConsumerBundleError("bundle core sections are missing")
+        # The whole-bundle replay profile belongs only to the new feature.
+        # Legacy bundles still need a bounded AST scan to reject concealed
+        # receiver fields, without imposing replay-only limits on old facts
+        # and linked metadata. Capability probing shares the same work budget.
+        raw_contract = bundle.get("consumer_contract")
+        raw_caps = (
+            raw_contract.get("required_capabilities") if isinstance(raw_contract, Mapping) else None
+        )
+        requests_receiver = raw_ast.get("schema_version") == "2.1"
+        if type(raw_caps) is list:
+            for cap in raw_caps:
+                budget.charge()
+                if type(cap) is str and cap == METHOD_RECEIVER_CAPABILITY:
+                    requests_receiver = True
+                    break
+        budget.preflight(bundle if requests_receiver else raw_ast)
+        has_receiver_feature = receiver_feature(raw_ast, raw_context, budget=budget)
         if bundle.get("schema_id") != CONSUMER_BUNDLE_CONTRACT:
             raise ConsumerBundleError("unsupported consumer bundle schema_id")
         revision = bundle.get("schema_version")
@@ -253,6 +286,13 @@ def verify_consumer_bundle(
         capabilities = (
             contract.get("required_capabilities", []) if isinstance(contract, Mapping) else []
         )
+        if (
+            not isinstance(capabilities, list)
+            or (METHOD_RECEIVER_CAPABILITY in capabilities) != has_receiver_feature
+        ):
+            raise ConsumerBundleError(
+                "method receiver capability and AST feature must match exactly"
+            )
         has_context = "library_context" in bundle
         has_capability = isinstance(capabilities, list) and CONTEXT_CAPABILITY in capabilities
         needs_context = revision == LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
@@ -272,6 +312,8 @@ def verify_consumer_bundle(
             )
         if needs_context:
             expected_caps = {*_BASE_CONSUMER_CAPABILITIES, CONTEXT_CAPABILITY}
+            if has_receiver_feature:
+                expected_caps.add(METHOD_RECEIVER_CAPABILITY)
             if (
                 not isinstance(capabilities, list)
                 or len(capabilities) != len(expected_caps)
@@ -321,6 +363,19 @@ def verify_consumer_bundle(
                 or bundle_version.get("pine_version") != library_context.to_dict()["pine_version"]
             ):
                 raise ConsumerBundleError("library context Pine version mismatch")
+        elif has_receiver_feature:
+            expected_caps = {*_BASE_CONSUMER_CAPABILITIES, METHOD_RECEIVER_CAPABILITY}
+            if (
+                not isinstance(contract, Mapping)
+                or not all(isinstance(cap, str) for cap in capabilities)
+                or len(capabilities) != len(expected_caps)
+                or set(capabilities) != expected_caps
+                or set(contract)
+                != {"consumer", "minimum_consumer_version", "required_capabilities"}
+                or contract.get("consumer") != "ast2python"
+                or contract.get("minimum_consumer_version") != "5.0.0rc6"
+            ):
+                raise ConsumerBundleError("method receiver consumer contract must match exactly")
         production_blockers = _production_diagnostic_codes(bundle.get("diagnostics"))
         if production_blockers:
             raise ConsumerBundleError(
@@ -465,7 +520,9 @@ def verify_consumer_bundle(
             reparsed_facts = semantic_facts_payload(parsed_source, reparsed_ast)
             if content_hash(reparsed_facts) != content_hash(facts):
                 raise ConsumerBundleError("source and semantic facts do not match")
-    except (InvariantViolation, LibraryError) as exc:
+        elif has_receiver_feature:
+            verify_method_receiver_semantics(ast, facts, budget=budget)
+    except (InvariantViolation, LibraryError, ASTDecodeError, RecursionError) as exc:
         raise ConsumerBundleError(str(exc)) from exc
 
 

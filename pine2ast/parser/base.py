@@ -153,6 +153,14 @@ class BaseParser:
             items,
             [],
         )
+        from pine2ast.ast.nodes import MethodDeclaration
+        from pine2ast.ast.visitors import walk
+
+        if any(
+            isinstance(node, MethodDeclaration) and node.receiver_explicit_qualifier is not None
+            for node in walk(program)
+        ):
+            program.schema_version = "2.1"
         return ParserResult(program, self.diagnostics)
 
     def parse_top_level_item(self, *, pending_annotations: list | None = None):

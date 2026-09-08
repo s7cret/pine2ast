@@ -22,6 +22,22 @@ ArgResolver = Callable[[Argument], str | None]
 
 
 @dataclass(frozen=True, slots=True)
+class ReceiverArgumentEvidence:
+    node_id: str
+    span: SourceSpan
+    actual_type: str
+    actual_qualifier: str
+    can_be_na: bool
+
+
+@dataclass(frozen=True, slots=True)
+class ArgumentValidationContext:
+    source_symbol_id: str
+    callable_kind: str
+    builtin_rule: Literal["na", "nz", "fixnan"] | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class SignatureIssue:
     """A diagnostics-ready issue produced by signature binding."""
 
@@ -136,6 +152,7 @@ class SignatureResolver:
         infer_arg_qualifier: ArgResolver | None = None,
         argument_type_resolver: ArgResolver | None = None,
         argument_qualifier_resolver: ArgResolver | None = None,
+        receiver: ReceiverArgumentEvidence | None = None,
     ) -> SignatureResolution:
         call_span = span or SourceSpan.zero()
         type_resolver = argument_type_resolver or infer_arg_type
@@ -159,6 +176,36 @@ class SignatureResolver:
                 type_resolver=type_resolver,
                 qualifier_resolver=qualifier_resolver,
             )
+            receiver_parameter = candidate.get("__receiver_parameter")
+            if receiver_parameter is not None and receiver is None:
+                resolution = replace(
+                    resolution,
+                    issues=resolution.issues
+                    + (
+                        SignatureIssue(
+                            Severity.ERROR,
+                            codes.ARGUMENT_COUNT,
+                            f"Method {callee} is missing receiver evidence.",
+                            call_span,
+                        ),
+                    ),
+                )
+            if receiver is not None and receiver_parameter is not None:
+                issues = self.argument_evidence_issues(
+                    callee,
+                    kind,
+                    parameter=receiver_parameter,
+                    actual_type=receiver.actual_type,
+                    actual_qualifier=receiver.actual_qualifier,
+                    can_be_na=receiver.can_be_na,
+                    span=receiver.span,
+                    validate_types=True,
+                    validate_qualifiers=True,
+                    validation_context=ArgumentValidationContext(
+                        str(candidate["symbol_id"]), "USER_METHOD"
+                    ),
+                )
+                resolution = replace(resolution, issues=resolution.issues + tuple(issues))
             if not self.candidate_is_active(candidate):
                 resolution = replace(
                     resolution,
@@ -325,6 +372,15 @@ class SignatureResolver:
 
         if not active:
             for arg in args:
+                if entry.get("__receiver_parameter") is not None:
+                    issues.append(
+                        SignatureIssue(
+                            Severity.ERROR,
+                            codes.UNKNOWN_PARAMETER if arg.name else codes.ARGUMENT_COUNT,
+                            f"Method {callee} does not accept a regular argument {arg.name or '<positional>'}.",
+                            arg.span,
+                        )
+                    )
                 if arg.name and arg.name in removed:
                     removed_param = removed[arg.name]
                     issues.append(
@@ -476,6 +532,11 @@ class SignatureResolver:
                         param,
                         validate_types=validate_types,
                         validate_qualifiers=validate_qualifiers,
+                        validation_context=(
+                            ArgumentValidationContext(str(entry["symbol_id"]), "USER_METHOD")
+                            if entry.get("__receiver_parameter") is not None
+                            else None
+                        ),
                     )
                 )
 
@@ -675,79 +736,102 @@ class SignatureResolver:
         *,
         validate_types: bool,
         validate_qualifiers: bool,
+        validation_context: ArgumentValidationContext | None = None,
     ) -> list[SignatureIssue]:
         argument = resolved.argument
         if argument is None:
             raise RuntimeError("source argument resolution is missing its AST argument")
+        return self.argument_evidence_issues(
+            callee,
+            kind,
+            parameter=param,
+            actual_type=resolved.actual_type,
+            actual_qualifier=resolved.actual_qualifier,
+            can_be_na=resolved.can_be_na,
+            span=argument.span,
+            validate_types=validate_types,
+            validate_qualifiers=validate_qualifiers,
+            validation_context=validation_context,
+        )
+
+    def argument_evidence_issues(
+        self,
+        callee: str,
+        kind: str,
+        *,
+        parameter: dict[str, Any],
+        actual_type: str | None,
+        actual_qualifier: str | None,
+        can_be_na: bool,
+        span: SourceSpan,
+        validate_types: bool,
+        validate_qualifiers: bool,
+        validation_context: ArgumentValidationContext | None = None,
+    ) -> list[SignatureIssue]:
         issues: list[SignatureIssue] = []
-        pname = param.get("name") or "<positional>"
+        pname = parameter.get("name") or "<positional>"
         if (
             validate_types
             and self.version_context.pine_version >= 6
-            and callee in {"na", "nz", "fixnan"}
-            and resolved.actual_type == "bool"
+            and (validation_context.builtin_rule if validation_context is not None else callee)
+            in {"na", "nz", "fixnan"}
+            and actual_type == "bool"
         ):
             issues.append(
                 SignatureIssue(
                     Severity.ERROR,
                     codes.ARGUMENT_TYPE,
                     f"{callee} does not accept bool arguments in Pine v6.",
-                    argument.span,
+                    span,
                 )
             )
-        expected_type = param.get("type") or param.get("value_type")
-        if (
-            validate_types
-            and expected_type
-            and not is_assignable_type(expected_type, resolved.actual_type)
-        ):
+        expected_type = parameter.get("type") or parameter.get("value_type")
+        if validate_types and expected_type and not is_assignable_type(expected_type, actual_type):
             issues.append(
                 SignatureIssue(
                     Severity.ERROR,
                     codes.ARGUMENT_TYPE,
-                    f"Argument {pname} for {callee} expects {expected_type}, got {resolved.actual_type}.",
-                    argument.span,
+                    f"Argument {pname} for {callee} expects {expected_type}, got {actual_type}.",
+                    span,
                 )
             )
         if (
             validate_types
             and self.version_context.pine_version >= 6
             and is_bool_target_type(expected_type)
-            and resolved.can_be_na
+            and can_be_na
         ):
             issues.append(
                 SignatureIssue(
                     Severity.ERROR,
                     codes.BOOL_CANNOT_BE_NA,
                     f"Argument {pname} for {callee} expects bool, but Pine v6 bool cannot be na.",
-                    argument.span,
+                    span,
                 )
             )
         if (
             validate_types
             and self.version_context.pine_version >= 6
             and expected_type in ENUM_LIKE_BUILTIN_TYPES
-            and resolved.can_be_na
+            and can_be_na
         ):
             issues.append(
                 SignatureIssue(
                     Severity.ERROR,
                     codes.ARGUMENT_TYPE,
                     f"Argument {pname} for {callee} expects unique type {expected_type}, which cannot be na in Pine v6.",
-                    argument.span,
+                    span,
                 )
             )
-        max_q = param.get("qualifier_max")
+        max_q = parameter.get("qualifier_max")
         if validate_qualifiers and max_q:
-            if QUALIFIER_ORDER.get(resolved.actual_qualifier or "series", 3) > QUALIFIER_ORDER.get(
-                max_q, 3
-            ):
+            if QUALIFIER_ORDER.get(actual_qualifier or "series", 3) > QUALIFIER_ORDER.get(max_q, 3):
                 issues.append(
                     SignatureIssue(
                         Severity.ERROR,
                         codes.ARGUMENT_QUALIFIER,
-                        f"Argument {pname} for {callee} requires {max_q} or weaker qualifier, got {resolved.actual_qualifier}.",
-                        argument.span,
+                        f"Argument {pname} for {callee} requires {max_q} or weaker qualifier, got {actual_qualifier}.",
+                        span,
                     )
                 )
         return issues

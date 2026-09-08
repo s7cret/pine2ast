@@ -201,6 +201,7 @@
 {"name":"ta.lowest","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.lowest"}
 {"name":"ta.lowestbars","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.lowestbars"}
 {"name":"ta.macd","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.macd"}
+{"op":"PATCH","semantic_id":"sha256:7bda197acaf1f9049c443438d513a8f29038d9d26218006f80f9f11db5b23908","symbol_id":"pine:function:ta.macd"}
 {"name":"ta.max","op":"ADD","section":"functions","semantic_id":"sha256:cbad17545882835a4d6ac6616a909b757c754291af5c45d23d4e9c637d57985a","symbol_id":"pine:function:ta.max"}
 {"name":"ta.median","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.median"}
 {"name":"ta.mfi","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.mfi"}
@@ -228,7 +229,9 @@
 {"name":"ta.swma","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.swma"}
 {"name":"ta.tr","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.tr"}
 {"name":"ta.tsi","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.tsi"}
+{"op":"PATCH","semantic_id":"sha256:81543394a61f1d2fbb64356fec0203007a707001c772382534e3229ac3c2915f","symbol_id":"pine:function:ta.tsi"}
 {"name":"ta.valuewhen","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.valuewhen"}
+{"op":"PATCH","semantic_id":"sha256:35477888bfb73b8a346f088f03de25c678d4a2ed99c7ac4459b8ff5339fcbdb4","symbol_id":"pine:function:ta.valuewhen"}
 {"name":"ta.variance","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.variance"}
 {"op":"PATCH","semantic_id":"sha256:caaeaf0d05508233e86a5aa9b884f763d6a4a8cb20b500aa4d5af641656c2b95","symbol_id":"pine:function:ta.variance"}
 {"name":"ta.vwap","op":"RENAME","section":"functions","symbol_id":"pine:function:ta.vwap"}

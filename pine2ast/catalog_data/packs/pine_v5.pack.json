@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:26a6a3c447a5feebbcffc5d4b1b833f0e047e221d7945deb87dadcc644855893",
-  "content_hash": "sha256:5722900c5fa9599e35d537b6814c35be3a4d166582c61d034c0c41325fd68574",
+  "catalog_hash": "sha256:c37a825447f4217fd2e235b24b34bcaa558b4194de121083d9ace194737d4556",
+  "content_hash": "sha256:9997b3f9882d39c0db01e79eb8a78f391c7578374663e8570de78ebd941a2f75",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 5,
@@ -12498,19 +12498,19 @@
           },
           {
             "name": "fastlen",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           },
           {
             "name": "slowlen",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           },
           {
             "name": "siglen",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           }
@@ -13003,13 +13003,13 @@
           },
           {
             "name": "short_length",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           },
           {
             "name": "long_length",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           }
@@ -13038,7 +13038,7 @@
           },
           {
             "name": "occurrence",
-            "qualifier_max": "series",
+            "qualifier_max": "simple",
             "required": true,
             "type": "int"
           }

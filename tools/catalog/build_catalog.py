@@ -112,6 +112,9 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
     "ta.ema": {"length": "simple"},
     "ta.rma": {"length": "simple"},
     "ta.rsi": {"length": "simple"},
+    "ta.macd": {"fastlen": "simple", "slowlen": "simple", "siglen": "simple"},
+    "ta.tsi": {"short_length": "simple", "long_length": "simple"},
+    "ta.valuewhen": {"occurrence": "simple"},
     "ta.supertrend": {"atrPeriod": "simple"},
     "ta.dmi": {"diLength": "simple", "adxSmoothing": "simple"},
 }
@@ -578,6 +581,12 @@ def project_v4(
                 # This correction is sourced for v5/v6 only. Do not back-project
                 # its additional parameter into the retained historical surface.
                 definition = trim_parameters(definition, {"source", "length"})
+            elif name in {"ta.valuewhen", "ta.macd", "ta.tsi"}:
+                # This qualifier correction is sourced only for v5/v6. Keep
+                # the retained historical semantic contract unchanged.
+                for parameter in definition.get("parameters", []):
+                    if parameter["name"] in QUALIFIER_MAX_OVERRIDES[name]:
+                        parameter["qualifier_max"] = "series"
             elif name in {"math.min", "math.max"}:
                 # Positional variadic evidence is reviewed only for v5/v6 here.
                 for parameter in definition.get("parameters", []):

@@ -274,6 +274,19 @@ class PineInferenceEngine:
             proof = self.callable_context.infer_call(expr, self)
             if proof is not None:
                 return proof.qualifier
+        if isinstance(expr, CallExpr) and isinstance(expr.callee, MemberAccessExpr):
+            selection = (
+                self.method_candidates.resolve(expr, self)
+                if self.method_candidates is not None
+                else None
+            )
+            if (
+                selection is not None
+                and selection.user_selected
+                and selection.candidate is not None
+                and selection.candidate.declaration.receiver_explicit_qualifier is not None
+            ):
+                return str(selection.resolution.entry.get("return_qualifier") or "series")
         if isinstance(expr, Identifier):
             captured = self._lexical_qualifiers.get(id(expr))
             if captured:

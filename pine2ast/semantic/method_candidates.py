@@ -6,13 +6,24 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Any
 
-from pine2ast.ast.nodes import CallExpr, MemberAccessExpr, MethodDeclaration, Program
+from pine2ast.ast.nodes import (
+    CallExpr,
+    MemberAccessExpr,
+    MethodDeclaration,
+    Program,
+    TypeDeclaration,
+)
 from pine2ast.diagnostics import Severity, codes
 from pine2ast.semantic.collection_signatures import resolve_collection_call
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
-from pine2ast.semantic.signatures import SignatureIssue, SignatureResolution, SignatureResolver
-from pine2ast.semantic.type_helpers import generic_type_parts, type_ref_name
+from pine2ast.semantic.signatures import (
+    ReceiverArgumentEvidence,
+    SignatureIssue,
+    SignatureResolution,
+    SignatureResolver,
+)
+from pine2ast.semantic.type_helpers import generic_type_parts, is_reference_type, type_ref_name
 from pine2ast.semantic.type_infer import callee_name
 
 MAX_METHOD_WORK = 262144
@@ -53,6 +64,7 @@ class MethodCandidates:
     def __init__(self, analyzer: Any, program: Program) -> None:
         self.analyzer = analyzer
         self.index = NodeIndex.build(program)
+        self.udts = frozenset(n.name for n in self.index.nodes if isinstance(n, TypeDeclaration))
         declarations = [n for n in self.index.nodes if isinstance(n, MethodDeclaration)]
         counts: dict[tuple[str, str], int] = {}
         for node in declarations:
@@ -74,6 +86,7 @@ class MethodCandidates:
             signature = (
                 receiver,
                 node.name,
+                self.receiver_qualifier(node, for_binding=True),
                 tuple(
                     (
                         type_ref_name(p.type_ref) if p.type_ref else "any",
@@ -104,10 +117,25 @@ class MethodCandidates:
         self.active: set[int] = set()
         self.cache: dict[tuple[Any, ...], MethodSelection] = {}
 
-    def entry(self, candidate: MethodCandidate) -> dict[str, Any]:
+    def receiver_qualifier(self, node: MethodDeclaration, *, for_binding: bool = False) -> str:
+        """References stay series; v6 explicitly ignores their qualifier keyword.
+
+        The v5 simple-reference *admission* exception is not independently
+        established. Preserve that bounded rejection profile, without letting
+        its source annotation fabricate a simple reference inside a method.
+        """
+        dtype = type_ref_name(node.receiver_type)
+        reference = dtype in self.udts or is_reference_type(dtype)
+        if reference and (not for_binding or self.analyzer.version_context.pine_version == 6):
+            return "series"
+        return node.receiver_explicit_qualifier or "series"
+
+    def entry(self, candidate: MethodCandidate, *, symbols: Any = None) -> dict[str, Any]:
         node = candidate.declaration
-        symbol = self.analyzer.model.symbols.get(candidate.symbol_key)
-        return dict(
+        symbol = (symbols if symbols is not None else self.analyzer.model.symbols).get(
+            candidate.symbol_key
+        )
+        entry = dict(
             name=node.name,
             symbol_id=candidate.symbol_id,
             overload_id=candidate.symbol_id + "#signature",
@@ -123,6 +151,15 @@ class MethodCandidates:
             ],
             returns=getattr(symbol, "type", None) or "unknown",
         )
+        if node.receiver_explicit_qualifier is not None:
+            entry["__receiver_parameter"] = dict(
+                name=node.receiver_name,
+                type=candidate.receiver_type,
+                qualifier_max=self.receiver_qualifier(node, for_binding=True),
+                required=True,
+            )
+            entry["return_qualifier"] = getattr(symbol, "qualifier", None) or "series"
+        return entry
 
     def _limit(self, call: CallExpr, receiver: str) -> MethodSelection:
         issue = SignatureIssue(
@@ -152,7 +189,27 @@ class MethodCandidates:
             self.spent += 1 + len(call.arguments)
             if self.spent > MAX_METHOD_WORK:
                 return self._limit(call, receiver)
-            entries = [self.entry(c) for c in candidates]
+            entries = [
+                self.entry(
+                    c,
+                    symbols=(
+                        engine.symbols
+                        if c.declaration.receiver_explicit_qualifier is not None
+                        else None
+                    ),
+                )
+                for c in candidates
+            ]
+            receiver_evidence = None
+            if any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
+                value = engine.infer_value(call.callee.object)
+                receiver_evidence = ReceiverArgumentEvidence(
+                    self.index.id_for(call.callee.object),
+                    call.callee.object.span,
+                    receiver,
+                    value.qualifier,
+                    value.can_be_na,
+                )
             base, _ = generic_type_parts(receiver)
             builtin = engine.registry.get("methods", {}).get(f"{base}.{call.callee.member}")
             if isinstance(builtin, dict):
@@ -181,6 +238,8 @@ class MethodCandidates:
                 (
                     row.get("symbol_id"),
                     row.get("returns"),
+                    row.get("return_qualifier"),
+                    tuple(sorted((row.get("__receiver_parameter") or {}).items())),
                     tuple(
                         (p.get("name"), p.get("type"), p.get("qualifier_max"), p.get("required"))
                         for p in row.get("parameters", [])
@@ -188,10 +247,16 @@ class MethodCandidates:
                 )
                 for row in entries
             )
-            key = (id(call), receiver, actual, shape)
+            key = (id(call), receiver, receiver_evidence, actual, shape)
             if key in self.cache:
                 return self.cache[key]
-            cost = sum(1 + len(row.get("parameters", [])) + len(call.arguments) for row in entries)
+            cost = sum(
+                1
+                + len(row.get("parameters", []))
+                + len(call.arguments)
+                + int("__receiver_parameter" in row)
+                for row in entries
+            )
             self.spent += cost
             if self.spent > MAX_METHOD_WORK or len(self.cache) >= MAX_METHOD_CACHE:
                 return self._limit(call, receiver)
@@ -207,6 +272,7 @@ class MethodCandidates:
                 validate_qualifiers=True,
                 infer_arg_type=lambda a: actual_by_argument[id(a)][0],
                 infer_arg_qualifier=lambda a: actual_by_argument[id(a)][1],
+                receiver=receiver_evidence,
             )
             chosen = self.by_symbol.get(str(resolution.entry.get("symbol_id")))
             selected = MethodSelection(receiver, resolution, chosen)

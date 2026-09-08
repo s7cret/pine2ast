@@ -112,6 +112,9 @@ class MethodDeclaration(Declaration):
     body: Block | Expression
     is_exported: bool = False
     documentation: list[Annotation] = field(default_factory=list)
+    receiver_explicit_qualifier: TypingLiteral["simple", "series"] | None = field(
+        default=None, metadata={"omit_none": True}
+    )
 
 
 @dataclass(slots=True)

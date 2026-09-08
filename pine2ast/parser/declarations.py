@@ -205,9 +205,14 @@ class DeclarationsMixin(BaseParser):
         self._expect(TokenKind.LPAREN)
         receiver_type = None
         receiver_name = None
+        receiver_qualifier: TypingLiteral["simple", "series"] | None = None
         # Method signature: METHOD NAME ( [RECEIVER_TYPE RECEIVER_NAME [, PARAMS] ] ) => BODY
         # Receiver is the first parameter (required), followed by optional additional params.
         if not self._at(TokenKind.RPAREN):
+            if self._at(TokenKind.SIMPLE, TokenKind.SERIES):
+                receiver_qualifier = (
+                    "simple" if self._advance().kind is TokenKind.SIMPLE else "series"
+                )
             receiver_type = self.parse_type_ref()
             receiver_tok = self._expect(TokenKind.IDENTIFIER)
             receiver_name = receiver_tok.text
@@ -237,6 +242,7 @@ class DeclarationsMixin(BaseParser):
             body,
             exported,
             documentation=doc_annotations,
+            receiver_explicit_qualifier=receiver_qualifier,
         )
 
     def parse_params(

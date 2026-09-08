@@ -17,6 +17,7 @@ from pine2ast.ast.nodes import (
     ForInStructure,
     ForRangeStructure,
     FunctionDeclaration,
+    MethodDeclaration,
     Program,
     TypeDeclaration,
     VarDeclaration,
@@ -33,12 +34,22 @@ from pine2ast.semantic.type_model import QUALIFIER_ORDER
 class CallableResultQualifierInference:
     def __init__(self, analyzer: Any, program: Program) -> None:
         self.analyzer = analyzer
-        self.declarations = {
+        self.declarations: dict[str, FunctionDeclaration | MethodDeclaration] = {
             n.name: n
             for n in program.items
             if isinstance(n, FunctionDeclaration)
             and all(p.type_ref is not None for p in n.parameters)
         }
+        owner = analyzer.model.method_candidates
+        if owner is not None:
+            self.declarations.update(
+                {
+                    candidate.symbol_key: candidate.declaration
+                    for candidate in owner.candidates
+                    if candidate.declaration.receiver_explicit_qualifier is not None
+                    and all(p.type_ref is not None for p in candidate.declaration.parameters)
+                }
+            )
         self.udts = {n.name for n in program.items if isinstance(n, TypeDeclaration)}
         self.values: dict[int, str] = {}
         self.types: dict[int, str] = {}
@@ -55,6 +66,20 @@ class CallableResultQualifierInference:
                 local = dict(symbols)
                 self.values = {}
                 self.types = {}
+                if isinstance(node, MethodDeclaration) and node.receiver_name is not None:
+                    receiver_type = type_ref_name(node.receiver_type)
+                    receiver_qualifier = self.analyzer.model.method_candidates.receiver_qualifier(
+                        node
+                    )
+                    local[node.receiver_name] = Symbol(
+                        -1,
+                        node.receiver_name,
+                        SymbolKind.VARIABLE,
+                        node.span,
+                        receiver_type,
+                        receiver_qualifier,
+                        -1,
+                    )
                 for p in node.parameters:
                     dtype = type_ref_name(p.type_ref)
                     qualifier = parameter_qualifier(p, self.analyzer.model) or "series"

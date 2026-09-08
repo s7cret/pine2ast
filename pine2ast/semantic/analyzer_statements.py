@@ -351,7 +351,11 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 SymbolKind.VARIABLE,
                 node.span,
                 self._type_ref_name(node.receiver_type) if node.receiver_type else "unknown",
-                "series",
+                (
+                    self.model.method_candidates.receiver_qualifier(node)
+                    if self.model.method_candidates is not None
+                    else node.receiver_explicit_qualifier or "series"
+                ),
             )
         for p in node.parameters:
             if p.type_ref is not None:
