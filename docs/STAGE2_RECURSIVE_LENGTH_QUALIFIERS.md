@@ -1,0 +1,15 @@
+# Modern MACD and TSI length qualifiers
+
+Pine v5/v6 source admission now requires at most `simple int` for MACD `fastlen`, `slowlen`, and `siglen`, and TSI `short_length` and `long_length`. The version-specific official reference entries list simple, input, and const integer forms. Previously the producer advertised series limits, allowing a bar-varying length through normal compilation.
+
+The producer uses its existing audited override table. Only these five parameter qualifiers in each modern pack change. The explicit v4 historical projection preserves earlier behavior; all v1–4 pack bytes remain identical. Canonical symbol/overload identity, argument names/types, returns, other semantic fields, and the source manifest remain unchanged. The normal catalog generator owns its derived JSON and report files.
+
+The matching PineLib target adjustment changes only the two TSI length qualifiers in its existing row (two version tuples). MACD target metadata was already simple. No callable, ABI parameter mapping, availability, capability, manifest schema, kernel, state, or checkpoint behavior changes. This companion neither incorporates the separate EMA/MACD numeric correction nor the TSI scale correction.
+
+Independent source cases were authored before SUT execution in manual SHA256 `bb7c32877244350a0fc1f92d7172eba55626352610cd6b965826d0a62297c1aa`. Original 30-case before results retain ten false series admissions. The final 60-source positional/named matrix has 40 const/input positives that produce verified artifacts and 20 series negatives rejected with `P2A1405`, on both Python versions. The new producer tests add exact whole-pack preservation controls; the target tests check its one-row delta, complete remainder, ABI and category boundaries. These checks establish admission behavior, not independent numeric indicator trajectories or complete builtin coverage.
+
+Ten older fixture/test files have a separately reviewed metadata identity migration. Only remainder hashes, two modern normalized pack hashes, and resulting literal fixture byte checksums change. Original numeric literals, assertion bodies, historical hashes, and authority/provenance fields are retained. This migration is a separate publication group from production changes and new tests.
+
+The compiler's normalized `TargetCallBinding` currently retains source parameter names and ABI mappings, not qualifier ceilings. Correct producer facts close these normal-source false admissions. Compiler enforcement of semantic compatibility across differing source and raw target contracts remains a separate recorded limitation; no compiler fix or certification is claimed here.
+
+Local evidence uses an indexed frozen composition on top of producer `05d7e61be58a184b211bc093f989527157005b92`, compiler `95a14be4be8987faafb3e7629c744e698fd9f134`, and runtime `2148bca8370858ef8f7716ee0ba27d42960563b4`, including the reviewed occurrence companion. These base names alone are not a claim of executing a published final tree. Coordinated Linux checks and exact publication identities remain separate. Full Stage2 acceptance remains false.
