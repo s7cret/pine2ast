@@ -1,7 +1,7 @@
-"""Pre-validation simple/series results of typed v5/v6 functions.
+"""Pre-validation result qualifiers of typed v5/v6 functions.
 
-Declaration bounds are already fixed. Result facts may narrow from series to
-simple once, so chains terminate after at most one change per function. This
+Declaration bounds are already fixed. Result facts may descend the four-level
+qualifier lattice at most three times, so dependency cycles are bounded. This
 does not specialize untyped functions by callsite or weaken mutable/reference
 values. The shared expression inference owner evaluates all expression rules.
 """
@@ -27,6 +27,7 @@ from pine2ast.semantic.model import SemanticModel
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.semantic.symbols import Symbol, SymbolKind
 from pine2ast.semantic.type_helpers import type_ref_name
+from pine2ast.semantic.type_model import QUALIFIER_ORDER
 
 
 class CallableResultQualifierInference:
@@ -36,7 +37,6 @@ class CallableResultQualifierInference:
             n.name: n
             for n in program.items
             if isinstance(n, FunctionDeclaration)
-            and n.parameters
             and all(p.type_ref is not None for p in n.parameters)
         }
         self.udts = {n.name for n in program.items if isinstance(n, TypeDeclaration)}
@@ -48,10 +48,9 @@ class CallableResultQualifierInference:
             return
         # Copies prevent preliminary values from escaping into the real model.
         symbols = {name: replace(symbol) for name, symbol in self.analyzer.model.symbols.items()}
-        remaining = set(self.declarations)
-        while remaining:
+        while True:
             changed: set[str] = set()
-            for name in sorted(remaining):
+            for name in sorted(self.declarations):
                 node = self.declarations[name]
                 local = dict(symbols)
                 self.values = {}
@@ -67,9 +66,12 @@ class CallableResultQualifierInference:
                 self._walk(node.body, local)
                 returned = self.analyzer._body_return_expr(node.body)
                 result = self.values.get(id(returned), "series")
-                # Const/input results need an exported-result floor preserved by
-                # library projection; they retain the prior conservative result.
-                if result == "simple":
+                if node.is_exported or id(node) in getattr(
+                    self.analyzer, "_projected_exported_functions", ()
+                ):
+                    result = max(result, "simple", key=QUALIFIER_ORDER.__getitem__)
+                current = symbols[name].qualifier or "series"
+                if QUALIFIER_ORDER[result] < QUALIFIER_ORDER[current]:
                     symbols[name].qualifier = result
                     result_type = self.types.get(id(returned), "unknown")
                     if result_type not in {"unknown", "any", "function", "method"}:
@@ -77,7 +79,6 @@ class CallableResultQualifierInference:
                     changed.add(name)
             if not changed:
                 break
-            remaining -= changed
         for name in self.declarations:
             self.analyzer.model.symbols[name].qualifier = symbols[name].qualifier or "series"
             self.analyzer.model.symbols[name].type = symbols[name].type

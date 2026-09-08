@@ -2,5 +2,13 @@
 
 from .store import LibraryError, LibraryStore
 from .linker import LinkedSource, has_library_imports, link_libraries
+from .qualifier_context import LibraryQualifierContext
 
-__all__ = ["LibraryError", "LibraryStore", "LinkedSource", "link_libraries", "has_library_imports"]
+__all__ = [
+    "LibraryError",
+    "LibraryStore",
+    "LinkedSource",
+    "LibraryQualifierContext",
+    "link_libraries",
+    "has_library_imports",
+]

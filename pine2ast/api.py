@@ -5,7 +5,10 @@ from pine2ast.semantic.version_semantics import apply_version_semantics
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, Optional, Mapping, Any
+from typing import TYPE_CHECKING, Literal, Optional, Mapping, Any
+
+if TYPE_CHECKING:
+    from pine2ast.libraries.qualifier_context import LibraryQualifierContext
 
 from pine2ast import audit, security
 from pine2ast._version import __version__
@@ -44,6 +47,7 @@ class ParseOptions:
     producer_commit: str | None = None
     created_at_utc_ms: int | None = None
     security_audit_hook: Optional[audit.SecurityAuditHook] = None
+    library_context: LibraryQualifierContext | None = None
 
     def __post_init__(self) -> None:
         if self.strictness not in {"strict", "diagnostic"}:
@@ -77,6 +81,7 @@ class ParseOptions:
             producer_commit=self.producer_commit,
             created_at_utc_ms=self.created_at_utc_ms,
             security_audit_hook=self.security_audit_hook,
+            library_context=self.library_context,
         )
 
 
@@ -248,16 +253,30 @@ class ParsePipeline:
         actual_catalog = catalog or admitted_catalog
         actual_policies = policies or admitted_policies
         actual_policies.validate_context(ast.version_context)
-        return SemanticAnalyzer(
+        analyzer = SemanticAnalyzer(
             version_context=ast.version_context,
             catalog=actual_catalog,
             policy=actual_policies.semantic,
             max_diagnostics=self.options.max_diagnostics,
             strict_builtin_namespaces=self.options.strict_builtin_namespaces,
             loop_max_iterations=self.options.loop_max_iterations,
-        ).analyze(ast)
+        )
+        if self.options.library_context is not None:
+            analyzer._projected_exported_functions = self.options.library_context.declaration_ids(
+                ast
+            )
+        return analyzer.analyze(ast)
 
     def parse(self, code: str | bytes) -> ParseResult:
+        if self.options.library_context is not None:
+            from pine2ast.libraries.qualifier_context import LibraryQualifierContext
+
+            library_context = self.options.library_context
+            if type(library_context) is not LibraryQualifierContext:
+                raise ValueError("library_context must be an admitted LibraryQualifierContext")
+            text = code.decode("utf-8") if isinstance(code, bytes) else code
+            if text != library_context.code:
+                raise ValueError("library context source differs from parser input")
         early = self.validate_input(code)
         if early is not None:
             return early
@@ -350,6 +369,10 @@ class ParsePipeline:
             "semantic_gate": "not_run",
             "frontend_gate": "pending",
         }
+        if self.options.library_context is not None:
+            ast.producer_metadata["library_qualifier_context_ref"] = (
+                self.options.library_context.to_dict()["content_hash"]
+            )
         ast.diagnostics = diagnostics
         provisional = ParseResult(
             ast,
