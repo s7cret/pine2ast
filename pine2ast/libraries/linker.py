@@ -331,8 +331,11 @@ class _Linker:
             name: PREFIX + source_hash((ref + "\0" + text))[7:27] + "_" + name
             for name in unit.functions | unit.constants | unit.types
         }
+        # Each resolved method declaration gets its own private name. Keeping
+        # overloads under one spelling would let the final semantic pass select
+        # a private/more-specific overload that was invisible in the preview.
         unit.renamed.update({
-            key: PREFIX + source_hash((ref + "\0" + text + "\0method:" + node.name))[7:27] + "_" + node.name
+            key: PREFIX + source_hash((ref + "\0" + text + "\0method:" + key))[7:27] + "_" + node.name
             for key, node in unit.methods.items()
         })
         # Resolve every declared edge, even when calls under it are not selected.
