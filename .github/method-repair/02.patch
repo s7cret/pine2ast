@@ -1,0 +1,348 @@
+diff --git a/pine2ast/semantic/analyzer.py b/pine2ast/semantic/analyzer.py
+index 0a58adc..31b54bb 100644
+--- a/pine2ast/semantic/analyzer.py
++++ b/pine2ast/semantic/analyzer.py
+@@ -127,12 +127,16 @@ class SemanticAnalyzer(
+         self._symbol_history: dict[str, list[Symbol]] = {}
+         self._script_type: str | None = None
+         self._reassigned_names: set[str] = set()
++        self._reassigned_declarations: frozenset[int] = frozenset()
+         self.pass_results: tuple[PassResult, ...] = ()
+ 
+     def analyze(self, program: Program) -> SemanticModel:
+         if program.version_context != self.version_context:
+             raise ValueError("semantic analyzer version context does not match Program")
+         self._reassigned_names = self._collect_reassigned_names(program)
++        from pine2ast.semantic.mutation_identity import reassigned_declarations
++
++        self._reassigned_declarations = reassigned_declarations(program)
+         self._push_scope(ScopeKind.GLOBAL)
+         pipeline = AnalyzerPassPipeline(
+             (
+@@ -187,6 +191,12 @@ class SemanticAnalyzer(
+         visit(node)
+         return names
+ 
++    def _is_reassigned_declaration(self, node) -> bool:
++        # Legacy v1/v2 predeclaration rules remain unchanged.
++        if self.version_context.pine_version < 3:
++            return node.name in self._reassigned_names
++        return id(node) in self._reassigned_declarations
++
+     def _assignment_root(self, target: Expression) -> str | None:
+         if isinstance(target, Identifier):
+             return target.name
+diff --git a/pine2ast/semantic/analyzer_contract.py b/pine2ast/semantic/analyzer_contract.py
+index 1538a40..1074534 100644
+--- a/pine2ast/semantic/analyzer_contract.py
++++ b/pine2ast/semantic/analyzer_contract.py
+@@ -60,6 +60,7 @@ class AnalyzerMixinHost(Protocol):
+     _symbol_history: dict[str, list[Symbol]]
+     _script_type: str | None
+     _reassigned_names: set[str]
++    _reassigned_declarations: frozenset[int]
+     pass_results: tuple[PassResult, ...]
+ 
+     def analyze(self, program: Program) -> SemanticModel: ...
+@@ -74,6 +75,8 @@ class AnalyzerMixinHost(Protocol):
+ 
+     def _collect_reassigned_names(self, node: ASTNode) -> set[str]: ...
+ 
++    def _is_reassigned_declaration(self, node: Any) -> bool: ...
++
+     def _assignment_root(self, target: Expression) -> str | None: ...
+ 
+     def _predeclare_globals(self, items: list[Statement]) -> None: ...
+diff --git a/pine2ast/semantic/analyzer_statements.py b/pine2ast/semantic/analyzer_statements.py
+index 02c7966..5e44a76 100644
+--- a/pine2ast/semantic/analyzer_statements.py
++++ b/pine2ast/semantic/analyzer_statements.py
+@@ -112,7 +112,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
+         else:
+             if init_qualifier == "input":
+                 qualifier = "input"
+-            elif init_qualifier in {"const", "simple"} and node.name not in self._reassigned_names:
++            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(node):
+                 qualifier = init_qualifier
+             else:
+                 qualifier = "series"
+diff --git a/pine2ast/semantic/callable_context.py b/pine2ast/semantic/callable_context.py
+index 266bbe3..35dbca1 100644
+--- a/pine2ast/semantic/callable_context.py
++++ b/pine2ast/semantic/callable_context.py
+@@ -8,20 +8,13 @@ from typing import Any, Mapping
+ 
+ from pine2ast.ast.base import ASTNode
+ from pine2ast.ast.nodes import (
+-    Block,
+     CallExpr,
+-    ForInStructure,
+-    ForRangeStructure,
+     FunctionDeclaration,
+     Identifier,
+-    MethodDeclaration,
+     Program,
+-    Reassignment,
+-    TupleDeclaration,
+     TypeDeclaration,
+     VarDeclaration,
+ )
+-from pine2ast.ast.walk import iter_child_nodes
+ from pine2ast.semantic.callable_qualifiers import CallableResultQualifierInference
+ from pine2ast.semantic.inference import PineInferenceEngine
+ from pine2ast.semantic.model import SemanticModel
+@@ -118,50 +111,11 @@ class CallableContext:
+ 
+     @staticmethod
+     def _global_reassignment_ids(program: Program) -> frozenset[int]:
+-        """Associate module reassignments with source-ordered lexical declarations.
++        """Use the same source-identity classification as ordinary validation."""
++        from pine2ast.semantic.mutation_identity import reassigned_declarations
+ 
+-        This inventory only classifies the ordinary global declarations used by
+-        the constant prepass. It resolves no expression types or call identities.
+-        Function bodies cannot reassign globals and have their own bindings.
+-        """
+         global_ids = {id(n) for n in program.items if isinstance(n, VarDeclaration)}
+-        result: set[int] = set()
+-        pending: list[tuple[ASTNode, dict[str, ASTNode | None], bool]] = [(program, {}, False)]
+-        while pending:
+-            node, symbols, bind = pending.pop()
+-            if bind:
+-                if isinstance(node, VarDeclaration):
+-                    symbols[node.name] = node
+-                elif isinstance(node, TupleDeclaration):
+-                    for target in node.targets:
+-                        symbols[target.name] = None
+-                continue
+-            if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
+-                continue
+-            if isinstance(node, VarDeclaration):
+-                pending.append((node, symbols, True))
+-                pending.append((node.initializer, symbols, False))
+-            elif isinstance(node, TupleDeclaration):
+-                pending.append((node, symbols, True))
+-                pending.append((node.initializer, symbols, False))
+-            elif isinstance(node, (ForRangeStructure, ForInStructure)):
+-                local = dict(symbols)
+-                names = (
+-                    [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
+-                )
+-                for name in names:
+-                    local[name] = None
+-                for child in reversed(list(iter_child_nodes(node))):
+-                    pending.append((child, local if child is node.body else symbols, False))
+-            else:
+-                if isinstance(node, Reassignment) and isinstance(node.target, Identifier):
+-                    declaration = symbols.get(node.target.name)
+-                    if declaration is not None and id(declaration) in global_ids:
+-                        result.add(id(declaration))
+-                local = dict(symbols) if isinstance(node, Block) else symbols
+-                for child in reversed(list(iter_child_nodes(node))):
+-                    pending.append((child, local, False))
+-        return frozenset(result)
++        return reassigned_declarations(program) & global_ids
+ 
+     def charge(self) -> None:
+         if self.root_spent is None:
+diff --git a/pine2ast/semantic/callable_qualifiers.py b/pine2ast/semantic/callable_qualifiers.py
+index 4164e3b..d435bd8 100644
+--- a/pine2ast/semantic/callable_qualifiers.py
++++ b/pine2ast/semantic/callable_qualifiers.py
+@@ -171,7 +171,7 @@ class CallableResultQualifierInference:
+             self.types[id(node)] = engine.infer_type(node)
+ 
+     def _is_reassigned(self, node: VarDeclaration) -> bool:
+-        return node.name in self.analyzer._reassigned_names
++        return self.analyzer._is_reassigned_declaration(node)
+ 
+ 
+ def infer_callable_result_qualifiers(analyzer: Any, program: Program) -> None:
+diff --git a/pine2ast/semantic/mutation_identity.py b/pine2ast/semantic/mutation_identity.py
+new file mode 100644
+index 0000000..682d698
+--- /dev/null
++++ b/pine2ast/semantic/mutation_identity.py
+@@ -0,0 +1,85 @@
++"""Associate writes with lexical declarations, never with global spellings.
++
++This prepass only classifies mutation. The semantic analyzer still owns name,
++type and assignment validation. It introduces neither evaluation nor coercion.
++"""
++
++from __future__ import annotations
++
++from pine2ast.ast.nodes import (
++    Block,
++    ForInStructure,
++    ForRangeStructure,
++    FunctionDeclaration,
++    Identifier,
++    MemberAccessExpr,
++    MethodDeclaration,
++    Program,
++    Reassignment,
++    TupleDeclaration,
++    VarDeclaration,
++)
++from pine2ast.ast.walk import iter_child_nodes
++
++
++def reassigned_declarations(program: Program) -> frozenset[int]:
++    """Return the identities of declarations written in their visible scope.
++
++    Process declaration initializers before binding names. Function parameters,
++    tuple targets and loop targets shadow outer names. Explicit stack traversal
++    avoids recursion proportional to source size; scope frames are shared, not
++    flattened copies of every visible declaration.
++    """
++    result: set[int] = set()
++    # A None binding still shadows an outer variable (e.g. a parameter).
++    scopes: tuple[dict, ...] = ({},)
++    pending = [(program, scopes, False)]
++    while pending:
++        node, frames, bind = pending.pop()
++        if bind:
++            if isinstance(node, VarDeclaration):
++                frames[-1][node.name] = node
++            elif isinstance(node, TupleDeclaration):
++                for target in node.targets:
++                    if target.name != "_":
++                        frames[-1][target.name] = target
++            continue
++        if isinstance(node, VarDeclaration):
++            pending.append((node, frames, True))
++            pending.append((node.initializer, frames, False))
++            continue
++        if isinstance(node, TupleDeclaration):
++            pending.append((node, frames, True))
++            pending.append((node.initializer, frames, False))
++            continue
++        if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
++            local = {p.name: None for p in node.parameters}
++            if isinstance(node, MethodDeclaration) and node.receiver_name:
++                local[node.receiver_name] = None
++            pending.append((node.body, (*frames, local), False))
++            # Defaults have their defining outer scope, not another function's locals.
++            for p in reversed(node.parameters):
++                if p.default_value is not None:
++                    pending.append((p.default_value, frames, False))
++            continue
++        if isinstance(node, (ForRangeStructure, ForInStructure)):
++            names = [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
++            local = (*frames, {name: None for name in names})
++            for child in reversed(list(iter_child_nodes(node))):
++                pending.append((child, local if child is node.body else frames, False))
++            continue
++        if isinstance(node, Reassignment):
++            target = node.target
++            while isinstance(target, MemberAccessExpr):
++                target = target.object
++            if isinstance(target, Identifier):
++                for frame in reversed(frames):
++                    if target.name in frame:
++                        declaration = frame[target.name]
++                        if declaration is not None:
++                            result.add(id(declaration))
++                        break
++        nested = (*frames, {}) if isinstance(node, Block) else frames
++        for child in reversed(list(iter_child_nodes(node))):
++            pending.append((child, nested, False))
++    return frozenset(result)
+diff --git a/tests/test_lexical_mutation_identity.py b/tests/test_lexical_mutation_identity.py
+new file mode 100644
+index 0000000..5d7ea41
+--- /dev/null
++++ b/tests/test_lexical_mutation_identity.py
+@@ -0,0 +1,91 @@
++"""Mutation classification is lexical, not a property of a variable spelling.
++
++Manual typing fixtures. These do not claim an external TradingView execution.
++"""
++
++import pytest
++
++from pine2ast import parse_code
++from pine2ast.ast.nodes import VarDeclaration
++from pine2ast.ast.walk import iter_nodes
++from pine2ast.hardening.consumer_bundle import build_consumer_bundle, verify_consumer_bundle
++from pine2ast.semantic.mutation_identity import reassigned_declarations
++
++
++def check(body, version=6):
++    title = "indicator" if version >= 5 else "study"
++    return parse_code(f'//@version={version}\n{title}("lexical writes")\n{body}\n')
++
++
++@pytest.mark.parametrize("version", [5, 6])
++@pytest.mark.parametrize("kind", ["method", "function"])
++@pytest.mark.parametrize("use", ["receiver", "input_default"])
++def test_local_write_does_not_strengthen_unrelated_global_qualifier(version, kind, use):
++    declaration = (
++        "method count(simple int self,int step)" if kind == "method" else "count(int step)"
++    )
++    body = (
++        declaration + "=>\n    var int n=1000\n    n+=step\n    n\n"
++        "method stable(simple int self)=>self\nn=2\n"
++    )
++    body += "plot(n.stable())" if use == "receiver" else "plot(input.int(n))"
++    parsed = check(body, version)
++    assert parsed.ok, [(d.code, d.message) for d in parsed.diagnostics]
++    bundle = build_consumer_bundle(f'//@version={version}\nindicator("lexical writes")\n{body}\n')
++    verify_consumer_bundle(bundle)
++
++
++@pytest.mark.parametrize("version", [3, 4, 5, 6])
++def test_function_local_mutation_does_not_change_global_constant(version):
++    body = "counter()=>\n    n=1\n    n:=n+1\n    n\nn=2\nplot(n)"
++    parsed = check(body, version)
++    assert parsed.ok, parsed.diagnostics
++    global_n = next(n for n in parsed.ast.items if isinstance(n, VarDeclaration) and n.name == "n")
++    writes = reassigned_declarations(parsed.ast)
++    assert id(global_n) not in writes
++    assert len(writes) == 1
++
++
++@pytest.mark.parametrize("version", [5, 6])
++@pytest.mark.parametrize("write", ["n+=1", "if bar_index>0\n    n+=1"])
++def test_real_global_mutation_still_rejects_simple_receiver(version, write):
++    parsed = check(
++        "method stable(simple int self)=>self\nn=2\n" + write + "\nplot(n.stable())", version
++    )
++    assert not parsed.ok
++    assert any(d.code == "P2A1405" and "simple" in d.message for d in parsed.diagnostics)
++
++
++@pytest.mark.parametrize("version", [5, 6])
++def test_unrelated_mutated_method_local_does_not_poison_simple_result(version):
++    body = (
++        "method changed(simple int self)=>\n    n=1\n    n+=self\n    n\n"
++        "method stable(simple int self)=>\n    n=self\n    n\n"
++        "a=2\nplot(ta.ema(close,a.stable()))"
++    )
++    parsed = check(body, version)
++    assert parsed.ok, [(d.code, d.message) for d in parsed.diagnostics]
++
++
++@pytest.mark.parametrize("version", [5, 6])
++@pytest.mark.parametrize("scope", ["block", "tuple", "loop", "parameter"])
++def test_local_shadow_bindings_never_mark_outer_variable(version, scope):
++    body = {
++        "block": "n=2\nif close>0\n    n=1\n    n+=1\nplot(n)",
++        "tuple": "pair()=>[1,2]\nn=2\nif close>0\n    [n,m]=pair()\n    n+=1\nplot(n)",
++        "loop": "n=2\nfor n=0 to 1\n    a=n+1\nplot(n)",
++        "parameter": "n=2\nidentity(int n)=>n+1\nplot(n)",
++    }[scope]
++    parsed = check(body, version)
++    assert parsed.ok, [(d.code, d.message) for d in parsed.diagnostics]
++    outer = next(n for n in parsed.ast.items if isinstance(n, VarDeclaration) and n.name == "n")
++    assert id(outer) not in reassigned_declarations(parsed.ast)
++
++
++@pytest.mark.parametrize("version", [5, 6])
++def test_write_before_local_shadow_marks_outer_but_later_write_marks_local(version):
++    parsed = check("n=2\nif close>0\n    n+=1\n    n=7\n    n+=1\nplot(n)", version)
++    assert parsed.ok, parsed.diagnostics
++    nodes = [n for n in iter_nodes(parsed.ast) if isinstance(n, VarDeclaration) and n.name == "n"]
++    assert len(nodes) == 2
++    assert reassigned_declarations(parsed.ast) == {id(n) for n in nodes}

@@ -1,0 +1,25 @@
+name: Publish exact method identity repairs to candidate
+'on':
+  push:
+    branches: ['ops/stage2-method-repair-20260911']
+permissions:
+  contents: write
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore reviewed source and advance only candidate
+        run: |
+          cp -R .github/method-repair "$RUNNER_TEMP/method-repair"
+          python "$RUNNER_TEMP/method-repair/publish.py" "$RUNNER_TEMP/method-repair"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: method-repair-publication-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication/
+          if-no-files-found: error
+          retention-days: 14
