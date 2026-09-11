@@ -231,6 +231,8 @@ def build_consumer_bundle(
         body["schema_version"] = LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
         body["library_context"] = library_context.to_dict()
         body["consumer_contract"]["required_capabilities"].append("library_qualifier_context_v1")
+        if body["library_context"]["schema_id"] == "pine2ast.library_qualifier_context.v2":
+            body["consumer_contract"]["required_capabilities"].append("library_method_projection_v1")
     if ast.get("schema_version") == "2.1":
         body["consumer_contract"]["required_capabilities"].append(METHOD_RECEIVER_CAPABILITY)
     body["content_hash"] = content_hash(body)
@@ -312,6 +314,9 @@ def verify_consumer_bundle(
             )
         if needs_context:
             expected_caps = {*_BASE_CONSUMER_CAPABILITIES, CONTEXT_CAPABILITY}
+            context_payload = bundle.get("library_context")
+            if isinstance(context_payload, Mapping) and context_payload.get("schema_id") == "pine2ast.library_qualifier_context.v2":
+                expected_caps.add("library_method_projection_v1")
             if has_receiver_feature:
                 expected_caps.add(METHOD_RECEIVER_CAPABILITY)
             if (

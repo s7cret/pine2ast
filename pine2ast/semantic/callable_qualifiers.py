@@ -46,7 +46,8 @@ class CallableResultQualifierInference:
                 {
                     candidate.symbol_key: candidate.declaration
                     for candidate in owner.candidates
-                    if candidate.declaration.receiver_explicit_qualifier is not None
+                    if (candidate.declaration.receiver_explicit_qualifier is not None
+                        or id(candidate.declaration) in analyzer._projected_exported_functions)
                     and all(p.type_ref is not None for p in candidate.declaration.parameters)
                 }
             )

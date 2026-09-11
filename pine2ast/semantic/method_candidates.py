@@ -63,6 +63,7 @@ class MethodCandidates:
 
     def __init__(self, analyzer: Any, program: Program) -> None:
         self.analyzer = analyzer
+        self.visibility = getattr(analyzer, "_method_visibility", None)
         self.index = NodeIndex.build(program)
         self.udts = frozenset(n.name for n in self.index.nodes if isinstance(n, TypeDeclaration))
         declarations = [n for n in self.index.nodes if isinstance(n, MethodDeclaration)]
@@ -84,6 +85,7 @@ class MethodCandidates:
             # Names/default-only differences cannot make a required signature
             # unique; preserve exact qualifier/type distinctions.
             signature = (
+                self.visibility.origin(node) if self.visibility is not None else None,
                 receiver,
                 node.name,
                 self.receiver_qualifier(node, for_binding=True),
@@ -159,6 +161,8 @@ class MethodCandidates:
                 required=True,
             )
             entry["return_qualifier"] = getattr(symbol, "qualifier", None) or "series"
+        if id(node) in getattr(self.analyzer, "_projected_exported_functions", ()):
+            entry["return_qualifier"] = getattr(symbol, "qualifier", None) or "series"
         return entry
 
     def _limit(self, call: CallExpr, receiver: str) -> MethodSelection:
@@ -186,6 +190,9 @@ class MethodCandidates:
             candidates = self.by_receiver_name.get((receiver, call.callee.member), ())
             if not candidates:
                 return None
+            all_candidates = candidates
+            if self.visibility is not None:
+                candidates = tuple(c for c in candidates if self.visibility.allows(call, c.declaration))
             self.spent += 1 + len(call.arguments)
             if self.spent > MAX_METHOD_WORK:
                 return self._limit(call, receiver)
@@ -227,6 +234,11 @@ class MethodCandidates:
                     ]
                     builtin["returns"] = collection.return_type or builtin.get("returns")
                 entries.extend(self.resolver.candidate_entries(builtin))
+            if not entries and all_candidates:
+                issue = SignatureIssue(Severity.ERROR, codes.UNKNOWN_CALL,
+                    "No imported or local method is visible for this receiver.", call.span)
+                resolution = SignatureResolution(callee_name(call.callee), "method", {}, (), {}, (), issues=(issue,))
+                return MethodSelection(receiver, resolution, None)
             actual = tuple(
                 (engine.infer_type(a.value), engine.infer_qualifier(a.value))
                 for a in call.arguments

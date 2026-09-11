@@ -12,7 +12,7 @@ import math
 from typing import Any, Mapping, NoReturn
 
 from pine2ast.api import ParseOptions, ParsePipeline
-from pine2ast.ast.nodes import FunctionDeclaration, Program
+from pine2ast.ast.nodes import FunctionDeclaration, MethodDeclaration, Program
 from pine2ast.ast.serialize import ast_to_dict
 from .linker import LinkedSource, _parse, link_libraries
 from .store import (
@@ -28,6 +28,8 @@ from .store import (
 
 CONTEXT_SCHEMA = "pine2ast.library_qualifier_context.v1"
 CONTEXT_CAPABILITY = "library_qualifier_context_v1"
+METHOD_CONTEXT_SCHEMA = "pine2ast.library_qualifier_context.v2"
+METHOD_CONTEXT_CAPABILITY = "library_method_projection_v1"
 MAX_CONTEXT_BYTES = 64_000_000
 MAX_CONTEXT_NODES = 500_000
 MAX_CONTEXT_DEPTH = 16
@@ -88,7 +90,7 @@ def _decode(data: bytes) -> dict[str, Any]:
     return payload
 
 
-def _span(node: FunctionDeclaration) -> dict[str, int]:
+def _span(node: FunctionDeclaration | MethodDeclaration) -> dict[str, int]:
     return {"start_offset": node.span.start_offset, "end_offset": node.span.end_offset}
 
 
@@ -106,44 +108,41 @@ def _syntax(code: str) -> Program:
 
 def _payload(linked: LinkedSource) -> dict[str, Any]:
     receipt = linked.receipt()
-    generated = {
-        node.name: node
-        for node in _syntax(linked.code).items
-        if isinstance(node, FunctionDeclaration)
-    }
+    generated = {}
+    for node in _syntax(linked.code).items:
+        if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
+            generated.setdefault((type(node), node.name), []).append(node)
     originals = {
         ref: _parse(ref, receipt["sources"][ref]["raw_text"]) for ref in receipt["dependencies"]
     }
     rows = []
     for row in receipt["declarations"]:
         unit = originals[row["ref"]]
-        original = unit.functions.get(row["name"])
+        original = unit.functions.get(row["name"]) or unit.methods.get(row["name"])
         if original is None or not original.is_exported:
             continue
-        projected = generated.get(row["linked_name"])
-        if projected is None:
-            _fail("exported declaration is absent from projected syntax")
-        location = linked.original_location(projected.span.start_offset)
-        if (
-            location is None
-            or location["source"] != row["ref"]
-            or not (original.span.start_offset <= location["offset"] < original.span.end_offset)
-        ):
-            _fail("exported declaration projection does not match original span")
-        rows.append(
-            {
-                "source": row["ref"],
-                "source_hash": receipt["dependencies"][row["ref"]],
-                "name": original.name,
-                "span": _span(original),
-                "generated_name": projected.name,
-                "generated_span": _span(projected),
-                "minimum_return_qualifier": "simple",
-            }
-        )
+        matches = []
+        for node in generated.get((type(original), row["linked_name"]), ()):
+
+            location = linked.original_location(node.span.start_offset)
+            if (location is not None and location["source"] == row["ref"]
+                    and original.span.start_offset <= location["offset"] < original.span.end_offset):
+                matches.append(node)
+        if len(matches) != 1:
+            _fail("exported declaration does not have one exact source projection")
+        projected = matches[0]
+        rows.append({
+            "source": row["ref"],
+            "source_hash": receipt["dependencies"][row["ref"]],
+            "name": original.name,
+            "span": _span(original),
+            "generated_name": projected.name,
+            "generated_span": _span(projected),
+            "minimum_return_qualifier": "simple",
+        })
     rows.sort(key=lambda row: row["generated_span"]["start_offset"])
     body = {
-        "schema_id": CONTEXT_SCHEMA,
+        "schema_id": (METHOD_CONTEXT_SCHEMA if receipt["profile"] == "same_version_methods_v5" else CONTEXT_SCHEMA),
         "pine_version": receipt["pine_version"],
         "linked_source_hash": receipt["linked_source_hash"],
         "linkage_receipt_hash": receipt["content_hash"],
@@ -178,7 +177,7 @@ class LibraryQualifierContext:
     @classmethod
     def admit(cls, payload: Mapping[str, Any]) -> LibraryQualifierContext:
         _bounded(payload)
-        if not isinstance(payload, dict) or payload.get("schema_id") != CONTEXT_SCHEMA:
+        if not isinstance(payload, dict) or payload.get("schema_id") not in {CONTEXT_SCHEMA, METHOD_CONTEXT_SCHEMA}:
             _fail("unsupported context schema")
         if type(payload.get("pine_version")) is not int or payload["pine_version"] not in {5, 6}:
             _fail("context requires Pine v5 or v6")
@@ -210,7 +209,7 @@ class LibraryQualifierContext:
         return frozenset(
             id(node)
             for node in program.items
-            if isinstance(node, FunctionDeclaration)
+            if isinstance(node, (FunctionDeclaration, MethodDeclaration))
             and (node.name, node.span.start_offset, node.span.end_offset) in keys
         )
 

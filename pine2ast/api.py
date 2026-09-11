@@ -248,6 +248,8 @@ class ParsePipeline:
         *,
         catalog: Mapping[str, Any] | None = None,
         policies: PolicyBundle | None = None,
+        method_visibility=None,
+        projected_exports: frozenset[int] = frozenset(),
     ) -> SemanticModel:
         admitted_catalog, admitted_policies = self.admitted_frontend(ast.version_context)
         actual_catalog = catalog or admitted_catalog
@@ -261,6 +263,8 @@ class ParsePipeline:
             strict_builtin_namespaces=self.options.strict_builtin_namespaces,
             loop_max_iterations=self.options.loop_max_iterations,
         )
+        analyzer._method_visibility = method_visibility
+        analyzer._projected_exported_functions = projected_exports
         if self.options.library_context is not None:
             analyzer._projected_exported_functions = self.options.library_context.declaration_ids(
                 ast
