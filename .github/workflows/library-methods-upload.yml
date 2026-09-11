@@ -1,0 +1,25 @@
+name: Publish exact library method source candidate
+'on':
+  push:
+    branches: ['ops/publish-library-methods-20260911']
+permissions:
+  contents: write
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify exact patch and publish candidate only
+        run: |
+          cp .github/method-upload/publish.py "$RUNNER_TEMP/publish.py"
+          python "$RUNNER_TEMP/publish.py"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: method-source-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication/
+          if-no-files-found: error
+          retention-days: 30
