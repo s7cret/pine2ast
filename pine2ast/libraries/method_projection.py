@@ -11,7 +11,7 @@ from __future__ import annotations
 from bisect import bisect_right
 
 from pine2ast.api import ParseOptions, ParsePipeline
-from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, MemberAccessExpr, MethodDeclaration
+from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, Identifier, MemberAccessExpr, MethodDeclaration
 from pine2ast.ast.visitors import walk
 from .store import LibraryError
 
@@ -63,9 +63,25 @@ class _Visibility:
                 return result
         raise LibraryError("P2A_LIBRARY_PROJECTION", "method declaration has no original")
 
+    def explicit_owner(self, call: CallExpr):
+        callee = call.callee
+        if not (isinstance(callee, MemberAccessExpr) and isinstance(callee.object, Identifier)):
+            return None
+        ref, start = self.location(callee.span.start_offset)
+        end_ref, end = self.location(callee.span.end_offset - 1)
+        if ref != end_ref:
+            raise LibraryError("P2A_LIBRARY_PROJECTION", "method callee spans multiple sources")
+        return self.linker.explicit_method_calls.get((ref, start, end + 1))
+
     def allows(self, call: CallExpr, method: MethodDeclaration) -> bool:
         caller = self.units[self.origin(call)]
         owner, _, original = self.declaration(method)
+        target = self.explicit_owner(call)
+        if target is not None:
+            return owner.ref == target and original.is_exported
+        # A bare local function-style method call is scoped to its source unit.
+        if isinstance(call.callee, Identifier):
+            return owner is caller
         return owner is caller or (original.is_exported and owner.ref in caller.imports.values())
 
 
@@ -110,7 +126,7 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
     index = model.method_candidates.index
     calls = {c.node_id: c for c in model.semantic_facts.calls}
     for node in walk(parsed.ast):
-        if not isinstance(node, CallExpr) or not isinstance(node.callee, MemberAccessExpr):
+        if not isinstance(node, CallExpr) or not isinstance(node.callee, (Identifier, MemberAccessExpr)):
             continue
         fact = calls.get(index.id_for(node))
         if fact is None or fact.call_form != "USER_METHOD" or fact.resolution_status != "RESOLVED":
@@ -121,15 +137,18 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
         unit, key, _ = visibility.declaration(candidate.declaration)
         if unit is linker.root:
             continue
-        member = node.callee.member
-        start = node.callee.span.end_offset - len(member)
+        explicit = isinstance(node.callee, Identifier) or visibility.explicit_owner(node) is not None
+        member = (node.callee.name if isinstance(node.callee, Identifier) else node.callee.member)
+        start = node.callee.span.start_offset if explicit else node.callee.span.end_offset - len(member)
         ref, original = visibility.location(start)
         caller = visibility.units[ref]
-        if caller.text[original : original + len(member)] != member:
+        length = node.callee.span.end_offset - start
+        spelling = code[start : node.callee.span.end_offset]
+        if caller.text[original : original + length] != spelling:
             raise LibraryError(
                 "P2A_LIBRARY_PROJECTION", "selected method token differs from source"
             )
-        linker.edit(caller, original, original + len(member), unit.renamed[key])
+        linker.edit(caller, original, original + length, unit.renamed[key])
     for unit in linker.units.values():
         for key, node in unit.methods.items():
             token = next(

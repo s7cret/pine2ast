@@ -8,6 +8,8 @@ from typing import Any
 
 from pine2ast.ast.nodes import (
     CallExpr,
+    FunctionDeclaration,
+    Identifier,
     MemberAccessExpr,
     MethodDeclaration,
     Program,
@@ -103,7 +105,9 @@ class MethodCandidates:
             seen.add(signature)
         self.candidates = tuple(candidates)
         groups: dict[tuple[str, str], list[MethodCandidate]] = {}
+        names: dict[str, list[MethodCandidate]] = {}
         for candidate in candidates:
+            names.setdefault(candidate.declaration.name, []).append(candidate)
             groups.setdefault((candidate.receiver_type, candidate.declaration.name), []).append(
                 candidate
             )
@@ -112,7 +116,11 @@ class MethodCandidates:
         )
         self.by_node = MappingProxyType({id(c.declaration): c for c in candidates})
         self.by_symbol = MappingProxyType({c.symbol_id: c for c in candidates})
-        self.names = frozenset(c.declaration.name for c in candidates)
+        self.by_name = MappingProxyType({name: tuple(group) for name, group in names.items()})
+        self.function_names = frozenset(
+            n.name for n in program.items if isinstance(n, FunctionDeclaration)
+        )
+        self.names = frozenset(self.by_name)
         self.duplicates = tuple(duplicates)
         self.resolver = SignatureResolver(version_context=analyzer.version_context)
         self.spent = 0
@@ -178,7 +186,19 @@ class MethodCandidates:
         return MethodSelection(receiver, resolution, None)
 
     def resolve(self, call: CallExpr, engine: Any) -> MethodSelection | None:
-        if not isinstance(call.callee, MemberAccessExpr) or call.callee.member not in self.names:
+        explicit = isinstance(call.callee, Identifier)
+        namespace_owner = None
+        if isinstance(call.callee, MemberAccessExpr) and self.visibility is not None:
+            namespace_owner = self.visibility.explicit_owner(call)
+            explicit = namespace_owner is not None
+        name = call.callee.name if isinstance(call.callee, Identifier) else (
+            call.callee.member if isinstance(call.callee, MemberAccessExpr) else None
+        )
+        if name not in self.names:
+            return None
+        # Ordinary functions/builtins keep their existing owner. A method's
+        # function notation is not a spelling-based replacement for a function.
+        if explicit and namespace_owner is None and name in self.function_names:
             return None
         if callee_name(call.callee) in engine.registry.get("functions", {}):
             return None
@@ -186,8 +206,8 @@ class MethodCandidates:
             return self._limit(call, "unknown")
         self.active.add(id(call))
         try:
-            receiver = engine.infer_type(call.callee.object)
-            candidates = self.by_receiver_name.get((receiver, call.callee.member), ())
+            receiver = "unknown" if explicit else engine.infer_type(call.callee.object)
+            candidates = self.by_name[name] if explicit else self.by_receiver_name.get((receiver, name), ())
             if not candidates:
                 return None
             all_candidates = candidates
@@ -208,7 +228,18 @@ class MethodCandidates:
                 for c in candidates
             ]
             receiver_evidence = None
-            if any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
+            if explicit:
+                for entry, candidate in zip(entries, candidates):
+                    # SignatureResolver owns binding/coercions/qualifiers for
+                    # every argument, including an explicitly supplied receiver.
+                    entry.pop("__receiver_parameter", None)
+                    entry["parameters"] = [{
+                        "name": candidate.declaration.receiver_name,
+                        "type": candidate.receiver_type,
+                        "qualifier_max": self.receiver_qualifier(candidate.declaration, for_binding=True),
+                        "required": True,
+                    }, *entry["parameters"]]
+            elif any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
                 value = engine.infer_value(call.callee.object)
                 receiver_evidence = ReceiverArgumentEvidence(
                     self.index.id_for(call.callee.object),
@@ -218,7 +249,7 @@ class MethodCandidates:
                     value.can_be_na,
                 )
             base, _ = generic_type_parts(receiver)
-            builtin = engine.registry.get("methods", {}).get(f"{base}.{call.callee.member}")
+            builtin = None if explicit else engine.registry.get("methods", {}).get(f"{base}.{name}")
             if isinstance(builtin, dict):
                 builtin = dict(builtin)
                 collection = resolve_collection_call(call, engine=engine)
@@ -259,7 +290,7 @@ class MethodCandidates:
                 )
                 for row in entries
             )
-            key = (id(call), receiver, receiver_evidence, actual, shape)
+            key = (id(call), explicit, receiver, receiver_evidence, actual, shape)
             if key in self.cache:
                 return self.cache[key]
             cost = sum(
@@ -275,7 +306,7 @@ class MethodCandidates:
             # Selection consumes the original source arguments once. Distinct
             # declaration IDs are never deduplicated merely by callable shape.
             resolution = self.resolver.resolve_candidates(
-                call.callee.member,
+                name,
                 entries,
                 call.arguments,
                 call.span,
@@ -287,7 +318,10 @@ class MethodCandidates:
                 receiver=receiver_evidence,
             )
             chosen = self.by_symbol.get(str(resolution.entry.get("symbol_id")))
-            selected = MethodSelection(receiver, resolution, chosen)
+            selected = MethodSelection(
+                chosen.receiver_type if explicit and chosen is not None else receiver,
+                resolution, chosen,
+            )
             self.cache[key] = selected
             return selected
         finally:

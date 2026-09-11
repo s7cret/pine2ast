@@ -141,6 +141,7 @@ class _Unit:
     imports: dict[str, str]
     functions: dict[str, FunctionDeclaration]
     methods: dict[str, MethodDeclaration]
+    method_names: frozenset[str]
     constants: dict[str, VarDeclaration]
     types: dict[str, TypeDeclaration | EnumDeclaration]
     globals: set[str]
@@ -245,6 +246,7 @@ def _parse(ref: str, text: str) -> _Unit:
         imports,
         functions,
         methods,
+        frozenset(method.name for method in methods.values()),
         constants,
         types,
         declarations,
@@ -261,6 +263,7 @@ class _Linker:
         self.store = store
         self.units: dict[str, _Unit] = {}
         self.version = self.root.program.version_context.pine_version
+        self.explicit_method_calls: dict[tuple[str, int, int], str] = {}
         self.selected: set[tuple[str, str]] = set()
         self.visiting: list[tuple[str, str]] = []
         self.order: list[tuple[str, str]] = []
@@ -545,6 +548,32 @@ class _Linker:
         if isinstance(node, TypeRef):
             self.visit_type(unit, node)
             return
+
+        if isinstance(node, CallExpr):
+            callee = node.callee
+            target = None
+            if isinstance(callee, MemberAccessExpr) and isinstance(callee.object, Identifier):
+                alias = callee.object.name
+                if alias in unit.imports and not local(alias):
+                    owner = self.units[unit.imports[alias]]
+                    if callee.member not in owner.functions and callee.member in owner.method_names:
+                        target = owner
+                        self.explicit_method_calls[(
+                            unit.ref, callee.span.start_offset, callee.span.end_offset
+                        )] = owner.ref
+            bare_method = (
+                isinstance(callee, Identifier) and not local(callee.name)
+                and callee.name not in unit.functions
+                and callee.name in unit.method_names
+            )
+            if target is not None or bare_method:
+                if constant_only:
+                    self.fail(unit, node, "P2A_LIBRARY_CAPTURE", "method call is not a constant initializer")
+                # Selection is deferred to the shared typed preview; do not
+                # guess overloads or manufacture function wrapper declarations.
+                for argument in node.arguments:
+                    self.visit(unit, argument.value, scopes)
+                return
 
         if isinstance(node, MemberAccessExpr):
             if isinstance(node.object, Identifier) and not local(node.object.name):

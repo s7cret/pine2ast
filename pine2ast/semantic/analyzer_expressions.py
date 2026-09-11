@@ -408,7 +408,12 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
     def _e_call_expr(self, expr: CallExpr) -> None:
         name = callee_name(expr.callee)
         lookup_name, entry = self._registry_entry_for_call(expr.callee)
-        self._visit_callee(expr.callee)
+        visibility = getattr(self, "_method_visibility", None)
+        explicit_library_method = (
+            visibility is not None and visibility.explicit_owner(expr) is not None
+        )
+        if not explicit_library_method:
+            self._visit_callee(expr.callee)
         if entry and entry.get("forbidden_in_local_blocks") and self.local_depth > 0:
             self._diag(
                 Severity.ERROR,

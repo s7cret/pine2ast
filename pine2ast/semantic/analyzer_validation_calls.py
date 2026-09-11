@@ -185,13 +185,13 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
             )
 
     def _validate_method_call(self, expr: CallExpr) -> None:
-        if not isinstance(expr.callee, MemberAccessExpr):
-            return
         owner = self.model.method_candidates
         selection = owner.resolve(expr, self.inference) if owner is not None else None
         if selection is not None:
             for issue in selection.resolution.issues:
                 self._diag(issue.severity, issue.code, issue.message, issue.span)
+            return
+        if not isinstance(expr.callee, MemberAccessExpr):
             return
         method_name = expr.callee.member
         if method_name == "copy":
@@ -262,6 +262,12 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
     def _validate_user_function_call(self, name: str, expr: CallExpr) -> None:
+        owner = self.model.method_candidates
+        if owner is not None and owner.resolve(expr, self.inference) is not None:
+            # The shared signature resolver already validated all supplied
+            # arguments, including an explicit receiver. The old unqualified
+            # parameter table does not contain method receivers or overloads.
+            return
         params = self._function_params.get(name)
         if params is None:
             return

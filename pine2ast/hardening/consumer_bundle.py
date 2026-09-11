@@ -24,6 +24,7 @@ from .invariants import (
 from .model import canonical_json, content_hash, sha256_bytes
 from pine2ast.semantic.type_model import QUALIFIER_ORDER, qualifier_allows
 from pine2ast.ast.decode import ASTAdmissionBudget, ASTDecodeError, ASTReplayLimits
+from .method_functions import METHOD_FUNCTION_CAPABILITY, method_function_feature
 from .method_receivers import (
     METHOD_RECEIVER_CAPABILITY,
     receiver_feature,
@@ -235,6 +236,8 @@ def build_consumer_bundle(
             body["consumer_contract"]["required_capabilities"].append("library_method_projection_v1")
     if ast.get("schema_version") == "2.1":
         body["consumer_contract"]["required_capabilities"].append(METHOD_RECEIVER_CAPABILITY)
+    if method_function_feature(ast, context, budget=ASTAdmissionBudget()):
+        body["consumer_contract"]["required_capabilities"].append(METHOD_FUNCTION_CAPABILITY)
     body["content_hash"] = content_hash(body)
     verify_consumer_bundle(body, source=source, expected_producer_commit=producer_commit)
     return body
@@ -269,7 +272,7 @@ def verify_consumer_bundle(
         if type(raw_caps) is list:
             for cap in raw_caps:
                 budget.charge()
-                if type(cap) is str and cap == METHOD_RECEIVER_CAPABILITY:
+                if type(cap) is str and cap in {METHOD_RECEIVER_CAPABILITY, METHOD_FUNCTION_CAPABILITY}:
                     requests_receiver = True
                     break
         budget.preflight(bundle if requests_receiver else raw_ast)
@@ -295,6 +298,9 @@ def verify_consumer_bundle(
             raise ConsumerBundleError(
                 "method receiver capability and AST feature must match exactly"
             )
+        has_method_function_feature = method_function_feature(raw_ast, raw_context, budget=budget)
+        if (METHOD_FUNCTION_CAPABILITY in capabilities) != has_method_function_feature:
+            raise ConsumerBundleError("explicit method syntax and consumer capability must match exactly")
         has_context = "library_context" in bundle
         has_capability = isinstance(capabilities, list) and CONTEXT_CAPABILITY in capabilities
         needs_context = revision == LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
@@ -319,6 +325,8 @@ def verify_consumer_bundle(
                 expected_caps.add("library_method_projection_v1")
             if has_receiver_feature:
                 expected_caps.add(METHOD_RECEIVER_CAPABILITY)
+            if has_method_function_feature:
+                expected_caps.add(METHOD_FUNCTION_CAPABILITY)
             if (
                 not isinstance(capabilities, list)
                 or len(capabilities) != len(expected_caps)
@@ -368,8 +376,12 @@ def verify_consumer_bundle(
                 or bundle_version.get("pine_version") != library_context.to_dict()["pine_version"]
             ):
                 raise ConsumerBundleError("library context Pine version mismatch")
-        elif has_receiver_feature:
-            expected_caps = {*_BASE_CONSUMER_CAPABILITIES, METHOD_RECEIVER_CAPABILITY}
+        elif has_receiver_feature or has_method_function_feature:
+            expected_caps = set(_BASE_CONSUMER_CAPABILITIES)
+            if has_receiver_feature:
+                expected_caps.add(METHOD_RECEIVER_CAPABILITY)
+            if has_method_function_feature:
+                expected_caps.add(METHOD_FUNCTION_CAPABILITY)
             if (
                 not isinstance(contract, Mapping)
                 or not all(isinstance(cap, str) for cap in capabilities)
@@ -525,7 +537,8 @@ def verify_consumer_bundle(
             reparsed_facts = semantic_facts_payload(parsed_source, reparsed_ast)
             if content_hash(reparsed_facts) != content_hash(facts):
                 raise ConsumerBundleError("source and semantic facts do not match")
-        elif has_receiver_feature:
+        elif has_receiver_feature or has_method_function_feature:
+            # Both additions share the existing bounded producer replay owner.
             verify_method_receiver_semantics(ast, facts, budget=budget)
     except (InvariantViolation, LibraryError, ASTDecodeError, RecursionError) as exc:
         raise ConsumerBundleError(str(exc)) from exc

@@ -210,7 +210,7 @@ class PineInferenceEngine:
             field_type = self._symbol_type(f"{owner_type}.{expr.member}")
             if field_type:
                 return field_type
-        if isinstance(expr, CallExpr) and isinstance(expr.callee, MemberAccessExpr):
+        if isinstance(expr, CallExpr):
             selection = (
                 self.method_candidates.resolve(expr, self)
                 if self.method_candidates is not None
@@ -222,12 +222,13 @@ class PineInferenceEngine:
                     if selection.resolution.ok
                     else "unknown"
                 )
-            owner_type = self.infer_type(expr.callee.object)
-            key = f"{owner_type}.{expr.callee.member}"
-            method_type = self._symbol_type(key)
-            symbol = self.symbols.get(key) if self.symbols else None
-            if _symbol_kind_value(symbol) in {"METHOD", "method"} and method_type:
-                return method_type
+            if isinstance(expr.callee, MemberAccessExpr):
+                owner_type = self.infer_type(expr.callee.object)
+                key = f"{owner_type}.{expr.callee.member}"
+                method_type = self._symbol_type(key)
+                symbol = self.symbols.get(key) if self.symbols else None
+                if _symbol_kind_value(symbol) in {"METHOD", "method"} and method_type:
+                    return method_type
         if isinstance(expr, BinaryExpr):
             specialized = self._binary_return_type(expr)
             if specialized:
@@ -274,7 +275,7 @@ class PineInferenceEngine:
             proof = self.callable_context.infer_call(expr, self)
             if proof is not None:
                 return proof.qualifier
-        if isinstance(expr, CallExpr) and isinstance(expr.callee, MemberAccessExpr):
+        if isinstance(expr, CallExpr):
             selection = (
                 self.method_candidates.resolve(expr, self)
                 if self.method_candidates is not None
