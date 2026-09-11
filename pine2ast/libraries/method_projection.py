@@ -122,6 +122,7 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
             error.message,
             source=ref,
             line=unit.text.count("\n", 0, offset) + 1,
+            column=offset - unit.text.rfind("\n", 0, offset),
         )
     index = model.method_candidates.index
     calls = {c.node_id: c for c in model.semantic_facts.calls}

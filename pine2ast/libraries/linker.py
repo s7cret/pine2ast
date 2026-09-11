@@ -107,29 +107,41 @@ class LinkedSource:
 
         return LibraryQualifierContext.from_linked_source(self)
 
-    def original_location(self, offset: int) -> dict | None:
-        """Project a virtual character offset back to its original file and line."""
-        if type(offset) is not int or offset < 0:
+    def original_locations(self, offsets) -> list[dict | None]:
+        """Project many character offsets with one validated receipt and indexed lookup.
+
+        Coordinates refer to normalized Pine text, not UTF-8 bytes. Generated-only
+        spans have no original location. Renamed tokens map to their original start.
+        """
+        from bisect import bisect_right
+
+        values = list(offsets)
+        if any(type(value) is not int or value < 0 for value in values):
             raise ValueError("offset must be a nonnegative integer")
         receipt = self.receipt()
-        for row in receipt["projection"]:
-            if row["generated_start"] <= offset < row["generated_end"]:
-                # Renamed tokens project to their original token; untouched chunks
-                # have equal length and preserve exact character offsets.
-                original_length = row["source_end"] - row["source_start"]
-                generated_length = row["generated_end"] - row["generated_start"]
-                delta = (
-                    offset - row["generated_start"] if original_length == generated_length else 0
-                )
-                original = row["source_start"] + delta
-                text = receipt["sources"][row["source"]]["text"]
-                return {
-                    "source": row["source"],
-                    "offset": original,
-                    "line": text.count("\n", 0, original) + 1,
-                    "column": original - text.rfind("\n", 0, original),
-                }
-        return None
+        rows = receipt["projection"]
+        starts = [row["generated_start"] for row in rows]
+        lines = {}
+        result = []
+        for offset in values:
+            index = bisect_right(starts, offset) - 1
+            if index < 0 or offset >= rows[index]["generated_end"]:
+                result.append(None)
+                continue
+            row = rows[index]
+            same = row["source_end"] - row["source_start"] == row["generated_end"] - row["generated_start"]
+            original = row["source_start"] + (offset - row["generated_start"] if same else 0)
+            source = row["source"]
+            if source not in lines:
+                text = receipt["sources"][source]["text"]
+                lines[source] = [0] + [i + 1 for i, char in enumerate(text) if char == "\n"]
+            line = bisect_right(lines[source], original)
+            result.append({"source": source, "offset": original, "line": line,
+                           "column": original - lines[source][line - 1] + 1})
+        return result
+
+    def original_location(self, offset: int) -> dict | None:
+        return self.original_locations([offset])[0]
 
 
 @dataclass(slots=True)
@@ -158,7 +170,12 @@ def _parse(ref: str, text: str) -> _Unit:
     result = pipeline.parse(normalized.text)
     if not result.ok or result.ast is None:
         detail = "; ".join(d.message for d in result.diagnostics if d.is_error)
-        raise LibraryError("P2A_LIBRARY_SYNTAX", detail, source=ref, line=1)
+        first = next((d for d in result.diagnostics if d.is_error), None)
+        raise LibraryError(
+            "P2A_LIBRARY_SYNTAX", detail, source=ref,
+            line=first.span.start_line if first else None,
+            column=first.span.start_col if first else None,
+        )
     program = result.ast
     declarations, functions, constants, exports, imports = set(), {}, {}, set(), {}
     types = {}

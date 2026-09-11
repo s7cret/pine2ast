@@ -46,7 +46,16 @@ _PRODUCTION_BLOCKING_DIAGNOSTIC_CODES = frozenset({"P2A1702"})
 
 
 class ConsumerBundleError(ValueError):
-    pass
+    """Admission failure; retain frontend diagnostics without changing bundle bytes."""
+
+    def __init__(self, message: str, *, diagnostics=(), source_name: str | None = None):
+        super().__init__(message)
+        self._diagnostics = deepcopy(tuple(diagnostics)) if diagnostics else ()
+        self.source_name = source_name
+
+    @property
+    def diagnostics(self) -> list[dict[str, Any]]:
+        return deepcopy(list(self._diagnostics)) if self._diagnostics else []
 
 
 def _production_diagnostic_codes(diagnostics: object) -> set[str]:
@@ -173,7 +182,8 @@ def build_consumer_bundle(
             else ""
         )
         raise ConsumerBundleError(
-            f"frontend result contains production-blocking diagnostics{suffix}"
+            f"frontend result contains production-blocking diagnostics{suffix}",
+            diagnostics=diagnostics, source_name=source_name,
         )
     ast = ast_payload(result)
     context = version_context_payload(result, ast)
