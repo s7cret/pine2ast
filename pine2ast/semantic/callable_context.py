@@ -8,20 +8,13 @@ from typing import Any, Mapping
 
 from pine2ast.ast.base import ASTNode
 from pine2ast.ast.nodes import (
-    Block,
     CallExpr,
-    ForInStructure,
-    ForRangeStructure,
     FunctionDeclaration,
     Identifier,
-    MethodDeclaration,
     Program,
-    Reassignment,
-    TupleDeclaration,
     TypeDeclaration,
     VarDeclaration,
 )
-from pine2ast.ast.walk import iter_child_nodes
 from pine2ast.semantic.callable_qualifiers import CallableResultQualifierInference
 from pine2ast.semantic.inference import PineInferenceEngine
 from pine2ast.semantic.model import SemanticModel
@@ -118,50 +111,11 @@ class CallableContext:
 
     @staticmethod
     def _global_reassignment_ids(program: Program) -> frozenset[int]:
-        """Associate module reassignments with source-ordered lexical declarations.
+        """Use the same source-identity classification as ordinary validation."""
+        from pine2ast.semantic.mutation_identity import reassigned_declarations
 
-        This inventory only classifies the ordinary global declarations used by
-        the constant prepass. It resolves no expression types or call identities.
-        Function bodies cannot reassign globals and have their own bindings.
-        """
         global_ids = {id(n) for n in program.items if isinstance(n, VarDeclaration)}
-        result: set[int] = set()
-        pending: list[tuple[ASTNode, dict[str, ASTNode | None], bool]] = [(program, {}, False)]
-        while pending:
-            node, symbols, bind = pending.pop()
-            if bind:
-                if isinstance(node, VarDeclaration):
-                    symbols[node.name] = node
-                elif isinstance(node, TupleDeclaration):
-                    for target in node.targets:
-                        symbols[target.name] = None
-                continue
-            if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
-                continue
-            if isinstance(node, VarDeclaration):
-                pending.append((node, symbols, True))
-                pending.append((node.initializer, symbols, False))
-            elif isinstance(node, TupleDeclaration):
-                pending.append((node, symbols, True))
-                pending.append((node.initializer, symbols, False))
-            elif isinstance(node, (ForRangeStructure, ForInStructure)):
-                local = dict(symbols)
-                names = (
-                    [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
-                )
-                for name in names:
-                    local[name] = None
-                for child in reversed(list(iter_child_nodes(node))):
-                    pending.append((child, local if child is node.body else symbols, False))
-            else:
-                if isinstance(node, Reassignment) and isinstance(node.target, Identifier):
-                    declaration = symbols.get(node.target.name)
-                    if declaration is not None and id(declaration) in global_ids:
-                        result.add(id(declaration))
-                local = dict(symbols) if isinstance(node, Block) else symbols
-                for child in reversed(list(iter_child_nodes(node))):
-                    pending.append((child, local, False))
-        return frozenset(result)
+        return reassigned_declarations(program) & global_ids
 
     def charge(self) -> None:
         if self.root_spent is None:

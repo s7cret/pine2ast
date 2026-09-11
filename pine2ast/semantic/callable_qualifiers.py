@@ -171,7 +171,7 @@ class CallableResultQualifierInference:
             self.types[id(node)] = engine.infer_type(node)
 
     def _is_reassigned(self, node: VarDeclaration) -> bool:
-        return node.name in self.analyzer._reassigned_names
+        return self.analyzer._is_reassigned_declaration(node)
 
 
 def infer_callable_result_qualifiers(analyzer: Any, program: Program) -> None:

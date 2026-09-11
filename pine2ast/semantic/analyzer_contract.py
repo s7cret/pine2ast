@@ -60,6 +60,7 @@ class AnalyzerMixinHost(Protocol):
     _symbol_history: dict[str, list[Symbol]]
     _script_type: str | None
     _reassigned_names: set[str]
+    _reassigned_declarations: frozenset[int]
     pass_results: tuple[PassResult, ...]
 
     def analyze(self, program: Program) -> SemanticModel: ...
@@ -73,6 +74,8 @@ class AnalyzerMixinHost(Protocol):
     def _registry_entry_for_call(self, callee: Expression) -> tuple[str, dict[str, Any] | None]: ...
 
     def _collect_reassigned_names(self, node: ASTNode) -> set[str]: ...
+
+    def _is_reassigned_declaration(self, node: Any) -> bool: ...
 
     def _assignment_root(self, target: Expression) -> str | None: ...
 

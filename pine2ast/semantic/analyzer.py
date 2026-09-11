@@ -127,12 +127,16 @@ class SemanticAnalyzer(
         self._symbol_history: dict[str, list[Symbol]] = {}
         self._script_type: str | None = None
         self._reassigned_names: set[str] = set()
+        self._reassigned_declarations: frozenset[int] = frozenset()
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
         if program.version_context != self.version_context:
             raise ValueError("semantic analyzer version context does not match Program")
         self._reassigned_names = self._collect_reassigned_names(program)
+        from pine2ast.semantic.mutation_identity import reassigned_declarations
+
+        self._reassigned_declarations = reassigned_declarations(program)
         self._push_scope(ScopeKind.GLOBAL)
         pipeline = AnalyzerPassPipeline(
             (
@@ -186,6 +190,12 @@ class SemanticAnalyzer(
 
         visit(node)
         return names
+
+    def _is_reassigned_declaration(self, node) -> bool:
+        # Legacy v1/v2 predeclaration rules remain unchanged.
+        if self.version_context.pine_version < 3:
+            return node.name in self._reassigned_names
+        return id(node) in self._reassigned_declarations
 
     def _assignment_root(self, target: Expression) -> str | None:
         if isinstance(target, Identifier):

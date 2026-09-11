@@ -112,7 +112,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         else:
             if init_qualifier == "input":
                 qualifier = "input"
-            elif init_qualifier in {"const", "simple"} and node.name not in self._reassigned_names:
+            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(node):
                 qualifier = init_qualifier
             else:
                 qualifier = "series"
