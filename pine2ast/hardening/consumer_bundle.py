@@ -24,6 +24,7 @@ from .invariants import (
 from .model import canonical_json, content_hash, sha256_bytes
 from pine2ast.semantic.type_model import QUALIFIER_ORDER, qualifier_allows
 from pine2ast.ast.decode import ASTAdmissionBudget, ASTDecodeError, ASTReplayLimits
+from .mixed_callables import MIXED_CALLABLE_CAPABILITY, mixed_callable_feature
 from .method_functions import METHOD_FUNCTION_CAPABILITY, method_function_feature
 from .function_overloads import (
     FUNCTION_OVERLOAD_CAPABILITY,
@@ -258,6 +259,8 @@ def build_consumer_bundle(
         body["consumer_contract"]["required_capabilities"].append(FUNCTION_OVERLOAD_CAPABILITY)
     if library_overload_feature(body.get("library_context")):
         body["consumer_contract"]["required_capabilities"].append(LIBRARY_OVERLOAD_CAPABILITY)
+    if mixed_callable_feature(ast, context, body.get("library_context"), budget=ASTAdmissionBudget()):
+        body["consumer_contract"]["required_capabilities"].append(MIXED_CALLABLE_CAPABILITY)
     body["content_hash"] = content_hash(body)
     verify_consumer_bundle(body, source=source, expected_producer_commit=producer_commit)
     return body
@@ -292,7 +295,7 @@ def verify_consumer_bundle(
         if type(raw_caps) is list:
             for cap in raw_caps:
                 budget.charge()
-                if type(cap) is str and cap in {METHOD_RECEIVER_CAPABILITY, METHOD_FUNCTION_CAPABILITY}:
+                if type(cap) is str and cap in {METHOD_RECEIVER_CAPABILITY, METHOD_FUNCTION_CAPABILITY, MIXED_CALLABLE_CAPABILITY}:
                     requests_receiver = True
                     break
         budget.preflight(bundle if requests_receiver else raw_ast)
@@ -327,6 +330,9 @@ def verify_consumer_bundle(
             raise ConsumerBundleError("function overload syntax and capability must match exactly")
         if (LIBRARY_OVERLOAD_CAPABILITY in capabilities) != has_library_overloads:
             raise ConsumerBundleError("function overload projection and capability must match exactly")
+        has_mixed_callables = mixed_callable_feature(raw_ast, raw_context, bundle.get("library_context"), budget=budget)
+        if (MIXED_CALLABLE_CAPABILITY in capabilities) != has_mixed_callables:
+            raise ConsumerBundleError("mixed callable syntax/context and capability must match exactly")
         has_context = "library_context" in bundle
         has_capability = isinstance(capabilities, list) and CONTEXT_CAPABILITY in capabilities
         needs_context = revision == LIBRARY_CONSUMER_BUNDLE_SCHEMA_VERSION
@@ -357,6 +363,8 @@ def verify_consumer_bundle(
                 expected_caps.add(FUNCTION_OVERLOAD_CAPABILITY)
             if has_library_overloads:
                 expected_caps.add(LIBRARY_OVERLOAD_CAPABILITY)
+            if has_mixed_callables:
+                expected_caps.add(MIXED_CALLABLE_CAPABILITY)
             if (
                 not isinstance(capabilities, list)
                 or len(capabilities) != len(expected_caps)
@@ -406,7 +414,7 @@ def verify_consumer_bundle(
                 or bundle_version.get("pine_version") != library_context.to_dict()["pine_version"]
             ):
                 raise ConsumerBundleError("library context Pine version mismatch")
-        elif has_receiver_feature or has_method_function_feature or has_function_overloads:
+        elif has_receiver_feature or has_method_function_feature or has_function_overloads or has_mixed_callables:
             expected_caps = set(_BASE_CONSUMER_CAPABILITIES)
             if has_receiver_feature:
                 expected_caps.add(METHOD_RECEIVER_CAPABILITY)
@@ -416,6 +424,8 @@ def verify_consumer_bundle(
                 expected_caps.add(FUNCTION_OVERLOAD_CAPABILITY)
             if has_library_overloads:
                 expected_caps.add(LIBRARY_OVERLOAD_CAPABILITY)
+            if has_mixed_callables:
+                expected_caps.add(MIXED_CALLABLE_CAPABILITY)
             if (
                 not isinstance(contract, Mapping)
                 or not all(isinstance(cap, str) for cap in capabilities)
@@ -571,7 +581,7 @@ def verify_consumer_bundle(
             reparsed_facts = semantic_facts_payload(parsed_source, reparsed_ast)
             if content_hash(reparsed_facts) != content_hash(facts):
                 raise ConsumerBundleError("source and semantic facts do not match")
-        elif has_receiver_feature or has_method_function_feature or has_function_overloads:
+        elif has_receiver_feature or has_method_function_feature or has_function_overloads or has_mixed_callables:
             # Callable features share the existing bounded producer replay owner.
             verify_method_receiver_semantics(ast, facts, budget=budget)
     except (InvariantViolation, LibraryError, ASTDecodeError, RecursionError) as exc:

@@ -207,8 +207,19 @@ class CallableInferenceEngine:
             return self.engine.infer_type(last)
         return "void"
 
-    @staticmethod
-    def _argument_for(call: CallExpr, parameter: Parameter, index: int):
+    def _argument_for(self, call: CallExpr, parameter: Parameter, index: int):
+        # Reuse the declaration-bound argument map, including explicit receivers.
+        # Guessing a method parameter's index from call.arguments shifts it by
+        # one in function notation and widens untyped locals to the wrong type.
+        functions = self.model.function_candidates
+        selected = functions.resolve(call, self.engine) if functions is not None else None
+        if selected is None and self.model.method_candidates is not None:
+            selected = self.model.method_candidates.resolve(call, self.engine)
+        if selected is not None:
+            if not selected.user_selected:
+                return None
+            return next((a.argument for a in selected.resolution.resolved_arguments
+                         if a.parameter is not None and a.parameter.get("name") == parameter.name), None)
         named = next((item for item in call.arguments if item.name == parameter.name), None)
         if named is not None:
             return named
@@ -278,7 +289,7 @@ class CallableInferenceEngine:
 
     @staticmethod
     def _merge(values: Iterable[str | None]) -> str:
-        normalized = [str(item) for item in values if item and item not in {"unknown", "any", "na"}]
+        normalized = [str(item) for item in values if item and item not in {"unknown", "any", "na", "function", "method"}]
         if not normalized:
             return "unknown"
         return merge_type_names(normalized)

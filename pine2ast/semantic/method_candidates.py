@@ -8,7 +8,6 @@ from typing import Any
 
 from pine2ast.ast.nodes import (
     CallExpr,
-    FunctionDeclaration,
     Identifier,
     MemberAccessExpr,
     MethodDeclaration,
@@ -117,9 +116,6 @@ class MethodCandidates:
         self.by_node = MappingProxyType({id(c.declaration): c for c in candidates})
         self.by_symbol = MappingProxyType({c.symbol_id: c for c in candidates})
         self.by_name = MappingProxyType({name: tuple(group) for name, group in names.items()})
-        self.function_names = frozenset(
-            n.name for n in program.items if isinstance(n, FunctionDeclaration)
-        )
         self.names = frozenset(self.by_name)
         self.duplicates = tuple(duplicates)
         self.resolver = SignatureResolver(version_context=analyzer.version_context)
@@ -173,6 +169,20 @@ class MethodCandidates:
             entry["return_qualifier"] = getattr(symbol, "qualifier", None) or "series"
         return entry
 
+    def explicit_entry(self, candidate: MethodCandidate, *, symbols=None, qualifiers: bool = True) -> dict:
+        """Adapt only the signature shape; SignatureResolver still owns binding."""
+        entry = self.entry(candidate, symbols=symbols)
+        entry.pop("__receiver_parameter", None)
+        entry["parameters"] = [{
+            "name": candidate.declaration.receiver_name,
+            "type": candidate.receiver_type,
+            "qualifier_max": self.receiver_qualifier(candidate.declaration, for_binding=True),
+            "required": True,
+        }, *entry["parameters"]]
+        if not qualifiers:
+            entry["parameters"] = [dict(p, qualifier_max="series") for p in entry["parameters"]]
+        return entry
+
     def _limit(self, call: CallExpr, receiver: str) -> MethodSelection:
         issue = SignatureIssue(
             Severity.ERROR,
@@ -196,9 +206,14 @@ class MethodCandidates:
         )
         if name not in self.names:
             return None
-        # Ordinary functions/builtins keep their existing owner. A method's
-        # function notation is not a spelling-based replacement for a function.
-        if explicit and namespace_owner is None and name in self.function_names:
+        # Explicit mixed calls use one declaration family decision. Dot calls
+        # remain method-only, and builtin namespaces retain their existing owner.
+        functions = self.analyzer.model.function_candidates
+        if functions is not None and functions.is_mixed_call(call):
+            shared = functions.resolve_family(call, engine)
+            candidate = shared.candidate if shared is not None and shared.user_selected else None
+            if isinstance(candidate, MethodCandidate):
+                return MethodSelection(candidate.receiver_type, shared.resolution, candidate)
             return None
         if callee_name(call.callee) in engine.registry.get("functions", {}):
             return None
@@ -229,16 +244,7 @@ class MethodCandidates:
             ]
             receiver_evidence = None
             if explicit:
-                for entry, candidate in zip(entries, candidates):
-                    # SignatureResolver owns binding/coercions/qualifiers for
-                    # every argument, including an explicitly supplied receiver.
-                    entry.pop("__receiver_parameter", None)
-                    entry["parameters"] = [{
-                        "name": candidate.declaration.receiver_name,
-                        "type": candidate.receiver_type,
-                        "qualifier_max": self.receiver_qualifier(candidate.declaration, for_binding=True),
-                        "required": True,
-                    }, *entry["parameters"]]
+                entries = [self.explicit_entry(c, symbols=engine.symbols) for c in candidates]
             elif any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
                 value = engine.infer_value(call.callee.object)
                 receiver_evidence = ReceiverArgumentEvidence(

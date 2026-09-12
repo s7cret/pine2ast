@@ -17,7 +17,6 @@ def method_function_feature(
     ast: Mapping[str, Any], context: Mapping[str, Any], *, budget: ASTAdmissionBudget
 ) -> bool:
     methods: set[str] = set()
-    functions: set[str] = set()
     calls: set[str] = set()
     pending: list[Any] = [ast]
     while pending:
@@ -28,8 +27,6 @@ def method_function_feature(
             name = value.get("name")
             if kind == "MethodDeclaration" and isinstance(name, str):
                 methods.add(name)
-            elif kind == "FunctionDeclaration" and isinstance(name, str):
-                functions.add(name)
             elif kind == "CallExpr":
                 callee = value.get("callee")
                 if isinstance(callee, dict) and callee.get("kind") == "Identifier":
@@ -39,7 +36,7 @@ def method_function_feature(
             pending.extend(value.values())
         elif isinstance(value, list):
             pending.extend(value)
-    found = bool((methods - functions) & calls)
+    found = bool(methods & calls)
     if found and (type(context.get("pine_version")) is not int or context["pine_version"] not in {5, 6}):
         raise ASTDecodeError("user method function calls require Pine v5/v6")
     return found

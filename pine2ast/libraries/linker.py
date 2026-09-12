@@ -81,6 +81,7 @@ class LinkedSource:
             "same_version_reference_types_v4",
             "same_version_methods_v5",
             "same_version_function_overloads_v6",
+            "same_version_mixed_callables_v7",
         }:
             raise LibraryError("P2A_LIBRARY_PROJECTION", "unsupported linkage profile")
         root_name = value.get("root_source_name")
@@ -184,6 +185,8 @@ def _parse(ref: str, text: str) -> _Unit:
     for node in program.items:
         if isinstance(node, FunctionDeclaration):
             function_counts[node.name] = function_counts.get(node.name, 0) + 1
+    method_names = {n.name for n in program.items if isinstance(n, MethodDeclaration)}
+    callable_names = set()
     function_groups = {}
     types = {}
     methods = {}
@@ -209,8 +212,8 @@ def _parse(ref: str, text: str) -> _Unit:
                 EnumDeclaration,
             ),
         ):
-            same_function_family = isinstance(item, FunctionDeclaration) and item.name in function_groups
-            if item.name in imports or (item.name in declarations and not isinstance(item, MethodDeclaration) and not same_function_family):
+            same_function_family = isinstance(item, (FunctionDeclaration, MethodDeclaration)) and item.name in callable_names
+            if item.name in imports or (item.name in declarations and not same_function_family):
                 raise LibraryError(
                     "P2A_LIBRARY_NAME",
                     "duplicate module-level name",
@@ -218,10 +221,12 @@ def _parse(ref: str, text: str) -> _Unit:
                     line=item.span.start_line,
                 )
             declarations.add(item.name)
+            if isinstance(item, (FunctionDeclaration, MethodDeclaration)):
+                callable_names.add(item.name)
             key = (f"@method:{item.name}:{item.span.start_offset}"
                    if isinstance(item, MethodDeclaration) else
                    f"@function:{item.name}:{item.span.start_offset}"
-                   if isinstance(item, FunctionDeclaration) and function_counts[item.name] > 1
+                   if isinstance(item, FunctionDeclaration) and (function_counts[item.name] > 1 or item.name in method_names)
                    else item.name)
             if getattr(item, "is_exported", False):
                 exports.add(key)
@@ -310,7 +315,7 @@ class _Linker:
         self.namespaces = {name.split(".")[0] for name in self.builtins if "." in name}
 
     def promote_profile(self, profile: str) -> None:
-        profiles = ("same_version_scalar_v1", "same_version_arrays_v2", "same_version_collections_v3", "same_version_reference_types_v4", "same_version_methods_v5", "same_version_function_overloads_v6")
+        profiles = ("same_version_scalar_v1", "same_version_arrays_v2", "same_version_collections_v3", "same_version_reference_types_v4", "same_version_methods_v5", "same_version_function_overloads_v6", "same_version_mixed_callables_v7")
         if profiles.index(profile) > profiles.index(self.profile):
             self.profile = profile
 
@@ -592,8 +597,10 @@ class _Linker:
                 alias = callee.object.name
                 if alias in unit.imports and not local(alias):
                     owner = self.units[unit.imports[alias]]
-                    if len(owner.function_groups.get(callee.member, ())) > 1:
+                    if len(owner.function_groups.get(callee.member, ())) > 1 or (callee.member in owner.function_groups and callee.member in owner.method_names):
                         self.explicit_function_calls[(unit.ref, callee.span.start_offset, callee.span.end_offset)] = owner.ref
+                        if callee.member in owner.method_names:
+                            self.explicit_method_calls[(unit.ref, callee.span.start_offset, callee.span.end_offset)] = owner.ref
                         for argument in node.arguments:
                             self.visit(unit, argument.value, scopes)
                         return
@@ -603,7 +610,8 @@ class _Linker:
                             unit.ref, callee.span.start_offset, callee.span.end_offset
                         )] = owner.ref
             if (isinstance(callee, Identifier) and not local(callee.name)
-                    and len(unit.function_groups.get(callee.name, ())) > 1):
+                    and (len(unit.function_groups.get(callee.name, ())) > 1
+                         or (callee.name in unit.function_groups and callee.name in unit.method_names))):
                 if constant_only:
                     self.fail(unit, node, "P2A_LIBRARY_CAPTURE", "function call is not a constant initializer")
                 for argument in node.arguments:
@@ -822,13 +830,13 @@ class _Linker:
             raise LibraryError("P2A_LIBRARY_DECLARATION", "consumer must have a script declaration")
         for ref in sorted(set(self.root.imports.values())):
             self.load(ref)
-        function_overloads = any(any(len(keys) > 1 for keys in unit.function_groups.values())
+        function_overloads = any(any(len(keys) > 1 or name in unit.method_names for name, keys in unit.function_groups.items())
                                  for unit in self.units.values())
         if function_overloads:
             self.promote_profile("same_version_function_overloads_v6")
             for ref, unit in sorted(self.units.items()):
                 for name, keys in unit.function_groups.items():
-                    if len(keys) > 1:
+                    if len(keys) > 1 or name in unit.method_names:
                         for key in keys:
                             self.require(ref, key)
         # A nominal library's public interface must be valid independently of
@@ -850,6 +858,8 @@ class _Linker:
                 self.edit(self.root, item.span.start_offset, item.span.end_offset, "")
             else:
                 self.visit(self.root, item, [])
+        if any(set(u.function_groups) & u.method_names for u in (self.root, *self.units.values())):
+            self.promote_profile("same_version_mixed_callables_v7")
         closure = {ref: source_hash(self.store.source(ref)) for ref in sorted(self.units)}
         identity = source_hash(
             canonical(
@@ -865,7 +875,7 @@ class _Linker:
             from .method_projection import project_methods
             project_methods(self, joined, projection)
             joined, projection = self.render(identity)
-        if self.profile in {"same_version_reference_types_v4", "same_version_methods_v5", "same_version_function_overloads_v6"}:
+        if self.profile in {"same_version_reference_types_v4", "same_version_methods_v5", "same_version_function_overloads_v6", "same_version_mixed_callables_v7"}:
             # Use the existing semantic owner to infer public return types after
             # projection; private helpers may use private types internally.
             parsed = ParsePipeline(ParseOptions(created_at_utc_ms=0)).parse(joined)

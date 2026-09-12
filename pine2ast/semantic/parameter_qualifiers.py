@@ -193,7 +193,7 @@ class ParameterQualifierInference:
                        else self.declarations.get(name))
         if (
             declaration is not None
-            and getattr(symbols.get(name), "kind", None) is not SymbolKind.FUNCTION
+            and getattr(symbols.get(selected.candidate.symbol_key if selected is not None and selected.user_selected else name), "kind", None) is not SymbolKind.FUNCTION
         ):
             return
         if declaration is not None:

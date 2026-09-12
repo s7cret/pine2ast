@@ -190,6 +190,10 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 )
                 return
             if field_type is not None:
+                # Capture the lvalue and receiver in their lexical scope too.
+                # Deferred fact collection must not resolve a field-write target
+                # against another callable's same-named parameter.
+                self._visit_expr(node.target)
                 if node.op in {"+=", "-=", "*=", "/=", "%="} and field_type not in {
                     "int",
                     "float",
@@ -472,6 +476,14 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             self._external_aliases.add(alias)
 
     def _body_return_type(self, body) -> str:
+        # _visit_body has already left its lexical block. Re-inferring a local
+        # by spelling here can select a same-named variable in another callable.
+        # Use the fact recorded while visiting the return expression; the later
+        # callable fixed-point pass refines unknown facts with lexical bindings.
+        def recorded(expr):
+            captured = self.model.node_types.get(id(expr))
+            return captured if captured is not None else self._infer_type(expr)
+
         if isinstance(body, Block):
             if not body.statements:
                 return "void"
@@ -480,15 +492,15 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 last,
                 (IfStructure, SwitchStructure, ForRangeStructure, ForInStructure, WhileStructure),
             ):
-                return self._infer_type(last)
+                return recorded(last)
             if hasattr(last, "expression"):
-                return self._infer_type(last.expression)
+                return recorded(last.expression)
             if hasattr(last, "initializer"):
-                return self._infer_type(last.initializer)
+                return recorded(last.initializer)
             if hasattr(last, "value"):
-                return self._infer_type(last.value)
+                return recorded(last.value)
             return "void"
-        return self._infer_type(body)
+        return recorded(body)
 
     def _body_return_shape(self, body) -> str | None:
         """Best-effort return shape usable during global predeclaration.

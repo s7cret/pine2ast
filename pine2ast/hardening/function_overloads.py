@@ -34,5 +34,5 @@ def library_overload_feature(context) -> bool:
     return (
         isinstance(context, Mapping)
         and isinstance(context.get("linkage_receipt"), Mapping)
-        and context["linkage_receipt"].get("profile") == LIBRARY_OVERLOAD_PROFILE
+        and context["linkage_receipt"].get("profile") in {LIBRARY_OVERLOAD_PROFILE, "same_version_mixed_callables_v7"}
     )

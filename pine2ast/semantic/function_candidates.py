@@ -9,15 +9,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, Identifier, Program
+from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, Identifier, MemberAccessExpr, MethodDeclaration, Program
 from pine2ast.diagnostics import Severity, codes
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
 from pine2ast.semantic.signatures import SignatureIssue, SignatureResolution, SignatureResolver
 from pine2ast.semantic.type_helpers import type_ref_name
 from pine2ast.semantic.symbols import SymbolKind
+
+if TYPE_CHECKING:
+    from pine2ast.semantic.method_candidates import MethodCandidate
 
 MAX_FUNCTION_WORK = 262144
 MAX_FUNCTION_CACHE = 4096
@@ -37,7 +40,7 @@ class FunctionCandidate:
 @dataclass(frozen=True, slots=True)
 class FunctionSelection:
     resolution: SignatureResolution
-    candidate: FunctionCandidate | None
+    candidate: FunctionCandidate | MethodCandidate | None
 
     @property
     def user_selected(self) -> bool:
@@ -53,11 +56,12 @@ class FunctionCandidates:
         for node in program.items:
             if isinstance(node, FunctionDeclaration):
                 groups.setdefault(node.name, []).append(node)
+        self.mixed_names = frozenset(n.name for n in program.items if isinstance(n, MethodDeclaration)) & groups.keys()
         candidates = []
         for name, nodes in groups.items():
             for node in nodes:
                 identity = self.index.id_for(node)
-                key = name if len(nodes) == 1 else f"{name}#{identity}"
+                key = name if len(nodes) == 1 and name not in self.mixed_names else f"{name}#{identity}"
                 candidates.append(FunctionCandidate(node, identity, key))
         self.candidates = tuple(candidates)
         self.by_node = MappingProxyType({id(c.declaration): c for c in candidates})
@@ -133,21 +137,51 @@ class FunctionCandidates:
         resolution = SignatureResolution(name, "function", {}, (), {}, (), issues=(issue,))
         return FunctionSelection(resolution, None)
 
+    def is_mixed_call(self, call: CallExpr) -> bool:
+        """Only explicit calls can select from function *and* method declarations.
+
+        Receiver-dot notation remains method-only. Namespace identity is supplied
+        by the source-scoped library preview, never guessed from its spelling.
+        """
+        if isinstance(call.callee, Identifier):
+            return call.callee.name in self.mixed_names
+        if isinstance(call.callee, MemberAccessExpr) and self.visibility is not None:
+            return (call.callee.member in self.mixed_names
+                    and (self.visibility.function_owner(call) is not None
+                         or self.visibility.explicit_owner(call) is not None))
+        return False
+
     def resolve(self, call: CallExpr, engine: Any, *, qualifiers: bool = True) -> FunctionSelection | None:
+        """Function view of the one explicit-call family decision.
+
+        A selected method is returned by MethodCandidates using the *same* cached
+        decision. Failed/ambiguous mixed calls belong here and cannot fall back
+        to whichever same-named declaration happened to be stored last.
+        """
+        selected = self.resolve_family(call, engine, qualifiers=qualifiers)
+        if selected is not None and selected.user_selected and isinstance(
+            selected.candidate.declaration, MethodDeclaration
+        ):
+            return None
+        return selected
+
+    def resolve_family(self, call: CallExpr, engine: Any, *, qualifiers: bool = True) -> FunctionSelection | None:
         namespace_owner = (
-            self.visibility.function_owner(call) if self.visibility is not None else None
+            (self.visibility.function_owner(call) or self.visibility.explicit_owner(call)) if self.visibility is not None else None
         )
         if not isinstance(call.callee, Identifier) and namespace_owner is None:
             return None
         name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
         family = self.by_name.get(name)
-        if not family or (len(family) == 1 and namespace_owner is None):
+        mixed = self.is_mixed_call(call)
+        methods = self.analyzer.model.method_candidates if mixed else None
+        if not family or (len(family) == 1 and namespace_owner is None and not mixed):
             return None
         symbol = (engine.symbols or {}).get(name)
         if (
             namespace_owner is None
             and symbol is not None
-            and symbol.kind is not SymbolKind.FUNCTION
+            and symbol.kind not in ({SymbolKind.FUNCTION, SymbolKind.METHOD} if mixed else {SymbolKind.FUNCTION})
         ):
             return None
         if id(call) in self.active:
@@ -156,8 +190,8 @@ class FunctionCandidates:
             )
         self.active.add(id(call))
         try:
-            candidates = family
-            if len(family) > 1 and self.visibility is None:
+            candidates = family + (methods.by_name[name] if methods is not None else ())
+            if (len(family) > 1 or mixed) and self.visibility is None:
                 candidates = tuple(
                     c
                     for c in candidates
@@ -165,7 +199,11 @@ class FunctionCandidates:
                 )
             if self.visibility is not None and hasattr(self.visibility, "allows_function"):
                 candidates = tuple(
-                    c for c in candidates if self.visibility.allows_function(call, c.declaration)
+                    c for c in candidates if (
+                        self.visibility.allows(call, c.declaration)
+                        if isinstance(c.declaration, MethodDeclaration)
+                        else self.visibility.allows_function(call, c.declaration)
+                    )
                 )
             if not candidates:
                 return self._failure(
@@ -183,13 +221,15 @@ class FunctionCandidates:
                 for a in call.arguments
             )
             entries = [
-                self.entry(c, symbols=engine.symbols, qualifiers=qualifiers) for c in candidates
+                (methods.explicit_entry(c, symbols=engine.symbols, qualifiers=qualifiers)
+                 if isinstance(c.declaration, MethodDeclaration)
+                 else self.entry(c, symbols=engine.symbols, qualifiers=qualifiers)) for c in candidates
             ]
             shape = tuple(
                 (
                     e["symbol_id"],
                     e["returns"],
-                    e["return_qualifier"],
+                    e.get("return_qualifier"),
                     tuple(
                         (p["name"], p["type"], p["qualifier_max"], p["required"])
                         for p in e["parameters"]
@@ -220,7 +260,9 @@ class FunctionCandidates:
                 infer_arg_qualifier=lambda a: evidence[id(a)][1],
             )
             selected = FunctionSelection(
-                resolution, self.by_symbol.get(str(resolution.entry.get("symbol_id")))
+                resolution, (self.by_symbol.get(str(resolution.entry.get("symbol_id")))
+                             or (methods.by_symbol.get(str(resolution.entry.get("symbol_id")))
+                                 if methods is not None else None))
             )
             self.cache[key] = selected
             return selected

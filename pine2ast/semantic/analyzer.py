@@ -232,7 +232,7 @@ class SemanticAnalyzer(
                 owner = self.model.function_candidates
                 candidate = owner.by_node.get(id(item)) if owner is not None else None
                 existing = self.model.symbols.get(item.name)
-                allow_family = candidate is not None and existing is not None and existing.kind is SymbolKind.FUNCTION
+                allow_family = candidate is not None and existing is not None and existing.kind in {SymbolKind.FUNCTION, SymbolKind.METHOD}
                 symbol = self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None,
                                       allow_existing=allow_family)
                 if symbol is not None:
