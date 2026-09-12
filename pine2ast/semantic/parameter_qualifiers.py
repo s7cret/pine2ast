@@ -51,6 +51,9 @@ class ParameterQualifierInference:
         self.declarations = {
             node.name: node for node in program.items if isinstance(node, FunctionDeclaration)
         }
+        self.functions = analyzer.model.function_candidates
+        if self.functions is not None:
+            self.declarations = {c.symbol_key: c.declaration for c in self.functions.candidates}
         self.enums = {node.name for node in program.items if isinstance(node, EnumDeclaration)}
         self.udts = {node.name for node in program.items if isinstance(node, TypeDeclaration)}
         self.bounds: dict[int, str] = {}
@@ -184,7 +187,10 @@ class ParameterQualifierInference:
     def _call(self, call: CallExpr, symbols: dict[str, Symbol]) -> None:
         name = callee_name(call.callee)
         entry: dict[str, Any] | None
-        declaration = self.declarations.get(name)
+        engine = self._engine(symbols)
+        selected = self.functions.resolve(call, engine, qualifiers=False) if self.functions is not None else None
+        declaration = (selected.candidate.declaration if selected is not None and selected.user_selected
+                       else self.declarations.get(name))
         if (
             declaration is not None
             and getattr(symbols.get(name), "kind", None) is not SymbolKind.FUNCTION

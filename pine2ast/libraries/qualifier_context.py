@@ -142,7 +142,7 @@ def _payload(linked: LinkedSource) -> dict[str, Any]:
         })
     rows.sort(key=lambda row: row["generated_span"]["start_offset"])
     body = {
-        "schema_id": (METHOD_CONTEXT_SCHEMA if receipt["profile"] == "same_version_methods_v5" else CONTEXT_SCHEMA),
+        "schema_id": (METHOD_CONTEXT_SCHEMA if receipt["profile"] in {"same_version_methods_v5", "same_version_function_overloads_v6"} else CONTEXT_SCHEMA),
         "pine_version": receipt["pine_version"],
         "linked_source_hash": receipt["linked_source_hash"],
         "linkage_receipt_hash": receipt["content_hash"],

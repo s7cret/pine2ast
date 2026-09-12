@@ -295,7 +295,9 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 qualifier,
             )
         self._visit_body(node.body)
-        sym = self._resolve(node.name)
+        owner = self.model.function_candidates
+        candidate = owner.by_node.get(id(node)) if owner is not None else None
+        sym = self.model.symbols.get(candidate.symbol_key) if candidate is not None else self._resolve(node.name)
         if sym is not None:
             sym.type = self._body_return_type(node.body)
         self._pop_scope()

@@ -158,6 +158,11 @@ class SemanticFactBuilder:
         )
 
     def _declaration_key(self, node: ASTNode) -> str:
+        if isinstance(node, FunctionDeclaration):
+            owner = self.model.function_candidates
+            candidate = owner.by_node.get(id(node)) if owner is not None else None
+            if candidate is not None:
+                return candidate.symbol_key
         if isinstance(node, MethodDeclaration) and node.receiver_type is not None:
             owner = self.model.method_candidates
             candidate = owner.by_node.get(id(node)) if owner is not None else None
@@ -210,7 +215,14 @@ class SemanticFactBuilder:
         owner = self.model.method_candidates
         selection = owner.resolve(call, self.engine) if owner is not None else None
 
-        if selection is not None:
+        functions = self.model.function_candidates
+        function_selection = functions.resolve(call, self.engine) if functions is not None else None
+        if function_selection is not None:
+            selection = function_selection
+            entry = selection.resolution.entry
+            lookup_name = raw_name
+            call_form = "USER_FUNCTION"
+        elif selection is not None:
             entry = selection.resolution.entry
             receiver_type = selection.receiver_type
             lookup_name = str(entry.get("name") or raw_name)

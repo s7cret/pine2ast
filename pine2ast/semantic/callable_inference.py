@@ -216,6 +216,10 @@ class CallableInferenceEngine:
         return positional[index] if index < len(positional) else None
 
     def _user_call_name(self, call: CallExpr) -> str | None:
+        functions = self.model.function_candidates
+        selected = functions.resolve(call, self.engine) if functions is not None else None
+        if selected is not None:
+            return selected.candidate.symbol_key if selected.user_selected else None
         owner = self.model.method_candidates
         selection = owner.resolve(call, self.engine) if owner is not None else None
         if selection is not None:
@@ -231,6 +235,11 @@ class CallableInferenceEngine:
         return None
 
     def _declaration_key(self, declaration: FunctionDeclaration | MethodDeclaration) -> str:
+        if isinstance(declaration, FunctionDeclaration):
+            owner = self.model.function_candidates
+            candidate = owner.by_node.get(id(declaration)) if owner is not None else None
+            if candidate is not None:
+                return candidate.symbol_key
         if isinstance(declaration, MethodDeclaration) and declaration.receiver_type is not None:
             owner = self.model.method_candidates
             candidate = owner.by_node.get(id(declaration)) if owner is not None else None

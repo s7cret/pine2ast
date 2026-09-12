@@ -135,6 +135,9 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
         return is_collection_method(receiver_type, member)
 
     def _validate_member_call_target(self, name: str, expr: CallExpr) -> None:
+        visibility = getattr(self, "_method_visibility", None)
+        if visibility is not None and visibility.function_owner(expr) is not None:
+            return
         if not isinstance(expr.callee, MemberAccessExpr):
             return
         if self.registry.get("functions", {}).get(name):
@@ -262,6 +265,12 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
         self._validate_param_call(method_name, params, expr.arguments, expr.span, kind="method")
 
     def _validate_user_function_call(self, name: str, expr: CallExpr) -> None:
+        functions = self.model.function_candidates
+        selected = functions.resolve(expr, self.inference) if functions is not None else None
+        if selected is not None:
+            for issue in selected.resolution.issues:
+                self._diag(issue.severity, issue.code, issue.message, issue.span)
+            return
         owner = self.model.method_candidates
         if owner is not None and owner.resolve(expr, self.inference) is not None:
             # The shared signature resolver already validated all supplied

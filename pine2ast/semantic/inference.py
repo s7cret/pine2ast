@@ -158,6 +158,7 @@ class PineInferenceEngine:
         self._lexical_qualifiers: dict[int, str] = {}
         self.callable_context: Any | None = None
         self.method_candidates: Any | None = None
+        self.function_candidates: Any | None = None
         self.registry = registry or load_catalog_readonly_view(version_context.pine_version)
         self.policy = policy or semantic_policy_from_catalog(version_context, self.registry)
         self.policy.validate_context(version_context)
@@ -183,6 +184,7 @@ class PineInferenceEngine:
         self._lexical_qualifiers = dict(model.node_qualifiers)
         self.callable_context = model.callable_context
         self.method_candidates = model.method_candidates
+        self.function_candidates = model.function_candidates
 
     def infer_type(self, expr: Expression | None) -> str:
         if self.callable_context is not None:
@@ -198,6 +200,10 @@ class PineInferenceEngine:
                 "method",
             }:
                 return proof.type_name
+        if isinstance(expr, CallExpr) and self.function_candidates is not None:
+            selected = self.function_candidates.resolve(expr, self)
+            if selected is not None:
+                return normalize_return_type(selected.resolution.return_type) if selected.resolution.ok else "unknown"
         if isinstance(expr, Identifier):
             captured = self._lexical_types.get(id(expr))
             if captured and captured != "unknown":
@@ -288,6 +294,10 @@ class PineInferenceEngine:
                 and selection.candidate.declaration.receiver_explicit_qualifier is not None
             ):
                 return str(selection.resolution.entry.get("return_qualifier") or "series")
+        if isinstance(expr, CallExpr) and self.function_candidates is not None:
+            selected = self.function_candidates.resolve(expr, self)
+            if selected is not None:
+                return str(selected.resolution.entry.get("return_qualifier") or "series")
         if isinstance(expr, Identifier):
             captured = self._lexical_qualifiers.get(id(expr))
             if captured:

@@ -229,10 +229,15 @@ class SemanticAnalyzer(
                     self._predeclared_nodes.add(id(item))
             elif isinstance(item, FunctionDeclaration):
                 return_shape = self._body_return_shape(item.body) or "function"
-                if (
-                    self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None)
-                    is not None
-                ):
+                owner = self.model.function_candidates
+                candidate = owner.by_node.get(id(item)) if owner is not None else None
+                existing = self.model.symbols.get(item.name)
+                allow_family = candidate is not None and existing is not None and existing.kind is SymbolKind.FUNCTION
+                symbol = self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None,
+                                      allow_existing=allow_family)
+                if symbol is not None:
+                    if candidate is not None:
+                        self.model.symbols[candidate.symbol_key] = symbol
                     self._predeclared_nodes.add(id(item))
                     self._function_params[item.name] = item.parameters
             elif isinstance(item, MethodDeclaration):

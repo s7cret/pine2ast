@@ -32,3 +32,4 @@ class SemanticModel:
     callable_context: Any | None = None
     # Producer-owned source declaration inventory; not serialized authority.
     method_candidates: Any | None = None
+    function_candidates: Any | None = None

@@ -40,6 +40,10 @@ class CallableResultQualifierInference:
             if isinstance(n, FunctionDeclaration)
             and all(p.type_ref is not None for p in n.parameters)
         }
+        functions = analyzer.model.function_candidates
+        if functions is not None:
+            self.declarations = {c.symbol_key: c.declaration for c in functions.candidates
+                                 if all(p.type_ref is not None for p in c.declaration.parameters)}
         owner = analyzer.model.method_candidates
         if owner is not None:
             self.declarations.update(
@@ -123,6 +127,7 @@ class CallableResultQualifierInference:
                 node_types=self.types,
                 callable_context=self.analyzer.model.callable_context,
                 method_candidates=self.analyzer.model.method_candidates,
+                function_candidates=self.analyzer.model.function_candidates,
             )
         )
         return engine
