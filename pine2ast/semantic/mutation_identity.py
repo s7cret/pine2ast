@@ -6,6 +6,7 @@ type and assignment validation. It introduces neither evaluation nor coercion.
 
 from __future__ import annotations
 
+from pine2ast.ast.base import ASTNode, Expression
 from pine2ast.ast.nodes import (
     Block,
     ForInStructure,
@@ -33,16 +34,16 @@ def reassigned_declarations(program: Program) -> frozenset[int]:
     result: set[int] = set()
     # A None binding still shadows an outer variable (e.g. a parameter).
     scopes: tuple[dict, ...] = ({},)
-    pending = [(program, scopes, False)]
+    pending: list[tuple[ASTNode, tuple[dict, ...], bool]] = [(program, scopes, False)]
     while pending:
         node, frames, bind = pending.pop()
         if bind:
             if isinstance(node, VarDeclaration):
                 frames[-1][node.name] = node
             elif isinstance(node, TupleDeclaration):
-                for target in node.targets:
-                    if target.name != "_":
-                        frames[-1][target.name] = target
+                for tuple_target in node.targets:
+                    if tuple_target.name != "_":
+                        frames[-1][tuple_target.name] = tuple_target
             continue
         if isinstance(node, VarDeclaration):
             pending.append((node, frames, True))
@@ -64,12 +65,12 @@ def reassigned_declarations(program: Program) -> frozenset[int]:
             continue
         if isinstance(node, (ForRangeStructure, ForInStructure)):
             names = [node.variable] if isinstance(node, ForRangeStructure) else node.target.names
-            local = (*frames, {name: None for name in names})
+            loop_frames = (*frames, {name: None for name in names})
             for child in reversed(list(iter_child_nodes(node))):
-                pending.append((child, local if child is node.body else frames, False))
+                pending.append((child, loop_frames if child is node.body else frames, False))
             continue
         if isinstance(node, Reassignment):
-            target = node.target
+            target: Expression = node.target
             while isinstance(target, MemberAccessExpr):
                 target = target.object
             if isinstance(target, Identifier):

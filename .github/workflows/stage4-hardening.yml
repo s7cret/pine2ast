@@ -3,10 +3,14 @@ on:
   pull_request:
   push:
     branches: [main, "release/**"]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
   producer-gates:
+    name: producer-gates (${{ matrix.python }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -29,6 +33,7 @@ jobs:
         if: always()
         with: {name: "stage4-${{ matrix.python }}", path: stage4-gate.json}
   coordinated-boundary:
+    name: coordinated-boundary
     runs-on: ubuntu-latest
     needs: producer-gates
     steps:

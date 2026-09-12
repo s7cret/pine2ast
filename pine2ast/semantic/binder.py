@@ -124,6 +124,7 @@ class SemanticFactBuilder:
         self._assign_scopes(program, "scope:global")
         self._resolve_calls(program)
         from pine2ast.semantic.call_graph import reject_recursive_calls
+
         reject_recursive_calls(program, self.index, self._call_bindings, self._append_diagnostic)
         self._propagate_user_statefulness(program)
         self._index_constant_functions()

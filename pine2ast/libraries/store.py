@@ -28,13 +28,22 @@ class LibraryError(ValueError):
     """A deterministic admission failure with original source coordinates."""
 
     def __init__(
-        self, code: str, message: str, *, source: str | None = None, line: int | None = None,
-        column: int | None = None
+        self,
+        code: str,
+        message: str,
+        *,
+        source: str | None = None,
+        line: int | None = None,
+        column: int | None = None,
     ) -> None:
         self.code, self.source, self.line = code, source, line
         self.column = column
         self.message = message
-        where = (f" [{source}:{line}]" if line is not None else f" [{source}]") if source is not None else ""
+        where = (
+            (f" [{source}:{line}]" if line is not None else f" [{source}]")
+            if source is not None
+            else ""
+        )
         super().__init__(f"{code}{where}: {message}")
 
 
