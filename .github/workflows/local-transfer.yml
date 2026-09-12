@@ -1,0 +1,38 @@
+name: Preserve cumulative local source history
+'on':
+  push:
+    branches: ['ops/local-transfer-20260912']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: s7cret/pinelib
+          ref: 49df3e13c130777d4156877dee39fa11fd59430b
+          path: publisher
+          sparse-checkout: .github/local-transfer/publish.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - run: cp publisher/.github/local-transfer/publish.py "$RUNNER_TEMP/publish.py"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Restore exact original commits and publish candidate only
+        run: python "$RUNNER_TEMP/publish.py"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cumulative-source-publication-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Archive only this temporary upload branch
+        run: |
+          git push --atomic --force-with-lease=refs/heads/ops/local-transfer-20260912:${{ github.sha }} --force-with-lease=refs/tags/archive/20260912/local-transfer: origin ${{ github.sha }}:refs/tags/archive/20260912/local-transfer :refs/heads/ops/local-transfer-20260912
