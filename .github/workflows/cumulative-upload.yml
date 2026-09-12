@@ -1,0 +1,38 @@
+name: Publish preserved Stage 2 cumulative commits
+'on':
+  push:
+    branches: ['ops/stage2-cumulative-upload-20260912']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: s7cret/pinelib
+          ref: 1ad71639befa0f7aa6f394e4b8f514a0eaa51513
+          path: publisher
+          persist-credentials: false
+      - run: cp publisher/.github/cumulative-transfer/publish.py "$RUNNER_TEMP/publish.py"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore exact checked history and publish candidate only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('.github/cumulative-transfer')
+          parts = sorted((root / 'parts').iterdir())
+          assert [p.name for p in parts] == [f'part{i:02}' for i in range(4)]
+          (root / 'source.pack.xz').write_bytes(b''.join(p.read_bytes() for p in parts))
+          PY
+          python "$RUNNER_TEMP/publish.py"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cumulative-source-publication-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication/
+          if-no-files-found: error
+          retention-days: 30
