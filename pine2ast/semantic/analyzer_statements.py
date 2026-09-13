@@ -112,7 +112,9 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         else:
             if init_qualifier == "input":
                 qualifier = "input"
-            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(node):
+            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(
+                node
+            ):
                 qualifier = init_qualifier
             else:
                 qualifier = "series"
@@ -301,7 +303,11 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         self._visit_body(node.body)
         owner = self.model.function_candidates
         candidate = owner.by_node.get(id(node)) if owner is not None else None
-        sym = self.model.symbols.get(candidate.symbol_key) if candidate is not None else self._resolve(node.name)
+        sym = (
+            self.model.symbols.get(candidate.symbol_key)
+            if candidate is not None
+            else self._resolve(node.name)
+        )
         if sym is not None:
             sym.type = self._body_return_type(node.body)
         self._pop_scope()

@@ -77,6 +77,8 @@ class SemanticAnalyzer(
     AnalyzerValidationMixin,
     AnalyzerScopeMixin,
 ):
+    _method_visibility: object | None
+
     def __init__(
         self,
         *,
@@ -232,9 +234,19 @@ class SemanticAnalyzer(
                 owner = self.model.function_candidates
                 candidate = owner.by_node.get(id(item)) if owner is not None else None
                 existing = self.model.symbols.get(item.name)
-                allow_family = candidate is not None and existing is not None and existing.kind in {SymbolKind.FUNCTION, SymbolKind.METHOD}
-                symbol = self._define(item.name, SymbolKind.FUNCTION, item.span, return_shape, None,
-                                      allow_existing=allow_family)
+                allow_family = (
+                    candidate is not None
+                    and existing is not None
+                    and existing.kind in {SymbolKind.FUNCTION, SymbolKind.METHOD}
+                )
+                symbol = self._define(
+                    item.name,
+                    SymbolKind.FUNCTION,
+                    item.span,
+                    return_shape,
+                    None,
+                    allow_existing=allow_family,
+                )
                 if symbol is not None:
                     if candidate is not None:
                         self.model.symbols[candidate.symbol_key] = symbol
@@ -277,11 +289,11 @@ class SemanticAnalyzer(
                 self._predeclared_nodes.add(id(item))
                 self._user_method_params[method_key] = item.parameters
                 if receiver_name:
-                    existing = self._method_receivers.get(item.name)
-                    if isinstance(existing, set):
-                        existing.add(receiver_name)
-                    elif isinstance(existing, str):
-                        self._method_receivers[item.name] = {existing, receiver_name}
+                    receiver_set = self._method_receivers.get(item.name)
+                    if isinstance(receiver_set, set):
+                        receiver_set.add(receiver_name)
+                    elif isinstance(receiver_set, str):
+                        self._method_receivers[item.name] = {receiver_set, receiver_name}
                     else:
                         self._method_receivers[item.name] = receiver_name
             elif isinstance(item, TypeDeclaration):

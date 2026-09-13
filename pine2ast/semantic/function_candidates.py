@@ -9,9 +9,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING, cast
 
-from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, Identifier, MemberAccessExpr, MethodDeclaration, Program
+from pine2ast.ast.nodes import (
+    CallExpr,
+    FunctionDeclaration,
+    Identifier,
+    MemberAccessExpr,
+    MethodDeclaration,
+    Program,
+)
 from pine2ast.diagnostics import Severity, codes
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.parameter_qualifiers import parameter_qualifier
@@ -56,12 +63,19 @@ class FunctionCandidates:
         for node in program.items:
             if isinstance(node, FunctionDeclaration):
                 groups.setdefault(node.name, []).append(node)
-        self.mixed_names = frozenset(n.name for n in program.items if isinstance(n, MethodDeclaration)) & groups.keys()
+        self.mixed_names = (
+            frozenset(n.name for n in program.items if isinstance(n, MethodDeclaration))
+            & groups.keys()
+        )
         candidates = []
         for name, nodes in groups.items():
             for node in nodes:
                 identity = self.index.id_for(node)
-                key = name if len(nodes) == 1 and name not in self.mixed_names else f"{name}#{identity}"
+                key = (
+                    name
+                    if len(nodes) == 1 and name not in self.mixed_names
+                    else f"{name}#{identity}"
+                )
                 candidates.append(FunctionCandidate(node, identity, key))
         self.candidates = tuple(candidates)
         self.by_node = MappingProxyType({id(c.declaration): c for c in candidates})
@@ -81,7 +95,7 @@ class FunctionCandidates:
         """Optional/name/return-only differences do not create valid overloads."""
         duplicates = []
         for family in self.by_name.values():
-            seen = {}
+            seen: dict[tuple[str | None, int], set[tuple[tuple[str, str], ...]]] = {}
             untyped = set()
             for candidate in family:
                 node = candidate.declaration
@@ -120,9 +134,11 @@ class FunctionCandidates:
                 dict(
                     name=p.name,
                     type=type_ref_name(p.type_ref) if p.type_ref else "any",
-                    qualifier_max=(parameter_qualifier(p, self.analyzer.model) or "series")
-                    if qualifiers
-                    else "series",
+                    qualifier_max=(
+                        (parameter_qualifier(p, self.analyzer.model) or "series")
+                        if qualifiers
+                        else "series"
+                    ),
                     required=p.default_value is None,
                 )
                 for p in node.parameters
@@ -133,7 +149,11 @@ class FunctionCandidates:
 
     def _failure(self, call: CallExpr, code: str, message: str) -> FunctionSelection:
         issue = SignatureIssue(Severity.ERROR, code, message, call.span)
-        name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
+        name = (
+            call.callee.name
+            if isinstance(call.callee, Identifier)
+            else cast(MemberAccessExpr, call.callee).member
+        )
         resolution = SignatureResolution(name, "function", {}, (), {}, (), issues=(issue,))
         return FunctionSelection(resolution, None)
 
@@ -146,12 +166,15 @@ class FunctionCandidates:
         if isinstance(call.callee, Identifier):
             return call.callee.name in self.mixed_names
         if isinstance(call.callee, MemberAccessExpr) and self.visibility is not None:
-            return (call.callee.member in self.mixed_names
-                    and (self.visibility.function_owner(call) is not None
-                         or self.visibility.explicit_owner(call) is not None))
+            return call.callee.member in self.mixed_names and (
+                self.visibility.function_owner(call) is not None
+                or self.visibility.explicit_owner(call) is not None
+            )
         return False
 
-    def resolve(self, call: CallExpr, engine: Any, *, qualifiers: bool = True) -> FunctionSelection | None:
+    def resolve(
+        self, call: CallExpr, engine: Any, *, qualifiers: bool = True
+    ) -> FunctionSelection | None:
         """Function view of the one explicit-call family decision.
 
         A selected method is returned by MethodCandidates using the *same* cached
@@ -159,19 +182,30 @@ class FunctionCandidates:
         to whichever same-named declaration happened to be stored last.
         """
         selected = self.resolve_family(call, engine, qualifiers=qualifiers)
-        if selected is not None and selected.user_selected and isinstance(
-            selected.candidate.declaration, MethodDeclaration
+        if (
+            selected is not None
+            and selected.user_selected
+            and selected.candidate is not None
+            and isinstance(selected.candidate.declaration, MethodDeclaration)
         ):
             return None
         return selected
 
-    def resolve_family(self, call: CallExpr, engine: Any, *, qualifiers: bool = True) -> FunctionSelection | None:
+    def resolve_family(
+        self, call: CallExpr, engine: Any, *, qualifiers: bool = True
+    ) -> FunctionSelection | None:
         namespace_owner = (
-            (self.visibility.function_owner(call) or self.visibility.explicit_owner(call)) if self.visibility is not None else None
+            (self.visibility.function_owner(call) or self.visibility.explicit_owner(call))
+            if self.visibility is not None
+            else None
         )
         if not isinstance(call.callee, Identifier) and namespace_owner is None:
             return None
-        name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
+        name = (
+            call.callee.name
+            if isinstance(call.callee, Identifier)
+            else cast(MemberAccessExpr, call.callee).member
+        )
         family = self.by_name.get(name)
         mixed = self.is_mixed_call(call)
         methods = self.analyzer.model.method_candidates if mixed else None
@@ -181,7 +215,8 @@ class FunctionCandidates:
         if (
             namespace_owner is None
             and symbol is not None
-            and symbol.kind not in ({SymbolKind.FUNCTION, SymbolKind.METHOD} if mixed else {SymbolKind.FUNCTION})
+            and symbol.kind
+            not in ({SymbolKind.FUNCTION, SymbolKind.METHOD} if mixed else {SymbolKind.FUNCTION})
         ):
             return None
         if id(call) in self.active:
@@ -199,7 +234,9 @@ class FunctionCandidates:
                 )
             if self.visibility is not None and hasattr(self.visibility, "allows_function"):
                 candidates = tuple(
-                    c for c in candidates if (
+                    c
+                    for c in candidates
+                    if (
                         self.visibility.allows(call, c.declaration)
                         if isinstance(c.declaration, MethodDeclaration)
                         else self.visibility.allows_function(call, c.declaration)
@@ -220,11 +257,16 @@ class FunctionCandidates:
                 (engine.infer_type(a.value), engine.infer_qualifier(a.value))
                 for a in call.arguments
             )
-            entries = [
-                (methods.explicit_entry(c, symbols=engine.symbols, qualifiers=qualifiers)
-                 if isinstance(c.declaration, MethodDeclaration)
-                 else self.entry(c, symbols=engine.symbols, qualifiers=qualifiers)) for c in candidates
-            ]
+            entries = []
+            for c in candidates:
+                if isinstance(c.declaration, MethodDeclaration):
+                    if methods is None:
+                        raise RuntimeError("Method candidate has no declaration owner")
+                    entries.append(
+                        methods.explicit_entry(c, symbols=engine.symbols, qualifiers=qualifiers)
+                    )
+                else:
+                    entries.append(self.entry(c, symbols=engine.symbols, qualifiers=qualifiers))
             shape = tuple(
                 (
                     e["symbol_id"],
@@ -260,9 +302,15 @@ class FunctionCandidates:
                 infer_arg_qualifier=lambda a: evidence[id(a)][1],
             )
             selected = FunctionSelection(
-                resolution, (self.by_symbol.get(str(resolution.entry.get("symbol_id")))
-                             or (methods.by_symbol.get(str(resolution.entry.get("symbol_id")))
-                                 if methods is not None else None))
+                resolution,
+                (
+                    self.by_symbol.get(str(resolution.entry.get("symbol_id")))
+                    or (
+                        methods.by_symbol.get(str(resolution.entry.get("symbol_id")))
+                        if methods is not None
+                        else None
+                    )
+                ),
             )
             self.cache[key] = selected
             return selected

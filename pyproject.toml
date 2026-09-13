@@ -18,7 +18,7 @@ Repository = "https://github.com/s7cret/pine2ast"
 Issues = "https://github.com/s7cret/pine2ast/issues"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "black>=24", "mypy>=1.10", "jsonschema>=4"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "black>=24", "mypy>=1.10", "jsonschema>=4", "build>=1.2", "setuptools>=77", "wheel"]
 [project.scripts]
 pine2ast = "pine2ast.cli:main"
 pine2ast-stage4 = "pine2ast.hardening.cli:main"
