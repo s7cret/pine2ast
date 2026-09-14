@@ -14,6 +14,7 @@ import copy
 import hashlib
 import json
 import shutil
+import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any
@@ -1161,7 +1162,7 @@ def main() -> int:
     }
     manifest = {**manifest_body, "content_hash": digest(manifest_body)}
 
-    temp = root / ".catalog-build-tmp"
+    temp = Path(tempfile.gettempdir()) / f"catalog-build-tmp-{root.name}"
     shutil.rmtree(temp, ignore_errors=True)
     (temp / "source" / "deltas").mkdir(parents=True)
     (temp / "packs").mkdir(parents=True)
