@@ -409,19 +409,31 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
         name = callee_name(expr.callee)
         lookup_name, entry = self._registry_entry_for_call(expr.callee)
         visibility = getattr(self, "_method_visibility", None)
-        explicit_library_method = visibility is not None and (
-            visibility.explicit_owner(expr) is not None
-            or visibility.function_owner(expr) is not None
+        explicit_library_method = (
+            visibility is not None and (visibility.explicit_owner(expr) is not None
+                                        or visibility.function_owner(expr) is not None)
         )
         if not explicit_library_method:
             self._visit_callee(expr.callee)
-        if entry and entry.get("forbidden_in_local_blocks") and self.local_depth > 0:
-            self._diag(
-                Severity.ERROR,
-                codes.BUILTIN_FORBIDDEN_LOCAL,
-                f"{name}() is forbidden in local blocks in Pine.",
-                expr.span,
-            )
+        in_callable_scope = any(
+            scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD}
+            for scope in self.scope_stack
+        )
+        if entry and (self.local_depth > 0 or in_callable_scope):
+            if entry.get("scope") == "global_only":
+                self._diag(
+                    Severity.ERROR,
+                    codes.DECLARATION_NOT_GLOBAL,
+                    f"{name}() declaration must be in global scope.",
+                    expr.span,
+                )
+            elif entry.get("forbidden_in_local_blocks"):
+                self._diag(
+                    Severity.ERROR,
+                    codes.BUILTIN_FORBIDDEN_LOCAL,
+                    f"{name}() is forbidden in local blocks or user-defined callables in Pine.",
+                    expr.span,
+                )
         self._validate_strategy_call_script_type(name, expr)
         self._validate_strategy_namespace_usage(name, expr.span, is_call=True)
         self._validate_known_deferred_or_unsupported_builtin(name, entry, expr)

@@ -203,11 +203,7 @@ class PineInferenceEngine:
         if isinstance(expr, CallExpr) and self.function_candidates is not None:
             selected = self.function_candidates.resolve(expr, self)
             if selected is not None:
-                return (
-                    normalize_return_type(selected.resolution.return_type)
-                    if selected.resolution.ok
-                    else "unknown"
-                )
+                return normalize_return_type(selected.resolution.return_type) if selected.resolution.ok else "unknown"
         if isinstance(expr, Identifier):
             captured = self._lexical_types.get(id(expr))
             if captured and captured != "unknown":
@@ -435,7 +431,10 @@ class PineInferenceEngine:
                 # Historical input() preserves the type of its defval argument.
                 # This fact is required for deterministic overload resolution in
                 # v1-v4 and is part of the catalog's explicit return rule.
-                return self.infer_type(expr.arguments[0].value)
+                from pine2ast.semantic.argument_values import argument_value
+
+                default = argument_value(expr.arguments, "defval", 0)
+                return self.infer_type(default) if default is not None else "unknown"
         # Collection method/function forms are receiver-specialized by the Release 4.0
         # signature layer. Prefer those facts because broad registry entries
         # often say only "unknown" for generic methods such as array.slice(),

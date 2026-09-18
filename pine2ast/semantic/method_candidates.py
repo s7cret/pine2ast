@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, cast
+from typing import Any
 
 from pine2ast.ast.nodes import (
     CallExpr,
@@ -169,21 +169,16 @@ class MethodCandidates:
             entry["return_qualifier"] = getattr(symbol, "qualifier", None) or "series"
         return entry
 
-    def explicit_entry(
-        self, candidate: MethodCandidate, *, symbols=None, qualifiers: bool = True
-    ) -> dict:
+    def explicit_entry(self, candidate: MethodCandidate, *, symbols=None, qualifiers: bool = True) -> dict:
         """Adapt only the signature shape; SignatureResolver still owns binding."""
         entry = self.entry(candidate, symbols=symbols)
         entry.pop("__receiver_parameter", None)
-        entry["parameters"] = [
-            {
-                "name": candidate.declaration.receiver_name,
-                "type": candidate.receiver_type,
-                "qualifier_max": self.receiver_qualifier(candidate.declaration, for_binding=True),
-                "required": True,
-            },
-            *entry["parameters"],
-        ]
+        entry["parameters"] = [{
+            "name": candidate.declaration.receiver_name,
+            "type": candidate.receiver_type,
+            "qualifier_max": self.receiver_qualifier(candidate.declaration, for_binding=True),
+            "required": True,
+        }, *entry["parameters"]]
         if not qualifiers:
             entry["parameters"] = [dict(p, qualifier_max="series") for p in entry["parameters"]]
         return entry
@@ -206,10 +201,8 @@ class MethodCandidates:
         if isinstance(call.callee, MemberAccessExpr) and self.visibility is not None:
             namespace_owner = self.visibility.explicit_owner(call)
             explicit = namespace_owner is not None
-        name = (
-            call.callee.name
-            if isinstance(call.callee, Identifier)
-            else (call.callee.member if isinstance(call.callee, MemberAccessExpr) else None)
+        name = call.callee.name if isinstance(call.callee, Identifier) else (
+            call.callee.member if isinstance(call.callee, MemberAccessExpr) else None
         )
         if name not in self.names:
             return None
@@ -227,20 +220,14 @@ class MethodCandidates:
         if id(call) in self.active:
             return self._limit(call, "unknown")
         self.active.add(id(call))
-        # The admitted name above excludes non-identifier/non-member callees.
-        dot_callee = cast(MemberAccessExpr, call.callee)
         try:
-            receiver = "unknown" if explicit else engine.infer_type(dot_callee.object)
-            candidates = (
-                self.by_name[name] if explicit else self.by_receiver_name.get((receiver, name), ())
-            )
+            receiver = "unknown" if explicit else engine.infer_type(call.callee.object)
+            candidates = self.by_name[name] if explicit else self.by_receiver_name.get((receiver, name), ())
             if not candidates:
                 return None
             all_candidates = candidates
             if self.visibility is not None:
-                candidates = tuple(
-                    c for c in candidates if self.visibility.allows(call, c.declaration)
-                )
+                candidates = tuple(c for c in candidates if self.visibility.allows(call, c.declaration))
             self.spent += 1 + len(call.arguments)
             if self.spent > MAX_METHOD_WORK:
                 return self._limit(call, receiver)
@@ -259,10 +246,10 @@ class MethodCandidates:
             if explicit:
                 entries = [self.explicit_entry(c, symbols=engine.symbols) for c in candidates]
             elif any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
-                value = engine.infer_value(dot_callee.object)
+                value = engine.infer_value(call.callee.object)
                 receiver_evidence = ReceiverArgumentEvidence(
-                    self.index.id_for(dot_callee.object),
-                    dot_callee.object.span,
+                    self.index.id_for(call.callee.object),
+                    call.callee.object.span,
                     receiver,
                     value.qualifier,
                     value.can_be_na,
@@ -285,15 +272,9 @@ class MethodCandidates:
                     builtin["returns"] = collection.return_type or builtin.get("returns")
                 entries.extend(self.resolver.candidate_entries(builtin))
             if not entries and all_candidates:
-                issue = SignatureIssue(
-                    Severity.ERROR,
-                    codes.UNKNOWN_CALL,
-                    "No imported or local method is visible for this receiver.",
-                    call.span,
-                )
-                resolution = SignatureResolution(
-                    callee_name(call.callee), "method", {}, (), {}, (), issues=(issue,)
-                )
+                issue = SignatureIssue(Severity.ERROR, codes.UNKNOWN_CALL,
+                    "No imported or local method is visible for this receiver.", call.span)
+                resolution = SignatureResolution(callee_name(call.callee), "method", {}, (), {}, (), issues=(issue,))
                 return MethodSelection(receiver, resolution, None)
             actual = tuple(
                 (engine.infer_type(a.value), engine.infer_qualifier(a.value))
@@ -345,8 +326,7 @@ class MethodCandidates:
             chosen = self.by_symbol.get(str(resolution.entry.get("symbol_id")))
             selected = MethodSelection(
                 chosen.receiver_type if explicit and chosen is not None else receiver,
-                resolution,
-                chosen,
+                resolution, chosen,
             )
             self.cache[key] = selected
             return selected

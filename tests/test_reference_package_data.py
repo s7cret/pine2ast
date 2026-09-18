@@ -26,16 +26,7 @@ RESOURCE_ROOT = "pine2ast/reference_catalog/"
 def reference_artifacts(tmp_path_factory):
     output = tmp_path_factory.mktemp("reference-artifacts")
     result = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "build",
-            "--wheel",
-            "--sdist",
-            "--no-isolation",
-            "--outdir",
-            str(output),
-        ],
+        [sys.executable, "-m", "build", "--wheel", "--sdist", "--no-isolation", "--outdir", str(output)],
         cwd=PROJECT,
         text=True,
         capture_output=True,
@@ -78,11 +69,7 @@ def test_wheel_and_sdist_include_every_reference_resource(reference_artifacts):
             member = RESOURCE_ROOT + name
             assert archive.read(member) == (PROJECT / member).read_bytes()
     with tarfile.open(sdist, "r:gz") as archive:
-        members = {
-            member.name.split("/", 1)[1]: member
-            for member in archive.getmembers()
-            if "/" in member.name
-        }
+        members = {member.name.split("/", 1)[1]: member for member in archive.getmembers() if "/" in member.name}
         for name in RESOURCE_NAMES:
             member = RESOURCE_ROOT + name
             stream = archive.extractfile(members[member])
@@ -91,26 +78,19 @@ def test_wheel_and_sdist_include_every_reference_resource(reference_artifacts):
 
 def test_extracted_wheel_validates_default_catalog_and_matrix(reference_artifacts, tmp_path):
     root = extracted_wheel(reference_artifacts[0], tmp_path)
-    result = isolated_probe(
-        root,
-        "from pine2ast.reference_catalog import validate_catalog, validate_matrix; validate_catalog(); validate_matrix(); print('validated')",
-    )
+    result = isolated_probe(root, "from pine2ast.reference_catalog import validate_catalog, validate_matrix; validate_catalog(); validate_matrix(); print('validated')")
     assert result.returncode == 0, result.stdout + result.stderr
     assert result.stdout.strip() == "validated"
 
 
-def test_extracted_wheel_missing_resources_cannot_fall_back_to_checkout(
-    reference_artifacts, tmp_path
-):
+def test_extracted_wheel_missing_resources_cannot_fall_back_to_checkout(reference_artifacts, tmp_path):
     root = extracted_wheel(reference_artifacts[0], tmp_path)
     for name in ("pine_v6_reference_catalog.json", "parity_matrix.json"):
         resource = root / RESOURCE_ROOT / name
         original = resource.read_bytes()
         resource.unlink()
         try:
-            result = isolated_probe(
-                root, "from pine2ast.reference_catalog import validate_matrix; validate_matrix()"
-            )
+            result = isolated_probe(root, "from pine2ast.reference_catalog import validate_matrix; validate_matrix()")
         finally:
             resource.write_bytes(original)
         assert result.returncode != 0

@@ -356,6 +356,18 @@ def _validate_calls(version: int, nodes: Sequence[object]) -> list[Diagnostic]:
         "input.source",
         "input.time",
     }
+    # Rows retained by the migrated internal registry are not automatically part
+    # of the public Pine v6 callable surface.  The official reference-name
+    # denominator is authoritative for admission; internal generic
+    # specializations (array.new<T>/map.new<K,V>/matrix.new<T>) remain handled
+    # by collection typing, while these unsupported/legacy extras fail closed.
+    v6_fail_closed_catalog_calls = {
+        "array.percentile",
+        "request.news",
+        "strategy.closedtrades",
+        "strategy.opentrades",
+        "ta.obv",
+    }
     user_callable_names = {
         str(_get(node, "name"))
         for node in nodes
@@ -382,6 +394,23 @@ def _validate_calls(version: int, nodes: Sequence[object]) -> list[Diagnostic]:
                 _error(
                     codes.LEGACY_SPELLING_UNAVAILABLE,
                     f"Legacy call {name}() is not valid in Pine v{version}; use the versioned namespace spelling.",
+                    _node_span(node),
+                )
+            )
+        callee_is_generic = _kind(_get(node, "callee")) == "GenericInstantiationExpr"
+        if (
+            version == 6
+            and not is_user_callable
+            and (
+                name in v6_fail_closed_catalog_calls
+                or (name == "array.new" and not callee_is_generic)
+                or (name == "array.from" and callee_is_generic)
+            )
+        ):
+            diagnostics.append(
+                _error(
+                    codes.VERSION_CALL_UNAVAILABLE,
+                    f"Catalog-internal call {name}() is not part of the public Pine v6 reference surface.",
                     _node_span(node),
                 )
             )

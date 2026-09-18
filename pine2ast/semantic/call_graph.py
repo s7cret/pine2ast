@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pine2ast.ast.base import ASTNode
 from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, MethodDeclaration
 from pine2ast.ast.walk import iter_child_nodes
 from pine2ast.diagnostics import Diagnostic, Severity, codes
@@ -17,9 +16,9 @@ def reject_recursive_calls(program, index, bindings, append_diagnostic) -> None:
     edges = {}
     for key, declaration in declarations.items():
         rows = []
-        nodes: list[ASTNode] = [declaration.body]
-        while nodes:
-            node = nodes.pop()
+        pending = [declaration.body]
+        while pending:
+            node = pending.pop()
             if isinstance(node, CallExpr):
                 binding = bindings.get(id(node))
                 if (
@@ -28,7 +27,7 @@ def reject_recursive_calls(program, index, bindings, append_diagnostic) -> None:
                     and binding.symbol_id in declarations
                 ):
                     rows.append((binding.symbol_id, node))
-            nodes.extend(iter_child_nodes(node))
+            pending.extend(iter_child_nodes(node))
         edges[key] = rows
     # Iterative DFS is linear in the admitted AST/call graph and cannot exceed
     # Python recursion depth on a long acyclic chain of independent overloads.

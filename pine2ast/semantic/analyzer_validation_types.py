@@ -46,6 +46,17 @@ class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
         left_type = self._infer_type(expr.left)
         right_type = self._infer_type(expr.right)
         arithmetic = {"+", "-", "*", "/", "%"}
+        if expr.op in {"==", "!=", "<", "<=", ">", ">="} and any(
+            isinstance(operand, Literal) and operand.literal_type == "na"
+            for operand in (expr.left, expr.right)
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.TYPE_MISMATCH,
+                "The literal na cannot be a comparison operand; use na(value).",
+                expr.span,
+            )
+            return
         if expr.op in {"==", "!="} and (
             left_type in self._enum_members or right_type in self._enum_members
         ):
@@ -137,6 +148,17 @@ class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
                 type_ref.span,
             )
         args = list(getattr(type_ref, "template_args", []) or [])
+        if base in {"array", "map", "matrix"}:
+            for arg in args:
+                arg_name = self._type_ref_name(arg)
+                nested_base, _ = self._generic_type_parts(arg_name)
+                if nested_base in {"array", "map", "matrix"}:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.COLLECTION_ELEMENT_TYPE,
+                        f"Collections cannot directly contain collection type {arg_name}.",
+                        arg.span,
+                    )
         if base == "map" and args:
             key_type = self._type_ref_name(args[0])
             if not is_valid_map_key_type(key_type, enum_types=self._enum_members.keys()):

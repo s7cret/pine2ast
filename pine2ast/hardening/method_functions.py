@@ -4,7 +4,6 @@ The syntax is ordinary Pine. Its new lowering contract must nevertheless be
 explicit so older consumers cannot silently omit the receiver. Detection is
 AST-based (not based on trusted-looking producer call facts).
 """
-
 from __future__ import annotations
 
 from typing import Any, Mapping
@@ -38,8 +37,6 @@ def method_function_feature(
         elif isinstance(value, list):
             pending.extend(value)
     found = bool(methods & calls)
-    if found and (
-        type(context.get("pine_version")) is not int or context["pine_version"] not in {5, 6}
-    ):
+    if found and (type(context.get("pine_version")) is not int or context["pine_version"] not in {5, 6}):
         raise ASTDecodeError("user method function calls require Pine v5/v6")
     return found

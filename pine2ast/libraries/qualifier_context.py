@@ -108,7 +108,7 @@ def _syntax(code: str) -> Program:
 
 def _payload(linked: LinkedSource) -> dict[str, Any]:
     receipt = linked.receipt()
-    generated: dict[tuple[type, str], list[FunctionDeclaration | MethodDeclaration]] = {}
+    generated = {}
     for node in _syntax(linked.code).items:
         if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
             generated.setdefault((type(node), node.name), []).append(node)
@@ -125,38 +125,24 @@ def _payload(linked: LinkedSource) -> dict[str, Any]:
         for node in generated.get((type(original), row["linked_name"]), ()):
 
             location = linked.original_location(node.span.start_offset)
-            if (
-                location is not None
-                and location["source"] == row["ref"]
-                and original.span.start_offset <= location["offset"] < original.span.end_offset
-            ):
+            if (location is not None and location["source"] == row["ref"]
+                    and original.span.start_offset <= location["offset"] < original.span.end_offset):
                 matches.append(node)
         if len(matches) != 1:
             _fail("exported declaration does not have one exact source projection")
         projected = matches[0]
-        rows.append(
-            {
-                "source": row["ref"],
-                "source_hash": receipt["dependencies"][row["ref"]],
-                "name": original.name,
-                "span": _span(original),
-                "generated_name": projected.name,
-                "generated_span": _span(projected),
-                "minimum_return_qualifier": "simple",
-            }
-        )
+        rows.append({
+            "source": row["ref"],
+            "source_hash": receipt["dependencies"][row["ref"]],
+            "name": original.name,
+            "span": _span(original),
+            "generated_name": projected.name,
+            "generated_span": _span(projected),
+            "minimum_return_qualifier": "simple",
+        })
     rows.sort(key=lambda row: row["generated_span"]["start_offset"])
     body = {
-        "schema_id": (
-            METHOD_CONTEXT_SCHEMA
-            if receipt["profile"]
-            in {
-                "same_version_methods_v5",
-                "same_version_function_overloads_v6",
-                "same_version_mixed_callables_v7",
-            }
-            else CONTEXT_SCHEMA
-        ),
+        "schema_id": (METHOD_CONTEXT_SCHEMA if receipt["profile"] in {"same_version_methods_v5", "same_version_function_overloads_v6", "same_version_mixed_callables_v7"} else CONTEXT_SCHEMA),
         "pine_version": receipt["pine_version"],
         "linked_source_hash": receipt["linked_source_hash"],
         "linkage_receipt_hash": receipt["content_hash"],
@@ -191,10 +177,7 @@ class LibraryQualifierContext:
     @classmethod
     def admit(cls, payload: Mapping[str, Any]) -> LibraryQualifierContext:
         _bounded(payload)
-        if not isinstance(payload, dict) or payload.get("schema_id") not in {
-            CONTEXT_SCHEMA,
-            METHOD_CONTEXT_SCHEMA,
-        }:
+        if not isinstance(payload, dict) or payload.get("schema_id") not in {CONTEXT_SCHEMA, METHOD_CONTEXT_SCHEMA}:
             _fail("unsupported context schema")
         if type(payload.get("pine_version")) is not int or payload["pine_version"] not in {5, 6}:
             _fail("context requires Pine v5 or v6")

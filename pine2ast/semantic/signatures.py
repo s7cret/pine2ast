@@ -8,7 +8,7 @@ from pine2ast.ast.nodes import Argument
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
-from pine2ast.semantic.type_helpers import is_assignable_type
+from pine2ast.semantic.type_helpers import is_assignable_type, tuple_element_types
 from pine2ast.semantic.type_model import ENUM_LIKE_BUILTIN_TYPES, generic_type_parts
 from pine2ast.semantic.values import (
     QUALIFIER_ORDER,
@@ -205,6 +205,9 @@ class SignatureResolver:
                         str(candidate["symbol_id"]), "USER_METHOD"
                     ),
                 )
+                if candidate.get("return_rule_id") == "return.collection.numeric_sum.v1" and receiver.actual_type not in {"array<int>", "array<float>"}:
+                    issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                        "array.sum requires array<int> or array<float>", receiver.span))
                 resolution = replace(resolution, issues=resolution.issues + tuple(issues))
             if not self.candidate_is_active(candidate):
                 resolution = replace(
@@ -221,7 +224,7 @@ class SignatureResolver:
                         ),
                     ),
                 )
-            scored.append((self._resolution_score(resolution), resolution))
+            scored.append((self._resolution_score(resolution, callee), resolution))
         if not scored:
             raise ValueError(f"catalog entry for {callee} has no signature candidates")
         scored.sort(key=lambda item: (item[0], item[1].overload_id or ""))
@@ -570,6 +573,55 @@ class SignatureResolver:
                 )
             )
 
+        if validate_types and entry.get("parameter_type_rule_id") == "parameter.input.same_enum_type.v1":
+            by_name = {
+                str(item.parameter.get("name")): item
+                for item in resolved
+                if item.parameter is not None and item.parameter.get("name")
+            }
+            default_type = by_name.get("defval").actual_type if by_name.get("defval") else None
+            option_type = by_name.get("options").actual_type if by_name.get("options") else None
+            option_types = tuple_element_types(option_type or "")
+            valid_default = isinstance(default_type, str) and default_type not in {
+                "unknown", "any", "int", "float", "bool", "string", "color"
+            }
+            valid_options = not option_types or (
+                valid_default and all(item == default_type for item in option_types)
+            )
+            if not valid_default or not valid_options:
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "input.enum defval and every options member must use the same enum type",
+                        span,
+                    )
+                )
+
+        if validate_types and entry.get("return_rule_id") == "return.array.from_arguments.v1":
+            types = {item.actual_type for item in resolved}.difference({None, "unknown", "na"})
+            if not types or (len(types) > 1 and not types <= {"int", "float"}):
+                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                    "array.from values must have one compatible element type", span))
+        if validate_types and entry.get("return_rule_id") == "return.collection.numeric_sum.v1":
+            if any(item.actual_type not in {"array<int>", "array<float>", "unknown"} for item in resolved):
+                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                    "array.sum requires array<int> or array<float>", span))
+
+        if validate_types and entry.get("parameter_type_rule_id") == "parameter.str.tostring.scalar_or_enum.v1":
+            by_name = {str(item.parameter.get("name")): item for item in resolved
+                       if item.parameter is not None}
+            value = by_name.get("value")
+            actual = value.actual_type if value else None
+            symbol = (symbols or {}).get(actual) if isinstance(actual, str) else None
+            kind = getattr(getattr(symbol, "kind", None), "value", None)
+            if actual not in {"int", "float", "bool", "string", "na", "unknown"} and kind != "ENUM":
+                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                    "str.tostring requires a scalar value or an exact declared enum type", span))
+            if kind == "ENUM" and "format" in by_name:
+                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
+                    "The enum str.tostring overload does not accept format", span))
+
         if validate_types and entry.get("return_rule_id") in {
             "return.na.source_or_numeric_promotion.v1",
             "return.nz.argument_types.v1",
@@ -836,7 +888,9 @@ class SignatureResolver:
                 )
         return issues
 
-    def _resolution_score(self, resolution: SignatureResolution) -> tuple[int, int, int, int, int]:
+    def _resolution_score(
+        self, resolution: SignatureResolution, callee: str
+    ) -> tuple[int, int, int, int, int]:
         error_weight = 0
         type_weight = 0
         qualifier_weight = 0
@@ -850,7 +904,9 @@ class SignatureResolver:
             else:
                 error_weight += 1
         conversion_cost = sum(
-            self._argument_conversion_cost(arg) for arg in resolution.resolved_arguments
+            self._argument_conversion_cost(arg)
+            + (self._qualifier_slack(arg) if callee == "input" else 0)
+            for arg in resolution.resolved_arguments
         )
         unresolved = sum(1 for arg in resolution.resolved_arguments if arg.parameter is None)
         # Prefer fewer structural errors, then rejected types/qualifiers, then
@@ -859,6 +915,24 @@ class SignatureResolver:
         # rsi(series, int) versus rsi(series, series): both are assignable after
         # numeric widening, but only one is an exact match for an int length.
         return (error_weight, type_weight, qualifier_weight, conversion_cost, unresolved)
+
+    @staticmethod
+    def _qualifier_slack(resolved: ResolvedArgument) -> int:
+        """Prefer the narrowest admissible qualifier ceiling.
+
+        Generic ``input()`` has both a scalar-float and a source-float overload.
+        A const float is valid for both ceilings, but it must select the const
+        overload; an actual series selects the series overload.  Treating both
+        as equally specific made ordinary numeric inputs ambiguous.
+        """
+        parameter = resolved.parameter
+        if parameter is None:
+            return 0
+        expected = parameter.get("qualifier_max")
+        actual = resolved.actual_qualifier
+        if not isinstance(expected, str) or not isinstance(actual, str):
+            return 0
+        return max(0, QUALIFIER_ORDER.get(expected, 3) - QUALIFIER_ORDER.get(actual, 3))
 
     @staticmethod
     def _argument_conversion_cost(resolved: ResolvedArgument) -> int:

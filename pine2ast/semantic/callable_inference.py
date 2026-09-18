@@ -218,14 +218,8 @@ class CallableInferenceEngine:
         if selected is not None:
             if not selected.user_selected:
                 return None
-            return next(
-                (
-                    a.argument
-                    for a in selected.resolution.resolved_arguments
-                    if a.parameter is not None and a.parameter.get("name") == parameter.name
-                ),
-                None,
-            )
+            return next((a.argument for a in selected.resolution.resolved_arguments
+                         if a.parameter is not None and a.parameter.get("name") == parameter.name), None)
         named = next((item for item in call.arguments if item.name == parameter.name), None)
         if named is not None:
             return named
@@ -295,11 +289,7 @@ class CallableInferenceEngine:
 
     @staticmethod
     def _merge(values: Iterable[str | None]) -> str:
-        normalized = [
-            str(item)
-            for item in values
-            if item and item not in {"unknown", "any", "na", "function", "method"}
-        ]
+        normalized = [str(item) for item in values if item and item not in {"unknown", "any", "na", "function", "method"}]
         if not normalized:
             return "unknown"
         return merge_type_names(normalized)

@@ -20,3 +20,5 @@ def test_v6_missing_value_functions_reject_bool(function):
     result = parse_code(f'//@version=6\nindicator("bool")\nx={function}(true)\n')
     assert not result.ok
     assert any(d.is_error and "bool" in d.message for d in result.diagnostics)
+
+

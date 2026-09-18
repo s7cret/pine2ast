@@ -99,6 +99,15 @@ class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
         for type_arg in expr.callee.type_args:
             self._validate_type_ref(type_arg)
         type_args = [self._type_ref_name(t) for t in expr.callee.type_args]
+        for index, type_name in enumerate(type_args):
+            nested_base, _ = self._generic_type_parts(type_name)
+            if nested_base in {"array", "map", "matrix"}:
+                self._diag(
+                    Severity.ERROR,
+                    codes.COLLECTION_ELEMENT_TYPE,
+                    f"Collections cannot directly contain collection type {type_name}.",
+                    expr.callee.type_args[index].span,
+                )
         expected_arity = generic_constructor_expected_arity(base)
         if expected_arity is not None and len(type_args) != expected_arity:
             self._diag(

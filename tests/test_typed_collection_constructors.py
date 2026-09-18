@@ -71,18 +71,14 @@ def test_generic_namespace_not_available_in_old_version(version, namespace):
     result = parse_code(f'//@version={version}\nstudy("old")\nx={namespace}.new<{typ}>()\n')
     assert not result.ok
 
-
-@pytest.mark.parametrize(
-    "kind,typename,make,read",
-    [
-        ("array", "array<int>", "array.new<int>(1,2)", "array.get(a,0)"),
-        ("map", "map<string,int>", "map.new<string,int>()", 'map.get(a,"x")'),
-        ("matrix", "matrix<int>", "matrix.new<int>(1,1,2)", "matrix.get(a,0,0)"),
-    ],
-)
-@pytest.mark.parametrize("version", [5, 6])
-def test_later_global_does_not_retype_local_collection(kind, typename, make, read, version):
-    del kind, typename
-    source = f'//@version={version}\nindicator("scope")\nf()=>\n    var a={make}\n    {read}\na=7\nplot(f())\n'
+@pytest.mark.parametrize("kind,typename,make,read",[
+    ("array","array<int>","array.new<int>(1,2)","array.get(a,0)"),
+    ("map","map<string,int>","map.new<string,int>()",'map.get(a,"x")'),
+    ("matrix","matrix<int>","matrix.new<int>(1,1,2)","matrix.get(a,0,0)"),
+])
+@pytest.mark.parametrize("version",[5,6])
+def test_later_global_does_not_retype_local_collection(kind,typename,make,read,version):
+    del kind,typename
+    source=f'//@version={version}\nindicator("scope")\nf()=>\n    var a={make}\n    {read}\na=7\nplot(f())\n'
     assert parse_code(source).ok
     assert build_consumer_bundle(source)

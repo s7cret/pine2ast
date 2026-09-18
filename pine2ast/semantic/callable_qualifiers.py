@@ -42,21 +42,16 @@ class CallableResultQualifierInference:
         }
         functions = analyzer.model.function_candidates
         if functions is not None:
-            self.declarations = {
-                c.symbol_key: c.declaration
-                for c in functions.candidates
-                if all(p.type_ref is not None for p in c.declaration.parameters)
-            }
+            self.declarations = {c.symbol_key: c.declaration for c in functions.candidates
+                                 if all(p.type_ref is not None for p in c.declaration.parameters)}
         owner = analyzer.model.method_candidates
         if owner is not None:
             self.declarations.update(
                 {
                     candidate.symbol_key: candidate.declaration
                     for candidate in owner.candidates
-                    if (
-                        candidate.declaration.receiver_explicit_qualifier is not None
-                        or id(candidate.declaration) in analyzer._projected_exported_functions
-                    )
+                    if (candidate.declaration.receiver_explicit_qualifier is not None
+                        or id(candidate.declaration) in analyzer._projected_exported_functions)
                     and all(p.type_ref is not None for p in candidate.declaration.parameters)
                 }
             )
