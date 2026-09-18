@@ -50,6 +50,7 @@ from .store import (
     source_hash,
     valid_ref,
 )
+from .import_version_matrix import decide_import_versions
 
 PREFIX = "__p2a_library_"
 SCALARS = {"int", "float", "bool", "string", "color"}
@@ -362,12 +363,15 @@ class _Linker:
             raise LibraryError(
                 "P2A_LIBRARY_DECLARATION", "dependency must declare library()", source=ref
             )
-        if unit.program.version_context.pine_version != self.version:
-            raise LibraryError(
-                "P2A_LIBRARY_VERSION_CONTEXT",
-                "mixed Pine-language versions need separate evaluation; not admitted by this linker",
-                source=ref,
+        library_version = unit.program.version_context.pine_version
+        decision, reason = decide_import_versions(self.version, library_version)
+        if decision != "allowed":
+            code = (
+                "P2A_LIBRARY_VERSION"
+                if self.version < 5 or library_version < 5
+                else "P2A_LIBRARY_VERSION_CONTEXT"
             )
+            raise LibraryError(code, reason, source=ref)
         call = unit.program.declaration.call
         title = next(
             (a.value for a in call.arguments if a.name == "title"),
@@ -1045,6 +1049,7 @@ class _Linker:
                 "text": u.text,
                 "sha256": source_hash(u.text),
                 "raw_text": self.root_raw if u is self.root else self.store.source(u.ref),
+                "pine_version": u.program.version_context.pine_version,
             }
             for u in [self.root, *self.units.values()]
         }
