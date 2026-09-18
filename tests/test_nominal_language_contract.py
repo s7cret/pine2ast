@@ -72,14 +72,12 @@ string text = texts.firstValue()
 
 @pytest.mark.parametrize("receiver", ["array.new<float>(1, 2.5)", 'array.new<string>(1, "x")'])
 def test_method_cannot_match_only_the_generic_receiver_base(receiver):
-    result = parse_code(
-        f"""//@version=6
+    result = parse_code(f"""//@version=6
 indicator("wrong receiver")
 method read(array<int> self) => array.get(self, 0)
 value = {receiver}
 x = value.read()
-"""
-    )
+""")
     assert not result.ok
     assert any("receiver" in d.message for d in result.diagnostics)
 
@@ -146,8 +144,7 @@ b = Point.copy(object=p)
     "expression", ["a.copy(1)", "A.copy()", "A.copy(b)", 'A.new(n="wrong")', "A.new(unknown=1)"]
 )
 def test_udt_defaulting_does_not_weaken_constructor_or_copy_validation(expression):
-    result = parse_code(
-        f"""//@version=6
+    result = parse_code(f"""//@version=6
 indicator("invalid objects")
 type A
     int n
@@ -156,8 +153,7 @@ type B
 a = A.new()
 b = B.new()
 x = {expression}
-"""
-    )
+""")
     assert not result.ok
 
 
@@ -182,15 +178,13 @@ state = State.new()
 
 @pytest.mark.parametrize("version", [1, 2, 3, 4])
 def test_nominal_declarations_are_unavailable_before_v5(version):
-    result = parse_code(
-        f"""//@version={version}
+    result = parse_code(f"""//@version={version}
 study("old")
 type State
     varip int ticks
 enum Side
     up = "Up"
-"""
-    )
+""")
     assert not result.ok
 
 

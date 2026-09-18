@@ -17,7 +17,6 @@ from pine2ast.catalog import CatalogRepository
 from pine2ast.hardening.consumer_bundle import ConsumerBundleError, build_consumer_bundle
 from pine2ast.hardening.introspection import ast_payload, parse_source, semantic_facts_payload
 
-
 V5_GENERIC = ["defval", "title", "tooltip", "inline", "group"]
 V6_GENERIC = ["defval", "title", "tooltip", "inline", "group", "display", "active"]
 V6_GENERIC_SOURCE = ["defval", "title", "inline", "group", "tooltip", "display", "active"]
@@ -180,14 +179,12 @@ m=input.enum(A.x,options=[A.x,B.x])
 
 
 def test_active_and_overload_negative_boundaries_are_explicit():
-    compile_ok(
-        """//@version=6
+    compile_ok("""//@version=6
 indicator("active")
 enabled=input.bool(true)
 length=input.int(10,active=enabled)
 plot(length)
-"""
-    )
+""")
     compile_bad(
         """//@version=5
 indicator("active")
@@ -196,18 +193,14 @@ length=input.int(10,active=enabled)
 """,
         "active",
     )
-    compile_bad(
-        """//@version=6
+    compile_bad("""//@version=6
 indicator("mixed")
 length=input.int(10,options=[5,10],minval=1)
-"""
-    )
-    compile_bad(
-        """//@version=6
+""")
+    compile_bad("""//@version=6
 indicator("tail")
 x=input.int(1,"x",0,10,1,"tip","i","g",false,display.all,true,99)
-"""
-    )
+""")
 
 
 def test_generic_scalar_and_source_choose_distinct_overloads():
@@ -229,15 +222,13 @@ plot(a+b)
 
 
 def test_mutated_input_variable_cannot_satisfy_input_qualified_active():
-    compile_bad(
-        """//@version=6
+    compile_bad("""//@version=6
 indicator("mutated")
 enabled=input.bool(true)
 enabled:=false
 length=input.int(10,active=enabled)
 plot(length)
-"""
-    )
+""")
 
 
 def test_ta_rma_has_exact_modern_contract_without_historical_backport():

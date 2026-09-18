@@ -12,7 +12,6 @@ from pine2ast.hardening.consumer_bundle import ConsumerBundleError, build_consum
 from pine2ast.hardening.introspection import semantic_facts_payload
 from tests.stage21_post_audit_catalog import restore_pre_audit_ta_rma
 
-
 FIXTURE = Path(__file__).with_name("fixtures") / "valuewhen_occurrence_metadata.json"
 EXPECTED = json.loads(FIXTURE.read_bytes())
 
