@@ -1,0 +1,1643 @@
+{
+  "content_hash": "sha256:e85eaee6a6fbbb48f86d4be798285a8dba4a654f057c989bdeb0f7b2abe43dbb",
+  "old_versions_unchanged": true,
+  "schema_id": "pine2ast.stage2_audit_catalog_delta.v1",
+  "versions": {
+    "5": {
+      "after_hash": "sha256:b0fb98e350c787459056c89f82b5017a31929b94ba2d6d933967450924b17925",
+      "after_top": {
+        "catalog_hash": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
+        "content_hash": "sha256:c5b4963d5b8b841a91c79f547fe87c5150450501bf336ee67ac632f4c08e98e8",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+        "pine_version": 5,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              4,
+              5
+            ],
+            "assertions": [
+              "study_to_indicator",
+              "builtin_namespace_migration",
+              "tickerid_to_ticker_new",
+              "input_split",
+              "iff_offset_removed",
+              "rsi_overload_removed"
+            ],
+            "id": "tv.migration.v5",
+            "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+          },
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v5",
+            "path": "catalog_migration_inputs/rc5/builtins_v5.rc5.json",
+            "sha256": "sha256:017291cb971d827177609c7254813606d2ef19cb5bda5851374f409f204e2b7e"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": true,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "TRUNCATE",
+            "for_range_end": "FIXED",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "EAGER",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": true,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "STATIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v5",
+              "builtin_named_arguments": "call.named_arguments.all.v5",
+              "condition": "semantic.condition.v5",
+              "const_int_division": "operator.division.const_int.v5",
+              "for_range_end": "control.for_range.fixed_end.v5",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v5",
+              "logical_and": "operator.logical_and.eager.v5",
+              "logical_or": "operator.logical_or.eager.v5",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v5",
+              "na_declaration_type": "type.na_declaration.explicit_required.v5",
+              "qualifier_lattice": "qualifier.modern.v5",
+              "request_default": "request.default.static.v5",
+              "security_lookahead_default": "request.security.lookahead.off.v5",
+              "self_reference_declaration": "binding.self_reference.forbid.v5",
+              "ternary": "operator.ternary.lazy.v5"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": false,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": false,
+              "once_structures": false,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v5",
+              "break_continue": "syntax.break_continue.v5",
+              "comma_statement_separator": "syntax.comma_statement_separator.v5",
+              "compound_assignment": "syntax.compound_assignment.v5",
+              "conditional_structures": "syntax.conditional_structures.v5",
+              "enum_declarations": "syntax.enum_declarations.v5",
+              "exported_const": "syntax.exported_const.v5",
+              "for_in_loops": "syntax.for_in_loops.v5",
+              "for_loops": "syntax.for_loops.v5",
+              "generic_types": "syntax.generic_types.v5",
+              "imports": "syntax.imports.v5",
+              "map_collections": "syntax.map_collections.v5",
+              "matrix_collections": "syntax.matrix_collections.v5",
+              "method_declarations": "syntax.method_declarations.v5",
+              "multiline_strings": "syntax.multiline_strings.v5",
+              "once_structures": "syntax.once_structures.v5",
+              "reassignment": "syntax.reassignment.v5",
+              "switch_structures": "syntax.switch_structures.v5",
+              "tuple_declarations": "syntax.tuple_declarations.v5",
+              "typed_declarations": "syntax.typed_declarations.v5",
+              "udt_declarations": "syntax.udt_declarations.v5",
+              "user_functions": "syntax.user_functions.v5",
+              "var_declarations": "syntax.var_declarations.v5",
+              "varip_declarations": "syntax.varip_declarations.v5",
+              "while_loops": "syntax.while_loops.v5"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+        "spec_snapshot_ref": "tradingview-pine-v5-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "before_hash": "sha256:3c131f24dd43c6c5026b08a5199ade4125d672a2b9a89a751b97cfe672db058f",
+      "before_top": {
+        "catalog_hash": "sha256:3bf7b18aac1a51c8f712051495b77c85d7adb6e9a08751164365624498e38b6d",
+        "content_hash": "sha256:ec24855edbf862339a4473238d5303f786d1db67c2b0bd0309270fa85d0a432d",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+        "pine_version": 5,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              4,
+              5
+            ],
+            "assertions": [
+              "study_to_indicator",
+              "builtin_namespace_migration",
+              "tickerid_to_ticker_new",
+              "input_split",
+              "iff_offset_removed",
+              "rsi_overload_removed"
+            ],
+            "id": "tv.migration.v5",
+            "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+          },
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v5",
+            "path": "catalog_migration_inputs/rc5/builtins_v5.rc5.json",
+            "sha256": "sha256:017291cb971d827177609c7254813606d2ef19cb5bda5851374f409f204e2b7e"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": true,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "TRUNCATE",
+            "for_range_end": "FIXED",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "EAGER",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": true,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "STATIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v5",
+              "builtin_named_arguments": "call.named_arguments.all.v5",
+              "condition": "semantic.condition.v5",
+              "const_int_division": "operator.division.const_int.v5",
+              "for_range_end": "control.for_range.fixed_end.v5",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v5",
+              "logical_and": "operator.logical_and.eager.v5",
+              "logical_or": "operator.logical_or.eager.v5",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v5",
+              "na_declaration_type": "type.na_declaration.explicit_required.v5",
+              "qualifier_lattice": "qualifier.modern.v5",
+              "request_default": "request.default.static.v5",
+              "security_lookahead_default": "request.security.lookahead.off.v5",
+              "self_reference_declaration": "binding.self_reference.forbid.v5",
+              "ternary": "operator.ternary.lazy.v5"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": false,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": false,
+              "once_structures": false,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v5",
+              "break_continue": "syntax.break_continue.v5",
+              "comma_statement_separator": "syntax.comma_statement_separator.v5",
+              "compound_assignment": "syntax.compound_assignment.v5",
+              "conditional_structures": "syntax.conditional_structures.v5",
+              "enum_declarations": "syntax.enum_declarations.v5",
+              "exported_const": "syntax.exported_const.v5",
+              "for_in_loops": "syntax.for_in_loops.v5",
+              "for_loops": "syntax.for_loops.v5",
+              "generic_types": "syntax.generic_types.v5",
+              "imports": "syntax.imports.v5",
+              "map_collections": "syntax.map_collections.v5",
+              "matrix_collections": "syntax.matrix_collections.v5",
+              "method_declarations": "syntax.method_declarations.v5",
+              "multiline_strings": "syntax.multiline_strings.v5",
+              "once_structures": "syntax.once_structures.v5",
+              "reassignment": "syntax.reassignment.v5",
+              "switch_structures": "syntax.switch_structures.v5",
+              "tuple_declarations": "syntax.tuple_declarations.v5",
+              "typed_declarations": "syntax.typed_declarations.v5",
+              "udt_declarations": "syntax.udt_declarations.v5",
+              "user_functions": "syntax.user_functions.v5",
+              "var_declarations": "syntax.var_declarations.v5",
+              "varip_declarations": "syntax.varip_declarations.v5",
+              "while_loops": "syntax.while_loops.v5"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+        "spec_snapshot_ref": "tradingview-pine-v5-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "changes": [
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.b",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.b"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.b",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.b",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.b",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.g",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.g"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.g",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.g",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.g",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.r",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.r"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.r",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.r",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.r",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.t",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.t"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.t",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.t",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.t",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.contains",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.contains"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.contains",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.contains"
+          },
+          "name": "str.contains",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.endswith",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.endswith"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.endswith",
+            "parameters": [],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.endswith"
+          },
+          "name": "str.endswith",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.replace",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "target",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "replacement",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "default": 0,
+                "name": "occurrence",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.replace"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.replace",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.replace"
+          },
+          "name": "str.replace",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.replace_all",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "target",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "replacement",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.replace_all"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.replace_all",
+            "parameters": [],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.replace_all"
+          },
+          "name": "str.replace_all",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.split",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "separator",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "array<string>",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.split"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.split",
+            "parameters": [],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "array<string>",
+            "scope": "any",
+            "symbol_id": "pine:function:str.split"
+          },
+          "name": "str.split",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.startswith",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.startswith"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.startswith",
+            "parameters": [],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.startswith"
+          },
+          "name": "str.startswith",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.substring",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "begin_pos",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "int"
+              },
+              {
+                "name": "end_pos",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.substring"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.substring",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.substring"
+          },
+          "name": "str.substring",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.tostring",
+            "parameter_type_rule_id": "parameter.str.tostring.scalar_or_enum.v1",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "format",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.tostring"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.tostring",
+            "parameters": [],
+            "pine_version": "5",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.tostring"
+          },
+          "name": "str.tostring",
+          "section": "functions"
+        }
+      ]
+    },
+    "6": {
+      "after_hash": "sha256:7ff804d6a91c28ae811240dcf884a064a8c6335ba80bfe9fe08fc1402f25749b",
+      "after_top": {
+        "catalog_hash": "sha256:c0a5765c209518853aa1e27e887c2700fd753d48d3e697ef870b22a5343a0160",
+        "content_hash": "sha256:cdd032dc55c4082ddd22ae1c1f731eb9113ba804ff821aecc220e5b143fa7ccd",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+        "pine_version": 6,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v6",
+            "path": "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+            "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": false,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "FRACTIONAL",
+            "for_range_end": "DYNAMIC",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "LAZY",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": false,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "DYNAMIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v6",
+              "builtin_named_arguments": "call.named_arguments.all.v6",
+              "condition": "semantic.condition.v6",
+              "const_int_division": "operator.division.const_int.v6",
+              "for_range_end": "control.for_range.dynamic_end.v6",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v6",
+              "logical_and": "operator.logical_and.lazy.v6",
+              "logical_or": "operator.logical_or.lazy.v6",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v6",
+              "na_declaration_type": "type.na_declaration.explicit_required.v6",
+              "qualifier_lattice": "qualifier.modern.v6",
+              "request_default": "request.default.dynamic.v6",
+              "security_lookahead_default": "request.security.lookahead.off.v6",
+              "self_reference_declaration": "binding.self_reference.forbid.v6",
+              "ternary": "operator.ternary.lazy.v6"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": true,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": true,
+              "once_structures": true,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "keyword_additions": {
+              "once": {
+                "introduced": "2026-08",
+                "name": "once",
+                "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure"
+              }
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v6",
+              "break_continue": "syntax.break_continue.v6",
+              "comma_statement_separator": "syntax.comma_statement_separator.v6",
+              "compound_assignment": "syntax.compound_assignment.v6",
+              "conditional_structures": "syntax.conditional_structures.v6",
+              "enum_declarations": "syntax.enum_declarations.v6",
+              "exported_const": "syntax.exported_const.v6",
+              "for_in_loops": "syntax.for_in_loops.v6",
+              "for_loops": "syntax.for_loops.v6",
+              "generic_types": "syntax.generic_types.v6",
+              "imports": "syntax.imports.v6",
+              "map_collections": "syntax.map_collections.v6",
+              "matrix_collections": "syntax.matrix_collections.v6",
+              "method_declarations": "syntax.method_declarations.v6",
+              "multiline_strings": "syntax.multiline_strings.v6",
+              "once_structures": "syntax.once_structures.v6",
+              "reassignment": "syntax.reassignment.v6",
+              "switch_structures": "syntax.switch_structures.v6",
+              "tuple_declarations": "syntax.tuple_declarations.v6",
+              "typed_declarations": "syntax.typed_declarations.v6",
+              "udt_declarations": "syntax.udt_declarations.v6",
+              "user_functions": "syntax.user_functions.v6",
+              "var_declarations": "syntax.var_declarations.v6",
+              "varip_declarations": "syntax.varip_declarations.v6",
+              "while_loops": "syntax.while_loops.v6"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+        "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "before_hash": "sha256:7dd1a2d672f883f97110421dc139e3049397fbab5e3f48a9c990a1fb3ed40b1f",
+      "before_top": {
+        "catalog_hash": "sha256:4d15b6417dc1e62ee15ff695ee162f3740a6ebe1a77ec90db4cf6eb850ca7c22",
+        "content_hash": "sha256:3c8644a0f39782bbe5193a632f8efce85f075eafa9cc78cd6f39ee552569ced7",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+        "pine_version": 6,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v6",
+            "path": "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+            "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": false,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "FRACTIONAL",
+            "for_range_end": "DYNAMIC",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "LAZY",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": false,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "DYNAMIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v6",
+              "builtin_named_arguments": "call.named_arguments.all.v6",
+              "condition": "semantic.condition.v6",
+              "const_int_division": "operator.division.const_int.v6",
+              "for_range_end": "control.for_range.dynamic_end.v6",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v6",
+              "logical_and": "operator.logical_and.lazy.v6",
+              "logical_or": "operator.logical_or.lazy.v6",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v6",
+              "na_declaration_type": "type.na_declaration.explicit_required.v6",
+              "qualifier_lattice": "qualifier.modern.v6",
+              "request_default": "request.default.dynamic.v6",
+              "security_lookahead_default": "request.security.lookahead.off.v6",
+              "self_reference_declaration": "binding.self_reference.forbid.v6",
+              "ternary": "operator.ternary.lazy.v6"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": true,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": true,
+              "once_structures": true,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "keyword_additions": {
+              "once": {
+                "introduced": "2026-08",
+                "name": "once",
+                "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure"
+              }
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v6",
+              "break_continue": "syntax.break_continue.v6",
+              "comma_statement_separator": "syntax.comma_statement_separator.v6",
+              "compound_assignment": "syntax.compound_assignment.v6",
+              "conditional_structures": "syntax.conditional_structures.v6",
+              "enum_declarations": "syntax.enum_declarations.v6",
+              "exported_const": "syntax.exported_const.v6",
+              "for_in_loops": "syntax.for_in_loops.v6",
+              "for_loops": "syntax.for_loops.v6",
+              "generic_types": "syntax.generic_types.v6",
+              "imports": "syntax.imports.v6",
+              "map_collections": "syntax.map_collections.v6",
+              "matrix_collections": "syntax.matrix_collections.v6",
+              "method_declarations": "syntax.method_declarations.v6",
+              "multiline_strings": "syntax.multiline_strings.v6",
+              "once_structures": "syntax.once_structures.v6",
+              "reassignment": "syntax.reassignment.v6",
+              "switch_structures": "syntax.switch_structures.v6",
+              "tuple_declarations": "syntax.tuple_declarations.v6",
+              "typed_declarations": "syntax.typed_declarations.v6",
+              "udt_declarations": "syntax.udt_declarations.v6",
+              "user_functions": "syntax.user_functions.v6",
+              "var_declarations": "syntax.var_declarations.v6",
+              "varip_declarations": "syntax.varip_declarations.v6",
+              "while_loops": "syntax.while_loops.v6"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+        "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "changes": [
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.b",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.b"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.b",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.b",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.b",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.g",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.g"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.g",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.g",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.g",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.r",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.r"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.r",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.r",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.r",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "color.t",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.t"
+          },
+          "before": {
+            "allow_extra_positional": true,
+            "kind": "builtin",
+            "name": "color.t",
+            "parameters": [
+              {
+                "name": "color",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "color"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "float",
+            "scope": "any",
+            "symbol_id": "pine:function:color.t",
+            "unsupported_diagnostic_code": "P2A1507"
+          },
+          "name": "color.t",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.contains",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.contains"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.contains",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.contains"
+          },
+          "name": "str.contains",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.endswith",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.endswith"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.endswith",
+            "parameters": [],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.endswith"
+          },
+          "name": "str.endswith",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.replace",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "target",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "replacement",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "default": 0,
+                "name": "occurrence",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.replace"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.replace",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.replace"
+          },
+          "name": "str.replace",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.replace_all",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "target",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "replacement",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.replace_all"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.replace_all",
+            "parameters": [],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.replace_all"
+          },
+          "name": "str.replace_all",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.split",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "separator",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "array<string>",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.split"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.split",
+            "parameters": [],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "array<string>",
+            "scope": "any",
+            "symbol_id": "pine:function:str.split"
+          },
+          "name": "str.split",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.startswith",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "str",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.startswith"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.startswith",
+            "parameters": [],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "bool",
+            "scope": "any",
+            "symbol_id": "pine:function:str.startswith"
+          },
+          "name": "str.startswith",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.substring",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "begin_pos",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "int"
+              },
+              {
+                "name": "end_pos",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.substring"
+          },
+          "before": {
+            "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
+            "kind": "builtin",
+            "name": "str.substring",
+            "parameters": [
+              {
+                "name": "source",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "series<any>"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.substring"
+          },
+          "name": "str.substring",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "str.tostring",
+            "parameter_type_rule_id": "parameter.str.tostring.scalar_or_enum.v1",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "format",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
+            "symbol_id": "pine:function:str.tostring"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "str.tostring",
+            "parameters": [],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "string",
+            "scope": "any",
+            "symbol_id": "pine:function:str.tostring"
+          },
+          "name": "str.tostring",
+          "section": "functions"
+        }
+      ]
+    }
+  }
+}

@@ -399,6 +399,49 @@ def test_v6_rejects_removed_bare_global_builtin_names(name: str) -> None:
         if item.is_error
     )
 
+    # Run the Stage 2.1 public-surface guard once without adding parametrized
+    # inventory nodes.  Generic collection constructors remain valid, while
+    # migrated compatibility rows absent from the official v6 name index fail
+    # closed instead of becoming accidental Pine syntax.
+    if name == "barssince":
+        invalid_sources = {
+            "array.new": '//@version=6\nindicator("x")\nx = array.new(1, 0)\n',
+            "array.from<int>": '//@version=6\nindicator("x")\nx = array.from<int>(1, 2)\n',
+            "array.percentile": '//@version=6\nindicator("x")\nx = array.percentile(array.from(1.0), 50)\n',
+            "request.news": '//@version=6\nindicator("x")\nx = request.news("NASDAQ:AAPL")\n',
+            "strategy.closedtrades()": '//@version=6\nstrategy("x")\nx = strategy.closedtrades()\n',
+            "strategy.opentrades()": '//@version=6\nstrategy("x")\nx = strategy.opentrades()\n',
+            "ta.obv()": '//@version=6\nindicator("x")\nx = ta.obv()\n',
+        }
+        for label, invalid_source in invalid_sources.items():
+            invalid = parse_code(invalid_source)
+            assert any(
+                item.code == codes.VERSION_CALL_UNAVAILABLE
+                for item in invalid.diagnostics
+                if item.is_error
+            ), (label, [(item.code, item.message) for item in invalid.diagnostics])
+
+        for valid_source in (
+            '//@version=6\nindicator("x")\nx = array.from(1, 2)\n',
+            '//@version=6\nindicator("x")\nx = array.new<int>(1, 0)\n',
+            '//@version=6\nindicator("x")\nx = map.new<string, float>()\n',
+            '//@version=6\nindicator("x")\nx = matrix.new<float>(1, 1, 0.0)\n',
+        ):
+            valid = parse_code(valid_source)
+            assert valid.ok, [(item.code, item.message) for item in valid.diagnostics]
+
+        for alias in (
+            "strategy.risk.cash",
+            "strategy.risk.fixed",
+            "strategy.risk.percent_of_equity",
+        ):
+            invalid = parse_code(f'//@version=6\nstrategy("x")\nx = {alias}\n')
+            assert any(
+                item.code == codes.VERSION_FEATURE_UNAVAILABLE and alias in item.message
+                for item in invalid.diagnostics
+                if item.is_error
+            ), [(item.code, item.message) for item in invalid.diagnostics]
+
 
 def test_receiver_diagnostic_is_stable_across_hash_seeds() -> None:
     root = Path(__file__).resolve().parents[2]

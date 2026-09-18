@@ -14,6 +14,7 @@ import copy
 import hashlib
 import json
 import shutil
+import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any
@@ -122,6 +123,7 @@ QUALIFIER_MAX_OVERRIDES: dict[str, dict[str, str]] = {
 # The pinned RC5 registry contained name-only entries for these admitted calls.
 SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
     "na": [{"name": "x", "required": True, "type": "any"}],
+    "bool": [{"name": "value", "required": True, "type": "any"}],
     "ta.supertrend": [
         {"name": "factor", "required": True, "type": "float"},
         {"name": "atrPeriod", "required": True, "type": "int"},
@@ -135,8 +137,210 @@ SIGNATURE_OVERRIDES: dict[str, list[dict[str, Any]]] = {
 }
 
 
-def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
+_MISSING = object()
+
+
+def _input_parameter(
+    name: str,
+    type_name: str,
+    *,
+    required: bool = False,
+    qualifier: str = "const",
+    default: Any = _MISSING,
+) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "name": name,
+        "required": required,
+        "type": type_name,
+        "qualifier_max": qualifier,
+    }
+    if default is not _MISSING:
+        row["default"] = default
+    return row
+
+
+def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
+    """Return the audited v5/v6 input signature without rewriting source snapshots.
+
+    Pine v5 input parameters are const except source/enum values. Pine v6 adds
+    ``active`` as an input-qualified bool. Return qualifiers are ``input`` for
+    configuration values and ``series`` only for source inputs.
+    """
+    if version not in {5, 6} or not (name == "input" or name.startswith("input.")):
+        return None
+    active = (
+        [_input_parameter("active", "bool", qualifier="input", default=True)]
+        if version >= 6
+        else []
+    )
+    display_all = _input_parameter("display", "display", default="display.all")
+    display_none = _input_parameter("display", "display", default="display.none")
+    title = _input_parameter("title", "string", default="")
+    tooltip = _input_parameter("tooltip", "string", default="")
+    inline = _input_parameter("inline", "string", default="")
+    group = _input_parameter("group", "string", default="")
+    confirm = _input_parameter("confirm", "bool", default=False)
+
+    def fixed(
+        def_type: str,
+        returns: str,
+        *,
+        options: str | None = None,
+        include_inline: bool = True,
+        display_none_default: bool = False,
+        include_confirm: bool = True,
+    ) -> dict[str, Any]:
+        parameters = [_input_parameter("defval", def_type, required=True), title]
+        if options is not None:
+            parameters.append(_input_parameter("options", options))
+        parameters.extend([tooltip])
+        if include_inline:
+            parameters.append(inline)
+        parameters.append(group)
+        if include_confirm:
+            parameters.append(confirm)
+        parameters.extend([display_none if display_none_default else display_all, *active])
+        return {"parameters": parameters, "returns": returns, "return_qualifier": "input"}
+
+    if name == "input":
+        # The archived v5 manual fixes the generic signature at five arguments.
+        # v6 adds display and active.  Do not infer those modern parameters from
+        # the current reference when materializing the historical v5 pack.
+        base = [title, tooltip, inline, group]
+        if version >= 6:
+            base.extend([display_all, *active])
+        overloads = []
+        for dtype in ("int", "float", "bool", "color", "string"):
+            overloads.append(
+                {
+                    "parameters": [_input_parameter("defval", dtype, required=True), *base],
+                    "returns": dtype,
+                    "return_qualifier": "input",
+                }
+            )
+        # The source overload is intentionally separate because its default and
+        # result are series-qualified. Keep the historical parameter order used
+        # by the compiler's named-argument binder.
+        source_tail = (
+            [title, tooltip, inline, group]
+            if version == 5
+            else [title, inline, group, tooltip, display_all, *active]
+        )
+        overloads.append(
+            {
+                "parameters": [
+                    _input_parameter("defval", "float", required=True, qualifier="series"),
+                    *source_tail,
+                ],
+                "returns": "float",
+                "return_qualifier": "series",
+            }
+        )
+        return {
+            "parameters": [_input_parameter("defval", "any", required=True), *base],
+            "overloads": overloads,
+            "returns": "any",
+            "return_rule_id": "return.input.defval_type.v1",
+            "return_qualifier_rule_id": "qualifier.input.defval.v1",
+        }
+    if name in {"input.int", "input.float"}:
+        dtype = name.rsplit(".", 1)[1]
+        bounded = [
+            _input_parameter("defval", dtype, required=True),
+            title,
+            _input_parameter("minval", dtype),
+            _input_parameter("maxval", dtype),
+            _input_parameter("step", dtype, default=1),
+            tooltip,
+            inline,
+            group,
+            confirm,
+            display_all,
+            *active,
+        ]
+        selected = [
+            _input_parameter("defval", dtype, required=True),
+            title,
+            _input_parameter("options", f"array<{dtype}>", required=True),
+            tooltip,
+            inline,
+            group,
+            confirm,
+            display_all,
+            *active,
+        ]
+        if version == 5:
+            # The v5 concepts manual publishes both numeric overloads without
+            # display.  Preserve that exact historical signature instead of
+            # backporting the v6 tail.
+            bounded = [item for item in bounded if item["name"] != "display"]
+            selected = [item for item in selected if item["name"] != "display"]
+        return {
+            "parameters": bounded,
+            "overloads": [{"parameters": selected, "returns": dtype, "return_qualifier": "input"}],
+            "returns": dtype,
+            "return_qualifier": "input",
+        }
+    if name == "input.bool":
+        return fixed("bool", "bool", display_none_default=True)
+    if name == "input.color":
+        return fixed("color", "color", display_none_default=True)
+    if name == "input.enum":
+        result = fixed("any", "unknown", options="array<any>")
+        result["return_rule_id"] = "return.input.enum_type.v1"
+        result["parameter_type_rule_id"] = "parameter.input.same_enum_type.v1"
+        return result
+    if name == "input.source":
+        parameters = [
+            _input_parameter("defval", "float", required=True, qualifier="series"),
+            title,
+            tooltip,
+            inline,
+            group,
+            display_all,
+            *active,
+            confirm,
+        ]
+        return {"parameters": parameters, "returns": "float", "return_qualifier": "series"}
+    if name == "input.text_area":
+        return fixed("string", "string", include_inline=False, display_none_default=True)
+    table = {
+        "input.string": ("string", "string", "array<string>"),
+        "input.symbol": ("string", "string", None),
+        "input.timeframe": ("string", "string", "array<string>"),
+        "input.session": ("string", "string", "array<string>"),
+        "input.time": ("int", "int", None),
+        "input.price": ("float", "float", None),
+    }
+    if name in table:
+        dtype, returns, options = table[name]
+        return fixed(dtype, returns, options=options)
+    return None
+
+
+def enrich_callable_contract(
+    name: str, definition: dict[str, Any], *, version: int | None = None
+) -> None:
     """Complete callable qualifier metadata before catalog sealing."""
+
+    contract = _modern_input_contract(name, version) if version is not None else None
+    if contract is not None:
+        for key in (
+            "parameters",
+            "overloads",
+            "returns",
+            "return_rule_id",
+            "return_qualifier",
+            "return_qualifier_rule_id",
+            "parameter_type_rule_id",
+            "allow_extra_positional",
+        ):
+            definition.pop(key, None)
+        definition.update(copy.deepcopy(contract))
+        # The audited input contracts are exact callable signatures. Historical
+        # permissive rows must not continue accepting undeclared positional tails.
+        definition["allow_extra_positional"] = False
+        definition["input_contract_revision"] = 2
 
     # The v5/v6 reference requires one string argument for these functions.
     if name in {"str.upper", "str.lower", "str.tonumber"}:
@@ -166,6 +370,26 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
     # This metadata belongs to the function, never the historical input constant.
     if name == "float":
         definition["added_in"] = 4
+
+    # Stage 2.3 re-audit correction: the frozen RC5 modern snapshots marked
+    # polyline.new as forbidden in local blocks, but TradingView documents
+    # drawing constructors (including polyline.new) as callable from local
+    # scopes. Preserve the frozen source bytes and correct the materialized
+    # semantic contract here, alongside the other audited source corrections.
+    if name == "polyline.new" and version in {5, 6}:
+        definition.pop("forbidden_in_local_blocks", None)
+        definition["scope"] = "any"
+
+    # Stage 2.1 audit correction: the frozen modern source had a name-only
+    # ta.rma row.  Materialize the v5/v6 callable contract here so generated
+    # packs, compiler binding and runtime ABI share one owner.  Historical
+    # projections are intentionally left untouched.
+    if name == "ta.rma" and version in {5, 6}:
+        definition["parameters"] = [
+            {"name": "source", "required": True, "type": "float", "qualifier_max": "series"},
+            {"name": "length", "required": True, "type": "int", "qualifier_max": "simple"},
+        ]
+        definition["returns"] = "series<float>"
 
     # Both official modern reference payloads admit a per-call series bool.
     # Preserve earlier projections separately until their exact signature is
@@ -216,11 +440,37 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
         for parameter in definition.get("parameters", []):
             if parameter.get("name") == "values":
                 parameter["variadic"] = True
+    if contract is None and name in {"input.int", "input.float"}:
+        by_name = {p["name"]: copy.deepcopy(p) for p in definition.get("parameters", [])}
+        for overload in definition.get("overloads", []):
+            for parameter in overload.get("parameters", []):
+                by_name.setdefault(parameter["name"], copy.deepcopy(parameter))
+        common = ["tooltip", "inline", "group", "confirm", "display", "active"]
+        bounded = ["defval", "title", "minval", "maxval", "step", *common]
+        selected = ["defval", "title", "options", *common]
+        definition["parameters"] = [by_name[n] for n in bounded if n in by_name]
+        if "options" in by_name:
+            options = [by_name[n] for n in selected if n in by_name]
+            next(p for p in options if p["name"] == "options")["required"] = True
+            definition["overloads"] = [{"parameters": options, "returns": definition["returns"]}]
+    modern_generic = (
+        contract is None
+        and name == "input"
+        and not any(p.get("name") == "type" for p in definition.get("parameters", []))
+    )
+    if modern_generic:
+        source = copy.deepcopy(definition.get("parameters", []))
+        default = next(p for p in source if p["name"] == "defval")
+        default.update(type="float", qualifier_max="series", required=True)
+        definition["overloads"] = [{"parameters": source, "returns": "float"}]
     candidates = [definition]
     overloads = definition.get("overloads")
     if isinstance(overloads, list):
         candidates.extend(item for item in overloads if isinstance(item, dict))
-    overrides = QUALIFIER_MAX_OVERRIDES.get(name, {})
+    # Exact modern input contracts already carry their audited qualifier ceilings.
+    # Legacy correction tables must not overwrite source/enum qualifiers after the
+    # version-specific contract has been materialized.
+    overrides = {} if contract is not None else QUALIFIER_MAX_OVERRIDES.get(name, {})
     for candidate in candidates:
         for parameter in candidate.get("parameters", []):
             if not isinstance(parameter, dict):
@@ -240,6 +490,10 @@ def enrich_callable_contract(name: str, definition: dict[str, Any]) -> None:
                     "qualifier_max", overrides.get(str(parameter.get("name")), "series")
                 )
         candidate.setdefault("return_qualifier", "series")
+    if modern_generic:
+        next(p for p in definition["overloads"][0]["parameters"] if p["name"] == "defval")[
+            "qualifier_max"
+        ] = "series"
     if name == "array.from" and isinstance(definition.get("parameters"), list):
         for parameter in definition["parameters"]:
             if isinstance(parameter, dict) and parameter.get("name") == "values":
@@ -305,7 +559,7 @@ def symbol_id(section: str, name: str) -> str:
 
 
 def normalized_definition(
-    section: str, name: str, raw: Any, *, sid: str | None = None
+    section: str, name: str, raw: Any, *, sid: str | None = None, version: int | None = None
 ) -> dict[str, Any]:
     definition = copy.deepcopy(raw) if isinstance(raw, Mapping) else {"value": raw}
     for key in DROP_FIELDS:
@@ -313,7 +567,7 @@ def normalized_definition(
     definition.pop("name", None)
     definition = normalize(definition)
     if section in {"functions", "methods"}:
-        enrich_callable_contract(name, definition)
+        enrich_callable_contract(name, definition, version=version)
         active_sid = sid or symbol_id(section, name)
         overloads = definition.get("overloads")
         if isinstance(overloads, list):
@@ -345,6 +599,7 @@ def record(
     *,
     sid: str | None = None,
     provenance: str,
+    version: int | None = None,
 ) -> dict[str, Any]:
     active_sid = sid or symbol_id(section, name)
     return {
@@ -352,7 +607,7 @@ def record(
         "kind": SECTION_KIND[section],
         "section": section,
         "name": name,
-        "definition": normalized_definition(section, name, raw, sid=active_sid),
+        "definition": normalized_definition(section, name, raw, sid=active_sid, version=version),
         "provenance": provenance,
     }
 
@@ -364,7 +619,7 @@ def flatten_modern(registry: Mapping[str, Any], version: int) -> dict[str, dict[
         if not isinstance(mapping, Mapping):
             raise ValueError(f"registry section {section} must be an object")
         for name, raw in sorted(mapping.items()):
-            item = record(section, str(name), raw, provenance=f"rc5.v{version}")
+            item = record(section, str(name), raw, provenance=f"rc5.v{version}", version=version)
             if item["symbol_id"] in result:
                 raise ValueError(f"duplicate symbol identity {item['symbol_id']}")
             result[item["symbol_id"]] = item
@@ -577,6 +832,11 @@ def project_v4(
                 definition = rename_parameters(definition, {"number": "x"})
             elif name == "nz":
                 definition = rename_parameters(definition, {"source": "x", "replacement": "y"})
+            elif name == "ta.rma":
+                # The repaired callable contract is independently scoped to v5/v6.
+                # Preserve the previously frozen historical rma rows byte-for-byte.
+                definition["parameters"] = []
+                definition["returns"] = "float"
             elif name in {"ta.variance", "ta.stdev"}:
                 # This correction is sourced for v5/v6 only. Do not back-project
                 # its additional parameter into the retained historical surface.
@@ -944,7 +1204,7 @@ def materialize_pack(
         definition = copy.deepcopy(item["definition"])
         definition.update({"symbol_id": sid, "name": item["name"]})
         if item["section"] in {"functions", "methods"}:
-            enrich_callable_contract(str(item["name"]), definition)
+            enrich_callable_contract(str(item["name"]), definition, version=version)
             overloads = definition.get("overloads")
             if isinstance(overloads, list):
                 for index, overload in enumerate(overloads):
@@ -1013,7 +1273,9 @@ def compare_lossless_modern(
             )
             continue
         for name, raw in expected_map.items():
-            expected = normalized_definition(section, name, raw)
+            expected = normalized_definition(section, name, raw, version=version)
+            if section == "functions":
+                apply_stage2_audit_contract(name, expected, version)
             actual = copy.deepcopy(actual_map[name])
             for key in ("symbol_id", "name", "pine_version", "static_rule_id"):
                 actual.pop(key, None)
@@ -1028,6 +1290,59 @@ def compare_lossless_modern(
                     }
                 )
     return losses
+
+
+def apply_stage2_audit_contract(name: str, definition: dict[str, Any], version: int) -> None:
+    """Reviewed modern overrides, applied AFTER historical projection.
+
+    Do not rewrite archived input registries or project the modern signatures
+    into v1-v4. Semantic source/deltas and materialized packs share these rules.
+    Authority: official Pine string concepts and enum/type system manuals.
+    """
+    if version not in {5, 6}:
+        return
+
+    def parameter(name: str, type_name: str, required: bool = True, **extra: Any) -> dict[str, Any]:
+        return {
+            "name": name,
+            "type": type_name,
+            "required": required,
+            "qualifier_max": "series",
+            **extra,
+        }
+
+    contracts = {
+        "str.contains": [parameter("source", "string"), parameter("str", "string")],
+        "str.startswith": [parameter("source", "string"), parameter("str", "string")],
+        "str.endswith": [parameter("source", "string"), parameter("str", "string")],
+        "str.substring": [
+            parameter("source", "string"),
+            parameter("begin_pos", "int"),
+            parameter("end_pos", "int", False),
+        ],
+        "str.replace": [
+            parameter("source", "string"),
+            parameter("target", "string"),
+            parameter("replacement", "string"),
+            parameter("occurrence", "int", False, default=0),
+        ],
+        "str.replace_all": [
+            parameter("source", "string"),
+            parameter("target", "string"),
+            parameter("replacement", "string"),
+        ],
+        "str.split": [parameter("source", "string"), parameter("separator", "string")],
+        "str.tostring": [parameter("value", "any"), parameter("format", "string", False)],
+    }
+    if name in contracts:
+        definition["parameters"] = contracts[name]
+        definition.pop("allow_extra_positional", None)
+        definition["signature_source"] = "stage2_audit_repair_official_strings_2026_09_18"
+    if name == "str.tostring":
+        definition["parameter_type_rule_id"] = "parameter.str.tostring.scalar_or_enum.v1"
+    if name in {"color.r", "color.g", "color.b", "color.t"}:
+        definition.pop("unsupported_diagnostic_code", None)
+        definition.pop("allow_extra_positional", None)
 
 
 def main() -> int:
@@ -1081,6 +1396,11 @@ def main() -> int:
     version_items[1] = project_v1(version_items[2], projection)
     version_items[5] = modern5
     version_items[6] = modern6
+    # The v1-v4 projected records have already been deep-copied above.
+    for version in (5, 6):
+        for item in version_items[version].values():
+            if item["section"] == "functions":
+                apply_stage2_audit_contract(item["name"], item["definition"], version)
 
     # Build canonical symbols and content-addressed semantics from all versions.
     canonical: dict[str, dict[str, Any]] = {}
@@ -1161,7 +1481,7 @@ def main() -> int:
     }
     manifest = {**manifest_body, "content_hash": digest(manifest_body)}
 
-    temp = root / ".catalog-build-tmp"
+    temp = Path(tempfile.gettempdir()) / f"catalog-build-tmp-{root.name}"
     shutil.rmtree(temp, ignore_errors=True)
     (temp / "source" / "deltas").mkdir(parents=True)
     (temp / "packs").mkdir(parents=True)

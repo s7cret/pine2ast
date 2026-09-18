@@ -77,8 +77,6 @@ class SemanticAnalyzer(
     AnalyzerValidationMixin,
     AnalyzerScopeMixin,
 ):
-    _method_visibility: object | None
-
     def __init__(
         self,
         *,
@@ -130,6 +128,10 @@ class SemanticAnalyzer(
         self._script_type: str | None = None
         self._reassigned_names: set[str] = set()
         self._reassigned_declarations: frozenset[int] = frozenset()
+        # Direct reassignment of a UDF/method parameter (including a method
+        # receiver) is forbidden by Pine. The stack follows lexical callable
+        # scopes; reference-object field/setter mutation remains allowed.
+        self._callable_parameter_ids: list[set[int]] = []
         self.pass_results: tuple[PassResult, ...] = ()
 
     def analyze(self, program: Program) -> SemanticModel:
@@ -289,11 +291,11 @@ class SemanticAnalyzer(
                 self._predeclared_nodes.add(id(item))
                 self._user_method_params[method_key] = item.parameters
                 if receiver_name:
-                    receiver_set = self._method_receivers.get(item.name)
-                    if isinstance(receiver_set, set):
-                        receiver_set.add(receiver_name)
-                    elif isinstance(receiver_set, str):
-                        self._method_receivers[item.name] = {receiver_set, receiver_name}
+                    existing = self._method_receivers.get(item.name)
+                    if isinstance(existing, set):
+                        existing.add(receiver_name)
+                    elif isinstance(existing, str):
+                        self._method_receivers[item.name] = {existing, receiver_name}
                     else:
                         self._method_receivers[item.name] = receiver_name
             elif isinstance(item, TypeDeclaration):

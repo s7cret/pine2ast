@@ -108,7 +108,7 @@ def _syntax(code: str) -> Program:
 
 def _payload(linked: LinkedSource) -> dict[str, Any]:
     receipt = linked.receipt()
-    generated: dict[tuple[type, str], list[FunctionDeclaration | MethodDeclaration]] = {}
+    generated = {}
     for node in _syntax(linked.code).items:
         if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
             generated.setdefault((type(node), node.name), []).append(node)

@@ -5,3 +5,5 @@ recursive-include pine2ast/reference_catalog *.json
 recursive-include catalog_source *.json *.jsonl
 recursive-include catalog_reports *.json
 recursive-include catalog_migration_inputs *.json
+
+recursive-include pine2ast/hardening *.json

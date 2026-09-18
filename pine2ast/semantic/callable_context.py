@@ -4,14 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, fields, replace
 from types import MappingProxyType
-from typing import Any, Mapping, cast
+from typing import Any, Mapping
 
 from pine2ast.ast.base import ASTNode
 from pine2ast.ast.nodes import (
     CallExpr,
     FunctionDeclaration,
     Identifier,
-    MemberAccessExpr,
     Program,
     TypeDeclaration,
     VarDeclaration,
@@ -213,11 +212,7 @@ class CallableContext:
         )
         if not isinstance(call.callee, Identifier) and namespace_owner is None:
             return None
-        name = (
-            call.callee.name
-            if isinstance(call.callee, Identifier)
-            else cast(MemberAccessExpr, call.callee).member
-        )
+        name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
         selected = self.functions.resolve(call, caller) if self.functions is not None else None
         candidate = selected.candidate if selected is not None and selected.user_selected else None
         if (

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, cast
+from typing import Any
 
 from pine2ast.ast.nodes import (
     CallExpr,
@@ -227,10 +227,8 @@ class MethodCandidates:
         if id(call) in self.active:
             return self._limit(call, "unknown")
         self.active.add(id(call))
-        # The admitted name above excludes non-identifier/non-member callees.
-        dot_callee = cast(MemberAccessExpr, call.callee)
         try:
-            receiver = "unknown" if explicit else engine.infer_type(dot_callee.object)
+            receiver = "unknown" if explicit else engine.infer_type(call.callee.object)
             candidates = (
                 self.by_name[name] if explicit else self.by_receiver_name.get((receiver, name), ())
             )
@@ -259,10 +257,10 @@ class MethodCandidates:
             if explicit:
                 entries = [self.explicit_entry(c, symbols=engine.symbols) for c in candidates]
             elif any(c.declaration.receiver_explicit_qualifier is not None for c in candidates):
-                value = engine.infer_value(dot_callee.object)
+                value = engine.infer_value(call.callee.object)
                 receiver_evidence = ReceiverArgumentEvidence(
-                    self.index.id_for(dot_callee.object),
-                    dot_callee.object.span,
+                    self.index.id_for(call.callee.object),
+                    call.callee.object.span,
                     receiver,
                     value.qualifier,
                     value.can_be_na,

@@ -110,10 +110,6 @@ class SemanticFactBuilder:
         self._constant_roots: set[int] = set()
         self._constant_work = const_functions.ConstantWork()
         self._constant_global_scopes: dict[str, dict[str, VarDeclaration]] = {}
-        # Identifier object id -> its source declaration.  `SemanticModel.symbols`
-        # is intentionally a final/public name view, so it cannot represent two
-        # same-named locals at distinct occurrences after their scopes have closed.
-        self._lexical_declarations: dict[int, ASTNode | str] = {}
 
     def build(self, program: Program) -> SemanticFactsBundle:
         if program.version_context != self.version_context:
@@ -125,7 +121,6 @@ class SemanticFactBuilder:
 
         self.index = NodeIndex.build(program)
         self._index_declarations(program)
-        self._index_lexical_declarations(program)
         self._assign_scopes(program, "scope:global")
         self._resolve_calls(program)
         from pine2ast.semantic.call_graph import reject_recursive_calls
@@ -146,18 +141,6 @@ class SemanticFactBuilder:
         artifact_body = {
             "schema_id": "pine.semantic_facts.v1",
             "schema_version": "1.0.0",
-            "capabilities": ["implicit_lexical_binder_ids_v1", "lexical_binding_ids_v1"],
-            "symbol_id_contract": {
-                "identifier_declarations": "exact_declaration_fact_symbol_id",
-                "scope": "variables_parameters_tuple_targets_implicit_binders",
-                "callable_references": "resolved_call_facts",
-                "implicit_binders": {
-                    "for_in": "user:forinstructure:<name>:<owner_node_id>:role:target",
-                    "for_range": "user:forrangestructure:<name>:<owner_node_id>:role:iterator",
-                    "method_receiver": "user:methodreceiver:<name>:<owner_node_id>:role:receiver",
-                },
-                "version": "1",
-            },
             "version_context": self.version_context.to_dict(),
             "version_context_ref": sha256_id(self.version_context.to_dict()),
             "catalog_hash": self.version_context.catalog_hash,
@@ -193,143 +176,6 @@ class SemanticFactBuilder:
         for node in self.index.nodes if self.index else ():
             if isinstance(node, (FunctionDeclaration, MethodDeclaration, TypeDeclaration)):
                 self._declarations[self._declaration_key(node)] = node
-
-    def _index_lexical_declarations(self, program: Program) -> None:
-        """Record the declaration selected at every identifier occurrence.
-
-        This mirrors the analyzer's source-order scope rules instead of deriving
-        bindings from its final `model.symbols` snapshot.  v1/v2's documented
-        global forward-reference policy is deliberately limited to global
-        ``VarDeclaration`` nodes; later versions and all local scopes remain
-        source ordered.
-        """
-
-        assert self.index is not None
-        global_scope: dict[str, ASTNode | str | None] = {}
-        if self.policy.allows_forward_reference:
-            for item in program.items:
-                if isinstance(item, VarDeclaration):
-                    global_scope[item.name] = item
-        self._index_lexical_sequence(program.items, [global_scope])
-
-    def _index_lexical_sequence(
-        self,
-        nodes: Iterable[ASTNode],
-        scopes: list[dict[str, ASTNode | str | None]],
-    ) -> None:
-        for node in nodes:
-            self._index_lexical_node(node, scopes)
-
-    def _index_lexical_block(
-        self,
-        block: Block | Expression,
-        scopes: list[dict[str, ASTNode | str | None]],
-    ) -> None:
-        if isinstance(block, Block):
-            self._index_lexical_sequence(block.statements, [*scopes, {}])
-        else:
-            self._index_lexical_node(block, scopes)
-
-    def _index_lexical_node(
-        self,
-        node: ASTNode,
-        scopes: list[dict[str, ASTNode | str | None]],
-    ) -> None:
-        assert self.index is not None
-        if isinstance(node, Identifier):
-            for scope in reversed(scopes):
-                if node.name in scope:
-                    declaration = scope[node.name]
-                    if declaration is not None:
-                        self._lexical_declarations[id(node)] = declaration
-                    return
-            return
-        if isinstance(node, VarDeclaration):
-            self._index_lexical_node(node.initializer, scopes)
-            scopes[-1][node.name] = node
-            return
-        if isinstance(node, TupleDeclaration):
-            self._index_lexical_node(node.initializer, scopes)
-            for target in node.targets:
-                if target.name != "_":
-                    scopes[-1][target.name] = target
-            return
-        if isinstance(node, FunctionDeclaration):
-            function_scope: dict[str, ASTNode | str | None] = {}
-            for parameter in node.parameters:
-                if parameter.default_value is not None:
-                    self._index_lexical_node(parameter.default_value, [*scopes, function_scope])
-                function_scope[parameter.name] = parameter
-            self._index_lexical_block(node.body, [*scopes, function_scope])
-            return
-        if isinstance(node, MethodDeclaration):
-            method_scope: dict[str, ASTNode | str | None] = {}
-            if node.receiver_name:
-                # The receiver has no standalone AST declaration node or fact.
-                # It must still prevent an outer same-name declaration from being
-                # falsely attributed to that occurrence.
-                method_scope[node.receiver_name] = (
-                    f"user:methodreceiver:{node.receiver_name}:{self.index.id_for(node)}:role:receiver"
-                )
-            for parameter in node.parameters:
-                if parameter.default_value is not None:
-                    self._index_lexical_node(parameter.default_value, [*scopes, method_scope])
-                method_scope[parameter.name] = parameter
-            self._index_lexical_block(node.body, [*scopes, method_scope])
-            return
-        if isinstance(node, IfStructure):
-            self._index_lexical_node(node.condition, scopes)
-            self._index_lexical_block(node.then_block, scopes)
-            for branch in node.else_if_branches:
-                self._index_lexical_node(branch.condition, scopes)
-                self._index_lexical_block(branch.block, scopes)
-            if node.else_block is not None:
-                self._index_lexical_block(node.else_block, scopes)
-            return
-        if isinstance(node, OnceStructure):
-            self._index_lexical_node(node.condition, scopes)
-            self._index_lexical_block(node.body, scopes)
-            return
-        if isinstance(node, ForRangeStructure):
-            self._index_lexical_node(node.start, scopes)
-            self._index_lexical_node(node.end, scopes)
-            if node.step is not None:
-                self._index_lexical_node(node.step, scopes)
-            self._index_lexical_block(
-                node.body,
-                [
-                    *scopes,
-                    {
-                        node.variable: (
-                            f"user:forrangestructure:{node.variable}:{self.index.id_for(node)}:role:iterator"
-                        )
-                    },
-                ],
-            )
-            return
-        if isinstance(node, ForInStructure):
-            self._index_lexical_node(node.iterable, scopes)
-            self._index_lexical_block(
-                node.body,
-                [
-                    *scopes,
-                    {
-                        name: f"user:forinstructure:{name}:{self.index.id_for(node)}:role:target"
-                        for name in node.target.names
-                        if name != "_"
-                    },
-                ],
-            )
-            return
-        if isinstance(node, WhileStructure):
-            self._index_lexical_node(node.condition, scopes)
-            self._index_lexical_block(node.body, scopes)
-            return
-        if isinstance(node, Block):
-            self._index_lexical_block(node, scopes)
-            return
-        for child in iter_child_nodes(node):
-            self._index_lexical_node(child, scopes)
 
     def _assign_scopes(self, node: ASTNode, scope_id: str) -> None:
         assert self.index is not None
@@ -828,15 +674,6 @@ class SemanticFactBuilder:
         return "STRUCTURAL"
 
     def _symbol_type_hint(self, node: ASTNode) -> str | None:
-        if isinstance(node, Identifier):
-            declaration = self._lexical_declarations.get(id(node))
-            if declaration is not None:
-                if isinstance(declaration, (VarDeclaration, Parameter)) and declaration.type_ref:
-                    return type_ref_name(declaration.type_ref)
-                # A lexical declaration is authoritative even when it has no
-                # explicit type.  Never relabel that occurrence as a catalog
-                # builtin merely to manufacture a type hint.
-                return None
         name: str | None = None
         if isinstance(node, Identifier):
             name = node.name
@@ -856,12 +693,12 @@ class SemanticFactBuilder:
                 if section == "constants" and isinstance(entry.get("type"), str):
                     return str(entry["type"])
                 return type_name
-        symbol = self.model.symbols.get(name) if not isinstance(node, Identifier) else None
+        symbol = self.model.symbols.get(name)
         if symbol is not None:
             kind = str(getattr(symbol.kind, "value", symbol.kind)).lower()
-            if kind in {"function", "method", "type", "enum"}:
+            if kind in {"function", "method", "type", "enum", "builtin"}:
                 return kind
-            if kind != "builtin" and symbol.type:
+            if symbol.type:
                 return str(symbol.type)
         if name in self._namespace_prefixes:
             return "namespace"
@@ -869,12 +706,6 @@ class SemanticFactBuilder:
 
     def _symbol_id(self, node: ASTNode) -> str | None:
         assert self.index is not None
-        if isinstance(node, Identifier):
-            declaration = self._lexical_declarations.get(id(node))
-            if declaration is not None:
-                if isinstance(declaration, str):
-                    return declaration
-                return self._declaration_symbol_id(declaration)
         name: str | None = None
         sections: tuple[str, ...] = ()
         if isinstance(node, Identifier):
@@ -888,11 +719,7 @@ class SemanticFactBuilder:
                 entry = self.catalog.get(section, {}).get(name)
                 if isinstance(entry, Mapping) and entry.get("symbol_id"):
                     return str(entry["symbol_id"])
-            # The final model view can contain a later global shadow.  Identifier
-            # occurrences therefore use only the lexical map above; retain this
-            # fallback solely for compound member expressions without a source
-            # declaration target.
-            symbol = self.model.symbols.get(name) if not isinstance(node, Identifier) else None
+            symbol = self.model.symbols.get(name)
             if symbol is not None:
                 return f"user:{str(getattr(symbol.kind, 'value', symbol.kind)).lower()}:{name}:scope:{symbol.scope_id}"
             if name in self._namespace_prefixes:
@@ -906,15 +733,9 @@ class SemanticFactBuilder:
         if isinstance(node, EnumDeclaration):
             return f"user:enum:{node.name}:{self.index.id_for(node)}"
         if isinstance(node, (VarDeclaration, Parameter, FieldDeclaration, TupleTarget, EnumMember)):
-            return self._declaration_symbol_id(node)
+            target = self._declaration_target(node)
+            return f"user:{node.kind.lower()}:{target}:{self.index.id_for(node)}"
         return None
-
-    def _declaration_symbol_id(self, node: ASTNode) -> str:
-        assert self.index is not None
-        target = self._declaration_target(node)
-        if target is None:
-            raise ValueError(f"source declaration {node.kind} has no declaration target")
-        return f"user:{node.kind.lower()}:{target}:{self.index.id_for(node)}"
 
     @staticmethod
     def _declaration_target(node: ASTNode) -> str | None:
@@ -1592,14 +1413,18 @@ class SemanticFactBuilder:
                         and isinstance(right, int)
                         and not isinstance(right, bool)
                     ):
-                        return True, int(left / right)
+                        quotient = abs(left) // abs(right)
+                        return True, (-quotient if (left < 0) != (right < 0) else quotient)
                     return True, left / right
                 if node.op == "%":
                     return True, left % right
-                if node.op == "==":
-                    return True, left == right
-                if node.op == "!=":
-                    return True, left != right
+                if node.op in {"==", "!="}:
+                    # bool is not an integer in Pine. Match the runtime's typed
+                    # equality even when Python would equate False and 0.
+                    equal = (
+                        False if (type(left) is bool) != (type(right) is bool) else left == right
+                    )
+                    return True, equal if node.op == "==" else not equal
                 if node.op == "<":
                     return True, left < right
                 if node.op == "<=":

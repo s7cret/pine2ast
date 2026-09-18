@@ -124,7 +124,7 @@ class LinkedSource:
         rows = receipt["projection"]
         starts = [row["generated_start"] for row in rows]
         lines = {}
-        result: list[dict | None] = []
+        result = []
         for offset in values:
             index = bisect_right(starts, offset) - 1
             if index < 0 or offset >= rows[index]["generated_end"]:
@@ -192,13 +192,13 @@ def _parse(ref: str, text: str) -> _Unit:
         )
     program = result.ast
     declarations, functions, constants, exports, imports = set(), {}, {}, set(), {}
-    function_counts: dict[str, int] = {}
-    for declaration in program.items:
-        if isinstance(declaration, FunctionDeclaration):
-            function_counts[declaration.name] = function_counts.get(declaration.name, 0) + 1
+    function_counts = {}
+    for node in program.items:
+        if isinstance(node, FunctionDeclaration):
+            function_counts[node.name] = function_counts.get(node.name, 0) + 1
     method_names = {n.name for n in program.items if isinstance(n, MethodDeclaration)}
     callable_names = set()
-    function_groups: dict[str, list[str]] = {}
+    function_groups = {}
     types = {}
     methods = {}
     for item in program.items:
@@ -915,9 +915,7 @@ class _Linker:
                         literal(text)
                 cursor = b
 
-        declaration = self.root.program.declaration
-        assert declaration is not None  # validated root declaration before projection
-        end = declaration.span.end_offset
+        end = self.root.program.declaration.span.end_offset
         chunk(self.root, 0, end)
         literal("\n// openpine-library-link: " + identity + "\n")
         for ref, name in self.order:

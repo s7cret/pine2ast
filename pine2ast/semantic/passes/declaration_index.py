@@ -54,9 +54,9 @@ class DeclarationIndexPass:
         self.analyzer.model.parameter_qualifiers = infer_parameter_qualifiers(
             self.analyzer, program
         )
-        functions = self.analyzer.model.function_candidates
-        if functions is not None:
-            for candidate in functions.duplicate_candidates():
+        owner = self.analyzer.model.function_candidates
+        if owner is not None:
+            for candidate in owner.duplicate_candidates():
                 self.analyzer._diag(
                     Severity.ERROR,
                     codes.REDECLARATION,

@@ -35,6 +35,10 @@ class ExpressionsMixin(BaseParser):
 
     def parse_expression(self, min_prec: int = 0):
         left = self.parse_prefix()
+        # A block expression consumes its DEDENT. The following token belongs
+        # to a new statement, not to an operator/postfix on the block value.
+        if self.i and self._previous().kind is TokenKind.DEDENT:
+            return left
         while True:
             kind = self._peek().kind
             prec = PRECEDENCE.get(kind)
@@ -60,6 +64,8 @@ class ExpressionsMixin(BaseParser):
             expr = self.parse_expression(70)
             return UnaryExpr(join_span(op.span, expr.span), op.text, expr)
         expr = self.parse_primary()
+        if self.i and self._previous().kind is TokenKind.DEDENT:
+            return expr
         return self.parse_postfix(expr)
 
     def parse_primary(self):

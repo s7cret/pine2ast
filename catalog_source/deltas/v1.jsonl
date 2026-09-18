@@ -195,7 +195,7 @@
 {"name":"alertcondition","op":"ADD","section":"functions","semantic_id":"sha256:39813ad672b3bb41ee47136089b73c59e4b4059ad1fdb88ac31f9a8d304c6000","symbol_id":"pine:function:alertcondition"}
 {"name":"barcolor","op":"ADD","section":"functions","semantic_id":"sha256:f4e4b2cb84c503241d16bac37e21dad12bf5df2bc1ad607f3e5dc25e70ec9adc","symbol_id":"pine:function:barcolor"}
 {"name":"bgcolor","op":"ADD","section":"functions","semantic_id":"sha256:185fa9e397f93c6e01e3879a5fa176a79767e88dfa06772bce6a2b0780845a21","symbol_id":"pine:function:bgcolor"}
-{"name":"bool","op":"ADD","section":"functions","semantic_id":"sha256:7626d16a42ae549a8beb150ae7c5423219b87f06ffd48985cdc06c29b83b1416","symbol_id":"pine:function:bool"}
+{"name":"bool","op":"ADD","section":"functions","semantic_id":"sha256:1d2d9d3fa38005a96c85385e4d39464d882e75c63c650f5a0898b6662d3a66f3","symbol_id":"pine:function:bool"}
 {"name":"box","op":"ADD","section":"functions","semantic_id":"sha256:4ec34211c84b34fba3856fc5a539d86aa5e96e2dac66ea808233d9d051e7c478","symbol_id":"pine:function:box"}
 {"name":"color","op":"ADD","section":"functions","semantic_id":"sha256:dd35c08c1acc562383d6f2e8c7e5e92e1938f9ec5a10ccb2c680e70e17b55c11","symbol_id":"pine:function:color"}
 {"name":"color.b","op":"ADD","section":"functions","semantic_id":"sha256:730f617601e7dce922bc69afcc97229f94194d699a5fdb2b98ef55459b524171","symbol_id":"pine:function:color.b"}

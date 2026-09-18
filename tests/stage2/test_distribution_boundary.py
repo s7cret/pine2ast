@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pine2ast.api as public_api
@@ -40,7 +41,7 @@ def test_no_forbidden_legacy_identifiers_in_production_python():
             continue
         text = path.read_text(encoding="utf-8")
         for token in forbidden:
-            if token in text:
+            if re.search(r"(?<![A-Za-z0-9_])" + re.escape(token) + r"(?![A-Za-z0-9_])", text):
                 hits.append((path.relative_to(ROOT).as_posix(), token))
     assert not hits
 
@@ -75,3 +76,10 @@ def test_ci_runs_complete_rc6_quality_inventory():
 def test_legacy_registry_inputs_are_audit_only():
     assert (ROOT / "catalog_migration_inputs/rc5/builtins_v5.rc5.json").exists()
     assert (ROOT / "catalog_migration_inputs/rc5/builtins_v6.rc5.json").exists()
+
+
+def test_legacy_identifier_match_is_exact_but_also_checks_string_keys():
+    pattern = r"(?<![A-Za-z0-9_])target_version(?![A-Za-z0-9_])"
+    assert re.search(pattern, "target_version = 6")
+    assert re.search(pattern, 'payload["target_version"]')
+    assert not re.search(pattern, "compiler_target_version = 6")

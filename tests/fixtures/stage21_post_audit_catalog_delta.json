@@ -1,0 +1,83 @@
+{
+  "baseline_archive": {
+    "name": "OpenPine_Stage2_1_Complete_Sources_2026-09-14(4).zip",
+    "sha256": "69f9b9d6b02bcfb64d992065e8e7a6c206d09ae64e2d60f124331f642ef8dd37"
+  },
+  "content_hash": "sha256:050d9dd41a8161ed11b7aee36d83ed82887460f9f23010b431f579d5bd46235c",
+  "purpose": "Preserve pre-audit whole-pack evidence while allowing exactly the reviewed ta.rma v5/v6 contract correction.",
+  "schema": "pine2ast.stage21_post_audit_catalog_delta.v1",
+  "versions": {
+    "5": {
+      "after": {
+        "kind": "builtin",
+        "name": "ta.rma",
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "float"
+          },
+          {
+            "name": "length",
+            "qualifier_max": "simple",
+            "required": true,
+            "type": "int"
+          }
+        ],
+        "pine_version": "5",
+        "return_qualifier": "series",
+        "returns": "series<float>",
+        "scope": "any",
+        "symbol_id": "pine:function:ta.rma"
+      },
+      "before": {
+        "kind": "builtin",
+        "name": "ta.rma",
+        "parameters": [],
+        "pine_version": "5",
+        "return_qualifier": "series",
+        "returns": "float",
+        "scope": "any",
+        "symbol_id": "pine:function:ta.rma"
+      },
+      "path": "sections.functions.ta.rma"
+    },
+    "6": {
+      "after": {
+        "kind": "builtin",
+        "name": "ta.rma",
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "float"
+          },
+          {
+            "name": "length",
+            "qualifier_max": "simple",
+            "required": true,
+            "type": "int"
+          }
+        ],
+        "pine_version": "6",
+        "return_qualifier": "series",
+        "returns": "series<float>",
+        "scope": "any",
+        "symbol_id": "pine:function:ta.rma"
+      },
+      "before": {
+        "kind": "builtin",
+        "name": "ta.rma",
+        "parameters": [],
+        "pine_version": "6",
+        "return_qualifier": "series",
+        "returns": "float",
+        "scope": "any",
+        "symbol_id": "pine:function:ta.rma"
+      },
+      "path": "sections.functions.ta.rma"
+    }
+  }
+}

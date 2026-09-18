@@ -5,8 +5,8 @@
     "2": 9,
     "3": 1,
     "4": 291,
-    "5": 588,
-    "6": 200
+    "5": 601,
+    "6": 214
   },
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "input_identity": {
@@ -43,12 +43,12 @@
   "migration_loss_count": 0,
   "ok": true,
   "pack_hashes": {
-    "1": "sha256:07bdfa58416067ed2c66f5a2273bdc4f797c0f62ebb5bdcde8131ea97a9000e9",
-    "2": "sha256:6db1b1d96d51a5b9ebd50fb215cb9acd00f84ad923b702afdabd48cdd9eff175",
-    "3": "sha256:d13db13950094bc3d3b17d381b418bd60b06af242a501582064a00a89b5acfa7",
-    "4": "sha256:3190464bd63192286f3f144fb62846d2a42563ae344bf238a10ffb4141080a23",
-    "5": "sha256:c37a825447f4217fd2e235b24b34bcaa558b4194de121083d9ace194737d4556",
-    "6": "sha256:038cd7e484294495955ac5795916c1c852e2b754a5c847d0a6653cd169c71a2c"
+    "1": "sha256:f98f23c68395990c32744cbb05a0068bd8b247b0ecdd64747a52648fd6c7fd2a",
+    "2": "sha256:38e735fb3b7cd4417c481f248256e1a020bc59e63319f23797f490bb49116315",
+    "3": "sha256:2e0ddb60e225d41f3d46d9803b2ba655d6acc342925e4e168206a8504197fc3d",
+    "4": "sha256:697b84a50cd1f9bb5e7bad44cae7fe023a74704f35063ddb97abd58d8c32229a",
+    "5": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
+    "6": "sha256:c0a5765c209518853aa1e27e887c2700fd753d48d3e697ef870b22a5343a0160"
   },
   "schema_id": "pine.catalog.migration_report.v2",
   "section_counts": {
@@ -131,5 +131,5 @@
       "variables": 403
     }
   },
-  "semantic_definition_count": 1652
+  "semantic_definition_count": 1679
 }

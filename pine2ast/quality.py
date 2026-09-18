@@ -247,7 +247,8 @@ def architecture_budget_report(
         if any(part in exclude for part in py_file.parts):
             continue
         checked.append(py_file)
-        line_count = sum(1 for _ in py_file.open(encoding="utf-8"))
+        with py_file.open(encoding="utf-8") as stream:
+            line_count = sum(1 for _ in stream)
         if line_count > max_lines:
             oversized.append(
                 ArchitectureBudgetFile(

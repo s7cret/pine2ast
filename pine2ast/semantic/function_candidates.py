@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, TYPE_CHECKING, cast
+from typing import Any, TYPE_CHECKING
 
 from pine2ast.ast.nodes import (
     CallExpr,
@@ -95,7 +95,7 @@ class FunctionCandidates:
         """Optional/name/return-only differences do not create valid overloads."""
         duplicates = []
         for family in self.by_name.values():
-            seen: dict[tuple[str | None, int], set[tuple[tuple[str, str], ...]]] = {}
+            seen = {}
             untyped = set()
             for candidate in family:
                 node = candidate.declaration
@@ -149,11 +149,7 @@ class FunctionCandidates:
 
     def _failure(self, call: CallExpr, code: str, message: str) -> FunctionSelection:
         issue = SignatureIssue(Severity.ERROR, code, message, call.span)
-        name = (
-            call.callee.name
-            if isinstance(call.callee, Identifier)
-            else cast(MemberAccessExpr, call.callee).member
-        )
+        name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
         resolution = SignatureResolution(name, "function", {}, (), {}, (), issues=(issue,))
         return FunctionSelection(resolution, None)
 
@@ -185,7 +181,6 @@ class FunctionCandidates:
         if (
             selected is not None
             and selected.user_selected
-            and selected.candidate is not None
             and isinstance(selected.candidate.declaration, MethodDeclaration)
         ):
             return None
@@ -201,11 +196,7 @@ class FunctionCandidates:
         )
         if not isinstance(call.callee, Identifier) and namespace_owner is None:
             return None
-        name = (
-            call.callee.name
-            if isinstance(call.callee, Identifier)
-            else cast(MemberAccessExpr, call.callee).member
-        )
+        name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
         family = self.by_name.get(name)
         mixed = self.is_mixed_call(call)
         methods = self.analyzer.model.method_candidates if mixed else None
@@ -257,16 +248,14 @@ class FunctionCandidates:
                 (engine.infer_type(a.value), engine.infer_qualifier(a.value))
                 for a in call.arguments
             )
-            entries = []
-            for c in candidates:
-                if isinstance(c.declaration, MethodDeclaration):
-                    if methods is None:
-                        raise RuntimeError("Method candidate has no declaration owner")
-                    entries.append(
-                        methods.explicit_entry(c, symbols=engine.symbols, qualifiers=qualifiers)
-                    )
-                else:
-                    entries.append(self.entry(c, symbols=engine.symbols, qualifiers=qualifiers))
+            entries = [
+                (
+                    methods.explicit_entry(c, symbols=engine.symbols, qualifiers=qualifiers)
+                    if isinstance(c.declaration, MethodDeclaration)
+                    else self.entry(c, symbols=engine.symbols, qualifiers=qualifiers)
+                )
+                for c in candidates
+            ]
             shape = tuple(
                 (
                     e["symbol_id"],

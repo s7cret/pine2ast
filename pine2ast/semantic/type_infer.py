@@ -293,11 +293,10 @@ def _parametric_return_rule(
         actual = infer_type(expr.arguments[0].value, symbols, registry=registry)
         return "int" if actual == "int" else "float"
     if rule in {"return.input.defval_type.v1", "return.input.enum_type.v1"}:
-        return (
-            infer_type(expr.arguments[0].value, symbols, registry=registry)
-            if expr.arguments
-            else "unknown"
-        )
+        from pine2ast.semantic.argument_values import argument_value
+
+        default = argument_value(expr.arguments, "defval", 0)
+        return infer_type(default, symbols, registry=registry) if default is not None else "unknown"
     if rule == "return.na.source_or_numeric_promotion.v1":
         # Named arguments need not be in parameter order. Missing replacement
         # preserves the source type; a numeric replacement may promote int to

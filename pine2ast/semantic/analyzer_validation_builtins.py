@@ -69,6 +69,22 @@ class AnalyzerBuiltinValidationMixin(AnalyzerMixinHost):
     ) -> None:
         if not name.startswith("strategy."):
             return
+        # These three names leaked from an old compatibility projection into
+        # the v6 variable registry.  Pine exposes strategy.cash,
+        # strategy.fixed and strategy.percent_of_equity instead; the
+        # strategy.risk.* aliases are not public symbols and must fail closed.
+        if self.version_context.pine_version >= 5 and name in {
+            "strategy.risk.cash",
+            "strategy.risk.fixed",
+            "strategy.risk.percent_of_equity",
+        }:
+            self._diag(
+                Severity.ERROR,
+                codes.VERSION_FEATURE_UNAVAILABLE,
+                f"{name} is an internal compatibility alias, not a public Pine symbol.",
+                span,
+            )
+            return
         if name in self._strategy_constant_members():
             return
         is_state_member = name in self._strategy_state_members()

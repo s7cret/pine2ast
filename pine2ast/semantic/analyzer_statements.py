@@ -9,6 +9,7 @@ from pine2ast.ast.nodes import (
     EnumDeclaration,
     FunctionDeclaration,
     IfStructure,
+    Identifier,
     ForRangeStructure,
     ForInStructure,
     WhileStructure,
@@ -21,6 +22,7 @@ from pine2ast.ast.nodes import (
     TupleDeclaration,
     TupleExpr,
     TypeDeclaration,
+    UnaryExpr,
     VarDeclaration,
 )
 from pine2ast.diagnostics import Severity
@@ -110,7 +112,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 f"Initializer for {node.name}",
             )
         else:
-            if init_qualifier == "input":
+            if init_qualifier == "input" and not self._is_reassigned_declaration(node):
                 qualifier = "input"
             elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(
                 node
@@ -218,6 +220,34 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 self._validate_bool_cannot_be_na(field_type, node.value)
                 return
         sym = self._resolve_assignable(node.target)
+        if (
+            sym is not None
+            and isinstance(node.target, Identifier)
+            and any(
+                scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD} for scope in self.scope_stack
+            )
+        ):
+            parameter_ids = (
+                set().union(*self._callable_parameter_ids)
+                if self._callable_parameter_ids
+                else set()
+            )
+            if sym.id in parameter_ids:
+                self._diag(
+                    Severity.ERROR,
+                    codes.CALLABLE_REASSIGNMENT_FORBIDDEN,
+                    f"Cannot reassign function/method parameter {sym.name}.",
+                    node.span,
+                )
+                return
+            if self._scope_kind(sym.scope_id) is ScopeKind.GLOBAL:
+                self._diag(
+                    Severity.ERROR,
+                    codes.CALLABLE_REASSIGNMENT_FORBIDDEN,
+                    f"Cannot reassign global variable {sym.name} from a function/method.",
+                    node.span,
+                )
+                return
         if sym is None:
             target_name = self._assignable_name(node.target) or "<expr>"
             code = codes.REASSIGN_UNDECLARED if node.op == ":=" else codes.COMPOUND_UNDECLARED
@@ -270,6 +300,8 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             self._function_params[node.name] = node.parameters
         self.function_depth += 1
         self._push_scope(ScopeKind.FUNCTION)
+        protected_parameters: set[int] = set()
+        self._callable_parameter_ids.append(protected_parameters)
         for p in node.parameters:
             qualifier = parameter_qualifier(p, self.model)
             if p.type_ref is not None:
@@ -293,13 +325,15 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                         p.default_value.span,
                         f"Default value for parameter {p.name}",
                     )
-            self._define(
+            parameter_symbol = self._define(
                 p.name,
                 SymbolKind.VARIABLE,
                 p.span,
                 self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
                 qualifier,
             )
+            if parameter_symbol is not None:
+                protected_parameters.add(parameter_symbol.id)
         self._visit_body(node.body)
         owner = self.model.function_candidates
         candidate = owner.by_node.get(id(node)) if owner is not None else None
@@ -310,6 +344,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         )
         if sym is not None:
             sym.type = self._body_return_type(node.body)
+        self._callable_parameter_ids.pop()
         self._pop_scope()
         self.function_depth -= 1
 
@@ -357,8 +392,10 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                 else:
                     self._method_receivers[node.name] = rt
         self._push_scope(ScopeKind.METHOD)
+        protected_parameters: set[int] = set()
+        self._callable_parameter_ids.append(protected_parameters)
         if node.receiver_name:
-            self._define(
+            receiver_symbol = self._define(
                 node.receiver_name,
                 SymbolKind.VARIABLE,
                 node.span,
@@ -369,6 +406,8 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                     else node.receiver_explicit_qualifier or "series"
                 ),
             )
+            if receiver_symbol is not None:
+                protected_parameters.add(receiver_symbol.id)
         for p in node.parameters:
             if p.type_ref is not None:
                 self._validate_type_ref(p.type_ref)
@@ -391,13 +430,15 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                         p.default_value.span,
                         f"Default value for parameter {p.name}",
                     )
-            self._define(
+            parameter_symbol = self._define(
                 p.name,
                 SymbolKind.VARIABLE,
                 p.span,
                 self._type_ref_name(p.type_ref) if p.type_ref else "unknown",
                 p.explicit_qualifier,
             )
+            if parameter_symbol is not None:
+                protected_parameters.add(parameter_symbol.id)
         self._visit_body(node.body)
         receiver_type = self._type_ref_name(node.receiver_type) if node.receiver_type else ""
         owner = self.model.method_candidates
@@ -407,6 +448,7 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         )
         if sym is not None:
             sym.type = self._body_return_type(node.body)
+        self._callable_parameter_ids.pop()
         self._pop_scope()
 
     def _s_type_declaration(self, node: TypeDeclaration) -> None:
@@ -439,6 +481,30 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
             )
             if field.default_value is not None:
                 self._visit_expr(field.default_value)
+                default = field.default_value
+                literal = isinstance(default, Literal) or (
+                    isinstance(default, UnaryExpr)
+                    and default.op in {"+", "-"}
+                    and isinstance(default.operand, Literal)
+                    and default.operand.literal_type in {"int", "float"}
+                )
+                name = (
+                    self._expr_path(default)
+                    if isinstance(default, (Identifier, MemberAccessExpr))
+                    else None
+                )
+                symbol = self._resolve(name) if name is not None else None
+                value_symbol = symbol is not None and symbol.kind in {
+                    SymbolKind.BUILTIN,
+                    SymbolKind.ENUM_MEMBER,
+                }
+                if not literal and not value_symbol:
+                    self._diag(
+                        Severity.ERROR,
+                        codes.TYPE_MISMATCH,
+                        f"Default value for field {field.name} must be a literal or built-in value, not an expression or user variable.",
+                        default.span,
+                    )
                 default_type = self._infer_type(field.default_value)
                 if not self._is_assignable_type(field_type, default_type):
                     self._diag(

@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:c37a825447f4217fd2e235b24b34bcaa558b4194de121083d9ace194737d4556",
-  "content_hash": "sha256:9997b3f9882d39c0db01e79eb8a78f391c7578374663e8570de78ebd941a2f75",
+  "catalog_hash": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
+  "content_hash": "sha256:c5b4963d5b8b841a91c79f547fe87c5150450501bf336ee67ac632f4c08e98e8",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
   "pine_version": 5,
@@ -3494,7 +3494,14 @@
         "docs_url": null,
         "kind": "builtin",
         "name": "bool",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "value",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "any"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "bool",
@@ -4518,7 +4525,6 @@
         "unsupported_diagnostic_code": "P2A1507"
       },
       "color.b": {
-        "allow_extra_positional": true,
         "kind": "builtin",
         "name": "color.b",
         "parameters": [
@@ -4533,8 +4539,7 @@
         "return_qualifier": "series",
         "returns": "float",
         "scope": "any",
-        "symbol_id": "pine:function:color.b",
-        "unsupported_diagnostic_code": "P2A1507"
+        "symbol_id": "pine:function:color.b"
       },
       "color.from_gradient": {
         "docs_url": "https://www.tradingview.com/pine-script-reference/v6/",
@@ -4580,7 +4585,6 @@
         "unsupported_diagnostic_code": "P2A1507"
       },
       "color.g": {
-        "allow_extra_positional": true,
         "kind": "builtin",
         "name": "color.g",
         "parameters": [
@@ -4595,8 +4599,7 @@
         "return_qualifier": "series",
         "returns": "float",
         "scope": "any",
-        "symbol_id": "pine:function:color.g",
-        "unsupported_diagnostic_code": "P2A1507"
+        "symbol_id": "pine:function:color.g"
       },
       "color.new": {
         "kind": "builtin",
@@ -4623,7 +4626,6 @@
         "unsupported_diagnostic_code": "P2A1507"
       },
       "color.r": {
-        "allow_extra_positional": true,
         "kind": "builtin",
         "name": "color.r",
         "parameters": [
@@ -4638,8 +4640,7 @@
         "return_qualifier": "series",
         "returns": "float",
         "scope": "any",
-        "symbol_id": "pine:function:color.r",
-        "unsupported_diagnostic_code": "P2A1507"
+        "symbol_id": "pine:function:color.r"
       },
       "color.rgb": {
         "allow_extra_positional": true,
@@ -4680,7 +4681,6 @@
         "unsupported_diagnostic_code": "P2A1507"
       },
       "color.t": {
-        "allow_extra_positional": true,
         "kind": "builtin",
         "name": "color.t",
         "parameters": [
@@ -4695,8 +4695,7 @@
         "return_qualifier": "series",
         "returns": "float",
         "scope": "any",
-        "symbol_id": "pine:function:color.t",
-        "unsupported_diagnostic_code": "P2A1507"
+        "symbol_id": "pine:function:color.t"
       },
       "dayofmonth": {
         "docs_url": null,
@@ -4980,129 +4979,367 @@
         "symbol_id": "pine:function:indicator"
       },
       "input": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input",
+        "overloads": [
+          {
+            "overload_id": "pine:function:input#overload:0",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "int"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "int"
+          },
+          {
+            "overload_id": "pine:function:input#overload:1",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "float"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "float"
+          },
+          {
+            "overload_id": "pine:function:input#overload:2",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "bool"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "bool"
+          },
+          {
+            "overload_id": "pine:function:input#overload:3",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "color"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "color"
+          },
+          {
+            "overload_id": "pine:function:input#overload:4",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "string"
+          },
+          {
+            "overload_id": "pine:function:input#overload:5",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "float"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "return_qualifier": "series",
+            "returns": "float"
+          }
+        ],
         "parameters": [
           {
             "name": "defval",
             "qualifier_max": "const",
-            "required": false,
+            "required": true,
             "type": "any"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
             "name": "inline",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "confirm",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "bool"
-          },
-          {
-            "name": "display",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
-            "required": false,
-            "type": "bool"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
+        "return_qualifier_rule_id": "qualifier.input.defval.v1",
         "return_rule_id": "return.input.defval_type.v1",
         "returns": "any",
         "scope": "any",
         "symbol_id": "pine:function:input"
       },
       "input.bool": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.bool",
         "parameters": [
           {
             "name": "defval",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": true,
             "type": "bool"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "group",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "inline",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "group",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": false,
             "name": "confirm",
             "qualifier_max": "const",
             "required": false,
             "type": "bool"
           },
           {
-            "metadata_version": 2,
+            "default": "display.none",
             "name": "display",
             "qualifier_max": "const",
             "required": false,
             "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
-            "required": false,
-            "type": "bool"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "bool",
         "scope": "any",
         "symbol_id": "pine:function:input.bool"
       },
       "input.color": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.color",
         "parameters": [
@@ -5110,43 +5347,64 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "color"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.none",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "color",
         "scope": "any",
         "symbol_id": "pine:function:input.color"
       },
       "input.enum": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.enum",
+        "parameter_type_rule_id": "parameter.input.same_enum_type.v1",
         "parameters": [
           {
             "name": "defval",
@@ -5155,6 +5413,7 @@
             "type": "any"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5167,29 +5426,109 @@
             "type": "array<any>"
           },
           {
+            "default": "",
+            "name": "tooltip",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.all",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "return_rule_id": "return.input.enum_type.v1",
         "returns": "unknown",
         "scope": "any",
         "symbol_id": "pine:function:input.enum"
       },
       "input.float": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.float",
+        "overloads": [
+          {
+            "overload_id": "pine:function:input.float#overload:0",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "float"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "name": "options",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "array<float>"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": false,
+                "name": "confirm",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "bool"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "float"
+          }
+        ],
         "parameters": [
           {
             "name": "defval",
@@ -5198,6 +5537,7 @@
             "type": "float"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5216,65 +5556,108 @@
             "type": "float"
           },
           {
+            "default": 1,
             "name": "step",
             "qualifier_max": "const",
             "required": false,
             "type": "float"
           },
           {
-            "name": "options",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "array<float>"
-          },
-          {
-            "name": "group",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "inline",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "group",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": false,
             "name": "confirm",
             "qualifier_max": "const",
-            "required": false,
-            "type": "bool"
-          },
-          {
-            "metadata_version": 2,
-            "name": "display",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
             "required": false,
             "type": "bool"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:input.float"
       },
       "input.int": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.int",
+        "overloads": [
+          {
+            "overload_id": "pine:function:input.int#overload:0",
+            "parameters": [
+              {
+                "name": "defval",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "int"
+              },
+              {
+                "default": "",
+                "name": "title",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "name": "options",
+                "qualifier_max": "const",
+                "required": true,
+                "type": "array<int>"
+              },
+              {
+                "default": "",
+                "name": "tooltip",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "inline",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": "",
+                "name": "group",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "default": false,
+                "name": "confirm",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "bool"
+              }
+            ],
+            "return_qualifier": "input",
+            "returns": "int"
+          }
+        ],
         "parameters": [
           {
             "name": "defval",
@@ -5283,6 +5666,7 @@
             "type": "int"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5301,63 +5685,51 @@
             "type": "int"
           },
           {
+            "default": 1,
             "name": "step",
             "qualifier_max": "const",
             "required": false,
             "type": "int"
           },
           {
-            "name": "options",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "array<int>"
-          },
-          {
-            "name": "group",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "inline",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "group",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": false,
             "name": "confirm",
             "qualifier_max": "const",
-            "required": false,
-            "type": "bool"
-          },
-          {
-            "metadata_version": 2,
-            "name": "display",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
             "required": false,
             "type": "bool"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "int",
         "scope": "any",
         "symbol_id": "pine:function:input.int"
       },
       "input.price": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.price",
         "parameters": [
@@ -5365,41 +5737,61 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "float"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.all",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:input.price"
       },
       "input.session": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.session",
         "parameters": [
@@ -5407,9 +5799,10 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "string"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5419,29 +5812,54 @@
             "name": "options",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "array<string>"
           },
           {
+            "default": "",
+            "name": "tooltip",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.all",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "string",
         "scope": "any",
         "symbol_id": "pine:function:input.session"
       },
       "input.source": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.source",
         "parameters": [
@@ -5449,51 +5867,71 @@
             "name": "defval",
             "qualifier_max": "series",
             "required": true,
-            "type": "any"
+            "type": "float"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": "display.all",
+            "name": "display",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "display"
+          },
+          {
+            "default": false,
+            "name": "confirm",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "bool"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
-        "returns": "series<any>",
+        "returns": "float",
         "scope": "any",
         "symbol_id": "pine:function:input.source"
       },
       "input.string": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.string",
         "parameters": [
           {
             "name": "defval",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": true,
             "type": "string"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5506,51 +5944,51 @@
             "type": "array<string>"
           },
           {
-            "name": "group",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "inline",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "group",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": false,
             "name": "confirm",
             "qualifier_max": "const",
             "required": false,
             "type": "bool"
           },
           {
-            "metadata_version": 2,
+            "default": "display.all",
             "name": "display",
             "qualifier_max": "const",
             "required": false,
             "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
-            "required": false,
-            "type": "bool"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "string",
         "scope": "any",
         "symbol_id": "pine:function:input.string"
       },
       "input.symbol": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.symbol",
         "parameters": [
@@ -5558,41 +5996,61 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "string"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.all",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "string",
         "scope": "any",
         "symbol_id": "pine:function:input.symbol"
       },
       "input.text_area": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.text_area",
         "parameters": [
@@ -5600,41 +6058,54 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "string"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.none",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "string",
         "scope": "any",
         "symbol_id": "pine:function:input.text_area"
       },
       "input.time": {
+        "allow_extra_positional": false,
         "docs_url": null,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.time",
         "parameters": [
@@ -5642,51 +6113,71 @@
             "name": "defval",
             "qualifier_max": "const",
             "required": true,
-            "type": "any"
+            "type": "int"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "options",
+            "default": "",
+            "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
-            "type": "array<any>"
+            "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
             "name": "group",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
-            "name": "inline",
+            "default": false,
+            "name": "confirm",
             "qualifier_max": "const",
             "required": false,
-            "type": "string"
+            "type": "bool"
+          },
+          {
+            "default": "display.all",
+            "name": "display",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "display"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "int",
         "scope": "any",
         "symbol_id": "pine:function:input.time"
       },
       "input.timeframe": {
-        "allow_extra_positional": true,
+        "allow_extra_positional": false,
+        "input_contract_revision": 2,
         "kind": "builtin",
         "name": "input.timeframe",
         "parameters": [
           {
             "name": "defval",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": true,
             "type": "string"
           },
           {
+            "default": "",
             "name": "title",
             "qualifier_max": "const",
             "required": false,
@@ -5699,45 +6190,43 @@
             "type": "array<string>"
           },
           {
-            "name": "group",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "inline",
-            "qualifier_max": "const",
-            "required": false,
-            "type": "string"
-          },
-          {
+            "default": "",
             "name": "tooltip",
             "qualifier_max": "const",
             "required": false,
             "type": "string"
           },
           {
+            "default": "",
+            "name": "inline",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "name": "group",
+            "qualifier_max": "const",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": false,
             "name": "confirm",
             "qualifier_max": "const",
             "required": false,
             "type": "bool"
           },
           {
-            "metadata_version": 2,
+            "default": "display.all",
             "name": "display",
             "qualifier_max": "const",
             "required": false,
             "type": "display"
-          },
-          {
-            "name": "active",
-            "qualifier_max": "input",
-            "required": false,
-            "type": "bool"
           }
         ],
         "pine_version": "5",
-        "return_qualifier": "series",
+        "return_qualifier": "input",
         "returns": "string",
         "scope": "any",
         "symbol_id": "pine:function:input.timeframe"
@@ -9686,7 +10175,6 @@
       },
       "polyline.new": {
         "allow_extra_positional": true,
-        "forbidden_in_local_blocks": true,
         "kind": "builtin",
         "name": "polyline.new",
         "parameters": [
@@ -10225,24 +10713,45 @@
           {
             "name": "source",
             "qualifier_max": "series",
-            "required": false,
-            "type": "series<any>"
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "str",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "bool",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.contains"
       },
       "str.endswith": {
         "kind": "builtin",
         "name": "str.endswith",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "str",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "bool",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.endswith"
       },
       "str.format": {
@@ -10412,44 +10921,112 @@
           {
             "name": "source",
             "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "target",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "replacement",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "default": 0,
+            "name": "occurrence",
+            "qualifier_max": "series",
             "required": false,
-            "type": "series<any>"
+            "type": "int"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "string",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.replace"
       },
       "str.replace_all": {
         "kind": "builtin",
         "name": "str.replace_all",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "target",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "replacement",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "string",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.replace_all"
       },
       "str.split": {
         "kind": "builtin",
         "name": "str.split",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "separator",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "array<string>",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.split"
       },
       "str.startswith": {
         "kind": "builtin",
         "name": "str.startswith",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "str",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "bool",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.startswith"
       },
       "str.substring": {
@@ -10460,14 +11037,27 @@
           {
             "name": "source",
             "qualifier_max": "series",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "begin_pos",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "int"
+          },
+          {
+            "name": "end_pos",
+            "qualifier_max": "series",
             "required": false,
-            "type": "series<any>"
+            "type": "int"
           }
         ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "string",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.substring"
       },
       "str.tonumber": {
@@ -10490,11 +11080,26 @@
       "str.tostring": {
         "kind": "builtin",
         "name": "str.tostring",
-        "parameters": [],
+        "parameter_type_rule_id": "parameter.str.tostring.scalar_or_enum.v1",
+        "parameters": [
+          {
+            "name": "value",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "any"
+          },
+          {
+            "name": "format",
+            "qualifier_max": "series",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
         "returns": "string",
         "scope": "any",
+        "signature_source": "stage2_audit_repair_official_strings_2026_09_18",
         "symbol_id": "pine:function:str.tostring"
       },
       "str.trim": {
@@ -12797,10 +13402,23 @@
       "ta.rma": {
         "kind": "builtin",
         "name": "ta.rma",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "source",
+            "qualifier_max": "series",
+            "required": true,
+            "type": "float"
+          },
+          {
+            "name": "length",
+            "qualifier_max": "simple",
+            "required": true,
+            "type": "int"
+          }
+        ],
         "pine_version": "5",
         "return_qualifier": "series",
-        "returns": "float",
+        "returns": "series<float>",
         "scope": "any",
         "symbol_id": "pine:function:ta.rma"
       },

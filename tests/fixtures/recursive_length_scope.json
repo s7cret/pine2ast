@@ -20,12 +20,17 @@
     },
     "5": {
       "before_raw_sha256": "f6f596160ce2d58ddf1c9ae553c4953fac98db30b1ddc2ded5c949787531e582",
-      "expected_except_provenance_sha256": "c36729bda1a63119316a5fb8432678a05b2244589de0f65cfd934c62cac59422"
+      "expected_except_provenance_sha256": "aecb44e361178a23c4d3acf70094ddfc69a5459b35c8f7968c289d5038f5cf63"
     },
     "6": {
       "before_raw_sha256": "f669e09e66ed7a31230d030ac3d00626ec60b7195235aa5c28e2b88a60fe289f",
-      "expected_except_provenance_sha256": "5891f9f86e239b5abe99e842922486bd15ffacefefdfc0e7b9c73a816adcad2d"
+      "expected_except_provenance_sha256": "afd9d836dc5ca7d3033eb08f27ccd0484a35ec04a3f261c45d6bcb506ba4fa00"
     }
+  },
+  "stage2_1_rebaseline": {
+    "no_rows_removed": true,
+    "review_receipt": "openpine/verification/stage2-1-callable-lock-delta.json",
+    "scope": "v5/v6 input callable signatures, overload projection, defaults and qualifier ceilings"
   },
   "target_remainder_without_tsi_sha256": "717fdf2c97593fc2e15510d69fdbd9651029a7353362fdb67cc7e11f09276bff"
 }

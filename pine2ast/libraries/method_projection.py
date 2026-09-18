@@ -9,7 +9,6 @@ The complete source projection is rebuilt during normal library admission.
 from __future__ import annotations
 
 from bisect import bisect_right
-from typing import TYPE_CHECKING
 
 from pine2ast.api import ParseOptions, ParsePipeline
 from pine2ast.ast.nodes import (
@@ -21,9 +20,6 @@ from pine2ast.ast.nodes import (
 )
 from pine2ast.ast.visitors import walk
 from .store import LibraryError
-
-if TYPE_CHECKING:
-    from .linker import _Unit
 
 
 class _Visibility:
@@ -45,9 +41,7 @@ class _Visibility:
         self.method_starts = {
             ref: [row[0] for row in rows] for ref, rows in self.method_rows.items()
         }
-        self.declarations: dict[int, tuple[_Unit, str, FunctionDeclaration | MethodDeclaration]] = (
-            {}
-        )
+        self.declarations = {}
 
     def location(self, offset: int) -> tuple[str, int]:
         i = bisect_right(self.starts, offset) - 1
@@ -127,19 +121,19 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
     if parsed.ast is None or not parsed.ok:
         raise LibraryError("P2A_LIBRARY_METHOD_BINDING", "method projection must have valid syntax")
     exported = set()
-    for declaration in parsed.ast.items:
-        if isinstance(declaration, MethodDeclaration):
-            _, _, original = visibility.declaration(declaration)
+    for node in parsed.ast.items:
+        if isinstance(node, MethodDeclaration):
+            _, _, original = visibility.declaration(node)
             if original.is_exported:
-                exported.add(id(declaration))
-        elif isinstance(declaration, FunctionDeclaration):
-            ref, offset = visibility.location(declaration.span.start_offset)
+                exported.add(id(node))
+        elif isinstance(node, FunctionDeclaration):
+            ref, offset = visibility.location(node.span.start_offset)
             unit = visibility.units[ref]
             if any(
                 f.is_exported and f.span.start_offset <= offset < f.span.end_offset
                 for f in unit.functions.values()
             ):
-                exported.add(id(declaration))
+                exported.add(id(node))
     # The normal resolver consumes receiver type, argument names and qualifiers.
     # The linker adds visibility only; it does not implement type matching.
     model = pipeline.semantic_only(
@@ -157,12 +151,8 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
             line=unit.text.count("\n", 0, offset) + 1,
             column=offset - unit.text.rfind("\n", 0, offset),
         )
-    functions = model.function_candidates
-    facts = model.semantic_facts
-    if functions is None or facts is None:
-        raise LibraryError("P2A_LIBRARY_PROJECTION", "semantic projection evidence is missing")
-    index = functions.index
-    calls = {c.node_id: c for c in facts.calls}
+    index = model.function_candidates.index
+    calls = {c.node_id: c for c in model.semantic_facts.calls}
     for node in walk(parsed.ast):
         if not isinstance(node, CallExpr) or not isinstance(
             node.callee, (Identifier, MemberAccessExpr)
@@ -176,17 +166,14 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
         ):
             continue
         if fact.call_form == "USER_FUNCTION":
-            candidate = functions.by_symbol.get(fact.symbol_id)
+            candidate = model.function_candidates.by_symbol.get(fact.symbol_id)
             if candidate is None:
                 continue
             unit, key, original_declaration = visibility.declaration(candidate.declaration)
             if not key.startswith("@function:"):
                 continue
         else:
-            methods = model.method_candidates
-            if methods is None:
-                raise LibraryError("P2A_LIBRARY_PROJECTION", "selected method owner is missing")
-            candidate = methods.by_symbol.get(fact.symbol_id)
+            candidate = model.method_candidates.by_symbol.get(fact.symbol_id)
         if candidate is None:
             raise LibraryError("P2A_LIBRARY_PROJECTION", "selected method declaration is missing")
         unit, key, _ = visibility.declaration(candidate.declaration)
