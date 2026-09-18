@@ -205,9 +205,20 @@ class SignatureResolver:
                         str(candidate["symbol_id"]), "USER_METHOD"
                     ),
                 )
-                if candidate.get("return_rule_id") == "return.collection.numeric_sum.v1" and receiver.actual_type not in {"array<int>", "array<float>"}:
-                    issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                        "array.sum requires array<int> or array<float>", receiver.span))
+                if candidate.get(
+                    "return_rule_id"
+                ) == "return.collection.numeric_sum.v1" and receiver.actual_type not in {
+                    "array<int>",
+                    "array<float>",
+                }:
+                    issues.append(
+                        SignatureIssue(
+                            Severity.ERROR,
+                            codes.ARGUMENT_TYPE,
+                            "array.sum requires array<int> or array<float>",
+                            receiver.span,
+                        )
+                    )
                 resolution = replace(resolution, issues=resolution.issues + tuple(issues))
             if not self.candidate_is_active(candidate):
                 resolution = replace(
@@ -573,7 +584,10 @@ class SignatureResolver:
                 )
             )
 
-        if validate_types and entry.get("parameter_type_rule_id") == "parameter.input.same_enum_type.v1":
+        if (
+            validate_types
+            and entry.get("parameter_type_rule_id") == "parameter.input.same_enum_type.v1"
+        ):
             by_name = {
                 str(item.parameter.get("name")): item
                 for item in resolved
@@ -583,7 +597,13 @@ class SignatureResolver:
             option_type = by_name.get("options").actual_type if by_name.get("options") else None
             option_types = tuple_element_types(option_type or "")
             valid_default = isinstance(default_type, str) and default_type not in {
-                "unknown", "any", "int", "float", "bool", "string", "color"
+                "unknown",
+                "any",
+                "int",
+                "float",
+                "bool",
+                "string",
+                "color",
             }
             valid_options = not option_types or (
                 valid_default and all(item == default_type for item in option_types)
@@ -601,26 +621,59 @@ class SignatureResolver:
         if validate_types and entry.get("return_rule_id") == "return.array.from_arguments.v1":
             types = {item.actual_type for item in resolved}.difference({None, "unknown", "na"})
             if not types or (len(types) > 1 and not types <= {"int", "float"}):
-                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                    "array.from values must have one compatible element type", span))
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "array.from values must have one compatible element type",
+                        span,
+                    )
+                )
         if validate_types and entry.get("return_rule_id") == "return.collection.numeric_sum.v1":
-            if any(item.actual_type not in {"array<int>", "array<float>", "unknown"} for item in resolved):
-                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                    "array.sum requires array<int> or array<float>", span))
+            if any(
+                item.actual_type not in {"array<int>", "array<float>", "unknown"}
+                for item in resolved
+            ):
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "array.sum requires array<int> or array<float>",
+                        span,
+                    )
+                )
 
-        if validate_types and entry.get("parameter_type_rule_id") == "parameter.str.tostring.scalar_or_enum.v1":
-            by_name = {str(item.parameter.get("name")): item for item in resolved
-                       if item.parameter is not None}
+        if (
+            validate_types
+            and entry.get("parameter_type_rule_id") == "parameter.str.tostring.scalar_or_enum.v1"
+        ):
+            by_name = {
+                str(item.parameter.get("name")): item
+                for item in resolved
+                if item.parameter is not None
+            }
             value = by_name.get("value")
             actual = value.actual_type if value else None
             symbol = (symbols or {}).get(actual) if isinstance(actual, str) else None
             kind = getattr(getattr(symbol, "kind", None), "value", None)
             if actual not in {"int", "float", "bool", "string", "na", "unknown"} and kind != "ENUM":
-                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                    "str.tostring requires a scalar value or an exact declared enum type", span))
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "str.tostring requires a scalar value or an exact declared enum type",
+                        span,
+                    )
+                )
             if kind == "ENUM" and "format" in by_name:
-                issues.append(SignatureIssue(Severity.ERROR, codes.ARGUMENT_TYPE,
-                    "The enum str.tostring overload does not accept format", span))
+                issues.append(
+                    SignatureIssue(
+                        Severity.ERROR,
+                        codes.ARGUMENT_TYPE,
+                        "The enum str.tostring overload does not accept format",
+                        span,
+                    )
+                )
 
         if validate_types and entry.get("return_rule_id") in {
             "return.na.source_or_numeric_promotion.v1",

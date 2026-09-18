@@ -1,6 +1,8 @@
 """Request return types and exact source-expression binding."""
+
 import pytest
 from pine2ast import parse_code
+
 
 @pytest.mark.parametrize(
     "arguments", ['"EX:S","1",[close,open]', 'expression=[close,open],symbol="EX:S",timeframe="1"']

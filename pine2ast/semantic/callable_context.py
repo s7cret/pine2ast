@@ -136,15 +136,22 @@ class CallableContext:
             if not isinstance(node, CallExpr) or not isinstance(node.callee, Identifier):
                 continue
             selected = self.functions.resolve(node, caller) if self.functions is not None else None
-            declaration = (selected.candidate.declaration if selected is not None and selected.user_selected
-                           else self.declarations.get(node.callee.name))
+            declaration = (
+                selected.candidate.declaration
+                if selected is not None and selected.user_selected
+                else self.declarations.get(node.callee.name)
+            )
             if declaration is None or any(p.type_ref is None for p in declaration.parameters):
                 continue
             proof = self.infer_call(node, caller)
             if proof is None:
                 continue
-            candidate = self.functions.by_node.get(id(declaration)) if self.functions is not None else None
-            symbol = self.analyzer.model.symbols[candidate.symbol_key if candidate is not None else declaration.name]
+            candidate = (
+                self.functions.by_node.get(id(declaration)) if self.functions is not None else None
+            )
+            symbol = self.analyzer.model.symbols[
+                candidate.symbol_key if candidate is not None else declaration.name
+            ]
             if QUALIFIER_ORDER[proof.qualifier] < QUALIFIER_ORDER[symbol.qualifier or "series"]:
                 symbol.qualifier = proof.qualifier
                 if proof.type_name not in {"unknown", "any", "function", "method"}:
@@ -198,16 +205,25 @@ class CallableContext:
         )
 
     def infer_call(self, call: CallExpr, caller: PineInferenceEngine) -> CallContextProof | None:
-        namespace_owner = (self.functions.visibility.function_owner(call)
-                           if self.functions is not None and self.functions.visibility is not None else None)
+        namespace_owner = (
+            self.functions.visibility.function_owner(call)
+            if self.functions is not None and self.functions.visibility is not None
+            else None
+        )
         if not isinstance(call.callee, Identifier) and namespace_owner is None:
             return None
         name = call.callee.name if isinstance(call.callee, Identifier) else call.callee.member
         selected = self.functions.resolve(call, caller) if self.functions is not None else None
         candidate = selected.candidate if selected is not None and selected.user_selected else None
-        if self.functions is not None and len(self.functions.by_name.get(name, ())) > 1 and candidate is None:
+        if (
+            self.functions is not None
+            and len(self.functions.by_name.get(name, ())) > 1
+            and candidate is None
+        ):
             return None
-        declaration = candidate.declaration if candidate is not None else self.declarations.get(name)
+        declaration = (
+            candidate.declaration if candidate is not None else self.declarations.get(name)
+        )
         symbol = (caller.symbols or {}).get(candidate.symbol_key if candidate is not None else name)
         if (
             declaration is None
@@ -232,8 +248,12 @@ class CallableContext:
         # Fixed typed declaration bounds are already established by the existing
         # non-contextual owner. Exhausting optional specialization cannot erase
         # those facts; untyped declarations have no such safe fallback.
-        candidate = self.functions.by_node.get(id(declaration)) if self.functions is not None else None
-        symbol = self.analyzer.model.symbols.get(candidate.symbol_key if candidate is not None else declaration.name)
+        candidate = (
+            self.functions.by_node.get(id(declaration)) if self.functions is not None else None
+        )
+        symbol = self.analyzer.model.symbols.get(
+            candidate.symbol_key if candidate is not None else declaration.name
+        )
         fixed = symbol is not None and all(p.type_ref is not None for p in declaration.parameters)
         return CallContextProof(
             identity,

@@ -124,6 +124,7 @@ class SemanticFactBuilder:
         self._assign_scopes(program, "scope:global")
         self._resolve_calls(program)
         from pine2ast.semantic.call_graph import reject_recursive_calls
+
         reject_recursive_calls(program, self.index, self._call_bindings, self._append_diagnostic)
         self._propagate_user_statefulness(program)
         self._index_constant_functions()
@@ -1420,7 +1421,9 @@ class SemanticFactBuilder:
                 if node.op in {"==", "!="}:
                     # bool is not an integer in Pine. Match the runtime's typed
                     # equality even when Python would equate False and 0.
-                    equal = False if (type(left) is bool) != (type(right) is bool) else left == right
+                    equal = (
+                        False if (type(left) is bool) != (type(right) is bool) else left == right
+                    )
                     return True, equal if node.op == "==" else not equal
                 if node.op == "<":
                     return True, left < right

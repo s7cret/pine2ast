@@ -80,6 +80,6 @@ def test_legacy_registry_inputs_are_audit_only():
 
 def test_legacy_identifier_match_is_exact_but_also_checks_string_keys():
     pattern = r"(?<![A-Za-z0-9_])target_version(?![A-Za-z0-9_])"
-    assert re.search(pattern, 'target_version = 6')
+    assert re.search(pattern, "target_version = 6")
     assert re.search(pattern, 'payload["target_version"]')
-    assert not re.search(pattern, 'compiler_target_version = 6')
+    assert not re.search(pattern, "compiler_target_version = 6")

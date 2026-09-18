@@ -1,4 +1,5 @@
 """Stage 2.4 producer gates for typed collection/reference lifecycle."""
+
 import pytest
 
 from pine2ast.hardening.consumer_bundle import build_consumer_bundle, ConsumerBundleError
@@ -40,7 +41,7 @@ def test_explicit_collection_types_reject_direct_nested_collections(declaration)
     "body",
     [
         'a=array.new<int>()\narray.push(a,"x")',
-        'm=map.new<string,int>()\nmap.put(m,1,2)',
+        "m=map.new<string,int>()\nmap.put(m,1,2)",
         'm=map.new<string,int>()\nmap.put(m,"x","bad")',
         'm=matrix.new<int>(1,1,0)\nmatrix.set(m,0,0,"bad")',
     ],
@@ -75,12 +76,13 @@ def test_reference_parameters_and_returns_are_admitted_for_v5_v6(version, body):
     "body",
     [
         "a=array.new<int>(1,1)\np=a[1]",
-        'm=map.new<string,int>()\np=m[1]',
+        "m=map.new<string,int>()\np=m[1]",
         "m=matrix.new<int>(1,1,1)\np=m[1]",
     ],
 )
 def test_collection_reference_history_is_admitted_in_v5_v6(version, body):
     assert build_consumer_bundle(source(body, version))["content_hash"]
+
 
 @pytest.mark.parametrize(
     "expression",

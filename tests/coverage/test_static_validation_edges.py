@@ -418,14 +418,16 @@ def test_sort_field_issues_cover_non_udt_qualifier_type_unknown_and_unsortable(
 
 
 def test_type_field_map_and_top_level_static_report_are_consistent() -> None:
-    program = parse_code("""//@version=6
+    program = parse_code(
+        """//@version=6
 indicator("report")
 type Point
     float price
 var array<Point> points = array.new<Point>()
 array.sort(points, sort_field="price")
 strategy.exit("X")
-""").ast
+"""
+    ).ast
     fields = validation._type_fields(program)
     assert fields["Point"][0][:2] == ("price", "float")
     report = validation.build_static_validation_report(program)

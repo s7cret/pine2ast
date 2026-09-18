@@ -22,15 +22,34 @@ V5_GENERIC = ["defval", "title", "tooltip", "inline", "group"]
 V6_GENERIC = ["defval", "title", "tooltip", "inline", "group", "display", "active"]
 V6_GENERIC_SOURCE = ["defval", "title", "inline", "group", "tooltip", "display", "active"]
 V5_NUMERIC_BOUNDED = [
-    "defval", "title", "minval", "maxval", "step", "tooltip", "inline", "group", "confirm"
+    "defval",
+    "title",
+    "minval",
+    "maxval",
+    "step",
+    "tooltip",
+    "inline",
+    "group",
+    "confirm",
 ]
 V5_NUMERIC_OPTIONS = ["defval", "title", "options", "tooltip", "inline", "group", "confirm"]
 V6_NUMERIC_BOUNDED = [*V5_NUMERIC_BOUNDED, "display", "active"]
 V6_NUMERIC_OPTIONS = [*V5_NUMERIC_OPTIONS, "display", "active"]
 MODERN_INPUTS = {
-    "input", "input.bool", "input.color", "input.enum", "input.float", "input.int",
-    "input.price", "input.session", "input.source", "input.string", "input.symbol",
-    "input.text_area", "input.time", "input.timeframe",
+    "input",
+    "input.bool",
+    "input.color",
+    "input.enum",
+    "input.float",
+    "input.int",
+    "input.price",
+    "input.session",
+    "input.source",
+    "input.string",
+    "input.symbol",
+    "input.text_area",
+    "input.time",
+    "input.timeframe",
 }
 
 
@@ -110,14 +129,17 @@ def test_v6_active_is_input_bool_and_not_backported_to_v5():
         assert "active" not in names(v5)
         active = next(p for p in v6["parameters"] if p["name"] == "active")
         assert active == {
-            "name": "active", "required": False, "type": "bool",
-            "qualifier_max": "input", "default": True,
+            "name": "active",
+            "required": False,
+            "type": "bool",
+            "qualifier_max": "input",
+            "default": True,
         }
 
 
 @pytest.mark.parametrize("version", [5, 6])
 def test_enum_and_text_area_are_real_versioned_calls(version):
-    source = f'''//@version={version}
+    source = f"""//@version={version}
 indicator("inputs")
 enum Mode
     fast
@@ -125,7 +147,7 @@ enum Mode
 mode=input.enum(Mode.fast,"Mode",options=[Mode.fast,Mode.slow])
 text=input.text_area("a\\nb","Text")
 plot(mode==Mode.fast ? str.length(text) : 0)
-'''
+"""
     facts, _ = compile_ok(source)
     calls = {row["callee"]: row for row in facts["calls"]}
     assert calls["input.enum"]["return_type"] == "Mode"
@@ -136,7 +158,7 @@ plot(mode==Mode.fast ? str.length(text) : 0)
 
 
 @pytest.mark.parametrize("version", range(1, 5))
-@pytest.mark.parametrize("call", ['input.text_area("x")', 'input.enum(E.a)'])
+@pytest.mark.parametrize("call", ['input.text_area("x")', "input.enum(E.a)"])
 def test_modern_specialized_inputs_are_rejected_in_historical_versions(version, call):
     declaration = "study" if version < 4 else "study"
     prefix = "enum E\n    a\n" if "enum" in call else ""
@@ -144,49 +166,62 @@ def test_modern_specialized_inputs_are_rejected_in_historical_versions(version, 
 
 
 def test_enum_options_must_keep_one_nominal_type():
-    compile_bad('''//@version=6
+    compile_bad(
+        """//@version=6
 indicator("bad")
 enum A
     x
 enum B
     x
 m=input.enum(A.x,options=[A.x,B.x])
-''', "enum")
+""",
+        "enum",
+    )
 
 
 def test_active_and_overload_negative_boundaries_are_explicit():
-    compile_ok('''//@version=6
+    compile_ok(
+        """//@version=6
 indicator("active")
 enabled=input.bool(true)
 length=input.int(10,active=enabled)
 plot(length)
-''')
-    compile_bad('''//@version=5
+"""
+    )
+    compile_bad(
+        """//@version=5
 indicator("active")
 enabled=input.bool(true)
 length=input.int(10,active=enabled)
-''', "active")
-    compile_bad('''//@version=6
+""",
+        "active",
+    )
+    compile_bad(
+        """//@version=6
 indicator("mixed")
 length=input.int(10,options=[5,10],minval=1)
-''')
-    compile_bad('''//@version=6
+"""
+    )
+    compile_bad(
+        """//@version=6
 indicator("tail")
 x=input.int(1,"x",0,10,1,"tip","i","g",false,display.all,true,99)
-''')
+"""
+    )
 
 
 def test_generic_scalar_and_source_choose_distinct_overloads():
-    source = '''//@version=6
+    source = """//@version=6
 indicator("generic")
 a=input(1.5)
 b=input(close)
 plot(a+b)
-'''
+"""
     facts, _ = compile_ok(source)
     calls = [row for row in facts["calls"] if row["callee"] == "input"]
     assert [row["overload_id"] for row in calls] == [
-        "pine:function:input#overload:1", "pine:function:input#overload:5"
+        "pine:function:input#overload:1",
+        "pine:function:input#overload:5",
     ]
     catalog = CatalogRepository.default().pack(6)["sections"]["functions"]["input"]
     by_id = {row["overload_id"]: row for row in catalog["overloads"]}
@@ -194,13 +229,15 @@ plot(a+b)
 
 
 def test_mutated_input_variable_cannot_satisfy_input_qualified_active():
-    compile_bad('''//@version=6
+    compile_bad(
+        """//@version=6
 indicator("mutated")
 enabled=input.bool(true)
 enabled:=false
 length=input.int(10,active=enabled)
 plot(length)
-''')
+"""
+    )
 
 
 def test_ta_rma_has_exact_modern_contract_without_historical_backport():

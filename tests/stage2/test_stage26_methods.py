@@ -47,7 +47,7 @@ def test_stage26_collection_receivers_keep_element_type(version):
     code = _src(
         "method firstValue(array<int> self)=>array.get(self, 0)\n"
         "method firstValue(array<string> self)=>array.get(self, 0)\n"
-        "xs=array.new<int>(1, 2)\nys=array.new<string>(1, \"x\")\n"
+        'xs=array.new<int>(1, 2)\nys=array.new<string>(1, "x")\n'
         "n=xs.firstValue()\n"
         "s=ys.firstValue()\n"
         "plot(n)\nplot(str.length(s))",
@@ -58,7 +58,8 @@ def test_stage26_collection_receivers_keep_element_type(version):
     calls = [
         row
         for row in build_consumer_bundle(code)["semantic_facts"]["calls"]
-        if row.get("call_form") == "USER_METHOD" and "firstValue" in str(row.get("name", row.get("symbol_id", "")))
+        if row.get("call_form") == "USER_METHOD"
+        and "firstValue" in str(row.get("name", row.get("symbol_id", "")))
     ]
     assert {(row["receiver_type"], row["return_type"]) for row in calls} == {
         ("array<int>", "int"),
@@ -71,7 +72,7 @@ def test_stage26_named_defaults_select_exact_overload(version):
     code = _src(
         "method choose(int self, int n, float extra=0.5)=>n+extra\n"
         "method choose(int self, string text)=>str.length(text)\n"
-        "a=1\nplot(a.choose(n=4))\nplot(a.choose(\"abcd\"))",
+        'a=1\nplot(a.choose(n=4))\nplot(a.choose("abcd"))',
         version,
     )
     parsed = parse_code(code)
@@ -110,8 +111,12 @@ def test_stage26_methods_not_backported_before_v5(version):
 
 def test_stage26_exported_library_methods_keep_source_bound_receivers():
     sources = {
-        "ownerA/Lib/1": _lib("export type Point\n    int n=1\nexport method score(Point self)=>self.n", name="Lib"),
-        "ownerB/Lib/1": _lib("export type Point\n    int n=10\nexport method score(Point self)=>self.n*2", name="Lib"),
+        "ownerA/Lib/1": _lib(
+            "export type Point\n    int n=1\nexport method score(Point self)=>self.n", name="Lib"
+        ),
+        "ownerB/Lib/1": _lib(
+            "export type Point\n    int n=10\nexport method score(Point self)=>self.n*2", name="Lib"
+        ),
     }
     good = (
         '//@version=6\nindicator("s26")\n'

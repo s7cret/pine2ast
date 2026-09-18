@@ -4,6 +4,7 @@ This file intentionally keeps the high-value version-boundary assertions compact
 It does not merge the remote PR and does not turn historical uncertainty into an
 unsupported completeness claim.
 """
+
 from __future__ import annotations
 
 import json
@@ -13,21 +14,38 @@ from pine2ast.catalog import CatalogRepository, validate_catalog_pack
 
 ROOT = Path(__file__).resolve().parents[2]
 BARSTATE = {
-    "barstate.isconfirmed", "barstate.isfirst", "barstate.ishistory",
-    "barstate.islast", "barstate.islastconfirmedhistory", "barstate.isnew",
+    "barstate.isconfirmed",
+    "barstate.isfirst",
+    "barstate.ishistory",
+    "barstate.islast",
+    "barstate.islastconfirmedhistory",
+    "barstate.isnew",
     "barstate.isrealtime",
 }
 LEGACY_INPUTS = {
-    "input.bool", "input.color", "input.float", "input.integer",
-    "input.source", "input.string",
+    "input.bool",
+    "input.color",
+    "input.float",
+    "input.integer",
+    "input.source",
+    "input.string",
 }
 MODERN_INPUTS = {
-    "input.bool", "input.color", "input.float", "input.int",
-    "input.source", "input.string", "input.timeframe",
+    "input.bool",
+    "input.color",
+    "input.float",
+    "input.int",
+    "input.source",
+    "input.string",
+    "input.timeframe",
 }
 SHORT = {
-    "input.bool": "bool", "input.color": "color", "input.float": "float",
-    "input.integer": "integer", "input.source": "source", "input.string": "string",
+    "input.bool": "bool",
+    "input.color": "color",
+    "input.float": "float",
+    "input.integer": "integer",
+    "input.source": "source",
+    "input.string": "string",
 }
 
 
@@ -58,10 +76,13 @@ def test_barstate_metadata_and_delta_origin_are_version_exact():
         assert row["first_observed_version"] == 1
         assert row["last_observed_version"] == 6
     v1 = _rows(ROOT / "catalog_source/deltas/v1.jsonl")
-    assert {r["name"] for r in v1 if r.get("op") == "ADD" and r.get("section") == "variables"} >= BARSTATE
+    assert {
+        r["name"] for r in v1 if r.get("op") == "ADD" and r.get("section") == "variables"
+    } >= BARSTATE
     for version in range(1, 7):
         removes = [
-            row for row in _rows(ROOT / f"catalog_source/deltas/v{version}.jsonl")
+            row
+            for row in _rows(ROOT / f"catalog_source/deltas/v{version}.jsonl")
             if row.get("op") == "REMOVE" and ":barstate." in str(row.get("symbol_id", ""))
         ]
         assert removes == []
@@ -110,8 +131,7 @@ def test_v4_renames_legacy_input_constants_and_v5_performs_typed_input_migration
 
     v5 = _rows(ROOT / "catalog_source/deltas/v5.jsonl")
     added = {
-        row["name"] for row in v5
-        if row.get("op") == "ADD" and row.get("section") == "functions"
+        row["name"] for row in v5 if row.get("op") == "ADD" and row.get("section") == "functions"
     }
     removed = {row.get("symbol_id") for row in v5 if row.get("op") == "REMOVE"}
     assert MODERN_INPUTS <= added

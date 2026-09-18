@@ -45,18 +45,19 @@ def test_udf_local_shadow_can_be_reassigned_without_touching_global(version):
 
 def test_global_reference_object_field_mutation_is_not_binding_reassignment():
     parsed = parse_code(
-        script(
-            "type C\n    int n=0\nvar C c=C.new()\nf()=>\n    c.n+=1\n    c.n\nplot(f())"
-        )
+        script("type C\n    int n=0\nvar C c=C.new()\nf()=>\n    c.n+=1\n    c.n\nplot(f())")
     )
     assert parsed.ok, [d.to_dict() for d in parsed.diagnostics]
 
 
 @pytest.mark.parametrize("version", [2, 3, 4, 5, 6])
-@pytest.mark.parametrize("bad", [
-    "f()=>f()\nplot(f())",
-    "f()=>g()\ng()=>f()\nplot(f())",
-])
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "f()=>f()\nplot(f())",
+        "f()=>g()\ng()=>f()\nplot(f())",
+    ],
+)
 def test_recursive_udf_cycles_remain_rejected_by_resolved_identity(version, bad):
     parsed = parse_code(script(bad, version))
     assert not parsed.ok
@@ -65,9 +66,7 @@ def test_recursive_udf_cycles_remain_rejected_by_resolved_identity(version, bad)
 
 @pytest.mark.parametrize("version", [2, 3, 4, 5, 6])
 def test_nested_function_definition_is_rejected_in_udf_scope(version):
-    parsed = parse_code(
-        script("outer()=>\n    inner()=>1\n    inner()\nplot(outer())", version)
-    )
+    parsed = parse_code(script("outer()=>\n    inner()=>1\n    inner()\nplot(outer())", version))
     assert not parsed.ok
     assert any(d.code == codes.NESTED_FUNCTION for d in parsed.diagnostics)
 
@@ -99,7 +98,8 @@ def test_v6_single_expression_udf_rejects_every_catalog_global_only_callable(cal
     parsed = parse_code(script(f"f()=>{call}\nplot(close)", 6))
     assert not parsed.ok
     assert any(d.code == codes.BUILTIN_FORBIDDEN_LOCAL for d in parsed.diagnostics), (
-        call, [d.to_dict() for d in parsed.diagnostics]
+        call,
+        [d.to_dict() for d in parsed.diagnostics],
     )
 
 
@@ -109,12 +109,8 @@ def test_v6_single_expression_user_method_rejects_global_only_builtin():
     assert any(d.code == codes.BUILTIN_FORBIDDEN_LOCAL for d in parsed.diagnostics)
 
 
-
-
 def test_v6_single_expression_user_method_rejects_script_declaration():
-    parsed = parse_code(
-        script('method bad(int self)=>indicator("inner")\na=1\nplot(a.bad())', 6)
-    )
+    parsed = parse_code(script('method bad(int self)=>indicator("inner")\na=1\nplot(a.bad())', 6))
     assert not parsed.ok
     assert any(d.code == codes.DECLARATION_NOT_GLOBAL for d in parsed.diagnostics)
 
@@ -122,12 +118,12 @@ def test_v6_single_expression_user_method_rejects_script_declaration():
 def test_v6_udf_keeps_allowed_drawing_and_ta_calls_available():
     parsed = parse_code(
         script(
-            'f(float x)=>\n'
+            "f(float x)=>\n"
             '    label.new(bar_index,x,"ok")\n'
-            '    pts=array.new<chart.point>()\n'
-            '    polyline.new(pts)\n'
-            '    ta.sma(x,2)\n'
-            'plot(f(close))',
+            "    pts=array.new<chart.point>()\n"
+            "    polyline.new(pts)\n"
+            "    ta.sma(x,2)\n"
+            "plot(f(close))",
             6,
         )
     )
@@ -155,5 +151,7 @@ def test_single_expression_udf_rejects_script_declarations(version, call):
     parsed = parse_code(script(f"f()=>{call}\nplot(close)", version))
     assert not parsed.ok
     assert any(d.code == codes.DECLARATION_NOT_GLOBAL for d in parsed.diagnostics), (
-        version, call, [d.to_dict() for d in parsed.diagnostics]
+        version,
+        call,
+        [d.to_dict() for d in parsed.diagnostics],
     )

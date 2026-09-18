@@ -25,7 +25,7 @@ def test_v6_numeric_condition_requires_explicit_bool() -> None:
 
 def test_bool_and_int_cast_signatures_are_bound() -> None:
     for version in range(1, 7):
-        declaration = 'indicator' if version >= 5 else 'study'
+        declaration = "indicator" if version >= 5 else "study"
         assert_ok(f'//@version={version}\n{declaration}("casts")\nb = bool(1)\ni = int(1.5)\n')
 
 
@@ -40,11 +40,18 @@ def test_history_non_int_offsets_fail_closed() -> None:
             ParseOptions(max_diagnostics=100),
         )
         assert not result.ok
-        assert any("offset" in item.message.lower() or "integer" in item.message.lower() for item in result.diagnostics)
+        assert any(
+            "offset" in item.message.lower() or "integer" in item.message.lower()
+            for item in result.diagnostics
+        )
 
 
 def test_bool_na_version_boundary_is_preserved() -> None:
-    v5 = parse_code('//@version=5\nindicator("v5")\nbool x = na\n', ParseOptions(max_diagnostics=100))
-    v6 = parse_code('//@version=6\nindicator("v6")\nbool x = na\n', ParseOptions(max_diagnostics=100))
+    v5 = parse_code(
+        '//@version=5\nindicator("v5")\nbool x = na\n', ParseOptions(max_diagnostics=100)
+    )
+    v6 = parse_code(
+        '//@version=6\nindicator("v6")\nbool x = na\n', ParseOptions(max_diagnostics=100)
+    )
     assert v5.ok
     assert not v6.ok

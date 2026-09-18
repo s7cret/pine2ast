@@ -409,15 +409,14 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
         name = callee_name(expr.callee)
         lookup_name, entry = self._registry_entry_for_call(expr.callee)
         visibility = getattr(self, "_method_visibility", None)
-        explicit_library_method = (
-            visibility is not None and (visibility.explicit_owner(expr) is not None
-                                        or visibility.function_owner(expr) is not None)
+        explicit_library_method = visibility is not None and (
+            visibility.explicit_owner(expr) is not None
+            or visibility.function_owner(expr) is not None
         )
         if not explicit_library_method:
             self._visit_callee(expr.callee)
         in_callable_scope = any(
-            scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD}
-            for scope in self.scope_stack
+            scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD} for scope in self.scope_stack
         )
         if entry and (self.local_depth > 0 or in_callable_scope):
             if entry.get("scope") == "global_only":

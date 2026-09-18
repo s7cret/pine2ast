@@ -52,8 +52,12 @@ def test_stage25_unknown_members_and_foreign_enum_equality_fail_closed(body):
 
 def test_stage25_same_name_library_types_keep_distinct_linked_identities():
     sources = {
-        "ownerA/Geom/1": _library("export type Point\n    int n=1\nexport enum Side\n    left", name="Geom"),
-        "ownerB/Geom/1": _library("export type Point\n    int n=10\nexport enum Side\n    left", name="Geom"),
+        "ownerA/Geom/1": _library(
+            "export type Point\n    int n=1\nexport enum Side\n    left", name="Geom"
+        ),
+        "ownerB/Geom/1": _library(
+            "export type Point\n    int n=10\nexport enum Side\n    left", name="Geom"
+        ),
     }
     source = _script(
         "import ownerA/Geom/1 as a\nimport ownerB/Geom/1 as b\n"
@@ -61,7 +65,9 @@ def test_stage25_same_name_library_types_keep_distinct_linked_identities():
     )
     linked = link_libraries(source, LibraryStore.create(sources))
     linked.verify()
-    points = [row["linked_name"] for row in linked.receipt()["declarations"] if row["name"] == "Point"]
+    points = [
+        row["linked_name"] for row in linked.receipt()["declarations"] if row["name"] == "Point"
+    ]
     assert len(set(points)) == 2
     assert parse_code(linked.code).ok
 
@@ -100,12 +106,13 @@ def test_stage25_nested_udt_enum_title_and_method_receiver_parse(version):
 
 def test_stage25_foreign_library_udt_is_not_accepted_as_local_parameter():
     sources = {
-        "ownerA/Geom/1": _library("export type Point\n    int n=1\nexport read(Point p)=>p.n", name="Geom"),
+        "ownerA/Geom/1": _library(
+            "export type Point\n    int n=1\nexport read(Point p)=>p.n", name="Geom"
+        ),
         "ownerB/Geom/1": _library("export type Point\n    int n=10", name="Geom"),
     }
     source = _script(
-        "import ownerA/Geom/1 as a\nimport ownerB/Geom/1 as b\n"
-        "p=b.Point.new()\nplot(a.read(p))"
+        "import ownerA/Geom/1 as a\nimport ownerB/Geom/1 as b\n" "p=b.Point.new()\nplot(a.read(p))"
     )
     linked = link_libraries(source, LibraryStore.create(sources))
     parsed = parse_code(linked.code)
@@ -115,8 +122,8 @@ def test_stage25_foreign_library_udt_is_not_accepted_as_local_parameter():
 @pytest.mark.parametrize(
     "body",
     [
-        'enum Side\n    buy=1',
-        "type P\n    int n\np=P.new()\np.n:=\"x\"",
+        "enum Side\n    buy=1",
+        'type P\n    int n\np=P.new()\np.n:="x"',
         "type P\n    int n\ntype Q\n    int n\np=P.new()\nq=Q.new()\np:=q",
         "enum Side\n    buy\nplot(Side.buy==1)",
     ],

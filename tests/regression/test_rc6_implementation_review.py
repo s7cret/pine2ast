@@ -263,9 +263,7 @@ def test_consumer_bundle_propagates_producer_identity_to_every_linked_artifact()
 
     assert bundle["semantic_facts"]["producer"] == expected
     assert bundle["linked_artifacts"]
-    assert all(
-        artifact["producer"] == expected for artifact in bundle["linked_artifacts"].values()
-    )
+    assert all(artifact["producer"] == expected for artifact in bundle["linked_artifacts"].values())
     verify_consumer_bundle(
         bundle,
         source=_VALID_V6,
@@ -437,9 +435,7 @@ def test_v6_rejects_removed_bare_global_builtin_names(name: str) -> None:
             "strategy.risk.fixed",
             "strategy.risk.percent_of_equity",
         ):
-            invalid = parse_code(
-                f'//@version=6\nstrategy("x")\nx = {alias}\n'
-            )
+            invalid = parse_code(f'//@version=6\nstrategy("x")\nx = {alias}\n')
             assert any(
                 item.code == codes.VERSION_FEATURE_UNAVAILABLE and alias in item.message
                 for item in invalid.diagnostics

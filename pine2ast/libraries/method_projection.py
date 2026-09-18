@@ -11,7 +11,13 @@ from __future__ import annotations
 from bisect import bisect_right
 
 from pine2ast.api import ParseOptions, ParsePipeline
-from pine2ast.ast.nodes import CallExpr, FunctionDeclaration, Identifier, MemberAccessExpr, MethodDeclaration
+from pine2ast.ast.nodes import (
+    CallExpr,
+    FunctionDeclaration,
+    Identifier,
+    MemberAccessExpr,
+    MethodDeclaration,
+)
 from pine2ast.ast.visitors import walk
 from .store import LibraryError
 
@@ -24,7 +30,10 @@ class _Visibility:
         self.units = {linker.root.ref: linker.root, **linker.units}
         self.method_rows = {
             ref: sorted(
-                ((node.span.start_offset, key, node) for key, node in (unit.methods | unit.functions).items()),
+                (
+                    (node.span.start_offset, key, node)
+                    for key, node in (unit.methods | unit.functions).items()
+                ),
                 key=lambda row: row[0],
             )
             for ref, unit in self.units.items()
@@ -145,10 +154,16 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
     index = model.function_candidates.index
     calls = {c.node_id: c for c in model.semantic_facts.calls}
     for node in walk(parsed.ast):
-        if not isinstance(node, CallExpr) or not isinstance(node.callee, (Identifier, MemberAccessExpr)):
+        if not isinstance(node, CallExpr) or not isinstance(
+            node.callee, (Identifier, MemberAccessExpr)
+        ):
             continue
         fact = calls.get(index.id_for(node))
-        if fact is None or fact.call_form not in {"USER_METHOD", "USER_FUNCTION"} or fact.resolution_status != "RESOLVED":
+        if (
+            fact is None
+            or fact.call_form not in {"USER_METHOD", "USER_FUNCTION"}
+            or fact.resolution_status != "RESOLVED"
+        ):
             continue
         if fact.call_form == "USER_FUNCTION":
             candidate = model.function_candidates.by_symbol.get(fact.symbol_id)
@@ -164,10 +179,15 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
         unit, key, _ = visibility.declaration(candidate.declaration)
         if unit is linker.root:
             continue
-        explicit = (isinstance(node.callee, Identifier) or visibility.explicit_owner(node) is not None
-                    or visibility.function_owner(node) is not None)
-        member = (node.callee.name if isinstance(node.callee, Identifier) else node.callee.member)
-        start = node.callee.span.start_offset if explicit else node.callee.span.end_offset - len(member)
+        explicit = (
+            isinstance(node.callee, Identifier)
+            or visibility.explicit_owner(node) is not None
+            or visibility.function_owner(node) is not None
+        )
+        member = node.callee.name if isinstance(node.callee, Identifier) else node.callee.member
+        start = (
+            node.callee.span.start_offset if explicit else node.callee.span.end_offset - len(member)
+        )
         ref, original = visibility.location(start)
         caller = visibility.units[ref]
         length = node.callee.span.end_offset - start
@@ -180,9 +200,17 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
     for unit in linker.units.values():
         for key, node in unit.functions.items():
             if key.startswith("@function:"):
-                token = next((t for t in unit.tokens
-                              if node.span.start_offset <= t.span.start_offset < node.body.span.start_offset
-                              and t.text == node.name), None)
+                token = next(
+                    (
+                        t
+                        for t in unit.tokens
+                        if node.span.start_offset
+                        <= t.span.start_offset
+                        < node.body.span.start_offset
+                        and t.text == node.name
+                    ),
+                    None,
+                )
                 if token is None:
                     raise LibraryError("P2A_LIBRARY_PROJECTION", "function name token is missing")
                 linker.edit(unit, token.span.start_offset, token.span.end_offset, unit.renamed[key])

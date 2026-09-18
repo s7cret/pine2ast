@@ -203,7 +203,11 @@ class PineInferenceEngine:
         if isinstance(expr, CallExpr) and self.function_candidates is not None:
             selected = self.function_candidates.resolve(expr, self)
             if selected is not None:
-                return normalize_return_type(selected.resolution.return_type) if selected.resolution.ok else "unknown"
+                return (
+                    normalize_return_type(selected.resolution.return_type)
+                    if selected.resolution.ok
+                    else "unknown"
+                )
         if isinstance(expr, Identifier):
             captured = self._lexical_types.get(id(expr))
             if captured and captured != "unknown":

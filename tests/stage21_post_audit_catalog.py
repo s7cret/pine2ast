@@ -8,10 +8,15 @@ from pathlib import Path
 _FIXTURE = Path(__file__).with_name("fixtures") / "stage21_post_audit_catalog_delta.json"
 _CUMULATIVE_FIXTURE = Path(__file__).with_name("fixtures") / "stage23_cumulative_catalog_delta.json"
 
+
 def _digest(value):
-    return "sha256:" + hashlib.sha256(
-        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
-    ).hexdigest()
+    return (
+        "sha256:"
+        + hashlib.sha256(
+            json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+        ).hexdigest()
+    )
+
 
 def _delta():
     data = json.loads(_FIXTURE.read_bytes())
@@ -20,12 +25,14 @@ def _delta():
     data["content_hash"] = claimed
     return data
 
+
 def _cumulative_delta():
     data = json.loads(_CUMULATIVE_FIXTURE.read_bytes())
     claimed = data.pop("content_hash")
     assert _digest(data) == claimed
     data["content_hash"] = claimed
     return data
+
 
 def restore_stage21_baseline(pack):
     """Return a copy rolled back to the sealed Stage 2.1 catalog baseline.
@@ -57,6 +64,7 @@ def restore_stage21_baseline(pack):
         assert current == record["after"]
         restored["sections"]["functions"]["ta.rma"] = deepcopy(record["before"])
     return restored
+
 
 def restore_pre_audit_ta_rma(pack):
     """Backward-compatible name for historical guards.

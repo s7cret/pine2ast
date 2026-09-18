@@ -29,7 +29,9 @@ def test_stage28_exact_revision_lock_and_source_checksum(version):
     receipt = linked.receipt()
     assert receipt["pine_version"] == version
     assert "user/Lib/1" in receipt["dependencies"]
-    loc = linked.original_location(linked.code.rindex(linked.receipt()["declarations"][0]["linked_name"]))
+    loc = linked.original_location(
+        linked.code.rindex(linked.receipt()["declarations"][0]["linked_name"])
+    )
     assert loc["source"] in {"<memory>", "user/Lib/1"}
 
 
@@ -62,7 +64,9 @@ def test_stage28_latest_token_is_rejected():
 def test_stage28_dependency_change_changes_hashes_and_projection():
     src = _root("plot(lib.add(1))", "import user/Lib/1 as lib")
     first = link_libraries(src, LibraryStore.create({"user/Lib/1": _lib("export add(int x)=>x+1")}))
-    second = link_libraries(src, LibraryStore.create({"user/Lib/1": _lib("export add(int x)=>x+2")}))
+    second = link_libraries(
+        src, LibraryStore.create({"user/Lib/1": _lib("export add(int x)=>x+2")})
+    )
     first.verify()
     second.verify()
     assert first.dependency_hashes != second.dependency_hashes
@@ -73,8 +77,12 @@ def test_stage28_dependency_change_changes_hashes_and_projection():
 def test_stage28_transitive_diamond_is_deterministic():
     sources = {
         "user/Core/1": _lib("export base(int x)=>x", name="Core"),
-        "user/Left/1": _lib("import user/Core/1 as core\nexport wrap(int x)=>core.base(x)+1", name="Left"),
-        "user/Right/1": _lib("import user/Core/1 as core\nexport wrap(int x)=>core.base(x)+2", name="Right"),
+        "user/Left/1": _lib(
+            "import user/Core/1 as core\nexport wrap(int x)=>core.base(x)+1", name="Left"
+        ),
+        "user/Right/1": _lib(
+            "import user/Core/1 as core\nexport wrap(int x)=>core.base(x)+2", name="Right"
+        ),
     }
     root = _root(
         "plot(left.wrap(1)+right.wrap(1))",

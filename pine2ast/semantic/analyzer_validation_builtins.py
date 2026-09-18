@@ -73,14 +73,11 @@ class AnalyzerBuiltinValidationMixin(AnalyzerMixinHost):
         # the v6 variable registry.  Pine exposes strategy.cash,
         # strategy.fixed and strategy.percent_of_equity instead; the
         # strategy.risk.* aliases are not public symbols and must fail closed.
-        if (
-            self.version_context.pine_version >= 5
-            and name in {
-                "strategy.risk.cash",
-                "strategy.risk.fixed",
-                "strategy.risk.percent_of_equity",
-            }
-        ):
+        if self.version_context.pine_version >= 5 and name in {
+            "strategy.risk.cash",
+            "strategy.risk.fixed",
+            "strategy.risk.percent_of_equity",
+        }:
             self._diag(
                 Severity.ERROR,
                 codes.VERSION_FEATURE_UNAVAILABLE,

@@ -114,7 +114,9 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         else:
             if init_qualifier == "input" and not self._is_reassigned_declaration(node):
                 qualifier = "input"
-            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(node):
+            elif init_qualifier in {"const", "simple"} and not self._is_reassigned_declaration(
+                node
+            ):
                 qualifier = init_qualifier
             else:
                 qualifier = "series"
@@ -221,9 +223,15 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         if (
             sym is not None
             and isinstance(node.target, Identifier)
-            and any(scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD} for scope in self.scope_stack)
+            and any(
+                scope.kind in {ScopeKind.FUNCTION, ScopeKind.METHOD} for scope in self.scope_stack
+            )
         ):
-            parameter_ids = set().union(*self._callable_parameter_ids) if self._callable_parameter_ids else set()
+            parameter_ids = (
+                set().union(*self._callable_parameter_ids)
+                if self._callable_parameter_ids
+                else set()
+            )
             if sym.id in parameter_ids:
                 self._diag(
                     Severity.ERROR,
@@ -329,7 +337,11 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
         self._visit_body(node.body)
         owner = self.model.function_candidates
         candidate = owner.by_node.get(id(node)) if owner is not None else None
-        sym = self.model.symbols.get(candidate.symbol_key) if candidate is not None else self._resolve(node.name)
+        sym = (
+            self.model.symbols.get(candidate.symbol_key)
+            if candidate is not None
+            else self._resolve(node.name)
+        )
         if sym is not None:
             sym.type = self._body_return_type(node.body)
         self._callable_parameter_ids.pop()
@@ -476,10 +488,15 @@ class AnalyzerStatementMixin(AnalyzerMixinHost):
                     and isinstance(default.operand, Literal)
                     and default.operand.literal_type in {"int", "float"}
                 )
-                name = self._expr_path(default) if isinstance(default, (Identifier, MemberAccessExpr)) else None
+                name = (
+                    self._expr_path(default)
+                    if isinstance(default, (Identifier, MemberAccessExpr))
+                    else None
+                )
                 symbol = self._resolve(name) if name is not None else None
                 value_symbol = symbol is not None and symbol.kind in {
-                    SymbolKind.BUILTIN, SymbolKind.ENUM_MEMBER,
+                    SymbolKind.BUILTIN,
+                    SymbolKind.ENUM_MEMBER,
                 }
                 if not literal and not value_symbol:
                     self._diag(

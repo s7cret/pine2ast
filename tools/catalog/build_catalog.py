@@ -141,7 +141,12 @@ _MISSING = object()
 
 
 def _input_parameter(
-    name: str, type_name: str, *, required: bool = False, qualifier: str = "const", default: Any = _MISSING
+    name: str,
+    type_name: str,
+    *,
+    required: bool = False,
+    qualifier: str = "const",
+    default: Any = _MISSING,
 ) -> dict[str, Any]:
     row: dict[str, Any] = {
         "name": name,
@@ -163,7 +168,11 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
     """
     if version not in {5, 6} or not (name == "input" or name.startswith("input.")):
         return None
-    active = [_input_parameter("active", "bool", qualifier="input", default=True)] if version >= 6 else []
+    active = (
+        [_input_parameter("active", "bool", qualifier="input", default=True)]
+        if version >= 6
+        else []
+    )
     display_all = _input_parameter("display", "display", default="display.all")
     display_none = _input_parameter("display", "display", default="display.none")
     title = _input_parameter("title", "string", default="")
@@ -172,9 +181,15 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
     group = _input_parameter("group", "string", default="")
     confirm = _input_parameter("confirm", "bool", default=False)
 
-    def fixed(def_type: str, returns: str, *, options: str | None = None,
-              include_inline: bool = True, display_none_default: bool = False,
-              include_confirm: bool = True) -> dict[str, Any]:
+    def fixed(
+        def_type: str,
+        returns: str,
+        *,
+        options: str | None = None,
+        include_inline: bool = True,
+        display_none_default: bool = False,
+        include_confirm: bool = True,
+    ) -> dict[str, Any]:
         parameters = [_input_parameter("defval", def_type, required=True), title]
         if options is not None:
             parameters.append(_input_parameter("options", options))
@@ -196,11 +211,13 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
             base.extend([display_all, *active])
         overloads = []
         for dtype in ("int", "float", "bool", "color", "string"):
-            overloads.append({
-                "parameters": [_input_parameter("defval", dtype, required=True), *base],
-                "returns": dtype,
-                "return_qualifier": "input",
-            })
+            overloads.append(
+                {
+                    "parameters": [_input_parameter("defval", dtype, required=True), *base],
+                    "returns": dtype,
+                    "return_qualifier": "input",
+                }
+            )
         # The source overload is intentionally separate because its default and
         # result are series-qualified. Keep the historical parameter order used
         # by the compiler's named-argument binder.
@@ -209,14 +226,16 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
             if version == 5
             else [title, inline, group, tooltip, display_all, *active]
         )
-        overloads.append({
-            "parameters": [
-                _input_parameter("defval", "float", required=True, qualifier="series"),
-                *source_tail,
-            ],
-            "returns": "float",
-            "return_qualifier": "series",
-        })
+        overloads.append(
+            {
+                "parameters": [
+                    _input_parameter("defval", "float", required=True, qualifier="series"),
+                    *source_tail,
+                ],
+                "returns": "float",
+                "return_qualifier": "series",
+            }
+        )
         return {
             "parameters": [_input_parameter("defval", "any", required=True), *base],
             "overloads": overloads,
@@ -227,14 +246,28 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
     if name in {"input.int", "input.float"}:
         dtype = name.rsplit(".", 1)[1]
         bounded = [
-            _input_parameter("defval", dtype, required=True), title,
-            _input_parameter("minval", dtype), _input_parameter("maxval", dtype),
-            _input_parameter("step", dtype, default=1), tooltip, inline, group, confirm, display_all, *active,
+            _input_parameter("defval", dtype, required=True),
+            title,
+            _input_parameter("minval", dtype),
+            _input_parameter("maxval", dtype),
+            _input_parameter("step", dtype, default=1),
+            tooltip,
+            inline,
+            group,
+            confirm,
+            display_all,
+            *active,
         ]
         selected = [
-            _input_parameter("defval", dtype, required=True), title,
+            _input_parameter("defval", dtype, required=True),
+            title,
             _input_parameter("options", f"array<{dtype}>", required=True),
-            tooltip, inline, group, confirm, display_all, *active,
+            tooltip,
+            inline,
+            group,
+            confirm,
+            display_all,
+            *active,
         ]
         if version == 5:
             # The v5 concepts manual publishes both numeric overloads without
@@ -260,7 +293,13 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
     if name == "input.source":
         parameters = [
             _input_parameter("defval", "float", required=True, qualifier="series"),
-            title, tooltip, inline, group, display_all, *active, confirm,
+            title,
+            tooltip,
+            inline,
+            group,
+            display_all,
+            *active,
+            confirm,
         ]
         return {"parameters": parameters, "returns": "float", "return_qualifier": "series"}
     if name == "input.text_area":
@@ -279,15 +318,22 @@ def _modern_input_contract(name: str, version: int) -> dict[str, Any] | None:
     return None
 
 
-def enrich_callable_contract(name: str, definition: dict[str, Any], *, version: int | None = None) -> None:
+def enrich_callable_contract(
+    name: str, definition: dict[str, Any], *, version: int | None = None
+) -> None:
     """Complete callable qualifier metadata before catalog sealing."""
 
     contract = _modern_input_contract(name, version) if version is not None else None
     if contract is not None:
         for key in (
-            "parameters", "overloads", "returns", "return_rule_id",
-            "return_qualifier", "return_qualifier_rule_id",
-            "parameter_type_rule_id", "allow_extra_positional",
+            "parameters",
+            "overloads",
+            "returns",
+            "return_rule_id",
+            "return_qualifier",
+            "return_qualifier_rule_id",
+            "parameter_type_rule_id",
+            "allow_extra_positional",
         ):
             definition.pop(key, None)
         definition.update(copy.deepcopy(contract))
@@ -295,7 +341,6 @@ def enrich_callable_contract(name: str, definition: dict[str, Any], *, version: 
         # permissive rows must not continue accepting undeclared positional tails.
         definition["allow_extra_positional"] = False
         definition["input_contract_revision"] = 2
-
 
     # The v5/v6 reference requires one string argument for these functions.
     if name in {"str.upper", "str.lower", "str.tonumber"}:
@@ -408,7 +453,11 @@ def enrich_callable_contract(name: str, definition: dict[str, Any], *, version: 
             options = [by_name[n] for n in selected if n in by_name]
             next(p for p in options if p["name"] == "options")["required"] = True
             definition["overloads"] = [{"parameters": options, "returns": definition["returns"]}]
-    modern_generic = contract is None and name == "input" and not any(p.get("name") == "type" for p in definition.get("parameters", []))
+    modern_generic = (
+        contract is None
+        and name == "input"
+        and not any(p.get("name") == "type" for p in definition.get("parameters", []))
+    )
     if modern_generic:
         source = copy.deepcopy(definition.get("parameters", []))
         default = next(p for p in source if p["name"] == "defval")
@@ -442,7 +491,9 @@ def enrich_callable_contract(name: str, definition: dict[str, Any], *, version: 
                 )
         candidate.setdefault("return_qualifier", "series")
     if modern_generic:
-        next(p for p in definition["overloads"][0]["parameters"] if p["name"] == "defval")["qualifier_max"] = "series"
+        next(p for p in definition["overloads"][0]["parameters"] if p["name"] == "defval")[
+            "qualifier_max"
+        ] = "series"
     if name == "array.from" and isinstance(definition.get("parameters"), list):
         for parameter in definition["parameters"]:
             if isinstance(parameter, dict) and parameter.get("name") == "values":
@@ -1241,7 +1292,6 @@ def compare_lossless_modern(
     return losses
 
 
-
 def apply_stage2_audit_contract(name: str, definition: dict[str, Any], version: int) -> None:
     """Reviewed modern overrides, applied AFTER historical projection.
 
@@ -1251,19 +1301,36 @@ def apply_stage2_audit_contract(name: str, definition: dict[str, Any], version: 
     """
     if version not in {5, 6}:
         return
+
     def parameter(name: str, type_name: str, required: bool = True, **extra: Any) -> dict[str, Any]:
-        return {"name": name, "type": type_name, "required": required,
-                "qualifier_max": "series", **extra}
+        return {
+            "name": name,
+            "type": type_name,
+            "required": required,
+            "qualifier_max": "series",
+            **extra,
+        }
+
     contracts = {
         "str.contains": [parameter("source", "string"), parameter("str", "string")],
         "str.startswith": [parameter("source", "string"), parameter("str", "string")],
         "str.endswith": [parameter("source", "string"), parameter("str", "string")],
-        "str.substring": [parameter("source", "string"), parameter("begin_pos", "int"),
-                          parameter("end_pos", "int", False)],
-        "str.replace": [parameter("source", "string"), parameter("target", "string"),
-                        parameter("replacement", "string"), parameter("occurrence", "int", False, default=0)],
-        "str.replace_all": [parameter("source", "string"), parameter("target", "string"),
-                            parameter("replacement", "string")],
+        "str.substring": [
+            parameter("source", "string"),
+            parameter("begin_pos", "int"),
+            parameter("end_pos", "int", False),
+        ],
+        "str.replace": [
+            parameter("source", "string"),
+            parameter("target", "string"),
+            parameter("replacement", "string"),
+            parameter("occurrence", "int", False, default=0),
+        ],
+        "str.replace_all": [
+            parameter("source", "string"),
+            parameter("target", "string"),
+            parameter("replacement", "string"),
+        ],
         "str.split": [parameter("source", "string"), parameter("separator", "string")],
         "str.tostring": [parameter("value", "any"), parameter("format", "string", False)],
     }
@@ -1276,6 +1343,7 @@ def apply_stage2_audit_contract(name: str, definition: dict[str, Any], version: 
     if name in {"color.r", "color.g", "color.b", "color.t"}:
         definition.pop("unsupported_diagnostic_code", None)
         definition.pop("allow_extra_positional", None)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()

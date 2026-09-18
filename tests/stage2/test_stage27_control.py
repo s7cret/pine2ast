@@ -62,7 +62,7 @@ def test_stage27_once_is_statement_not_expression():
 @pytest.mark.parametrize(
     "body",
     [
-        "for i=1 to 3\n    strategy(\"inner\")",
+        'for i=1 to 3\n    strategy("inner")',
         "once na\n    x=1",
         "once\n    plot(close)",
     ],

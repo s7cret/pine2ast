@@ -188,12 +188,28 @@ class ParameterQualifierInference:
         name = callee_name(call.callee)
         entry: dict[str, Any] | None
         engine = self._engine(symbols)
-        selected = self.functions.resolve(call, engine, qualifiers=False) if self.functions is not None else None
-        declaration = (selected.candidate.declaration if selected is not None and selected.user_selected
-                       else self.declarations.get(name))
+        selected = (
+            self.functions.resolve(call, engine, qualifiers=False)
+            if self.functions is not None
+            else None
+        )
+        declaration = (
+            selected.candidate.declaration
+            if selected is not None and selected.user_selected
+            else self.declarations.get(name)
+        )
         if (
             declaration is not None
-            and getattr(symbols.get(selected.candidate.symbol_key if selected is not None and selected.user_selected else name), "kind", None) is not SymbolKind.FUNCTION
+            and getattr(
+                symbols.get(
+                    selected.candidate.symbol_key
+                    if selected is not None and selected.user_selected
+                    else name
+                ),
+                "kind",
+                None,
+            )
+            is not SymbolKind.FUNCTION
         ):
             return
         if declaration is not None:

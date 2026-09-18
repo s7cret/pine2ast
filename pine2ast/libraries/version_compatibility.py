@@ -6,6 +6,7 @@ producer still parses, types, and binds the original declarations. Version-sensi
 constructs are refused; they must use a future per-module semantic execution domain.
 The proof is always regenerated from exact locked source bytes when linking.
 """
+
 from __future__ import annotations
 
 import ast
@@ -21,8 +22,10 @@ IDENT = r"[A-Za-z_][A-Za-z_0-9]*"
 PARAM = re.compile(rf"(?:(simple|series)\s+)?(int|float|string)\s+({IDENT})\Z")
 DECL = re.compile(rf"(export\s+)?({IDENT})\s*\(([^()]*)\)\s*=>\s*(.+)\Z")
 
+
 class VersionSensitiveLibrary(ValueError):
     """A source was not proven invariant; it must never be silently converted."""
+
 
 @dataclass(frozen=True)
 class _Function:
@@ -45,14 +48,20 @@ def _without_comment(line: str) -> str:
             quote = None
         elif not quote and char in ("'", '"'):
             quote = char
-        elif not quote and line[index:index+2] == "//":
+        elif not quote and line[index : index + 2] == "//":
             return line[:index].strip()
     return line.strip()
 
 
 def _canonical(value: Any) -> str:
-    return "sha256:" + hashlib.sha256(json.dumps(value, sort_keys=True,
-        separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+    return (
+        "sha256:"
+        + hashlib.sha256(
+            json.dumps(
+                value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
+            ).encode()
+        ).hexdigest()
+    )
 
 
 def prove_version_invariant_library(source: str) -> dict[str, Any]:
@@ -80,11 +89,16 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
                 header = ast.parse(line, mode="eval").body
             except SyntaxError as exc:
                 raise VersionSensitiveLibrary("simple library declaration required") from exc
-            if not (isinstance(header, ast.Call) and isinstance(header.func, ast.Name)
-                    and header.func.id == "library" and len(header.args) == 1
-                    and isinstance(header.args[0], ast.Constant)
-                    and type(header.args[0].value) is str and not header.keywords):
-                raise VersionSensitiveLibrary("only library(\"name\") is in this proof profile")
+            if not (
+                isinstance(header, ast.Call)
+                and isinstance(header.func, ast.Name)
+                and header.func.id == "library"
+                and len(header.args) == 1
+                and isinstance(header.args[0], ast.Constant)
+                and type(header.args[0].value) is str
+                and not header.keywords
+            ):
+                raise VersionSensitiveLibrary('only library("name") is in this proof profile')
             seen_header = True
             continue
         match = DECL.fullmatch(line)
@@ -97,7 +111,9 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
         for arg in args.split(",") if args.strip() else []:
             parameter = PARAM.fullmatch(arg.strip())
             if not parameter:
-                raise VersionSensitiveLibrary("only explicitly typed scalar parameters; no defaults")
+                raise VersionSensitiveLibrary(
+                    "only explicitly typed scalar parameters; no defaults"
+                )
             qualifier, typ, pname = parameter.groups()
             if any(pname == p[0] for p in params):
                 raise VersionSensitiveLibrary("duplicate parameter")
@@ -127,7 +143,7 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
                 typ = type(node.value)
                 if typ is bool or node.value is None:
                     raise VersionSensitiveLibrary("bool and NA require versioned semantics")
-                if typ is int and -(2**63) <= node.value <= 2**63-1:
+                if typ is int and -(2**63) <= node.value <= 2**63 - 1:
                     return "int"
                 if typ is float and math.isfinite(node.value):
                     return "float"
@@ -143,7 +159,9 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
                 if typ not in ("int", "float"):
                     raise VersionSensitiveLibrary("numeric unary operands required")
                 return typ
-            if isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Mod)):
+            if isinstance(node, ast.BinOp) and isinstance(
+                node.op, (ast.Add, ast.Sub, ast.Mult, ast.Mod)
+            ):
                 left, right = infer(node.left), infer(node.right)
                 if isinstance(node.op, ast.Add) and left == right == "string":
                     return "string"
@@ -153,17 +171,23 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
                 target = node.func.id
                 if target not in functions:
-                    raise VersionSensitiveLibrary("builtin/external calls require per-module contracts")
+                    raise VersionSensitiveLibrary(
+                        "builtin/external calls require per-module contracts"
+                    )
                 callee = functions[target]
                 if node.keywords or len(node.args) != len(callee.params):
-                    raise VersionSensitiveLibrary("only exact positional local calls in invariant profile")
+                    raise VersionSensitiveLibrary(
+                        "only exact positional local calls in invariant profile"
+                    )
                 for value, (_, expected, _) in zip(node.args, callee.params):
                     actual = infer(value)
                     if actual != expected and not (actual == "int" and expected == "float"):
                         raise VersionSensitiveLibrary("local call scalar type mismatch")
                 calls[name].add(target)
                 return function_type(target)
-            raise VersionSensitiveLibrary(f"{type(node).__name__} requires a semantic language domain")
+            raise VersionSensitiveLibrary(
+                f"{type(node).__name__} requires a semantic language domain"
+            )
 
         result = infer(function.expression)
         visiting.remove(name)
@@ -178,11 +202,16 @@ def prove_version_invariant_library(source: str) -> dict[str, Any]:
         "source_pine_version": int(versions[0]),
         "compatible_consumer_versions": [5, 6],
         "proof_kind": "closed_stateless_scalar_expression_subset",
-        "functions": {name: {"exported": function.exported,
-            "parameters": [list(p) for p in function.params],
-            "return_type": return_types[name],
-            "expression": ast.dump(function.expression, include_attributes=False),
-            "calls": sorted(calls[name])} for name, function in sorted(functions.items())},
+        "functions": {
+            name: {
+                "exported": function.exported,
+                "parameters": [list(p) for p in function.params],
+                "return_type": return_types[name],
+                "expression": ast.dump(function.expression, include_attributes=False),
+                "calls": sorted(calls[name]),
+            }
+            for name, function in sorted(functions.items())
+        },
         "not_full_mixed_version_support": True,
     }
     result["content_hash"] = _canonical(result)

@@ -57,7 +57,10 @@ class DeclarationIndexPass:
         owner = self.analyzer.model.function_candidates
         if owner is not None:
             for candidate in owner.duplicate_candidates():
-                self.analyzer._diag(Severity.ERROR, codes.REDECLARATION,
+                self.analyzer._diag(
+                    Severity.ERROR,
+                    codes.REDECLARATION,
                     "Function overload repeats or cannot distinguish required qualified parameter types.",
-                    candidate.declaration.span)
+                    candidate.declaration.span,
+                )
         infer_callable_result_qualifiers(self.analyzer, program)
