@@ -135,6 +135,30 @@ def _limit_diagnostics(diagnostics: list[Diagnostic], limit: int) -> list[Diagno
     return [item for index, item in enumerate(deduped) if index in selected]
 
 
+def library_origin_span_versions(
+    library_context: LibraryQualifierContext | None,
+) -> tuple[tuple[int, int, int], ...]:
+    """Map generated offsets to the originating module Pine version.
+
+    Lexical lowering concatenates library bodies after the consumer header, so a
+    later parse would otherwise apply the consumer ``//@version``. Projection
+    rows keep the origin unit; ``//@version`` text is never rewritten.
+    """
+    if library_context is None:
+        return ()
+    receipt = library_context.to_dict()["linkage_receipt"]
+    sources = receipt["sources"]
+    return tuple(
+        (
+            int(row["generated_start"]),
+            int(row["generated_end"]),
+            int(sources[row["source"]]["pine_version"]),
+        )
+        for row in receipt["projection"]
+        if isinstance(row, dict) and row.get("source") in sources
+    )
+
+
 class ParsePipeline:
     def __init__(self, options: ParseOptions | None = None) -> None:
         self.options = (options or ParseOptions()).clamp_to_ceiling()
@@ -265,6 +289,9 @@ class ParsePipeline:
         )
         analyzer._method_visibility = method_visibility
         analyzer._projected_exported_functions = projected_exports
+        origin_spans = library_origin_span_versions(self.options.library_context)
+        analyzer._origin_span_versions = origin_spans
+        analyzer.inference.origin_span_versions = origin_spans
         if self.options.library_context is not None:
             analyzer._projected_exported_functions = self.options.library_context.declaration_ids(
                 ast
