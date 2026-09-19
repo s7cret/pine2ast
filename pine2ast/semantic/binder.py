@@ -817,7 +817,7 @@ class SemanticFactBuilder:
             rules.append(f"operator.unary.{node.op}.v{version}")
         elif isinstance(node, ConditionalExpr):
             rules.append(f"control.condition.v{version}")
-            rules.append(self.policy.rule_id("ternary"))
+            rules.append(origin_semantic_rule_id(version, "ternary"))
         elif isinstance(node, OnceStructure):
             rules.append(f"control.once.v{version}")
         elif isinstance(node, (IfStructure, WhileStructure)):
