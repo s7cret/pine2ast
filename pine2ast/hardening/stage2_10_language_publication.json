@@ -8,9 +8,9 @@
     "5": "sha256:f1d437cfeb821e97c02e437be18304bfe58642e382a63db5fd1295fd338d8da5",
     "6": "sha256:68565f5498c837ec4c7c50c1dc75a33c0c20f31f16a2f9dca773cdb4188331c5"
   },
-  "compiler_target_hash": "sha256:2635a58b890610efd8a678b8bf8a2c31787e7ee6703d88ecd75d9708cf4cb97f",
+  "compiler_target_hash": "sha256:1254f5ce7661471584297a7e750b95a6c6871bfe559a9528938f0b2245cc5ba5",
   "compiler_target_name": "pinelib",
-  "compiler_target_version": "sha256:edd7499240e0ca738379a102569c867172c4c1ad3044916c485d70411814b685",
+  "compiler_target_version": "sha256:3cc0e1b96e6f2822de25e2d097d26aaf754cae246705cab9392bad705f822dfb",
   "criteria": {
     "imports": "not_accepted",
     "independent_builtin_expected": "not_accepted",
@@ -41,7 +41,7 @@
     "protected_workers_not_sealed_on_this_tree",
     "mixed_version_library_imports"
   ],
-  "runtime_target_file_hash": "sha256:600a21c4a45f0f9102199aaf3a5644f9dda78ff854a19fe041ab3f737f839cce",
+  "runtime_target_file_hash": "sha256:8e4d5b35dc363099d391a1e9a51ff72a4a361703f873f55db5c3c6a62e2983ef",
   "schema_id": "openpine.stage2_10_language_publication.v1",
   "status": "candidate_not_full_acceptance"
 }
