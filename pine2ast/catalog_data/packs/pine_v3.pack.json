@@ -1,8 +1,8 @@
 {
-  "catalog_hash": "sha256:2e0ddb60e225d41f3d46d9803b2ba655d6acc342925e4e168206a8504197fc3d",
-  "content_hash": "sha256:be5670bdbe5a6a28f789c1cc287998744762cbea47f410e97a0f86fde179797a",
+  "catalog_hash": "sha256:7d607bd3cf47cb7fed0108a009f635fd78fbc4b11603525acd31655a6962e95d",
+  "content_hash": "sha256:19067fc17494e185c06e2ee5dcd77f01f032eb7297ac86769575b2a55c1692f6",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
-  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+  "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
   "pine_version": 3,
   "provenance_sources": [
     {
@@ -9674,7 +9674,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+  "source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
   "spec_snapshot_ref": "tradingview-pine-v3-historical-static-snapshot-2026-08-27",
   "status": "HISTORICAL_STATIC_SNAPSHOT"
 }

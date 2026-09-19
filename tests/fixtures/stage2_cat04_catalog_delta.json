@@ -1,0 +1,122 @@
+{
+  "authority": {
+    "assertion": "array_binary_search_family_added_march_2022_v5",
+    "id": "tv.release_notes.2022-03.array_binary_search",
+    "url": "https://www.tradingview.com/pine-script-docs/release-notes/#march-2022"
+  },
+  "content_hash": "sha256:1c23c18c774869e53d1ca91e53c01da8e5adc0d28c123f90539b02dffb847675",
+  "new_historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
+  "new_source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
+  "old_historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+  "old_source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+  "schema_id": "pine2ast.stage2_cat04_catalog_delta.v1",
+  "versions": {
+    "1": {
+      "after_catalog_hash": "sha256:b8f919d087832a440af3c4ae5527ecae56f114dc73659e6bf419d50549b80873",
+      "after_content_hash": "sha256:799b8c016dd181adfa03ea85ea1d1b17dde7456c634700f2efcd8675293ee0bd",
+      "before_catalog_hash": "sha256:f98f23c68395990c32744cbb05a0068bd8b247b0ecdd64747a52648fd6c7fd2a",
+      "before_content_hash": "sha256:981a4cf3bd5878a4bfecff85ad8b78fe2184daf42591daa2e39ee6863900726a"
+    },
+    "2": {
+      "after_catalog_hash": "sha256:cd82b5037383225b7d73c430322b9f1513b146e29a4449ee35c2f1dfaeeee487",
+      "after_content_hash": "sha256:133120138964ea05fd82d7f117577f43cf1ee4654a89fdf948a855c798461f1f",
+      "before_catalog_hash": "sha256:38e735fb3b7cd4417c481f248256e1a020bc59e63319f23797f490bb49116315",
+      "before_content_hash": "sha256:ddf39b9f5460c0e32acc5de7b860e43e13ea79d9b4bcc3b44c90198a1e37fc05"
+    },
+    "3": {
+      "after_catalog_hash": "sha256:7d607bd3cf47cb7fed0108a009f635fd78fbc4b11603525acd31655a6962e95d",
+      "after_content_hash": "sha256:19067fc17494e185c06e2ee5dcd77f01f032eb7297ac86769575b2a55c1692f6",
+      "before_catalog_hash": "sha256:2e0ddb60e225d41f3d46d9803b2ba655d6acc342925e4e168206a8504197fc3d",
+      "before_content_hash": "sha256:be5670bdbe5a6a28f789c1cc287998744762cbea47f410e97a0f86fde179797a"
+    },
+    "4": {
+      "after_catalog_hash": "sha256:77d283f6e030c7a763fa7396607d0dc0b7bfddc27209c1824073eb892bf634c0",
+      "after_content_hash": "sha256:e538d35fb1be3ac127b29eba066d579293e1100e535aed42d10f38f66602458c",
+      "before_catalog_hash": "sha256:697b84a50cd1f9bb5e7bad44cae7fe023a74704f35063ddb97abd58d8c32229a",
+      "before_content_hash": "sha256:b63a2f2d90a44d3088125095e760ee92985086528c75a9e8f8b70972d68d5be6",
+      "restored_functions": {
+        "array.binary_search": {
+          "kind": "builtin",
+          "name": "array.binary_search",
+          "parameters": [
+            {
+              "name": "id",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "array"
+            },
+            {
+              "name": "value",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "pine_version": "4",
+          "return_qualifier": "series",
+          "returns": "int",
+          "scope": "any",
+          "symbol_id": "pine:function:array.binary_search"
+        },
+        "array.binary_search_leftmost": {
+          "kind": "builtin",
+          "name": "array.binary_search_leftmost",
+          "parameters": [
+            {
+              "name": "id",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "array"
+            },
+            {
+              "name": "value",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "pine_version": "4",
+          "return_qualifier": "series",
+          "returns": "int",
+          "scope": "any",
+          "symbol_id": "pine:function:array.binary_search_leftmost"
+        },
+        "array.binary_search_rightmost": {
+          "kind": "builtin",
+          "name": "array.binary_search_rightmost",
+          "parameters": [
+            {
+              "name": "id",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "array"
+            },
+            {
+              "name": "value",
+              "qualifier_max": "series",
+              "required": true,
+              "type": "any"
+            }
+          ],
+          "pine_version": "4",
+          "return_qualifier": "series",
+          "returns": "int",
+          "scope": "any",
+          "symbol_id": "pine:function:array.binary_search_rightmost"
+        }
+      }
+    },
+    "5": {
+      "after_catalog_hash": "sha256:f1d437cfeb821e97c02e437be18304bfe58642e382a63db5fd1295fd338d8da5",
+      "after_content_hash": "sha256:f80ba7d50072df1fe6dcaf8d01170eb97f8ca0756db63d030fcbd8f130f14b7a",
+      "before_catalog_hash": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
+      "before_content_hash": "sha256:c5b4963d5b8b841a91c79f547fe87c5150450501bf336ee67ac632f4c08e98e8"
+    },
+    "6": {
+      "after_catalog_hash": "sha256:68565f5498c837ec4c7c50c1dc75a33c0c20f31f16a2f9dca773cdb4188331c5",
+      "after_content_hash": "sha256:c7ed520a76134e9bb7066f6564864a7fb78a532fb36e09bbf847d4549f81a99e",
+      "before_catalog_hash": "sha256:c0a5765c209518853aa1e27e887c2700fd753d48d3e697ef870b22a5343a0160",
+      "before_content_hash": "sha256:cdd032dc55c4082ddd22ae1c1f731eb9113ba804ff821aecc220e5b143fa7ccd"
+    }
+  }
+}

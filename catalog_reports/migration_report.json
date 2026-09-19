@@ -4,16 +4,16 @@
     "1": 780,
     "2": 9,
     "3": 1,
-    "4": 291,
-    "5": 601,
+    "4": 288,
+    "5": 604,
     "6": 214
   },
-  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+  "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
   "input_identity": {
     "historical_projection": {
-      "byte_length": 7642,
+      "byte_length": 8047,
       "path": "catalog_source/historical_projection.json",
-      "sha256": "sha256:ac51737621e7a11c083fb415ec342e920b6659d941afba0c8fe6dabaa98dddb3"
+      "sha256": "sha256:f36bd0aaa47b8450f0f370a712300ff4a94534123c577ce5f3a03b352d36be7b"
     },
     "rc5_v5": {
       "byte_length": 678438,
@@ -43,12 +43,12 @@
   "migration_loss_count": 0,
   "ok": true,
   "pack_hashes": {
-    "1": "sha256:f98f23c68395990c32744cbb05a0068bd8b247b0ecdd64747a52648fd6c7fd2a",
-    "2": "sha256:38e735fb3b7cd4417c481f248256e1a020bc59e63319f23797f490bb49116315",
-    "3": "sha256:2e0ddb60e225d41f3d46d9803b2ba655d6acc342925e4e168206a8504197fc3d",
-    "4": "sha256:697b84a50cd1f9bb5e7bad44cae7fe023a74704f35063ddb97abd58d8c32229a",
-    "5": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
-    "6": "sha256:c0a5765c209518853aa1e27e887c2700fd753d48d3e697ef870b22a5343a0160"
+    "1": "sha256:b8f919d087832a440af3c4ae5527ecae56f114dc73659e6bf419d50549b80873",
+    "2": "sha256:cd82b5037383225b7d73c430322b9f1513b146e29a4449ee35c2f1dfaeeee487",
+    "3": "sha256:7d607bd3cf47cb7fed0108a009f635fd78fbc4b11603525acd31655a6962e95d",
+    "4": "sha256:77d283f6e030c7a763fa7396607d0dc0b7bfddc27209c1824073eb892bf634c0",
+    "5": "sha256:f1d437cfeb821e97c02e437be18304bfe58642e382a63db5fd1295fd338d8da5",
+    "6": "sha256:68565f5498c837ec4c7c50c1dc75a33c0c20f31f16a2f9dca773cdb4188331c5"
   },
   "schema_id": "pine.catalog.migration_report.v2",
   "section_counts": {
@@ -96,7 +96,7 @@
       "constants": 208,
       "declarations": 2,
       "enum_values": 0,
-      "functions": 356,
+      "functions": 353,
       "keywords": 12,
       "methods": 0,
       "namespaces": 43,

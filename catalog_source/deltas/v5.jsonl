@@ -14,6 +14,9 @@
 {"name":"math.rphi","op":"RENAME","section":"constants","symbol_id":"pine:constant:math.rphi"}
 {"op":"REMOVE","symbol_id":"pine:declaration:strategy"}
 {"op":"REMOVE","symbol_id":"pine:declaration:study"}
+{"name":"array.binary_search","op":"ADD","section":"functions","semantic_id":"sha256:2916704ab0e753255fb9f1e6a5af9f0e3b64dd5c03a62a545fe7153d0f0e59aa","symbol_id":"pine:function:array.binary_search"}
+{"name":"array.binary_search_leftmost","op":"ADD","section":"functions","semantic_id":"sha256:2cc4584aa57813e97e183100e46f00998f4e09fcb2ae1e2db1594076787a5173","symbol_id":"pine:function:array.binary_search_leftmost"}
+{"name":"array.binary_search_rightmost","op":"ADD","section":"functions","semantic_id":"sha256:239eae37f611a71b49455aa8877e517578fbffef865862770ee0fe6c57ef2441","symbol_id":"pine:function:array.binary_search_rightmost"}
 {"name":"chart.point.copy","op":"ADD","section":"functions","semantic_id":"sha256:bcd248df9b1d040cc17f2067619d7b3319b467de89152504b25d3d8b5a850635","symbol_id":"pine:function:chart.point.copy"}
 {"name":"chart.point.from_index","op":"ADD","section":"functions","semantic_id":"sha256:2996ad23cb40c7a038c94cb9afe13c8dc25692c164f1beae4f43ce6e2ee14555","symbol_id":"pine:function:chart.point.from_index"}
 {"name":"chart.point.from_time","op":"ADD","section":"functions","semantic_id":"sha256:3ad8085e0c838f948bd23b36983b0a1fe3c83687ff9ac46e987f713943553b37","symbol_id":"pine:function:chart.point.from_time"}
