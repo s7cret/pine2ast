@@ -242,8 +242,11 @@ def test_cycle_and_mixed_version_never_fall_back():
     }
     with pytest.raises(LibraryError, match="CYCLE"):
         link_libraries(root(imports="import user/A/1 as lib"), LibraryStore.create(sources))
+    allowed = link_libraries(root(), LibraryStore.create({"user/Lib/1": library(version=5)}))
+    allowed.verify()
+    assert allowed.receipt()["sources"]["user/Lib/1"]["pine_version"] == 5
     with pytest.raises(LibraryError, match="VERSION_CONTEXT"):
-        link_libraries(root(), LibraryStore.create({"user/Lib/1": library(version=5)}))
+        link_libraries(root(version=5), LibraryStore.create({"user/Lib/1": library(version=6)}))
 
 
 @pytest.mark.parametrize(
