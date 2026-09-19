@@ -51,7 +51,12 @@ from pine2ast.semantic.fact_model import (
 from pine2ast.semantic.collection_signatures import resolve_collection_call
 from pine2ast.semantic.constant_numbers import comparison_constant, round_constant
 from pine2ast.semantic import constant_functions as const_functions
-from pine2ast.semantic.inference import PineInferenceEngine, registry_entry_for_call
+from pine2ast.semantic.inference import (
+    PineInferenceEngine,
+    origin_const_int_division_fractional,
+    origin_pine_version,
+    registry_entry_for_call,
+)
 from pine2ast.semantic.node_index import NodeIndex
 from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.policy import SemanticPolicy
@@ -76,10 +81,12 @@ class SemanticFactBuilder:
         catalog: Mapping[str, Any],
         policy: SemanticPolicy,
         model: Any,
+        origin_span_versions: tuple[tuple[int, int, int], ...] = (),
     ) -> None:
         self.version_context = version_context
         policy.validate_context(version_context)
         self.catalog = catalog
+        self.origin_span_versions = origin_span_versions
         # Structural parents of active qualified names need type evidence even
         # when a pinned catalog omits the intermediate namespace (v5 direction).
         # This does not import names from another version or overwrite a symbol.
@@ -97,6 +104,7 @@ class SemanticFactBuilder:
             symbols=model.symbols,
             registry=catalog,
             policy=policy,
+            origin_span_versions=origin_span_versions,
         )
         self.engine.bind_model(model)
         self.signatures = SignatureResolver(version_context=version_context)
@@ -764,8 +772,13 @@ class SemanticFactBuilder:
             return ",".join(node.target.names)
         return None
 
+    def _origin_version(self, node: ASTNode) -> int:
+        return origin_pine_version(
+            self.version_context, self.origin_span_versions, node.span.start_offset
+        )
+
     def _semantic_rule_ids(self, node: ASTNode, call: CallBindingFact | None) -> list[str]:
-        version = self.version_context.pine_version
+        version = self._origin_version(node)
         rules: list[str] = []
         if isinstance(node, BinaryExpr):
             operator_name = {
@@ -1407,7 +1420,7 @@ class SemanticFactBuilder:
                     if right == 0:
                         return False, None
                     if (
-                        not self.policy.const_int_division_fractional
+                        not origin_const_int_division_fractional(self._origin_version(node))
                         and isinstance(left, int)
                         and not isinstance(left, bool)
                         and isinstance(right, int)

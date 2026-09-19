@@ -23,6 +23,7 @@ class SemanticFactsPass:
             catalog=self.analyzer.registry,
             policy=self.analyzer.policy,
             model=self.analyzer.model,
+            origin_span_versions=getattr(self.analyzer, "_origin_span_versions", ()),
         ).build(program)
 
 

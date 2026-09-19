@@ -134,6 +134,24 @@ def _symbol_kind_value(symbol: Any | None) -> str | None:
     return getattr(kind, "value", kind)
 
 
+def origin_pine_version(
+    version_context: PineVersionContext,
+    origin_span_versions: tuple[tuple[int, int, int], ...],
+    offset: int,
+) -> int:
+    """Return the originating module Pine version for a generated offset."""
+    for start, end, version in origin_span_versions:
+        if start <= offset < end:
+            return version
+    return version_context.pine_version
+
+
+def origin_const_int_division_fractional(version: int) -> bool:
+    """Catalog ``rules.semantic.const_int_division`` for the origin module."""
+    rules = load_catalog_readonly_view(version).get("rules", {}).get("semantic", {})
+    return rules.get("const_int_division") == "FRACTIONAL"
+
+
 class PineInferenceEngine:
     """Version-aware Pine expression inference facade.
 
@@ -151,6 +169,7 @@ class PineInferenceEngine:
         symbols: Mapping[str, Any] | None = None,
         registry: Mapping[str, Any] | None = None,
         policy: SemanticPolicy | None = None,
+        origin_span_versions: tuple[tuple[int, int, int], ...] = (),
     ) -> None:
         self.version_context = version_context
         self.symbols = symbols
@@ -162,6 +181,7 @@ class PineInferenceEngine:
         self.registry = registry or load_catalog_readonly_view(version_context.pine_version)
         self.policy = policy or semantic_policy_from_catalog(version_context, self.registry)
         self.policy.validate_context(version_context)
+        self.origin_span_versions = origin_span_versions
 
     @classmethod
     def from_analyzer(cls, analyzer: Any) -> "PineInferenceEngine":
@@ -173,6 +193,7 @@ class PineInferenceEngine:
             symbols=getattr(getattr(analyzer, "model", None), "symbols", None),
             registry=getattr(analyzer, "registry", None),
             policy=getattr(analyzer, "policy", None),
+            origin_span_versions=getattr(analyzer, "_origin_span_versions", ()),
         )
 
     def bind_model(self, model: SemanticModel) -> None:
@@ -419,7 +440,10 @@ class PineInferenceEngine:
 
         if expr.op != "/":
             return None
-        if not self.policy.const_int_division_fractional:
+        origin = origin_pine_version(
+            self.version_context, self.origin_span_versions, expr.span.start_offset
+        )
+        if not origin_const_int_division_fractional(origin):
             return None
         if left_type == right_type == "int" and {
             self.infer_qualifier(expr.left),
