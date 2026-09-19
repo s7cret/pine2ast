@@ -158,6 +158,12 @@ def origin_numeric_condition_allowed(version: int) -> bool:
     return bool(rules.get("numeric_condition_allowed"))
 
 
+def origin_bool_allows_na(version: int) -> bool:
+    """Catalog ``rules.semantic.bool_allows_na`` for the origin module."""
+    rules = load_catalog_readonly_view(version).get("rules", {}).get("semantic", {})
+    return bool(rules.get("bool_allows_na"))
+
+
 class PineInferenceEngine:
     """Version-aware Pine expression inference facade.
 

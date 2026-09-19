@@ -21,6 +21,7 @@ from pine2ast.semantic.type_helpers import (
 )
 from pine2ast.semantic.qualifier_validation import qualifier_rank
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
+from pine2ast.semantic.inference import origin_bool_allows_na, origin_pine_version
 
 
 class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
@@ -196,15 +197,20 @@ class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
         return False
 
     def _validate_bool_cannot_be_na(self, expected: str | None, expr: Expression) -> None:
+        origin = origin_pine_version(
+            self.version_context,
+            getattr(self, "_origin_span_versions", ()),
+            expr.span.start_offset,
+        )
         if (
-            self._uses_v6_bool_rules()
+            not origin_bool_allows_na(origin)
             and self._is_bool_target_type(expected)
             and self._expr_can_be_na(expr)
         ):
             self._diag(
                 Severity.ERROR,
                 codes.BOOL_CANNOT_BE_NA,
-                "Pine v6 bool cannot be na.",
+                f"Pine v{origin} bool cannot be na.",
                 expr.span,
             )
 
