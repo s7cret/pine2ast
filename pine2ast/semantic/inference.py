@@ -164,6 +164,15 @@ def origin_bool_allows_na(version: int) -> bool:
     return bool(rules.get("bool_allows_na"))
 
 
+def origin_semantic_rule_id(version: int, name: str) -> str:
+    """Catalog ``rules.semantic.rule_ids[name]`` for the origin module."""
+    rules = load_catalog_readonly_view(version).get("rules", {}).get("semantic", {})
+    ids = rules.get("rule_ids") or {}
+    if name not in ids:
+        raise KeyError(f"origin v{version} semantic policy has no rule ID {name!r}")
+    return str(ids[name])
+
+
 class PineInferenceEngine:
     """Version-aware Pine expression inference facade.
 

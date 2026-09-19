@@ -55,6 +55,7 @@ from pine2ast.semantic.inference import (
     PineInferenceEngine,
     origin_const_int_division_fractional,
     origin_pine_version,
+    origin_semantic_rule_id,
     registry_entry_for_call,
 )
 from pine2ast.semantic.node_index import NodeIndex
@@ -811,18 +812,18 @@ class SemanticFactBuilder:
                 rules.append(f"operator.division.const_int.v{version}")
             if node.op in {"and", "or"}:
                 key = "logical_and" if node.op == "and" else "logical_or"
-                rules.append(self.policy.rule_id(key))
+                rules.append(origin_semantic_rule_id(version, key))
         elif isinstance(node, UnaryExpr):
             rules.append(f"operator.unary.{node.op}.v{version}")
         elif isinstance(node, ConditionalExpr):
             rules.append(f"control.condition.v{version}")
-            rules.append(self.policy.rule_id("ternary"))
+            rules.append(origin_semantic_rule_id(version, "ternary"))
         elif isinstance(node, OnceStructure):
             rules.append(f"control.once.v{version}")
         elif isinstance(node, (IfStructure, WhileStructure)):
             rules.append(f"control.condition.v{version}")
         elif isinstance(node, ForRangeStructure):
-            rules.append(self.policy.rule_id("for_range_end"))
+            rules.append(origin_semantic_rule_id(version, "for_range_end"))
         elif isinstance(node, ForInStructure):
             rules.append(f"control.for_in.v{version}")
         if call is not None:

@@ -21,7 +21,11 @@ from pine2ast.semantic.type_helpers import (
 )
 from pine2ast.semantic.qualifier_validation import qualifier_rank
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
-from pine2ast.semantic.inference import origin_bool_allows_na, origin_pine_version
+from pine2ast.semantic.inference import (
+    origin_bool_allows_na,
+    origin_numeric_condition_allowed,
+    origin_pine_version,
+)
 
 
 class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
@@ -107,7 +111,12 @@ class AnalyzerTypeValidationMixin(AnalyzerMixinHost):
                 )
         elif expr.op in {"and", "or"}:
             allowed = {"bool", "unknown"}
-            if self.policy.numeric_condition_allowed:
+            origin = origin_pine_version(
+                self.version_context,
+                getattr(self, "_origin_span_versions", ()),
+                expr.span.start_offset,
+            )
+            if origin_numeric_condition_allowed(origin):
                 allowed.update({"int", "float"})
             if left_type not in allowed or right_type not in allowed:
                 self._diag(
