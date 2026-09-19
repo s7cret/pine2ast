@@ -32,6 +32,10 @@ from pine2ast.semantic.passes.loop_dos import (
     _static_int_bound,
 )
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
+from pine2ast.semantic.inference import (
+    origin_numeric_condition_allowed,
+    origin_pine_version,
+)
 
 
 class AnalyzerExpressionMixin(AnalyzerMixinHost):
@@ -558,23 +562,25 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
     def _check_bool(self, expr: Expression) -> None:
         self._visit_expr(expr)
         typ = self._infer_type(expr)
-        if self.policy.numeric_condition_allowed:
+        origin = origin_pine_version(
+            self.version_context,
+            getattr(self, "_origin_span_versions", ()),
+            expr.span.start_offset,
+        )
+        if origin_numeric_condition_allowed(origin):
             return
         if isinstance(expr, Literal) and expr.literal_type == "na":
             self._diag(
                 Severity.ERROR,
                 codes.NA_IN_BOOL_CONTEXT,
-                (f"na is not allowed in a condition in Pine v{self.version_context.pine_version}."),
+                (f"na is not allowed in a condition in Pine v{origin}."),
                 expr.span,
             )
         elif typ not in {"bool", "unknown"}:
             self._diag(
                 Severity.ERROR,
                 codes.NON_BOOL_CONDITION,
-                (
-                    f"Non-bool expression used as a condition in Pine v"
-                    f"{self.version_context.pine_version}."
-                ),
+                (f"Non-bool expression used as a condition in Pine v" f"{origin}."),
                 expr.span,
             )
 

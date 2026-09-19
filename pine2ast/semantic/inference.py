@@ -152,6 +152,12 @@ def origin_const_int_division_fractional(version: int) -> bool:
     return rules.get("const_int_division") == "FRACTIONAL"
 
 
+def origin_numeric_condition_allowed(version: int) -> bool:
+    """Catalog ``rules.semantic.numeric_condition_allowed`` for the origin module."""
+    rules = load_catalog_readonly_view(version).get("rules", {}).get("semantic", {})
+    return bool(rules.get("numeric_condition_allowed"))
+
+
 class PineInferenceEngine:
     """Version-aware Pine expression inference facade.
 
