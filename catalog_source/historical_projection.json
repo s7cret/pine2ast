@@ -112,6 +112,17 @@
     },
     {
       "applies_to": [
+        4,
+        5
+      ],
+      "assertions": [
+        "array_binary_search_family_added_march_2022_v5"
+      ],
+      "id": "tv.release_notes.2022-03.array_binary_search",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/#march-2022"
+    },
+    {
+      "applies_to": [
         4
       ],
       "assertions": [
@@ -297,7 +308,10 @@
       "request.footprint",
       "ticker.standard",
       "ticker.modify",
-      "ticker.inherit"
+      "ticker.inherit",
+      "array.binary_search",
+      "array.binary_search_leftmost",
+      "array.binary_search_rightmost"
     ],
     "function_remove_prefixes": [
       "input.",

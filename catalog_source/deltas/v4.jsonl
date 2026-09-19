@@ -75,9 +75,6 @@
 {"name":"plot.style_steplinebr","op":"RENAME","section":"constants","symbol_id":"pine:constant:plot.style_steplinebr"}
 {"name":"array.abs","op":"ADD","section":"functions","semantic_id":"sha256:0772ee02433326a56160423f001c1c35a292ffacf7c2ab340246f49328bed122","symbol_id":"pine:function:array.abs"}
 {"name":"array.avg","op":"ADD","section":"functions","semantic_id":"sha256:6bebef78ce7ac2519e12586952491b24d8e4e84908792687649d834963bf46f8","symbol_id":"pine:function:array.avg"}
-{"name":"array.binary_search","op":"ADD","section":"functions","semantic_id":"sha256:2916704ab0e753255fb9f1e6a5af9f0e3b64dd5c03a62a545fe7153d0f0e59aa","symbol_id":"pine:function:array.binary_search"}
-{"name":"array.binary_search_leftmost","op":"ADD","section":"functions","semantic_id":"sha256:2cc4584aa57813e97e183100e46f00998f4e09fcb2ae1e2db1594076787a5173","symbol_id":"pine:function:array.binary_search_leftmost"}
-{"name":"array.binary_search_rightmost","op":"ADD","section":"functions","semantic_id":"sha256:239eae37f611a71b49455aa8877e517578fbffef865862770ee0fe6c57ef2441","symbol_id":"pine:function:array.binary_search_rightmost"}
 {"name":"array.clear","op":"ADD","section":"functions","semantic_id":"sha256:c4f12fe6076f94f2d0fd7a0aec6e8e07e3e688987542566b3fe1be9c0c5d9afe","symbol_id":"pine:function:array.clear"}
 {"name":"array.concat","op":"ADD","section":"functions","semantic_id":"sha256:3a67297d6c7a5dc8d3ccdc464825a59d073015828754b1b6d66c7a1c239c502e","symbol_id":"pine:function:array.concat"}
 {"name":"array.copy","op":"ADD","section":"functions","semantic_id":"sha256:5db89adf8af30953bca0c4dcbbf84865baba97fe01cc8ef97d5cb8bcd4df9d84","symbol_id":"pine:function:array.copy"}

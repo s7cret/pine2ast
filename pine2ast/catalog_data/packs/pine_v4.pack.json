@@ -1,8 +1,8 @@
 {
-  "catalog_hash": "sha256:697b84a50cd1f9bb5e7bad44cae7fe023a74704f35063ddb97abd58d8c32229a",
-  "content_hash": "sha256:b63a2f2d90a44d3088125095e760ee92985086528c75a9e8f8b70972d68d5be6",
+  "catalog_hash": "sha256:77d283f6e030c7a763fa7396607d0dc0b7bfddc27209c1824073eb892bf634c0",
+  "content_hash": "sha256:e538d35fb1be3ac127b29eba066d579293e1100e535aed42d10f38f66602458c",
   "coverage_basis": "official_historical_migration_guides_and_archived_manual_conservative_snapshot",
-  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+  "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
   "pine_version": 4,
   "provenance_sources": [
     {
@@ -46,6 +46,17 @@
       ],
       "id": "tv.v4.release_notes",
       "url": "https://www.tradingview.com/pine-script-docs/v4/release-notes/"
+    },
+    {
+      "applies_to": [
+        4,
+        5
+      ],
+      "assertions": [
+        "array_binary_search_family_added_march_2022_v5"
+      ],
+      "id": "tv.release_notes.2022-03.array_binary_search",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/#march-2022"
     },
     {
       "applies_to": [
@@ -2434,75 +2445,6 @@
         "returns": "unknown",
         "scope": "any",
         "symbol_id": "pine:function:array.avg"
-      },
-      "array.binary_search": {
-        "kind": "builtin",
-        "name": "array.binary_search",
-        "parameters": [
-          {
-            "name": "id",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "array"
-          },
-          {
-            "name": "value",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "any"
-          }
-        ],
-        "pine_version": "4",
-        "return_qualifier": "series",
-        "returns": "int",
-        "scope": "any",
-        "symbol_id": "pine:function:array.binary_search"
-      },
-      "array.binary_search_leftmost": {
-        "kind": "builtin",
-        "name": "array.binary_search_leftmost",
-        "parameters": [
-          {
-            "name": "id",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "array"
-          },
-          {
-            "name": "value",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "any"
-          }
-        ],
-        "pine_version": "4",
-        "return_qualifier": "series",
-        "returns": "int",
-        "scope": "any",
-        "symbol_id": "pine:function:array.binary_search_leftmost"
-      },
-      "array.binary_search_rightmost": {
-        "kind": "builtin",
-        "name": "array.binary_search_rightmost",
-        "parameters": [
-          {
-            "name": "id",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "array"
-          },
-          {
-            "name": "value",
-            "qualifier_max": "series",
-            "required": true,
-            "type": "any"
-          }
-        ],
-        "pine_version": "4",
-        "return_qualifier": "series",
-        "returns": "int",
-        "scope": "any",
-        "symbol_id": "pine:function:array.binary_search_rightmost"
       },
       "array.clear": {
         "kind": "builtin",
@@ -14165,7 +14107,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+  "source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
   "spec_snapshot_ref": "tradingview-pine-v4-historical-static-snapshot-2026-08-27",
   "status": "HISTORICAL_STATIC_SNAPSHOT"
 }

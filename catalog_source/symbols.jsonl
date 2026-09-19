@@ -263,9 +263,9 @@
 {"canonical_name":"alertcondition","first_observed_version":1,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:alertcondition"}
 {"canonical_name":"array.abs","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.abs"}
 {"canonical_name":"array.avg","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.avg"}
-{"canonical_name":"array.binary_search","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search"}
-{"canonical_name":"array.binary_search_leftmost","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search_leftmost"}
-{"canonical_name":"array.binary_search_rightmost","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search_rightmost"}
+{"canonical_name":"array.binary_search","first_observed_version":5,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search"}
+{"canonical_name":"array.binary_search_leftmost","first_observed_version":5,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search_leftmost"}
+{"canonical_name":"array.binary_search_rightmost","first_observed_version":5,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.binary_search_rightmost"}
 {"canonical_name":"array.clear","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.clear"}
 {"canonical_name":"array.concat","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.concat"}
 {"canonical_name":"array.copy","first_observed_version":4,"kind":"function","last_observed_version":6,"section":"functions","symbol_id":"pine:function:array.copy"}

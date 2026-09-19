@@ -1,8 +1,8 @@
 {
-  "catalog_hash": "sha256:4e0aca9cfbd8e3d51e296466cf7f0f259f5193ea669fd95cc6c896a62c34f5b3",
-  "content_hash": "sha256:c5b4963d5b8b841a91c79f547fe87c5150450501bf336ee67ac632f4c08e98e8",
+  "catalog_hash": "sha256:f1d437cfeb821e97c02e437be18304bfe58642e382a63db5fd1295fd338d8da5",
+  "content_hash": "sha256:f80ba7d50072df1fe6dcaf8d01170eb97f8ca0756db63d030fcbd8f130f14b7a",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
-  "historical_projection_hash": "sha256:fe2a3ea3ee85c0189e9e3c54f918b5310feef497aad2acc693c078dacd4a2f3f",
+  "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
   "pine_version": 5,
   "provenance_sources": [
     {
@@ -20,6 +20,17 @@
       ],
       "id": "tv.migration.v5",
       "url": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/"
+    },
+    {
+      "applies_to": [
+        4,
+        5
+      ],
+      "assertions": [
+        "array_binary_search_family_added_march_2022_v5"
+      ],
+      "id": "tv.release_notes.2022-03.array_binary_search",
+      "url": "https://www.tradingview.com/pine-script-docs/release-notes/#march-2022"
     },
     {
       "applies_to": [
@@ -20878,7 +20889,7 @@
       }
     }
   },
-  "source_manifest_hash": "sha256:de2280f89270b194a2a37f999a788c64a4ce4dbc5434d75b1330cd96a48bc188",
+  "source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
   "spec_snapshot_ref": "tradingview-pine-v5-reference-snapshot-2026-08-26",
   "status": "STATIC_COMPLETE"
 }

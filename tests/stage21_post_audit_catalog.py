@@ -7,6 +7,7 @@ from pathlib import Path
 
 _FIXTURE = Path(__file__).with_name("fixtures") / "stage21_post_audit_catalog_delta.json"
 _CUMULATIVE_FIXTURE = Path(__file__).with_name("fixtures") / "stage23_cumulative_catalog_delta.json"
+_CAT04_FIXTURE = Path(__file__).with_name("fixtures") / "stage2_cat04_catalog_delta.json"
 
 
 def _digest(value):
@@ -34,6 +35,44 @@ def _cumulative_delta():
     return data
 
 
+def _cat04_delta():
+    data = json.loads(_CAT04_FIXTURE.read_bytes())
+    claimed = data.pop("content_hash")
+    assert _digest(data) == claimed
+    data["content_hash"] = claimed
+    return data
+
+
+def restore_cat04_binary_search_authority(pack):
+    """Roll CAT-04 v4 unavailability back so Stage 2.1 pack guards still apply.
+
+    Current packs correctly omit array.binary_search* from v4. Historical
+    whole-pack hashes still compare against the pre-CAT-04 identity.
+    """
+    lock = _cat04_delta()
+    restored = deepcopy(pack)
+    version = str(int(restored.get("version") or restored.get("pine_version") or 0))
+    record = lock["versions"][version]
+    assert restored["catalog_hash"] == record["after_catalog_hash"]
+    assert restored["content_hash"] == record["after_content_hash"]
+    assert restored["historical_projection_hash"] == lock["new_historical_projection_hash"]
+    assert restored["source_manifest_hash"] == lock["new_source_manifest_hash"]
+    source_id = lock["authority"]["id"]
+    restored["provenance_sources"] = [
+        source for source in restored.get("provenance_sources", []) if source.get("id") != source_id
+    ]
+    if "restored_functions" in record:
+        functions = restored["sections"]["functions"]
+        for name, row in record["restored_functions"].items():
+            assert name not in functions
+            functions[name] = deepcopy(row)
+    restored["historical_projection_hash"] = lock["old_historical_projection_hash"]
+    restored["source_manifest_hash"] = lock["old_source_manifest_hash"]
+    restored["catalog_hash"] = record["before_catalog_hash"]
+    restored["content_hash"] = record["before_content_hash"]
+    return restored
+
+
 def restore_stage21_baseline(pack):
     """Return a copy rolled back to the sealed Stage 2.1 catalog baseline.
 
@@ -43,7 +82,7 @@ def restore_stage21_baseline(pack):
     exactly equal the recorded reviewed ``after`` value before it is replaced
     with the corresponding ``before`` value.
     """
-    restored = restore_stage2_audit_catalog(pack)
+    restored = restore_stage2_audit_catalog(restore_cat04_binary_search_authority(pack))
     version = int(restored.get("version") or restored.get("pine_version") or 0)
 
     # Roll back reviewed post-2.1 catalog changes (Stage 2.2 bool signatures
