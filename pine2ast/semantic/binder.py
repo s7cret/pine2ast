@@ -823,7 +823,7 @@ class SemanticFactBuilder:
         elif isinstance(node, (IfStructure, WhileStructure)):
             rules.append(f"control.condition.v{version}")
         elif isinstance(node, ForRangeStructure):
-            rules.append(self.policy.rule_id("for_range_end"))
+            rules.append(origin_semantic_rule_id(version, "for_range_end"))
         elif isinstance(node, ForInStructure):
             rules.append(f"control.for_in.v{version}")
         if call is not None:
