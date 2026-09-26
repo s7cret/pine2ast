@@ -118,7 +118,10 @@ class MethodCandidates:
         self.by_name = MappingProxyType({name: tuple(group) for name, group in names.items()})
         self.names = frozenset(self.by_name)
         self.duplicates = tuple(duplicates)
-        self.resolver = SignatureResolver(version_context=analyzer.version_context)
+        self.resolver = SignatureResolver(
+            version_context=analyzer.version_context,
+            origin_span_versions=getattr(analyzer, "_origin_span_versions", ()),
+        )
         self.spent = 0
         self.active: set[int] = set()
         self.cache: dict[tuple[Any, ...], MethodSelection] = {}

@@ -333,6 +333,23 @@ class _Linker:
             if isinstance(name, str)
         }
         self.namespaces = {name.split(".")[0] for name in self.builtins if "." in name}
+        self._builtins_by_version = {self.version: self.builtins}
+
+    def _builtins_for(self, unit: _Unit) -> set[str]:
+        version = unit.program.version_context.pine_version
+        cached = self._builtins_by_version.get(version)
+        if cached is not None:
+            return cached
+        catalog = CatalogRepository.default().readonly_view(version)
+        names = {
+            name
+            for category in catalog.values()
+            if isinstance(category, Mapping)
+            for name in category
+            if isinstance(name, str)
+        }
+        self._builtins_by_version[version] = names
+        return names
 
     def promote_profile(self, profile: str) -> None:
         profiles = (
@@ -787,7 +804,10 @@ class _Linker:
                     self.edit(
                         unit, node.span.start_offset, node.span.end_offset, unit.renamed[name]
                     )
-                elif constant_only or (name not in self.builtins and name not in self.namespaces):
+                elif constant_only or (
+                    name not in (builtins := self._builtins_for(unit))
+                    and name not in {item.split(".")[0] for item in builtins if "." in item}
+                ):
                     self.fail(
                         unit, node, "P2A_LIBRARY_UNBOUND", "unresolved library identifier: " + name
                     )

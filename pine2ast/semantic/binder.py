@@ -20,6 +20,7 @@ from pine2ast.ast.nodes import (
     GenericInstantiationExpr,
     Identifier,
     IfStructure,
+    HistoryRefExpr,
     OnceStructure,
     Literal,
     MemberAccessExpr,
@@ -108,7 +109,10 @@ class SemanticFactBuilder:
             origin_span_versions=origin_span_versions,
         )
         self.engine.bind_model(model)
-        self.signatures = SignatureResolver(version_context=version_context)
+        self.signatures = SignatureResolver(
+            version_context=version_context,
+            origin_span_versions=origin_span_versions,
+        )
         self.index: NodeIndex | None = None
         self._scopes: dict[int, str] = {}
         self._call_bindings: dict[int, CallBindingFact] = {}
@@ -1001,6 +1005,9 @@ class SemanticFactBuilder:
             rules.append(f"control.once.v{version}")
         elif isinstance(node, (IfStructure, WhileStructure)):
             rules.append(f"control.condition.v{version}")
+        elif isinstance(node, HistoryRefExpr) and self.engine.infer_type(node.base) == "bool":
+            # Missing bool history follows catalog bool_allows_na: na before v6, false in v6.
+            rules.append(f"series.history.missing_bool.v{version}")
         elif isinstance(node, ForRangeStructure):
             rules.append(origin_semantic_rule_id(version, "for_range_end"))
         elif isinstance(node, ForInStructure):

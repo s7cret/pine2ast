@@ -32,9 +32,11 @@ from pine2ast.semantic.passes.loop_dos import (
     _static_int_bound,
 )
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
+from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.semantic.inference import (
     origin_numeric_condition_allowed,
     origin_pine_version,
+    registry_entry_for_call,
 )
 
 
@@ -412,6 +414,24 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
     def _e_call_expr(self, expr: CallExpr) -> None:
         name = callee_name(expr.callee)
         lookup_name, entry = self._registry_entry_for_call(expr.callee)
+        origin = origin_pine_version(
+            self.version_context,
+            getattr(self, "_origin_span_versions", ()),
+            expr.span.start_offset,
+        )
+        if (
+            entry is not None
+            and origin != self.version_context.pine_version
+            and registry_entry_for_call(expr.callee, load_catalog_readonly_view(origin))[1] is None
+        ):
+            self._diag(
+                Severity.ERROR,
+                codes.UNKNOWN_CALL,
+                f"Call {name} cannot be resolved in Pine v{origin}.",
+                expr.span,
+            )
+            entry = None
+            lookup_name = name
         visibility = getattr(self, "_method_visibility", None)
         explicit_library_method = visibility is not None and (
             visibility.explicit_owner(expr) is not None
@@ -504,7 +524,11 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
                 "Array instance history requires Pine v5 or later; scalar element-result history remains available.",
                 expr.span,
             )
-        if self.version_context.pine_version >= 6 and isinstance(expr.base, Literal):
+        if origin_pine_version(
+            self.version_context,
+            getattr(self, "_origin_span_versions", ()),
+            expr.span.start_offset,
+        ) >= 6 and isinstance(expr.base, Literal):
             self._diag(
                 Severity.ERROR,
                 codes.HISTORY_ON_LITERAL,
@@ -512,7 +536,12 @@ class AnalyzerExpressionMixin(AnalyzerMixinHost):
                 expr.span,
             )
         if (
-            self.version_context.pine_version >= 6
+            origin_pine_version(
+                self.version_context,
+                getattr(self, "_origin_span_versions", ()),
+                expr.span.start_offset,
+            )
+            >= 6
             and isinstance(expr.base, MemberAccessExpr)
             and self._infer_type(expr.base.object) in self._udt_fields
         ):
