@@ -8,6 +8,7 @@ from pine2ast.ast.nodes import Argument
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
+from pine2ast.semantic.inference import origin_bool_allows_na, origin_pine_version
 from pine2ast.semantic.type_helpers import is_assignable_type, tuple_element_types
 from pine2ast.semantic.type_model import ENUM_LIKE_BUILTIN_TYPES, generic_type_parts
 from pine2ast.semantic.values import (
@@ -103,8 +104,14 @@ class SignatureResolver:
     caller supplies symbol facts or explicit resolver callbacks.
     """
 
-    def __init__(self, *, version_context: PineVersionContext) -> None:
+    def __init__(
+        self,
+        *,
+        version_context: PineVersionContext,
+        origin_span_versions: tuple[tuple[int, int, int], ...] = (),
+    ) -> None:
         self.version_context = version_context
+        self.origin_span_versions = origin_span_versions
 
     def resolve_builtin(
         self,
@@ -877,7 +884,10 @@ class SignatureResolver:
         pname = parameter.get("name") or "<positional>"
         if (
             validate_types
-            and self.version_context.pine_version >= 6
+            and origin_pine_version(
+                self.version_context, self.origin_span_versions, span.start_offset
+            )
+            >= 6
             and (validation_context.builtin_rule if validation_context is not None else callee)
             in {"na", "nz", "fixnan"}
             and actual_type == "bool"
@@ -900,9 +910,12 @@ class SignatureResolver:
                     span,
                 )
             )
+        origin = origin_pine_version(
+            self.version_context, self.origin_span_versions, span.start_offset
+        )
         if (
             validate_types
-            and self.version_context.pine_version >= 6
+            and not origin_bool_allows_na(origin)
             and is_bool_target_type(expected_type)
             and can_be_na
         ):
@@ -910,13 +923,13 @@ class SignatureResolver:
                 SignatureIssue(
                     Severity.ERROR,
                     codes.BOOL_CANNOT_BE_NA,
-                    f"Argument {pname} for {callee} expects bool, but Pine v6 bool cannot be na.",
+                    f"Argument {pname} for {callee} expects bool, but Pine v{origin} bool cannot be na.",
                     span,
                 )
             )
         if (
             validate_types
-            and self.version_context.pine_version >= 6
+            and origin >= 6
             and expected_type in ENUM_LIKE_BUILTIN_TYPES
             and can_be_na
         ):

@@ -61,16 +61,24 @@ class Lexer:
         version_context: PineVersionContext,
         syntax_policy: SyntaxPolicy,
         source_name: str = "<memory>",
+        origin_keyword_spellings: tuple[tuple[int, int, frozenset[str]], ...] = (),
     ) -> None:
         syntax_policy.validate_context(version_context)
         self.text = text
         self.source_name = source_name
         self.version_context = version_context
         self.syntax_policy = syntax_policy
+        self.origin_keyword_spellings = origin_keyword_spellings
         self.i = 0
         self.line = 1
         self.col = 1
         self.diagnostics: list[Diagnostic] = []
+
+    def _keyword_spellings_at(self, offset: int) -> frozenset[str]:
+        for start, end, spellings in self.origin_keyword_spellings:
+            if start <= offset < end:
+                return spellings
+        return self.syntax_policy.keyword_spellings
 
     def lex(self) -> LexerResult:
         tokens: list[Token] = []
@@ -193,10 +201,12 @@ class Lexer:
         keyword_kind = KEYWORDS.get(raw)
         if keyword_kind is None:
             return Token(TokenKind.IDENTIFIER, raw, None, span)
-        if raw not in self.syntax_policy.keyword_spellings:
+        if raw not in self._keyword_spellings_at(start_i):
             # Pine keywords are versioned. A word introduced in a later version
             # remains a normal identifier in older source versions; classifying it
             # as the newer keyword would silently change the old grammar.
+            # Projected library spans keep the origin catalog, not the consumer
+            # //@version that heads the concatenated source.
             return Token(TokenKind.IDENTIFIER, raw, None, span)
         return Token(keyword_kind, raw, None, span)
 

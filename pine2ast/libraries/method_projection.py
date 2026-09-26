@@ -112,6 +112,23 @@ class _Visibility:
         return owner is caller or (original.is_exported and owner.ref in caller.imports.values())
 
 
+def _origin_spans(linker, projection: list[dict]) -> tuple[tuple[int, int, int], ...]:
+    units = {linker.root.ref: linker.root, **linker.units}
+    spans = []
+    for row in projection:
+        unit = units.get(row.get("source"))
+        if unit is None:
+            continue
+        spans.append(
+            (
+                int(row["generated_start"]),
+                int(row["generated_end"]),
+                int(unit.program.version_context.pine_version),
+            )
+        )
+    return tuple(spans)
+
+
 def project_methods(linker, code: str, projection: list[dict]) -> None:
     visibility = _Visibility(linker, projection)
     pipeline = ParsePipeline(
@@ -137,7 +154,10 @@ def project_methods(linker, code: str, projection: list[dict]) -> None:
     # The normal resolver consumes receiver type, argument names and qualifiers.
     # The linker adds visibility only; it does not implement type matching.
     model = pipeline.semantic_only(
-        parsed.ast, method_visibility=visibility, projected_exports=frozenset(exported)
+        parsed.ast,
+        method_visibility=visibility,
+        projected_exports=frozenset(exported),
+        origin_span_versions=_origin_spans(linker, projection),
     )
     errors = [d for d in model.diagnostics if d.is_error]
     if errors:

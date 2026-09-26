@@ -9,9 +9,11 @@ from pine2ast.ast.nodes import (
     FieldDeclaration,
     Parameter,
 )
+from pine2ast.catalog import load_catalog_readonly_view
 from pine2ast.diagnostics import Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer.token import SourceSpan
+from pine2ast.semantic.inference import origin_pine_version
 from pine2ast.semantic.symbols import SymbolKind
 from pine2ast.semantic.signatures import SignatureResolver
 from pine2ast.semantic.collection_signatures import (
@@ -168,6 +170,24 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
             )
             return
         if member in self._method_receivers:
+            origin = origin_pine_version(
+                self.version_context,
+                getattr(self, "_origin_span_versions", ()),
+                expr.span.start_offset,
+            )
+            receiver_type = self._infer_type(receiver_expr)
+            if (
+                origin != self.version_context.pine_version
+                and receiver_type not in {None, "", "unknown", "external"}
+                and f"{receiver_type}.{member}"
+                not in load_catalog_readonly_view(origin).get("methods", {})
+            ):
+                self._diag(
+                    Severity.ERROR,
+                    codes.UNKNOWN_FIELD,
+                    f"Unknown method {member} for type {receiver_type}.",
+                    expr.callee.span,
+                )
             return
         if self._is_collection_method(receiver_type, member):
             return
@@ -351,7 +371,10 @@ class AnalyzerCallValidationMixin(AnalyzerMixinHost):
     def _validate_builtin_call(self, name: str, entry: dict | None, expr: CallExpr) -> None:
         if not entry:
             return
-        resolution = SignatureResolver(version_context=self.version_context).resolve_builtin(
+        resolution = SignatureResolver(
+            version_context=self.version_context,
+            origin_span_versions=getattr(self, "_origin_span_versions", ()),
+        ).resolve_builtin(
             name,
             entry,
             expr.arguments,
