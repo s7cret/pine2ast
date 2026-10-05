@@ -1,6 +1,6 @@
 {
-  "catalog_hash": "sha256:68565f5498c837ec4c7c50c1dc75a33c0c20f31f16a2f9dca773cdb4188331c5",
-  "content_hash": "sha256:c7ed520a76134e9bb7066f6564864a7fb78a532fb36e09bbf847d4549f81a99e",
+  "catalog_hash": "sha256:dd0ea5dba67134134e33619ba760a2368f662514deae98fa78c47cbeecd575ae",
+  "content_hash": "sha256:69a9f3e9206af4fd35cb9304ab4303b1caf302cd127a8e4cb083f4c20b58a8e8",
   "coverage_basis": "pinned_reference_registry_static_snapshot",
   "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
   "pine_version": 6,
@@ -2672,8 +2672,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }
@@ -2701,8 +2702,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }
@@ -2730,8 +2732,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }
@@ -16352,8 +16355,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }
@@ -16377,8 +16381,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }
@@ -16402,8 +16407,9 @@
             "type": "any"
           },
           {
+            "default": 0,
             "name": "sort_field",
-            "qualifier_max": "series",
+            "qualifier_max": "const",
             "required": false,
             "type": "int|string"
           }

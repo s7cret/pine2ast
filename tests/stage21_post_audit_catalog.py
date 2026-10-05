@@ -8,6 +8,9 @@ from pathlib import Path
 _FIXTURE = Path(__file__).with_name("fixtures") / "stage21_post_audit_catalog_delta.json"
 _CUMULATIVE_FIXTURE = Path(__file__).with_name("fixtures") / "stage23_cumulative_catalog_delta.json"
 _CAT04_FIXTURE = Path(__file__).with_name("fixtures") / "stage2_cat04_catalog_delta.json"
+_STAGE6_UDT_BINARY_SEARCH_FIXTURE = (
+    Path(__file__).with_name("fixtures") / "stage6_udt_binary_search_default_delta.json"
+)
 
 
 def _digest(value):
@@ -41,6 +44,33 @@ def _cat04_delta():
     assert _digest(data) == claimed
     data["content_hash"] = claimed
     return data
+
+
+def _stage6_udt_binary_search_delta():
+    data = json.loads(_STAGE6_UDT_BINARY_SEARCH_FIXTURE.read_bytes())
+    claimed = data.pop("content_hash")
+    assert _digest(data) == claimed
+    data["content_hash"] = claimed
+    return data
+
+
+def restore_stage6_udt_binary_search_default(pack):
+    """Roll the new v6-only UDT-search metadata correction back exactly."""
+    restored = deepcopy(pack)
+    record = _stage6_udt_binary_search_delta()["versions"].get(
+        str(restored.get("pine_version", restored.get("version")))
+    )
+    if record is None:
+        return restored
+    for key, value in record["after_top"].items():
+        assert restored[key] == value
+    for change in record["changes"]:
+        current = restored["sections"][change["section"]][change["name"]]
+        assert current == change["after"]
+        restored["sections"][change["section"]][change["name"]] = deepcopy(change["before"])
+    for key, value in record["before_top"].items():
+        restored[key] = deepcopy(value)
+    return restored
 
 
 def restore_cat04_binary_search_authority(pack):
@@ -82,7 +112,9 @@ def restore_stage21_baseline(pack):
     exactly equal the recorded reviewed ``after`` value before it is replaced
     with the corresponding ``before`` value.
     """
-    restored = restore_stage2_audit_catalog(restore_cat04_binary_search_authority(pack))
+    restored = restore_stage2_audit_catalog(
+        restore_cat04_binary_search_authority(restore_stage6_udt_binary_search_default(pack))
+    )
     version = int(restored.get("version") or restored.get("pine_version") or 0)
 
     # Roll back reviewed post-2.1 catalog changes (Stage 2.2 bool signatures

@@ -330,16 +330,23 @@ Point p = Point.new(close)
 
 
 def test_v6_udt_binary_search_sort_field_is_catalogued() -> None:
+    """TV release notes: UDT search accepts const int (default 0) or const string."""
     view = CatalogRepository.default().view(6)
     for name in (
         "array.binary_search",
         "array.binary_search_leftmost",
         "array.binary_search_rightmost",
     ):
-        function_parameters = view["functions"][name]["parameters"]
-        method_parameters = view["methods"][name]["parameters"]
-        assert any(item["name"] == "sort_field" for item in function_parameters)
-        assert any(item["name"] == "sort_field" for item in method_parameters)
+        for section in ("functions", "methods"):
+            parameters = view[section][name]["parameters"]
+            sort_field = next(item for item in parameters if item["name"] == "sort_field")
+            assert sort_field == {
+                "name": "sort_field",
+                "type": "int|string",
+                "required": False,
+                "qualifier_max": "const",
+                "default": 0,
+            }
 
 
 def test_v6_unique_type_argument_rejects_na() -> None:

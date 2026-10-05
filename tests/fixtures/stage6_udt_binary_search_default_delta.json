@@ -1,0 +1,655 @@
+{
+  "authority": {
+    "assertion": "v6 UDT binary-search sort_field accepts const int default 0 or const string",
+    "id": "tv.release_notes.2026.binary_search_in_udt_arrays",
+    "url": "https://www.tradingview.com/pine-script-docs/release-notes/#binary-search-in-udt-arrays"
+  },
+  "content_hash": "sha256:a1d211f1268255a2f04f400aaa5c5ef516b7c75fc115abbbbbdb275ef97347f8",
+  "schema": "pine2ast.stage6_udt_binary_search_default_delta.v1",
+  "versions": {
+    "6": {
+      "after_top": {
+        "catalog_hash": "sha256:dd0ea5dba67134134e33619ba760a2368f662514deae98fa78c47cbeecd575ae",
+        "content_hash": "sha256:69a9f3e9206af4fd35cb9304ab4303b1caf302cd127a8e4cb083f4c20b58a8e8",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
+        "pine_version": 6,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v6",
+            "path": "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+            "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": false,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "FRACTIONAL",
+            "for_range_end": "DYNAMIC",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "LAZY",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": false,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "DYNAMIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v6",
+              "builtin_named_arguments": "call.named_arguments.all.v6",
+              "condition": "semantic.condition.v6",
+              "const_int_division": "operator.division.const_int.v6",
+              "for_range_end": "control.for_range.dynamic_end.v6",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v6",
+              "logical_and": "operator.logical_and.lazy.v6",
+              "logical_or": "operator.logical_or.lazy.v6",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v6",
+              "na_declaration_type": "type.na_declaration.explicit_required.v6",
+              "qualifier_lattice": "qualifier.modern.v6",
+              "request_default": "request.default.dynamic.v6",
+              "security_lookahead_default": "request.security.lookahead.off.v6",
+              "self_reference_declaration": "binding.self_reference.forbid.v6",
+              "ternary": "operator.ternary.lazy.v6"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": true,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": true,
+              "once_structures": true,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "keyword_additions": {
+              "once": {
+                "introduced": "2026-08",
+                "name": "once",
+                "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure"
+              }
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v6",
+              "break_continue": "syntax.break_continue.v6",
+              "comma_statement_separator": "syntax.comma_statement_separator.v6",
+              "compound_assignment": "syntax.compound_assignment.v6",
+              "conditional_structures": "syntax.conditional_structures.v6",
+              "enum_declarations": "syntax.enum_declarations.v6",
+              "exported_const": "syntax.exported_const.v6",
+              "for_in_loops": "syntax.for_in_loops.v6",
+              "for_loops": "syntax.for_loops.v6",
+              "generic_types": "syntax.generic_types.v6",
+              "imports": "syntax.imports.v6",
+              "map_collections": "syntax.map_collections.v6",
+              "matrix_collections": "syntax.matrix_collections.v6",
+              "method_declarations": "syntax.method_declarations.v6",
+              "multiline_strings": "syntax.multiline_strings.v6",
+              "once_structures": "syntax.once_structures.v6",
+              "reassignment": "syntax.reassignment.v6",
+              "switch_structures": "syntax.switch_structures.v6",
+              "tuple_declarations": "syntax.tuple_declarations.v6",
+              "typed_declarations": "syntax.typed_declarations.v6",
+              "udt_declarations": "syntax.udt_declarations.v6",
+              "user_functions": "syntax.user_functions.v6",
+              "var_declarations": "syntax.var_declarations.v6",
+              "varip_declarations": "syntax.varip_declarations.v6",
+              "while_loops": "syntax.while_loops.v6"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
+        "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "before_top": {
+        "catalog_hash": "sha256:68565f5498c837ec4c7c50c1dc75a33c0c20f31f16a2f9dca773cdb4188331c5",
+        "content_hash": "sha256:c7ed520a76134e9bb7066f6564864a7fb78a532fb36e09bbf847d4549f81a99e",
+        "coverage_basis": "pinned_reference_registry_static_snapshot",
+        "historical_projection_hash": "sha256:b7d52288871f440bef3a109dd5e22e0a2d18520fa73502162b851f4acce82fa3",
+        "pine_version": 6,
+        "provenance_sources": [
+          {
+            "applies_to": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "assertions": [
+              "explicit_float_callable_introduced_in_v4",
+              "historical_float_input_type_constant_is_not_a_cast"
+            ],
+            "id": "tv.v4.explicit_casts",
+            "url": "https://www.tradingview.com/pine-script-docs/v4/language/type-system/#type-casting"
+          },
+          {
+            "assertions": [
+              "lossless_static_registry_migration"
+            ],
+            "id": "rc5.registry.v6",
+            "path": "catalog_migration_inputs/rc5/builtins_v6.rc5.json",
+            "sha256": "sha256:e0d8fbbb8248e2d765016c46a75647b95eaa10467b22279841553d165e438547"
+          }
+        ],
+        "rules": {
+          "semantic": {
+            "bool_allows_na": false,
+            "bool_to_number": "FORBID",
+            "builtin_named_arguments": "ALL",
+            "const_int_division": "FRACTIONAL",
+            "for_range_end": "DYNAMIC",
+            "forward_reference_declaration": "FORBID",
+            "logical_evaluation": "LAZY",
+            "mutable_in_security_expression": "FORBID",
+            "na_declaration_type": "EXPLICIT_REQUIRED",
+            "numeric_condition_allowed": false,
+            "qualifier_model": "MODERN",
+            "qualifier_order": [
+              "const",
+              "input",
+              "simple",
+              "series"
+            ],
+            "request_default": "DYNAMIC",
+            "rule_ids": {
+              "bool_to_number": "coercion.bool_to_number.forbid.v6",
+              "builtin_named_arguments": "call.named_arguments.all.v6",
+              "condition": "semantic.condition.v6",
+              "const_int_division": "operator.division.const_int.v6",
+              "for_range_end": "control.for_range.dynamic_end.v6",
+              "forward_reference_declaration": "binding.forward_reference.forbid.v6",
+              "logical_and": "operator.logical_and.lazy.v6",
+              "logical_or": "operator.logical_or.lazy.v6",
+              "mutable_in_security_expression": "request.security.mutable_argument.forbid.v6",
+              "na_declaration_type": "type.na_declaration.explicit_required.v6",
+              "qualifier_lattice": "qualifier.modern.v6",
+              "request_default": "request.default.dynamic.v6",
+              "security_lookahead_default": "request.security.lookahead.off.v6",
+              "self_reference_declaration": "binding.self_reference.forbid.v6",
+              "ternary": "operator.ternary.lazy.v6"
+            },
+            "security_lookahead_default": "OFF",
+            "self_reference_declaration": "FORBID",
+            "ternary_evaluation": "LAZY"
+          },
+          "syntax": {
+            "capabilities": {
+              "array_collections": true,
+              "break_continue": true,
+              "comma_statement_separator": true,
+              "compound_assignment": true,
+              "conditional_structures": true,
+              "enum_declarations": true,
+              "exported_const": true,
+              "for_in_loops": true,
+              "for_loops": true,
+              "generic_types": true,
+              "imports": true,
+              "map_collections": true,
+              "matrix_collections": true,
+              "method_declarations": true,
+              "multiline_strings": true,
+              "once_structures": true,
+              "reassignment": true,
+              "switch_structures": true,
+              "tuple_declarations": true,
+              "typed_declarations": true,
+              "udt_declarations": true,
+              "user_functions": true,
+              "var_declarations": true,
+              "varip_declarations": true,
+              "while_loops": true
+            },
+            "keyword_additions": {
+              "once": {
+                "introduced": "2026-08",
+                "name": "once",
+                "source": "https://www.tradingview.com/pine-script-docs/language/conditional-structures/#once-structure"
+              }
+            },
+            "rule_ids": {
+              "array_collections": "syntax.array_collections.v6",
+              "break_continue": "syntax.break_continue.v6",
+              "comma_statement_separator": "syntax.comma_statement_separator.v6",
+              "compound_assignment": "syntax.compound_assignment.v6",
+              "conditional_structures": "syntax.conditional_structures.v6",
+              "enum_declarations": "syntax.enum_declarations.v6",
+              "exported_const": "syntax.exported_const.v6",
+              "for_in_loops": "syntax.for_in_loops.v6",
+              "for_loops": "syntax.for_loops.v6",
+              "generic_types": "syntax.generic_types.v6",
+              "imports": "syntax.imports.v6",
+              "map_collections": "syntax.map_collections.v6",
+              "matrix_collections": "syntax.matrix_collections.v6",
+              "method_declarations": "syntax.method_declarations.v6",
+              "multiline_strings": "syntax.multiline_strings.v6",
+              "once_structures": "syntax.once_structures.v6",
+              "reassignment": "syntax.reassignment.v6",
+              "switch_structures": "syntax.switch_structures.v6",
+              "tuple_declarations": "syntax.tuple_declarations.v6",
+              "typed_declarations": "syntax.typed_declarations.v6",
+              "udt_declarations": "syntax.udt_declarations.v6",
+              "user_functions": "syntax.user_functions.v6",
+              "var_declarations": "syntax.var_declarations.v6",
+              "varip_declarations": "syntax.varip_declarations.v6",
+              "while_loops": "syntax.while_loops.v6"
+            }
+          }
+        },
+        "schema_id": "pine.catalog.pack.v1",
+        "schema_version": "1.0.0",
+        "source_manifest_hash": "sha256:8dce8caa124e254af9814a3002f0916502f8b9b909e77453dfbca0ca045b3cf3",
+        "spec_snapshot_ref": "tradingview-pine-v6-reference-snapshot-2026-08-26",
+        "status": "STATIC_COMPLETE"
+      },
+      "changes": [
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "array.binary_search",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "array.binary_search",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search"
+          },
+          "name": "array.binary_search",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "array.binary_search_leftmost",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search_leftmost"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "array.binary_search_leftmost",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search_leftmost"
+          },
+          "name": "array.binary_search_leftmost",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "name": "array.binary_search_rightmost",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search_rightmost"
+          },
+          "before": {
+            "kind": "builtin",
+            "name": "array.binary_search_rightmost",
+            "parameters": [
+              {
+                "name": "id",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "array"
+              },
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "pine_version": "6",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "symbol_id": "pine:function:array.binary_search_rightmost"
+          },
+          "name": "array.binary_search_rightmost",
+          "section": "functions"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search"
+          },
+          "before": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search"
+          },
+          "name": "array.binary_search",
+          "section": "methods"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search_leftmost",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search_leftmost"
+          },
+          "before": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search_leftmost",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search_leftmost"
+          },
+          "name": "array.binary_search_leftmost",
+          "section": "methods"
+        },
+        {
+          "after": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search_rightmost",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "default": 0,
+                "name": "sort_field",
+                "qualifier_max": "const",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search_rightmost"
+          },
+          "before": {
+            "kind": "builtin",
+            "metadata_version": 4,
+            "name": "array.binary_search_rightmost",
+            "parameters": [
+              {
+                "name": "value",
+                "qualifier_max": "series",
+                "required": true,
+                "type": "any"
+              },
+              {
+                "name": "sort_field",
+                "qualifier_max": "series",
+                "required": false,
+                "type": "int|string"
+              }
+            ],
+            "receiver_type": "array",
+            "return_qualifier": "series",
+            "returns": "int",
+            "scope": "any",
+            "signature_source": "derived_from_function_form",
+            "symbol_id": "pine:method:array.binary_search_rightmost"
+          },
+          "name": "array.binary_search_rightmost",
+          "section": "methods"
+        }
+      ]
+    }
+  }
+}
