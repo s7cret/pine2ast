@@ -39,9 +39,9 @@
 {"name":"text.format_bold","op":"ADD","section":"constants","semantic_id":"sha256:e26744dbffe72be5ae64b38b25a9d274632795203b327f923d2de4b063b6065b","symbol_id":"pine:constant:text.format_bold"}
 {"name":"text.format_italic","op":"ADD","section":"constants","semantic_id":"sha256:7633c2dc12e3fedfaee7de031fac2be09e88dcba74099b98ef8dabfee8888c70","symbol_id":"pine:constant:text.format_italic"}
 {"name":"text.format_none","op":"ADD","section":"constants","semantic_id":"sha256:29708d2ebf3672a4ff619ece4e43bfa3cb3701f6bf5997da8901037b9811a0af","symbol_id":"pine:constant:text.format_none"}
-{"op":"PATCH","semantic_id":"sha256:ef7afb81a8e9313ebc91ff0950a13e466963b40fbbc508ca9c6491c63cb365b4","symbol_id":"pine:function:array.binary_search"}
-{"op":"PATCH","semantic_id":"sha256:6fa7e21950196ca66ee7c9d1e639da4ad104263fa76158a715ee5f7a42f6c5ca","symbol_id":"pine:function:array.binary_search_leftmost"}
-{"op":"PATCH","semantic_id":"sha256:9988cec4b853faa756955c49b8f3a454fbbf6e38420e8a50690910516274441e","symbol_id":"pine:function:array.binary_search_rightmost"}
+{"op":"PATCH","semantic_id":"sha256:5716bec4b3b8a62bb4dd60912c136a56b1445e1b97c3e7a5614093fd9c029a87","symbol_id":"pine:function:array.binary_search"}
+{"op":"PATCH","semantic_id":"sha256:2accb58fd191aaf92197b1b81d1b1521479a0bf30086a39463f485352be467b7","symbol_id":"pine:function:array.binary_search_leftmost"}
+{"op":"PATCH","semantic_id":"sha256:02fabb925d1b1e6bd6376b321ddf7923078249c003b1884fac5b6d9ccd1c7c58","symbol_id":"pine:function:array.binary_search_rightmost"}
 {"name":"array.from<bool>","op":"ADD","section":"functions","semantic_id":"sha256:623eb27bf2abb378fb041b3638ab82461b2cda472f06e4a237b4989ccba1f525","symbol_id":"pine:function:array.fromu003cboolu003e"}
 {"name":"array.from<color>","op":"ADD","section":"functions","semantic_id":"sha256:88eac77e71f9239227f67ab877dfe996d37a70c9d7dd0b9c79e442cf893c8892","symbol_id":"pine:function:array.fromu003ccoloru003e"}
 {"name":"array.from<float>","op":"ADD","section":"functions","semantic_id":"sha256:3053e446b8b72f512094819df6a1bdae17603a8c41dd74e1cac808861cfab3b9","symbol_id":"pine:function:array.fromu003cfloatu003e"}
@@ -109,9 +109,9 @@
 {"name":"volume_row.total_volume","op":"ADD","section":"functions","semantic_id":"sha256:f0c578a1f36b91ffcf3051400c9906ed6ca140886658643411147bcdc526644c","symbol_id":"pine:function:volume_row.total_volume"}
 {"name":"volume_row.up_price","op":"ADD","section":"functions","semantic_id":"sha256:574c93f3ae8d7a608249aa084218d3efc07b3c206e03966a6298ca00824ff20a","symbol_id":"pine:function:volume_row.up_price"}
 {"name":"once","op":"ADD","section":"keywords","semantic_id":"sha256:87d24437189b1e442e6aa8f4bb282f9736b833813b986b28c26be63b807f9b50","symbol_id":"pine:keyword:once"}
-{"op":"PATCH","semantic_id":"sha256:6201dff21f5fcf0d3f5fa5a64572ef51b0f778615d345a0640d1e72b61f04fe5","symbol_id":"pine:method:array.binary_search"}
-{"op":"PATCH","semantic_id":"sha256:43455762f563a64e85d93dfab6d9b8a5f976d51f24707816d76e80ea85f8c7d3","symbol_id":"pine:method:array.binary_search_leftmost"}
-{"op":"PATCH","semantic_id":"sha256:6bc6ad363cd9881e51b4c9bc5900a97704dc60782bfeefaa48b48bea6945432e","symbol_id":"pine:method:array.binary_search_rightmost"}
+{"op":"PATCH","semantic_id":"sha256:fb68929b618a0af9c7e638c1da73c6a4027a47e46e61a43aa6b98dd8e9ddeee2","symbol_id":"pine:method:array.binary_search"}
+{"op":"PATCH","semantic_id":"sha256:cb2761d5b5ca3b1e0303692f2c01ad0bd6ada64e678ff2315bd650717c5ef389","symbol_id":"pine:method:array.binary_search_leftmost"}
+{"op":"PATCH","semantic_id":"sha256:30e8ed5695453a72d35d09fd5715144bb2cee2580c3cede171edca7cfae3b447","symbol_id":"pine:method:array.binary_search_rightmost"}
 {"op":"PATCH","semantic_id":"sha256:735fb6262a2f80badf1a0a56b01f5e967e3fa8ea1fec63f1d1df15b433f48c2c","symbol_id":"pine:method:array.sort"}
 {"op":"PATCH","semantic_id":"sha256:2edc571120d66c96248c3acc669eda600a587d18c1494dd50c0ceab083398038","symbol_id":"pine:method:array.sort_indices"}
 {"name":"box.set_text_formatting","op":"ADD","section":"methods","semantic_id":"sha256:ef6ae39c44040c4786bd347a28e3a97a3a0e4abaa599525e7ff5523c5c0cbd1c","symbol_id":"pine:method:box.set_text_formatting"}

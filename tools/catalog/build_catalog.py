@@ -1274,7 +1274,15 @@ def compare_lossless_modern(
             continue
         for name, raw in expected_map.items():
             expected = normalized_definition(section, name, raw, version=version)
-            if section == "functions":
+            if section == "functions" or (
+                section == "methods"
+                and name
+                in {
+                    "array.binary_search",
+                    "array.binary_search_leftmost",
+                    "array.binary_search_rightmost",
+                }
+            ):
                 apply_stage2_audit_contract(name, expected, version)
             actual = copy.deepcopy(actual_map[name])
             for key in ("symbol_id", "name", "pine_version", "static_rule_id"):
@@ -1338,6 +1346,19 @@ def apply_stage2_audit_contract(name: str, definition: dict[str, Any], version: 
         definition["parameters"] = contracts[name]
         definition.pop("allow_extra_positional", None)
         definition["signature_source"] = "stage2_audit_repair_official_strings_2026_09_18"
+    if version == 6 and name in {
+        "array.binary_search",
+        "array.binary_search_leftmost",
+        "array.binary_search_rightmost",
+    }:
+        # TV release notes “Binary search in UDT arrays”: sort_field accepts a
+        # const int field index (0 by default) or const string field name.
+        for item in definition["parameters"]:
+            if item["name"] == "sort_field":
+                item.update(type="int|string", required=False, qualifier_max="const", default=0)
+                break
+        else:
+            raise ValueError(f"missing sort_field parameter for {name}")
     if name == "str.tostring":
         definition["parameter_type_rule_id"] = "parameter.str.tostring.scalar_or_enum.v1"
     if name in {"color.r", "color.g", "color.b", "color.t"}:
@@ -1399,7 +1420,15 @@ def main() -> int:
     # The v1-v4 projected records have already been deep-copied above.
     for version in (5, 6):
         for item in version_items[version].values():
-            if item["section"] == "functions":
+            if item["section"] == "functions" or (
+                item["section"] == "methods"
+                and item["name"]
+                in {
+                    "array.binary_search",
+                    "array.binary_search_leftmost",
+                    "array.binary_search_rightmost",
+                }
+            ):
                 apply_stage2_audit_contract(item["name"], item["definition"], version)
 
     # Build canonical symbols and content-addressed semantics from all versions.
