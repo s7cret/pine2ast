@@ -20,6 +20,7 @@ from pine2ast.config import DEFAULT_MAX_AST_NODES, DEFAULT_MAX_FILE_SIZE_BYTES, 
 from pine2ast.diagnostics import Diagnostic, Severity
 from pine2ast.diagnostics import codes
 from pine2ast.lexer import Lexer, Token
+from pine2ast.lexer.origin_keywords import origin_keyword_spans
 from pine2ast.lexer.token import SourceSpan
 from pine2ast.layout import LayoutProcessor
 from pine2ast.parser import Parser, ParserResult
@@ -167,6 +168,12 @@ class ParsePipeline:
         self.catalog = CatalogRepository.default()
         self.version_resolver = PineVersionResolver(self.catalog.identity_tuple)
 
+    def _origin_keyword_spellings(self) -> tuple[tuple[int, int, frozenset[str]], ...]:
+        context = self.options.library_context
+        if context is None:
+            return ()
+        return origin_keyword_spans(context.to_dict()["linkage_receipt"])
+
     def validate_input(self, code: str | bytes) -> ParseResult | None:
         options = self.options
         if options.source_name and len(options.source_name) > security.ABSOLUTE_MAX_SOURCE_NAME_LEN:
@@ -226,7 +233,12 @@ class ParsePipeline:
         policies = policy_bundle_from_catalog(context, catalog)
         return catalog, policies
 
-    def lex_only(self, code: str | bytes) -> tuple[list[Token], list[Diagnostic]]:
+    def lex_only(
+        self,
+        code: str | bytes,
+        *,
+        origin_keyword_spellings: tuple[tuple[int, int, frozenset[str]], ...] = (),
+    ) -> tuple[list[Token], list[Diagnostic]]:
         early = self.validate_input(code)
         if early is not None:
             return [], early.diagnostics
@@ -242,6 +254,7 @@ class ParsePipeline:
             version_context=resolution.context,
             syntax_policy=policies.syntax,
             source_name=self.options.source_name,
+            origin_keyword_spellings=origin_keyword_spellings,
         ).lex()
         diagnostics.extend(lexed.diagnostics)
         return lexed.tokens, _dedupe_diagnostics(diagnostics)
@@ -274,6 +287,7 @@ class ParsePipeline:
         policies: PolicyBundle | None = None,
         method_visibility=None,
         projected_exports: frozenset[int] = frozenset(),
+        origin_span_versions: tuple[tuple[int, int, int], ...] | None = None,
     ) -> SemanticModel:
         admitted_catalog, admitted_policies = self.admitted_frontend(ast.version_context)
         actual_catalog = catalog or admitted_catalog
@@ -289,7 +303,11 @@ class ParsePipeline:
         )
         analyzer._method_visibility = method_visibility
         analyzer._projected_exported_functions = projected_exports
-        origin_spans = library_origin_span_versions(self.options.library_context)
+        origin_spans = (
+            origin_span_versions
+            if origin_span_versions is not None
+            else library_origin_span_versions(self.options.library_context)
+        )
         analyzer._origin_span_versions = origin_spans
         analyzer.inference.origin_span_versions = origin_spans
         if self.options.library_context is not None:
@@ -336,6 +354,7 @@ class ParsePipeline:
             version_context=context,
             syntax_policy=policies.syntax,
             source_name=self.options.source_name,
+            origin_keyword_spellings=self._origin_keyword_spellings(),
         ).lex()
         diagnostics.extend(lexed.diagnostics)
         if len(lexed.tokens) > self.options.max_tokens:

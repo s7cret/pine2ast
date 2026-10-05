@@ -20,6 +20,7 @@ from pine2ast.semantic.collection_signatures import (
     resolve_collection_call,
 )
 from pine2ast.semantic.analyzer_contract import AnalyzerMixinHost
+from pine2ast.semantic.inference import origin_pine_version
 
 
 class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
@@ -74,7 +75,12 @@ class AnalyzerCollectionValidationMixin(AnalyzerMixinHost):
                 )
             value = binding.argument.value
             if (
-                self.version_context.pine_version < 6
+                origin_pine_version(
+                    self.version_context,
+                    getattr(self, "_origin_span_versions", ()),
+                    value.span.start_offset,
+                )
+                < 6
                 and resolution.collection_kind == "array"
                 and resolution.operation in {"get", "insert", "remove", "set"}
                 and binding.parameter is not None

@@ -14,6 +14,7 @@ from typing import Any, Mapping, NoReturn
 from pine2ast.api import ParseOptions, ParsePipeline
 from pine2ast.ast.nodes import FunctionDeclaration, MethodDeclaration, Program
 from pine2ast.ast.serialize import ast_to_dict
+from pine2ast.lexer.origin_keywords import origin_keyword_spans
 from .linker import LinkedSource, _parse, link_libraries
 from .store import (
     LibraryError,
@@ -94,9 +95,15 @@ def _span(node: FunctionDeclaration | MethodDeclaration) -> dict[str, int]:
     return {"start_offset": node.span.start_offset, "end_offset": node.span.end_offset}
 
 
-def _syntax(code: str) -> Program:
+def _syntax(
+    code: str,
+    receipt: Mapping[str, Any] | None = None,
+) -> Program:
     pipeline = ParsePipeline(ParseOptions(run_semantic=False, created_at_utc_ms=0))
-    tokens, diagnostics = pipeline.lex_only(code)
+    tokens, diagnostics = pipeline.lex_only(
+        code,
+        origin_keyword_spellings=origin_keyword_spans(receipt),
+    )
     resolution = pipeline.resolve_version(pipeline.normalize(code).text)
     if resolution.context is None or any(d.is_error for d in diagnostics):
         _fail("projected source must produce clean syntax")
@@ -109,7 +116,7 @@ def _syntax(code: str) -> Program:
 def _payload(linked: LinkedSource) -> dict[str, Any]:
     receipt = linked.receipt()
     generated = {}
-    for node in _syntax(linked.code).items:
+    for node in _syntax(linked.code, receipt).items:
         if isinstance(node, (FunctionDeclaration, MethodDeclaration)):
             generated.setdefault((type(node), node.name), []).append(node)
     originals = {
@@ -212,7 +219,7 @@ class LibraryQualifierContext:
         verified = LibraryQualifierContext.admit(self.to_dict())
         if self.code != verified.code:
             _fail("context code differs from reconstructed source")
-        syntax = _syntax(verified.code)
+        syntax = _syntax(verified.code, verified.to_dict()["linkage_receipt"])
         if canonical(ast_to_dict(program)) != canonical(ast_to_dict(syntax)):
             _fail("context requires the exact projected syntax AST")
         keys = {

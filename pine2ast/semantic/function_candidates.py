@@ -86,7 +86,10 @@ class FunctionCandidates:
                 for name, nodes in groups.items()
             }
         )
-        self.resolver = SignatureResolver(version_context=analyzer.version_context)
+        self.resolver = SignatureResolver(
+            version_context=analyzer.version_context,
+            origin_span_versions=getattr(analyzer, "_origin_span_versions", ()),
+        )
         self.spent = 0
         self.active: set[int] = set()
         self.cache: dict[tuple, FunctionSelection] = {}
