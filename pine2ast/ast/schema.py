@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import math
-from typing import Any
+from typing import Any, cast
 
 from pine2ast.ast.base import ASTNode, Expression
 from pine2ast.ast.nodes import Block, FunctionDeclaration, Literal, MethodDeclaration
@@ -29,11 +29,11 @@ def _valid_literal_value(node: Literal) -> bool:
     if type(node.literal_type) is not str or type(node.value) is not types.get(node.literal_type):
         return False
     if node.literal_type == "float":
-        return math.isfinite(node.value)
+        return math.isfinite(cast(float, node.value))
     if node.literal_type == "color":
         from pine2ast.lexer.lexer import _HEX_RE
 
-        return _HEX_RE.fullmatch(node.value) is not None
+        return _HEX_RE.fullmatch(cast(str, node.value)) is not None
     return True
 
 
