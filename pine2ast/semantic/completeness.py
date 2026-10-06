@@ -5,6 +5,8 @@ from typing import Any, Mapping
 
 from pine2ast.catalog import CatalogRepository
 
+from ._required_numeric_inputs import numeric_input_authority, required_numeric_input_gaps
+
 _REQUIRED_SECTIONS = (
     "annotations",
     "keywords",
@@ -96,6 +98,7 @@ class StaticCompletenessReport:
             "checked_field_count": self.checked_field_count,
             "gap_count": len(self.gaps),
             "gaps": list(self.gaps),
+            "numeric_input_authority": numeric_input_authority(self.pine_version),
         }
 
 
@@ -176,6 +179,10 @@ def pinned_catalog_static_completeness(
             _gap(gaps, "SECTION_MISSING", f"sections.{section}", "required section is missing")
         else:
             checked += 1
+
+    required_checked, required_gaps = required_numeric_input_gaps(pine_version, sections)
+    checked += required_checked
+    gaps.extend(required_gaps)
 
     rules_value = pack.get("rules")
     rules: Mapping[str, Any] = rules_value if isinstance(rules_value, Mapping) else {}
