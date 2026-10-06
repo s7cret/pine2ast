@@ -7,15 +7,26 @@ permissions:
   contents: read
 jobs:
   producer-gates:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.11", "3.12", "3.13"]
+        python: ["3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "${{ matrix.python }}"}
+      - name: Verify supported CPython and GIL
+        run: |
+          python - <<'PY'
+          import platform
+          import sys
+          import sysconfig
+          assert sys.version_info[:2] == (3, 13), sys.version
+          assert platform.python_implementation() == "CPython"
+          assert not sysconfig.get_config_var("Py_GIL_DISABLED"), "free-threaded builds are unsupported"
+          assert sys._is_gil_enabled(), "GIL must be enabled"
+          PY
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev]"
       - run: python -m ruff check pine2ast tests tools
@@ -29,12 +40,23 @@ jobs:
         if: always()
         with: {name: "stage4-${{ matrix.python }}", path: stage4-gate.json}
   coordinated-boundary:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: producer-gates
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.13"}
+      - name: Verify supported CPython and GIL
+        run: |
+          python - <<'PY'
+          import platform
+          import sys
+          import sysconfig
+          assert sys.version_info[:2] == (3, 13), sys.version
+          assert platform.python_implementation() == "CPython"
+          assert not sysconfig.get_config_var("Py_GIL_DISABLED"), "free-threaded builds are unsupported"
+          assert sys._is_gil_enabled(), "GIL must be enabled"
+          PY
       - run: python -m pip install -e ".[dev]"
       - name: Confirm boundary remains fail-closed until exact Ast2Python RC6 acceptance
         run: |

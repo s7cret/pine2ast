@@ -75,7 +75,6 @@ PRIMARY_STAGE2_CRITERIA = (
     "independent_builtin_expected",
 )
 MANDATORY_STAGE2_GATES = (
-    "python_3.11",
     "python_3.13",
     "sandbox",
     "protected_workers",
@@ -125,6 +124,13 @@ def _verify_full_acceptance(
             raise LanguagePublicationError(
                 f"full acceptance lacks clean exact-tree receipt: {name}"
             )
+        if name == "python_3.13" and (
+            receipt.get("python_implementation") != "CPython"
+            or receipt.get("gil_enabled") is not True
+        ):
+            raise LanguagePublicationError(
+                "full acceptance requires ordinary CPython 3.13 with the GIL enabled"
+            )
         if evidence_root is None:
             raise LanguagePublicationError("full acceptance requires the actual evidence directory")
         root = evidence_root.resolve()
@@ -148,9 +154,14 @@ def _verify_full_acceptance(
             actual = json.loads(candidate.read_text(encoding="utf-8"))
         except (ValueError, UnicodeError) as exc:
             raise LanguagePublicationError(f"invalid receipt file: {name}") from exc
-        for key in ("status", "source_lock_hash", "failures", "errors", "skipped"):
+        keys: tuple[str, ...] = ("status", "source_lock_hash", "failures", "errors", "skipped")
+        if name == "python_3.13":
+            keys += ("python_implementation", "gil_enabled")
+        for key in keys:
             if not isinstance(actual, Mapping) or actual.get(key) != receipt.get(key):
                 raise LanguagePublicationError(f"receipt content mismatch: {name}.{key}")
+        if name == "python_3.13" and actual.get("gil_enabled") is not True:
+            raise LanguagePublicationError(f"receipt content mismatch: {name}.gil_enabled")
 
 
 def verify_language_publication(

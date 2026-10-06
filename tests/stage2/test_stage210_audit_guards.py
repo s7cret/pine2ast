@@ -1,6 +1,8 @@
 """Negative publication tests for audit S2-19/20; no execution receipts are fabricated."""
 
 from copy import deepcopy
+import hashlib
+import json
 import pytest
 from pine2ast.hardening.language_publication import (
     LanguagePublicationError,
@@ -102,12 +104,72 @@ def test_declared_receipt_hash_is_not_a_substitute_for_a_file(tmp_path):
             "skipped": 0,
             "artifact_hash": "sha256:" + "b" * 64,
             "artifact_path": name + ".json",
+            "python_implementation": "CPython",
+            "gil_enabled": True,
         }
         for name in MANDATORY_STAGE2_GATES
     }
     with pytest.raises(LanguagePublicationError, match="actual evidence directory"):
         verify_language_publication(lock, complete_observation(lock), mode="coordinated")
     with pytest.raises(LanguagePublicationError, match="missing or unsafe"):
+        verify_language_publication(
+            lock, complete_observation(lock), mode="coordinated", evidence_root=tmp_path
+        )
+
+
+@pytest.mark.parametrize(
+    ("implementation", "gil_enabled"),
+    [("PyPy", True), ("CPython", False), ("CPython", None)],
+)
+def test_full_acceptance_requires_supported_cpython_gil(implementation, gil_enabled):
+    lock = load_language_publication()
+    lock.update(full_stage2_accepted=True, residuals=[])
+    lock["criteria"] = {name: "accepted" for name in PRIMARY_STAGE2_CRITERIA}
+    lock["source_lock_hash"] = "sha256:" + "a" * 64
+    lock["mandatory_gate_receipts"] = {
+        "python_3.13": {
+            "status": "passed",
+            "source_lock_hash": lock["source_lock_hash"],
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "artifact_hash": "sha256:" + "b" * 64,
+            "python_implementation": implementation,
+            "gil_enabled": gil_enabled,
+        },
+    }
+    with pytest.raises(LanguagePublicationError, match="ordinary CPython 3.13"):
+        verify_language_publication(lock, complete_observation(lock), mode="coordinated")
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("python_implementation", "PyPy"), ("gil_enabled", False), ("gil_enabled", 1)],
+)
+def test_python_profile_must_be_in_actual_receipt_bytes(tmp_path, field, value):
+    lock = load_language_publication()
+    lock.update(full_stage2_accepted=True, residuals=[])
+    lock["criteria"] = {name: "accepted" for name in PRIMARY_STAGE2_CRITERIA}
+    lock["source_lock_hash"] = "sha256:" + "a" * 64
+    receipt = {
+        "status": "passed",
+        "source_lock_hash": lock["source_lock_hash"],
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "python_implementation": "CPython",
+        "gil_enabled": True,
+    }
+    # Synthetic unit fixture: metadata cannot override the sealed artifact bytes.
+    actual = dict(receipt)
+    actual[field] = value
+    raw = json.dumps(actual).encode()
+    (tmp_path / "python.json").write_bytes(raw)
+    receipt["artifact_path"] = "python.json"
+    receipt["artifact_hash"] = "sha256:" + hashlib.sha256(raw).hexdigest()
+    lock["mandatory_gate_receipts"] = {"python_3.13": receipt}
+
+    with pytest.raises(LanguagePublicationError, match="receipt content mismatch"):
         verify_language_publication(
             lock, complete_observation(lock), mode="coordinated", evidence_root=tmp_path
         )

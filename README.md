@@ -1,5 +1,7 @@
 # Pine2AST 5.0.0rc6
 
+The supported interpreter is ordinary CPython 3.13 (`>=3.13,<3.14`) with the GIL enabled. Free-threaded builds (`3.13t`), other Python minors, and other Python implementations are outside the supported runtime policy. This interpreter policy does not narrow functional requirements or acceptance gates.
+
 Pine2AST is a version-exact static frontend for Pine Script versions 1 through 6.
 
 The frontend resolves one immutable `PineVersionContext`, selects one hash-bound
