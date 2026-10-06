@@ -16,6 +16,12 @@ historical type constants. Missing differs from null/zero/false/empty; primitive
 types are compared exactly. No expected values, generated catalogs, symbol
 inventory, producer ABI or verification statuses change in this repair.
 
+The fixed local shape also guards absent admission controls: overload overrides
+of `allow_extra_positional`, parameter `variadic`, and `added_in`/`removed_in`
+on callable rows, overloads, and either form's parameters. Introducing those keys
+where the local contract omits them is an invariant mismatch. Unrelated audit
+or provenance annotations remain allowed; this is not a ban on extra metadata.
+
 `REQUIRED_INPUT_CONTRACT` remains the integrated gap code for compatibility;
 its new `basis=LOCAL_CATALOG_INVARIANT` and message identify its actual basis.
 `StaticCompletenessReport.to_dict()` adds `numeric_input_authority`, including

@@ -41,6 +41,17 @@ MUTATIONS = (
     "overload_return",
     "overload_qualifier",
     "extra_positional",
+    "overload_extra_positional",
+    "parameter_variadic",
+    "overload_parameter_variadic",
+    "added_in",
+    "removed_in",
+    "overload_added_in",
+    "overload_removed_in",
+    "parameter_added_in",
+    "parameter_removed_in",
+    "overload_parameter_added_in",
+    "overload_parameter_removed_in",
     "identity",
 )
 
@@ -99,6 +110,23 @@ def mutate(pack, name, mutation):
         row["overloads"][0]["parameters"][0]["qualifier_max"] = "series"
     elif mutation == "extra_positional":
         row["allow_extra_positional"] = True
+    elif mutation == "overload_extra_positional":
+        row["overloads"][0]["allow_extra_positional"] = True
+    elif mutation == "parameter_variadic":
+        params["defval"]["variadic"] = True
+    elif mutation == "overload_parameter_variadic":
+        row["overloads"][0]["parameters"][0]["variadic"] = True
+    elif mutation in ("added_in", "removed_in"):
+        row[mutation] = 7 if mutation == "added_in" else 5
+    elif mutation in ("overload_added_in", "overload_removed_in"):
+        key = mutation.removeprefix("overload_")
+        row["overloads"][0][key] = 7 if key == "added_in" else 5
+    elif mutation in ("parameter_added_in", "parameter_removed_in"):
+        key = mutation.removeprefix("parameter_")
+        params["defval"][key] = 7 if key == "added_in" else 5
+    elif mutation in ("overload_parameter_added_in", "overload_parameter_removed_in"):
+        key = mutation.removeprefix("overload_parameter_")
+        row["overloads"][0]["parameters"][0][key] = 7 if key == "added_in" else 5
     elif mutation == "identity":
         row["symbol_id"] += ":wrong"
     else:
@@ -114,6 +142,24 @@ def test_required_numeric_input_mutations_fail_closed(version, name, mutation):
     report = pinned_catalog_static_completeness(version, repository=PackRepository(pack))
     assert not report.ok, (version, name, mutation)
     assert any(g["code"] == "REQUIRED_INPUT_CONTRACT" for g in report.gaps), report.gaps
+
+
+@pytest.mark.parametrize("version", (5, 6))
+@pytest.mark.parametrize("name", ("input.int", "input.float"))
+def test_numeric_input_harmless_annotations_remain_allowed(version, name):
+    pack = CatalogRepository.default().pack(version)
+    row = pack["sections"]["functions"][name]
+    for annotated in (
+        row,
+        row["overloads"][0],
+        *row["parameters"],
+        *row["overloads"][0]["parameters"],
+    ):
+        annotated["audit_note"] = "Metadata annotation without callable admission semantics."
+        annotated["provenance"] = {"review": "local invariant"}
+    report = pinned_catalog_static_completeness(version, repository=PackRepository(pack))
+    assert report.ok, report.gaps
+    assert report.to_dict()["numeric_input_authority"]["external_contract_complete"] is False
 
 
 @pytest.mark.parametrize("version", range(1, 5))

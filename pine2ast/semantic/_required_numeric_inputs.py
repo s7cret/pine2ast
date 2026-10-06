@@ -164,9 +164,13 @@ def _differences(actual: Any, expected: Any, path: str) -> list[str]:
         differences = []
         for key, value in expected.items():
             differences.extend(_differences(actual.get(key, _MISSING), value, f"{path}.{key}"))
-        # Absence is itself a contract: missing default != null/zero/false.
-        if "default" not in expected and "default" in actual:
-            differences.append(f"{path}.default")
+        # Absence is part of the fixed local callable shape. An overload can
+        # override the canonical arity policy, and version gates or variadic
+        # parameters can change admission even when every expected key matches.
+        # Unrelated annotations remain outside this guard.
+        for key in ("default", "allow_extra_positional", "variadic", "added_in", "removed_in"):
+            if key not in expected and key in actual:
+                differences.append(f"{path}.{key}")
         return differences
     if isinstance(expected, list):
         if not isinstance(actual, list) or len(actual) != len(expected):
